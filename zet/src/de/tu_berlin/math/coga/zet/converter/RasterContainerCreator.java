@@ -258,473 +258,477 @@ public class RasterContainerCreator {
 	}
 
 	public static BuildingPlan makeAnotherExample() {
-		BuildingPlan bp = new BuildingPlan();
-		Floor floor = new Floor( "Erdgeschoss" );
-		bp.addFloor( floor );
-
-		Room room = new Room( floor, "Größerer Raum" );
-
-		ArrayList<PlanPoint> points;
-		InaccessibleArea iA;
-		DelayArea dA;
-		EvacuationArea eA;
-		SaveArea saveA;
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 0.4, 0.4 ) );
-		points.add( new PlanPoint( 4.0, 0.4 ) );
-		points.add( new PlanPoint( 4.0, 4.0 ) );
-		points.add( new PlanPoint( 0.4, 4.0 ) );
-		room.defineByPoints( points );
-
-		points = new ArrayList<>();
-		iA = new InaccessibleArea( room );
-		points.add( new PlanPoint( 0.8, 3.6 ) );
-		points.add( new PlanPoint( 3.6, 3.6 ) );
-		points.add( new PlanPoint( 3.6, 4.0 ) );
-		points.add( new PlanPoint( 0.8, 4.0 ) );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		dA = new DelayArea( room, DelayType.OBSTACLE );
-		points.add( new PlanPoint( 0.8, 2.4 ) );
-		points.add( new PlanPoint( 1.6, 2.4 ) );
-		points.add( new PlanPoint( 1.6, 3.2 ) );
-		points.add( new PlanPoint( 0.8, 3.2 ) );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		eA = new EvacuationArea( room );
-		points.add( new PlanPoint( 3.6, 2.4 ) );
-		points.add( new PlanPoint( 4.0, 2.4 ) );
-		points.add( new PlanPoint( 4.0, 3.2 ) );
-		points.add( new PlanPoint( 3.6, 3.2 ) );
-		eA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		saveA = new SaveArea( room );
-		points.add( new PlanPoint( 3.2, 2.4 ) );
-		points.add( new PlanPoint( 3.6, 2.4 ) );
-		points.add( new PlanPoint( 3.6, 3.2 ) );
-		points.add( new PlanPoint( 3.2, 3.2 ) );
-		saveA.defineByPoints( points );
-		return bp;
+    return null;
+    // TODO correct, use of area builder, etc
+//    BuildingPlan bp = new BuildingPlan();
+//		Floor floor = new Floor( "Erdgeschoss" );
+//		bp.addFloor( floor );
+//
+//		Room room = new Room( floor, "Größerer Raum" );
+//
+//		ArrayList<PlanPoint> points;
+//		InaccessibleArea iA;
+//		DelayArea dA;
+//		EvacuationArea eA;
+//		SaveArea saveA;
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.4, 0.4 ) );
+//		points.add( new PlanPoint( 4.0, 0.4 ) );
+//		points.add( new PlanPoint( 4.0, 4.0 ) );
+//		points.add( new PlanPoint( 0.4, 4.0 ) );
+//		room.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		iA = new InaccessibleArea( room );
+//		points.add( new PlanPoint( 0.8, 3.6 ) );
+//		points.add( new PlanPoint( 3.6, 3.6 ) );
+//		points.add( new PlanPoint( 3.6, 4.0 ) );
+//		points.add( new PlanPoint( 0.8, 4.0 ) );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		dA = new DelayArea( room, DelayType.OBSTACLE );
+//		points.add( new PlanPoint( 0.8, 2.4 ) );
+//		points.add( new PlanPoint( 1.6, 2.4 ) );
+//		points.add( new PlanPoint( 1.6, 3.2 ) );
+//		points.add( new PlanPoint( 0.8, 3.2 ) );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		eA = new EvacuationArea( room );
+//		points.add( new PlanPoint( 3.6, 2.4 ) );
+//		points.add( new PlanPoint( 4.0, 2.4 ) );
+//		points.add( new PlanPoint( 4.0, 3.2 ) );
+//		points.add( new PlanPoint( 3.6, 3.2 ) );
+//		eA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		saveA = new SaveArea( room );
+//		points.add( new PlanPoint( 3.2, 2.4 ) );
+//		points.add( new PlanPoint( 3.6, 2.4 ) );
+//		points.add( new PlanPoint( 3.6, 3.2 ) );
+//		points.add( new PlanPoint( 3.2, 3.2 ) );
+//		saveA.defineByPoints( points );
+//		return bp;
 	}
 
 	public static BuildingPlan makeBuildingPlanExample() {
-		BuildingPlan bp = new BuildingPlan();
-		Floor floor = new Floor();
-		bp.addFloor( floor );
-
-		Room room = new Room( floor );
-
-		ArrayList<PlanPoint> points = new ArrayList<>();
-		points.add( new PlanPoint( 0.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 2.4 ) );
-		points.add( new PlanPoint( 0.4, 2.4 ) );
-		room.defineByPoints( points );
-
-		// To exception is allowed here!
-		room.checkRasterized();
-
-		// Inaccessible Areas
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 1.2, 0.8 ) );
-		InaccessibleArea iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 2.0 ) );
-		points.add( new PlanPoint( 1.2, 2.0 ) );
-		iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		// DelayArea
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 0.8, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 1.2 ) );
-		points.add( new PlanPoint( 0.8, 1.2 ) );
-		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 2.0 ) );
-		points.add( new PlanPoint( 1.6, 2.0 ) );
-		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
-		dA.defineByPoints( points );
-
-		Room pg_room = new Room( floor );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.0, 3.0 ) );
-		points.add( new PlanPoint( 8.6, 3.0 ) );
-		points.add( new PlanPoint( 8.6, 8.2 ) );
-		points.add( new PlanPoint( 3.0, 8.2 ) );
-		pg_room.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.4, 3.4 ) );
-		points.add( new PlanPoint( 3.8, 3.4 ) );
-		points.add( new PlanPoint( 3.8, 5.4 ) );
-		points.add( new PlanPoint( 3.4, 5.4 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.8, 3.4 ) );
-		points.add( new PlanPoint( 4.6, 3.4 ) );
-		points.add( new PlanPoint( 4.6, 4.6 ) );
-		points.add( new PlanPoint( 3.8, 4.6 ) );
-		points.add( new PlanPoint( 3.8, 4.2 ) );
-		points.add( new PlanPoint( 4.2, 4.2 ) );
-		points.add( new PlanPoint( 4.2, 3.8 ) );
-		points.add( new PlanPoint( 3.8, 3.8 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.0, 3.4 ) );
-		points.add( new PlanPoint( 6.6, 3.4 ) );
-		points.add( new PlanPoint( 6.6, 3.8 ) );
-		points.add( new PlanPoint( 5.4, 3.8 ) );
-		points.add( new PlanPoint( 5.4, 5.0 ) );
-		points.add( new PlanPoint( 6.2, 5.0 ) );
-		points.add( new PlanPoint( 6.2, 4.6 ) );
-		points.add( new PlanPoint( 5.8, 4.6 ) );
-		points.add( new PlanPoint( 5.8, 4.2 ) );
-		points.add( new PlanPoint( 6.6, 4.2 ) );
-		points.add( new PlanPoint( 6.6, 5.4 ) );
-		points.add( new PlanPoint( 5.0, 5.4 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.4, 5.8 ) );
-		points.add( new PlanPoint( 4.6, 5.8 ) );
-		points.add( new PlanPoint( 4.6, 6.2 ) );
-		points.add( new PlanPoint( 3.8, 6.2 ) );
-		points.add( new PlanPoint( 3.8, 6.6 ) );
-		points.add( new PlanPoint( 4.6, 6.6 ) );
-		points.add( new PlanPoint( 4.6, 7.8 ) );
-		points.add( new PlanPoint( 3.4, 7.8 ) );
-		points.add( new PlanPoint( 3.4, 7.4 ) );
-		points.add( new PlanPoint( 4.2, 7.4 ) );
-		points.add( new PlanPoint( 4.2, 7.0 ) );
-		points.add( new PlanPoint( 3.4, 7.0 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.0, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 7.0 ) );
-		points.add( new PlanPoint( 5.0, 7.0 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.4, 6.2 ) );
-		points.add( new PlanPoint( 5.8, 6.2 ) );
-		points.add( new PlanPoint( 5.8, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 6.6 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.8, 5.8 ) );
-		points.add( new PlanPoint( 6.2, 5.8 ) );
-		points.add( new PlanPoint( 6.2, 7.8 ) );
-		points.add( new PlanPoint( 5.8, 7.8 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 5.8 ) );
-		points.add( new PlanPoint( 8.2, 5.8 ) );
-		points.add( new PlanPoint( 8.2, 6.2 ) );
-		points.add( new PlanPoint( 7.8, 6.2 ) );
-		points.add( new PlanPoint( 7.8, 6.6 ) );
-		points.add( new PlanPoint( 7.4, 6.6 ) );
-		points.add( new PlanPoint( 7.4, 6.2 ) );
-		points.add( new PlanPoint( 6.6, 6.2 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 6.6 ) );
-		points.add( new PlanPoint( 8.2, 6.6 ) );
-		points.add( new PlanPoint( 8.2, 7.0 ) );
-		points.add( new PlanPoint( 7.4, 7.0 ) );
-		points.add( new PlanPoint( 7.4, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.0 ) );
-		points.add( new PlanPoint( 6.6, 7.0 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.8 ) );
-		points.add( new PlanPoint( 6.6, 7.8 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		return bp;
-
+//		BuildingPlan bp = new BuildingPlan();
+//		Floor floor = new Floor();
+//		bp.addFloor( floor );
+//
+//		Room room = new Room( floor );
+//
+//		ArrayList<PlanPoint> points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 2.4 ) );
+//		points.add( new PlanPoint( 0.4, 2.4 ) );
+//		room.defineByPoints( points );
+//
+//		// To exception is allowed here!
+//		room.checkRasterized();
+//
+//		// Inaccessible Areas
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 1.2, 0.8 ) );
+//		InaccessibleArea iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 2.0 ) );
+//		points.add( new PlanPoint( 1.2, 2.0 ) );
+//		iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		// DelayArea
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.8, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 1.2 ) );
+//		points.add( new PlanPoint( 0.8, 1.2 ) );
+//		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 2.0 ) );
+//		points.add( new PlanPoint( 1.6, 2.0 ) );
+//		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
+//		dA.defineByPoints( points );
+//
+//		Room pg_room = new Room( floor );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.0, 3.0 ) );
+//		points.add( new PlanPoint( 8.6, 3.0 ) );
+//		points.add( new PlanPoint( 8.6, 8.2 ) );
+//		points.add( new PlanPoint( 3.0, 8.2 ) );
+//		pg_room.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.4, 3.4 ) );
+//		points.add( new PlanPoint( 3.8, 3.4 ) );
+//		points.add( new PlanPoint( 3.8, 5.4 ) );
+//		points.add( new PlanPoint( 3.4, 5.4 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.8, 3.4 ) );
+//		points.add( new PlanPoint( 4.6, 3.4 ) );
+//		points.add( new PlanPoint( 4.6, 4.6 ) );
+//		points.add( new PlanPoint( 3.8, 4.6 ) );
+//		points.add( new PlanPoint( 3.8, 4.2 ) );
+//		points.add( new PlanPoint( 4.2, 4.2 ) );
+//		points.add( new PlanPoint( 4.2, 3.8 ) );
+//		points.add( new PlanPoint( 3.8, 3.8 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.0, 3.4 ) );
+//		points.add( new PlanPoint( 6.6, 3.4 ) );
+//		points.add( new PlanPoint( 6.6, 3.8 ) );
+//		points.add( new PlanPoint( 5.4, 3.8 ) );
+//		points.add( new PlanPoint( 5.4, 5.0 ) );
+//		points.add( new PlanPoint( 6.2, 5.0 ) );
+//		points.add( new PlanPoint( 6.2, 4.6 ) );
+//		points.add( new PlanPoint( 5.8, 4.6 ) );
+//		points.add( new PlanPoint( 5.8, 4.2 ) );
+//		points.add( new PlanPoint( 6.6, 4.2 ) );
+//		points.add( new PlanPoint( 6.6, 5.4 ) );
+//		points.add( new PlanPoint( 5.0, 5.4 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.4, 5.8 ) );
+//		points.add( new PlanPoint( 4.6, 5.8 ) );
+//		points.add( new PlanPoint( 4.6, 6.2 ) );
+//		points.add( new PlanPoint( 3.8, 6.2 ) );
+//		points.add( new PlanPoint( 3.8, 6.6 ) );
+//		points.add( new PlanPoint( 4.6, 6.6 ) );
+//		points.add( new PlanPoint( 4.6, 7.8 ) );
+//		points.add( new PlanPoint( 3.4, 7.8 ) );
+//		points.add( new PlanPoint( 3.4, 7.4 ) );
+//		points.add( new PlanPoint( 4.2, 7.4 ) );
+//		points.add( new PlanPoint( 4.2, 7.0 ) );
+//		points.add( new PlanPoint( 3.4, 7.0 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.0, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 7.0 ) );
+//		points.add( new PlanPoint( 5.0, 7.0 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.4, 6.2 ) );
+//		points.add( new PlanPoint( 5.8, 6.2 ) );
+//		points.add( new PlanPoint( 5.8, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 6.6 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.8, 5.8 ) );
+//		points.add( new PlanPoint( 6.2, 5.8 ) );
+//		points.add( new PlanPoint( 6.2, 7.8 ) );
+//		points.add( new PlanPoint( 5.8, 7.8 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 5.8 ) );
+//		points.add( new PlanPoint( 8.2, 5.8 ) );
+//		points.add( new PlanPoint( 8.2, 6.2 ) );
+//		points.add( new PlanPoint( 7.8, 6.2 ) );
+//		points.add( new PlanPoint( 7.8, 6.6 ) );
+//		points.add( new PlanPoint( 7.4, 6.6 ) );
+//		points.add( new PlanPoint( 7.4, 6.2 ) );
+//		points.add( new PlanPoint( 6.6, 6.2 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 6.6 ) );
+//		points.add( new PlanPoint( 8.2, 6.6 ) );
+//		points.add( new PlanPoint( 8.2, 7.0 ) );
+//		points.add( new PlanPoint( 7.4, 7.0 ) );
+//		points.add( new PlanPoint( 7.4, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.0 ) );
+//		points.add( new PlanPoint( 6.6, 7.0 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.8 ) );
+//		points.add( new PlanPoint( 6.6, 7.8 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		return bp;
+    return null;
 	}
 
 	public static BuildingPlan testraum() {
-		// 5x5-Raum mit rasterisierten Koordinaten erzeugen
-		BuildingPlan bp = new BuildingPlan();
-		Floor floor = new Floor();
-		bp.addFloor( floor );
-
-		Room room = new Room( floor, "Testraum" );
-		ArrayList<PlanPoint> points = new ArrayList<>();
-		points.add( new PlanPoint( 0.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 2.4 ) );
-		points.add( new PlanPoint( 2.0, 2.4 ) );
-		points.add( new PlanPoint( 1.2, 2.4 ) );
-		points.add( new PlanPoint( 0.4, 2.4 ) );
-		room.defineByPoints( points );
-
-		Room room2 = new Room( floor, "Anderer Raum" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 2.4, 2.4 ) );
-		points.add( new PlanPoint( 2.0, 2.4 ) );
-		points.add( new PlanPoint( 1.2, 2.4 ) );
-		points.add( new PlanPoint( 1.2, 3.2 ) );
-		points.add( new PlanPoint( 2.0, 3.2 ) );
-		points.add( new PlanPoint( 2.4, 3.2 ) );
-		room2.defineByPoints( points );
-		room2.connectTo( room, new PlanPoint( 2.0, 2.4, true ), new PlanPoint( 1.2, 2.4, true ) );
-
-
-		// To exception is allowed here!
-		room.checkRasterized();
-
-		// Inaccessible Areas
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 1.2, 0.8 ) );
-		InaccessibleArea iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 2.0 ) );
-		points.add( new PlanPoint( 1.2, 2.0 ) );
-		iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		// DelayArea
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 0.8, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 1.2 ) );
-		points.add( new PlanPoint( 0.8, 1.2 ) );
-		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 2.0 ) );
-		points.add( new PlanPoint( 1.6, 2.0 ) );
-		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
-		dA.defineByPoints( points );
-
-		return bp;
+    return null;
+//		// 5x5-Raum mit rasterisierten Koordinaten erzeugen
+//		BuildingPlan bp = new BuildingPlan();
+//		Floor floor = new Floor();
+//		bp.addFloor( floor );
+//
+//		Room room = new Room( floor, "Testraum" );
+//		ArrayList<PlanPoint> points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 2.4 ) );
+//		points.add( new PlanPoint( 2.0, 2.4 ) );
+//		points.add( new PlanPoint( 1.2, 2.4 ) );
+//		points.add( new PlanPoint( 0.4, 2.4 ) );
+//		room.defineByPoints( points );
+//
+//		Room room2 = new Room( floor, "Anderer Raum" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 2.4, 2.4 ) );
+//		points.add( new PlanPoint( 2.0, 2.4 ) );
+//		points.add( new PlanPoint( 1.2, 2.4 ) );
+//		points.add( new PlanPoint( 1.2, 3.2 ) );
+//		points.add( new PlanPoint( 2.0, 3.2 ) );
+//		points.add( new PlanPoint( 2.4, 3.2 ) );
+//		room2.defineByPoints( points );
+//		room2.connectTo( room, new PlanPoint( 2.0, 2.4, true ), new PlanPoint( 1.2, 2.4, true ) );
+//
+//
+//		// To exception is allowed here!
+//		room.checkRasterized();
+//
+//		// Inaccessible Areas
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 1.2, 0.8 ) );
+//		InaccessibleArea iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 2.0 ) );
+//		points.add( new PlanPoint( 1.2, 2.0 ) );
+//		iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		// DelayArea
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.8, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 1.2 ) );
+//		points.add( new PlanPoint( 0.8, 1.2 ) );
+//		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 2.0 ) );
+//		points.add( new PlanPoint( 1.6, 2.0 ) );
+//		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
+//		dA.defineByPoints( points );
+//
+//		return bp;
 
 	}
 
 	public static BuildingPlan makeBuildingPlanExampleWithDifferentAreas() {
-		BuildingPlan bp = new BuildingPlan();
-		Floor floor = new Floor();
-		bp.addFloor( floor );
-
-		Room room = new Room( floor );
-
-		ArrayList<PlanPoint> points = new ArrayList<>();
-		points.add( new PlanPoint( 0.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 0.4 ) );
-		points.add( new PlanPoint( 2.4, 2.4 ) );
-		points.add( new PlanPoint( 0.4, 2.4 ) );
-		room.defineByPoints( points );
-
-		// To exception is allowed here!
-		room.checkRasterized();
-
-		// Inaccessible Areas
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.4 ) );
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 1.2, 0.8 ) );
-		InaccessibleArea iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.2, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.2 ) );
-		points.add( new PlanPoint( 1.6, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 1.6 ) );
-		points.add( new PlanPoint( 2.0, 2.0 ) );
-		points.add( new PlanPoint( 1.2, 2.0 ) );
-		iA = new InaccessibleArea( room );
-		iA.defineByPoints( points );
-
-		// DelayArea
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 0.8, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 0.8 ) );
-		points.add( new PlanPoint( 2.0, 1.2 ) );
-		points.add( new PlanPoint( 0.8, 1.2 ) );
-		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 1.6, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 0.8 ) );
-		points.add( new PlanPoint( 2.4, 2.0 ) );
-		points.add( new PlanPoint( 1.6, 2.0 ) );
-		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
-		dA.defineByPoints( points );
-
-		Room pg_room = new Room( floor );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.0, 3.0 ) );
-		points.add( new PlanPoint( 8.6, 3.0 ) );
-		points.add( new PlanPoint( 8.6, 8.2 ) );
-		points.add( new PlanPoint( 3.0, 8.2 ) );
-		pg_room.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.4, 3.4 ) );
-		points.add( new PlanPoint( 3.8, 3.4 ) );
-		points.add( new PlanPoint( 3.8, 5.4 ) );
-		points.add( new PlanPoint( 3.4, 5.4 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.8, 3.4 ) );
-		points.add( new PlanPoint( 4.6, 3.4 ) );
-		points.add( new PlanPoint( 4.6, 4.6 ) );
-		points.add( new PlanPoint( 3.8, 4.6 ) );
-		points.add( new PlanPoint( 3.8, 4.2 ) );
-		points.add( new PlanPoint( 4.2, 4.2 ) );
-		points.add( new PlanPoint( 4.2, 3.8 ) );
-		points.add( new PlanPoint( 3.8, 3.8 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.0, 3.4 ) );
-		points.add( new PlanPoint( 6.6, 3.4 ) );
-		points.add( new PlanPoint( 6.6, 3.8 ) );
-		points.add( new PlanPoint( 5.4, 3.8 ) );
-		points.add( new PlanPoint( 5.4, 5.0 ) );
-		points.add( new PlanPoint( 6.2, 5.0 ) );
-		points.add( new PlanPoint( 6.2, 4.6 ) );
-		points.add( new PlanPoint( 5.8, 4.6 ) );
-		points.add( new PlanPoint( 5.8, 4.2 ) );
-		points.add( new PlanPoint( 6.6, 4.2 ) );
-		points.add( new PlanPoint( 6.6, 5.4 ) );
-		points.add( new PlanPoint( 5.0, 5.4 ) );
-		iA = new InaccessibleArea( pg_room );
-		iA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 3.4, 5.8 ) );
-		points.add( new PlanPoint( 4.6, 5.8 ) );
-		points.add( new PlanPoint( 4.6, 6.2 ) );
-		points.add( new PlanPoint( 3.8, 6.2 ) );
-		points.add( new PlanPoint( 3.8, 6.6 ) );
-		points.add( new PlanPoint( 4.6, 6.6 ) );
-		points.add( new PlanPoint( 4.6, 7.8 ) );
-		points.add( new PlanPoint( 3.4, 7.8 ) );
-		points.add( new PlanPoint( 3.4, 7.4 ) );
-		points.add( new PlanPoint( 4.2, 7.4 ) );
-		points.add( new PlanPoint( 4.2, 7.0 ) );
-		points.add( new PlanPoint( 3.4, 7.0 ) );
-		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.0, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 7.0 ) );
-		points.add( new PlanPoint( 5.0, 7.0 ) );
-		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.4, 6.2 ) );
-		points.add( new PlanPoint( 5.8, 6.2 ) );
-		points.add( new PlanPoint( 5.8, 6.6 ) );
-		points.add( new PlanPoint( 5.4, 6.6 ) );
-		SaveArea sA = new SaveArea( pg_room );
-		sA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 5.8, 5.8 ) );
-		points.add( new PlanPoint( 6.2, 5.8 ) );
-		points.add( new PlanPoint( 6.2, 7.8 ) );
-		points.add( new PlanPoint( 5.8, 7.8 ) );
-		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
-		dA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 5.8 ) );
-		points.add( new PlanPoint( 8.2, 5.8 ) );
-		points.add( new PlanPoint( 8.2, 6.2 ) );
-		points.add( new PlanPoint( 7.8, 6.2 ) );
-		points.add( new PlanPoint( 7.8, 6.6 ) );
-		points.add( new PlanPoint( 7.4, 6.6 ) );
-		points.add( new PlanPoint( 7.4, 6.2 ) );
-		points.add( new PlanPoint( 6.6, 6.2 ) );
-		EvacuationArea eA = new EvacuationArea( pg_room );
-		eA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 6.6 ) );
-		points.add( new PlanPoint( 8.2, 6.6 ) );
-		points.add( new PlanPoint( 8.2, 7.0 ) );
-		points.add( new PlanPoint( 7.4, 7.0 ) );
-		points.add( new PlanPoint( 7.4, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.0 ) );
-		points.add( new PlanPoint( 6.6, 7.0 ) );
-		eA = new EvacuationArea( pg_room );
-		eA.defineByPoints( points );
-
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 6.6, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.4 ) );
-		points.add( new PlanPoint( 7.0, 7.8 ) );
-		points.add( new PlanPoint( 6.6, 7.8 ) );
-		eA = new EvacuationArea( pg_room );
-		eA.defineByPoints( points );
-
-		return bp;
+    return null;
+//		BuildingPlan bp = new BuildingPlan();
+//		Floor floor = new Floor();
+//		bp.addFloor( floor );
+//
+//		Room room = new Room( floor );
+//
+//		ArrayList<PlanPoint> points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 0.4 ) );
+//		points.add( new PlanPoint( 2.4, 2.4 ) );
+//		points.add( new PlanPoint( 0.4, 2.4 ) );
+//		room.defineByPoints( points );
+//
+//		// To exception is allowed here!
+//		room.checkRasterized();
+//
+//		// Inaccessible Areas
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.4 ) );
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 1.2, 0.8 ) );
+//		InaccessibleArea iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.2, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.2 ) );
+//		points.add( new PlanPoint( 1.6, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 1.6 ) );
+//		points.add( new PlanPoint( 2.0, 2.0 ) );
+//		points.add( new PlanPoint( 1.2, 2.0 ) );
+//		iA = new InaccessibleArea( room );
+//		iA.defineByPoints( points );
+//
+//		// DelayArea
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.8, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 0.8 ) );
+//		points.add( new PlanPoint( 2.0, 1.2 ) );
+//		points.add( new PlanPoint( 0.8, 1.2 ) );
+//		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 1.6, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 0.8 ) );
+//		points.add( new PlanPoint( 2.4, 2.0 ) );
+//		points.add( new PlanPoint( 1.6, 2.0 ) );
+//		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
+//		dA.defineByPoints( points );
+//
+//		Room pg_room = new Room( floor );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.0, 3.0 ) );
+//		points.add( new PlanPoint( 8.6, 3.0 ) );
+//		points.add( new PlanPoint( 8.6, 8.2 ) );
+//		points.add( new PlanPoint( 3.0, 8.2 ) );
+//		pg_room.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.4, 3.4 ) );
+//		points.add( new PlanPoint( 3.8, 3.4 ) );
+//		points.add( new PlanPoint( 3.8, 5.4 ) );
+//		points.add( new PlanPoint( 3.4, 5.4 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.8, 3.4 ) );
+//		points.add( new PlanPoint( 4.6, 3.4 ) );
+//		points.add( new PlanPoint( 4.6, 4.6 ) );
+//		points.add( new PlanPoint( 3.8, 4.6 ) );
+//		points.add( new PlanPoint( 3.8, 4.2 ) );
+//		points.add( new PlanPoint( 4.2, 4.2 ) );
+//		points.add( new PlanPoint( 4.2, 3.8 ) );
+//		points.add( new PlanPoint( 3.8, 3.8 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.0, 3.4 ) );
+//		points.add( new PlanPoint( 6.6, 3.4 ) );
+//		points.add( new PlanPoint( 6.6, 3.8 ) );
+//		points.add( new PlanPoint( 5.4, 3.8 ) );
+//		points.add( new PlanPoint( 5.4, 5.0 ) );
+//		points.add( new PlanPoint( 6.2, 5.0 ) );
+//		points.add( new PlanPoint( 6.2, 4.6 ) );
+//		points.add( new PlanPoint( 5.8, 4.6 ) );
+//		points.add( new PlanPoint( 5.8, 4.2 ) );
+//		points.add( new PlanPoint( 6.6, 4.2 ) );
+//		points.add( new PlanPoint( 6.6, 5.4 ) );
+//		points.add( new PlanPoint( 5.0, 5.4 ) );
+//		iA = new InaccessibleArea( pg_room );
+//		iA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 3.4, 5.8 ) );
+//		points.add( new PlanPoint( 4.6, 5.8 ) );
+//		points.add( new PlanPoint( 4.6, 6.2 ) );
+//		points.add( new PlanPoint( 3.8, 6.2 ) );
+//		points.add( new PlanPoint( 3.8, 6.6 ) );
+//		points.add( new PlanPoint( 4.6, 6.6 ) );
+//		points.add( new PlanPoint( 4.6, 7.8 ) );
+//		points.add( new PlanPoint( 3.4, 7.8 ) );
+//		points.add( new PlanPoint( 3.4, 7.4 ) );
+//		points.add( new PlanPoint( 4.2, 7.4 ) );
+//		points.add( new PlanPoint( 4.2, 7.0 ) );
+//		points.add( new PlanPoint( 3.4, 7.0 ) );
+//		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.0, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 7.0 ) );
+//		points.add( new PlanPoint( 5.0, 7.0 ) );
+//		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.4, 6.2 ) );
+//		points.add( new PlanPoint( 5.8, 6.2 ) );
+//		points.add( new PlanPoint( 5.8, 6.6 ) );
+//		points.add( new PlanPoint( 5.4, 6.6 ) );
+//		SaveArea sA = new SaveArea( pg_room );
+//		sA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 5.8, 5.8 ) );
+//		points.add( new PlanPoint( 6.2, 5.8 ) );
+//		points.add( new PlanPoint( 6.2, 7.8 ) );
+//		points.add( new PlanPoint( 5.8, 7.8 ) );
+//		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
+//		dA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 5.8 ) );
+//		points.add( new PlanPoint( 8.2, 5.8 ) );
+//		points.add( new PlanPoint( 8.2, 6.2 ) );
+//		points.add( new PlanPoint( 7.8, 6.2 ) );
+//		points.add( new PlanPoint( 7.8, 6.6 ) );
+//		points.add( new PlanPoint( 7.4, 6.6 ) );
+//		points.add( new PlanPoint( 7.4, 6.2 ) );
+//		points.add( new PlanPoint( 6.6, 6.2 ) );
+//		EvacuationArea eA = new EvacuationArea( pg_room );
+//		eA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 6.6 ) );
+//		points.add( new PlanPoint( 8.2, 6.6 ) );
+//		points.add( new PlanPoint( 8.2, 7.0 ) );
+//		points.add( new PlanPoint( 7.4, 7.0 ) );
+//		points.add( new PlanPoint( 7.4, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.0 ) );
+//		points.add( new PlanPoint( 6.6, 7.0 ) );
+//		eA = new EvacuationArea( pg_room );
+//		eA.defineByPoints( points );
+//
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 6.6, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.4 ) );
+//		points.add( new PlanPoint( 7.0, 7.8 ) );
+//		points.add( new PlanPoint( 6.6, 7.8 ) );
+//		eA = new EvacuationArea( pg_room );
+//		eA.defineByPoints( points );
+//
+//		return bp;
 
 	}
 
