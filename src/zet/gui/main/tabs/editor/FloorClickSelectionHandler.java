@@ -180,10 +180,10 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 		Point translated = new Point( dragEnd.x - dragStart.x, dragEnd.y - dragStart.y );
 
 		// Check, if all selected polygons are areas:
-		List<Area<?>> areas = new LinkedList<>();
+		List<Area> areas = new LinkedList<>();
 		for( JPolygon sel : getEditStatus().getSelectedPolygons() ) {
-			if( sel.getPlanPolygon() instanceof Area<?> )
-				areas.add( (Area<?>) sel.getPlanPolygon() );
+			if( sel.getPlanPolygon() instanceof Area )
+				areas.add( (Area) sel.getPlanPolygon() );
 			else {
 				areas = null;
 				break;

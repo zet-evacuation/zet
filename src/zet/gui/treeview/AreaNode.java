@@ -3,7 +3,6 @@ package zet.gui.treeview;
 
 import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.ZLocalization;
 
 /**
  *
@@ -18,10 +17,10 @@ public class AreaNode extends ProjectTreeNode<Area> {
 	@Override
 	public String getInformationText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append( zFormatData.getAreaType().getTypeString() + "\n" );
-		sb.append( zFormatData.getCoordinateString() + "\n" );
-		sb.append( "Koordinaten: " + zFormatData.getCoordinateString() + "\n" );
-		sb.append( "Fläche: " + LocalizationManager.getManager().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
+		sb.append( zFormatData.getAreaType().getTypeString() ).append( "\n");
+		sb.append( zFormatData.getPolygon().getCoordinateString() ).append( "\n");
+		sb.append( "Koordinaten: " ).append( zFormatData.getPolygon().getCoordinateString() ).append( "\n");
+		sb.append( "Fläche: " ).append( LocalizationManager.getManager().getFloatConverter().format( zFormatData.areaMeter() ) ).append( "m²\n");
 		return sb.toString();
 	}
 

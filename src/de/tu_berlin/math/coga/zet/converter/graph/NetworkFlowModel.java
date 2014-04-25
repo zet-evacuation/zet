@@ -53,7 +53,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	protected IdentifiableIntegerMapping<Edge> transitTimes;
 	protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 	protected IdentifiableIntegerMapping<Node> currentAssignment;
-	protected LinkedList<Node> sources;
+	protected List<Node> sources;
 	protected ZToGraphMapping mapping;
 	protected Node supersink;
 	int edgeIndex = 0;
@@ -206,7 +206,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 			throw new AssertionError( ZETLocalization2.loc.getString( "converter.NoCheckException" ) );
 	}
 
-	Node newNode() {
+	public Node newNode() {
 		Node node = new Node( nodeCount );
 		nodeCount++;
 		network.setNode( node );
@@ -226,7 +226,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	void setNodeCapacity( Node node, int value ) {
 		nodeCapacities.set( node, value );
 	}
-	void setTransitTime( Edge edge, int value ) {
+	public void setTransitTime( Edge edge, int value ) {
 		transitTimes.set( edge, value );
 	}
 
@@ -272,7 +272,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		nodeCapacities.increase( node, i );
 	}
 
-	Edge newEdge( Node lastNode, Node node ) {
+	public Edge newEdge( Node lastNode, Node node ) {
 		Edge edge = new Edge( edgeIndex++, lastNode, node );
 		network.setEdge( edge );
 		edgeCapacities.set( edge, 0 );
