@@ -70,7 +70,7 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( p ) : p ) );
 
 			ZetObjectTypes type = getEditStatus().getZetObjectType();
-			if( type.isArea() && !getRoomsUnderMouse( p, components ).contains( ((Area<?>)getZControl().latestPolygon()).getAssociatedRoom() ) )
+			if( type.isArea() && !getRoomsUnderMouse( p, components ).contains( ((Area)getZControl().latestPolygon()).getAssociatedRoom() ) )
 					return; // return, if the necessary polygon was not clicked on
 
 			// check if the new point will close the polygon or the area will be zero

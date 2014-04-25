@@ -136,7 +136,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 			JPolygon poly = roomToPolygonMapping.get( room );
 			assert poly != null;
 			poly.displayPolygon( room );
-			JPolygon jp = findPolygonToArea( this, e2.getAffectedArea() );
+			JPolygon jp = findPolygonToArea( this, e2.getAffectedArea().getPolygon() );
 			System.out.println( "Editing set to " + jp );
 			editStatus.setCurrentEditing( jp );
 		} else
@@ -512,7 +512,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		}
 	}
 
-	public void showPolygon( Area<?> a ) {
+	public void showPolygon( Area a ) {
 		showPolygon( a.getAssociatedRoom() );
 	}
 

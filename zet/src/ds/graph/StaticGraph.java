@@ -32,9 +32,9 @@ public class StaticGraph implements Graph, DirectedGraph {
 	public StaticGraph( boolean directed, int initialNodeCapacity, int initialEdgeCapacity ) {
 
 		this.directed = directed;
-		edges = new ArraySet<Edge>( Edge.class, initialEdgeCapacity );
-		visibleEdges = new HidingSetForThinFlow<Edge>( edges, initialEdgeCapacity );
-		nodes = new ArraySet<Node>( Node.class, initialNodeCapacity );
+		edges = new ArraySet<>( Edge.class, initialEdgeCapacity );
+		visibleEdges = new HidingSetForThinFlow<>( edges, initialEdgeCapacity );
+		nodes = new ArraySet<>( Node.class, initialNodeCapacity );
 		//visibleNodes = new HidingSet<Node>(nodes, initialNodeCapacity);
 
 		adjacentEdges = new HidingAdjacencySetForThinFlow[initialNodeCapacity];
