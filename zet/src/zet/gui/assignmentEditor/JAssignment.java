@@ -14,16 +14,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * JDistribution.java
- * Created on 16. Dezember 2007, 19:30
- */
 package zet.gui.assignmentEditor;
 
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.coga.zet.model.ZControl;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -37,6 +33,7 @@ import zet.gui.GUILocalization;
  * @author Gordon Schlechter
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings("serial")
 public class JAssignment extends JDialog {
 	/**
 	 * Creates a new instance of {@code JAssignment} that is positioned in the
@@ -47,7 +44,7 @@ public class JAssignment extends JDialog {
 	 * @param width the width of the window
 	 * @param height  the height of the window
 	 */
-	public JAssignment( JFrame owner, Project p, String title, int width, int height ) {
+	public JAssignment( JFrame owner, ZControl p, String title, int width, int height ) {
 		super( owner, title, true );
 
 		getContentPane().setLayout( new BorderLayout() );
@@ -56,11 +53,9 @@ public class JAssignment extends JDialog {
 		// Add close button
 		final JPanel pnlButton = new JPanel( new BorderLayout() );
 		final JButton btnClose = new JButton( GUILocalization.loc.getString( "gui.General.quit" ) );
-		btnClose.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				JAssignment.this.setVisible( false );
-			}
-		} );
+		btnClose.addActionListener( (ActionEvent e) -> {
+			JAssignment.this.setVisible( false );
+		});
 		pnlButton.add( btnClose, BorderLayout.EAST );
 		pnlButton.setBorder( new EmptyBorder( 0, 0, 16, 16 ) );
 		getContentPane().add( pnlButton, BorderLayout.SOUTH );

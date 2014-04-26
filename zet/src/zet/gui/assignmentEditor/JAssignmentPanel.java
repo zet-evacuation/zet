@@ -61,9 +61,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.event.KeyAdapter;
@@ -90,6 +88,7 @@ import zet.gui.GUILocalization;
  * {@link HyperExponentialDistribution} are supported.
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings("serial")
 public class JAssignmentPanel extends JPanel {
 	private static final int COL_NAME = 0;
 	private static final int COL_DISTRIBUTION = 1;
@@ -102,25 +101,25 @@ public class JAssignmentPanel extends JPanel {
 	private static final int DIST_EXPONENTIAL = 2;
 	private static final int DIST_ERLANG = 3;
 	private static final int DIST_HYPEREXPONENTIAL = 4;
-	Project myProject;
+	private final ZControl myProject;
 	private static final Localization loc = GUILocalization.loc;	// the ZET GUI localization object
 	private Assignment currentAssignment;
 	private AssignmentType currentAssignmentType;
 	private JTextField addAssignmentText;
 	private JTextField addAssignmentTypeText;
-	private JList lstAssignment;
+	private JList<Assignment> lstAssignment;
 	private AssignmentListModel assignmentSelector;
-	private JList lstAssignmentType;
+	private JList<AssignmentType> lstAssignmentType;
 	private AssignmentTypeListModel assignmentTypeSelector;
 	private JTextField txtDefaultEvacuees;
-	private ArrayList<DistributionEntry> params;
+	private final ArrayList<DistributionEntry<Double>> params;
 	private AssignmentTableModel tablemodel;
 	private JTable distributionTable;
 	/** A panel containing the plot of the density */
 	private ChartPanel chartPanel;
 	/** The chart of the probability dense function */
 	private JFreeChart chart;
-	private JComboBox distributions;
+	private JComboBox<String> distributions;
 	private JDialog parent;
 
 	/**
@@ -129,10 +128,10 @@ public class JAssignmentPanel extends JPanel {
 	 * @param parent the parent window in which the panel is contained.
 	 * @param p the project whose assignments are edited
 	 */
-	public JAssignmentPanel( JDialog parent, Project p ) {
+	public JAssignmentPanel( JDialog parent, ZControl p ) {
 		super();
 		myProject = p;
-		params = new ArrayList<DistributionEntry>( 5 );
+		params = new ArrayList<>( 5 );
 		this.parent = parent;
 		addComponents();
 	}
@@ -151,23 +150,14 @@ public class JAssignmentPanel extends JPanel {
 
 		// Create the main table
 		tablemodel = new AssignmentTableModel();
-		tablemodel.addTableModelListener( new TableModelListener() {
-			@Override
-			public void tableChanged( TableModelEvent e ) {
-				drawCharts();
-			}
-		} );
+		tablemodel.addTableModelListener( e -> { drawCharts(); } );
 		distributionTable = new JTable( tablemodel );
 		distributionTable.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-		distributionTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
+		distributionTable.getSelectionModel().addListSelectionListener( (ListSelectionEvent e) -> {
+			drawCharts();
+		});
 
-			@Override
-			public void valueChanged( ListSelectionEvent e ) {
-				drawCharts();
-			}
-		} );
-
-		distributions = new JComboBox();
+		distributions = new JComboBox<>();
 		distributions.addItem( loc.getString( "gui.AssignmentEditor.Distribution.NormalDistribution" ) );
 		distributions.addItem( loc.getString( "gui.AssignmentEditor.Distribution.UniformDistribution" ) );
 		distributions.addItem( loc.getString( "gui.AssignmentEditor.Distribution.ExponentialDistribution" ) );
@@ -185,7 +175,7 @@ public class JAssignmentPanel extends JPanel {
 		final JPanel leftPanel = getLeftPanel();
 		leftPanel.setMaximumSize( new Dimension( 200, 0 ) );
 		add( leftPanel, BorderLayout.WEST );
-		assignmentSelector.displayAssignments( myProject );
+		assignmentSelector.displayAssignments( myProject.getProject() );
 	}
 
 	/**
@@ -219,7 +209,7 @@ public class JAssignmentPanel extends JPanel {
 		row++;
 
 		assignmentSelector = new AssignmentListModel();
-		lstAssignment = new JList();
+		lstAssignment = new JList<>();
 		lstAssignment.setModel( assignmentSelector );
 		lstAssignment.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
 		lstAssignment.setCellRenderer( new AssignmentListRenderer() );
@@ -267,7 +257,7 @@ public class JAssignmentPanel extends JPanel {
 		row++;
 
 		assignmentTypeSelector = new AssignmentTypeListModel();
-		lstAssignmentType = new JList();
+		lstAssignmentType = new JList<>();
 		lstAssignmentType.setModel( assignmentTypeSelector );
 		lstAssignmentType.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
 		lstAssignmentType.setCellRenderer( new AssignmentTypeListRenderer() );
@@ -348,12 +338,12 @@ public class JAssignmentPanel extends JPanel {
 	 */
 	private void initDistributions() {
 		loc.setPrefix( "gui.z.AssignmentType." );
-		params.add( new DistributionEntry( loc.getString( "diameter" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "age" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "familiarity" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "panic" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "decisiveness" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "reaction" ), new UniformDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "diameter" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "age" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "familiarity" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "panic" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "decisiveness" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry<>( loc.getString( "reaction" ), new UniformDistribution() ) );
 		loc.setPrefix( "" );
 	}
 	/*****************************************************************************
@@ -367,8 +357,9 @@ public class JAssignmentPanel extends JPanel {
 			try {
 				Assignment add = new Assignment( addAssignmentText.getText() );
 				myProject.addAssignment( add );
+				
 				addAssignmentText.setText( "" );
-				assignmentSelector.displayAssignments( myProject );
+				assignmentSelector.displayAssignments( myProject.getProject() );
 				lstAssignment.setSelectedValue( add, true );
 			} catch( IllegalArgumentException ex ) {
 				JOptionPane.showMessageDialog( parent, ex.getMessage(), loc.getString( "gui.General.Error" ), JOptionPane.ERROR_MESSAGE );
@@ -439,7 +430,7 @@ public class JAssignmentPanel extends JPanel {
 				}
 
 				myProject.deleteAssignment( currentAssignment );
-				assignmentSelector.displayAssignments( myProject );
+				assignmentSelector.displayAssignments( myProject.getProject() );
 			}
 		}
 	};
@@ -453,11 +444,11 @@ public class JAssignmentPanel extends JPanel {
 				}
 
 				currentAssignment.deleteAssignmentType( currentAssignmentType );
-				assignmentSelector.displayAssignments( myProject );
+				assignmentSelector.displayAssignments( myProject.getProject() );
 			}
 		}
 	};
-	private KeyListener kylEvacuees = new KeyAdapter() {
+	private final KeyListener kylEvacuees = new KeyAdapter() {
 		@Override
 		public void keyTyped( KeyEvent e ) {
 			switch( e.getKeyChar() ) {
@@ -490,20 +481,19 @@ public class JAssignmentPanel extends JPanel {
 	public void drawCharts() {
 		int[] sel = distributionTable.getSelectedRows();
 		XYSeriesCollection c = new XYSeriesCollection();
-		JFreeChart newChart = null;
 		int nodes = 150;
 		for( int i = 0; i < sel.length; i++ ) {
 			Object b = distributionTable.getModel().getValueAt( sel[i], 0 );
 			XYSeries dataSeries = new XYSeries( b.toString() );
-			Distribution distribution = params.get( sel[i] ).getDistribution();
-			double distance = (distribution.getMax().doubleValue() - distribution.getMin().doubleValue()) / (nodes - 1);
+			Distribution<Double> distribution = params.get( sel[i] ).getDistribution();
+			double distance = (distribution.getMax() - distribution.getMin()) / (nodes - 1);
 			for( int j = 0; j < nodes; j++ ) {
-				double pos = distribution.getMin().doubleValue() + j * distance;
+				double pos = distribution.getMin() + j * distance;
 				dataSeries.add( pos, distribution.getDensityAt( pos ) );
 			}
 			c.addSeries( dataSeries );
 		}
-		newChart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.AssignmentEditor.plot.Title" ),
+		JFreeChart newChart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.AssignmentEditor.plot.Title" ),
 						loc.getStringWithoutPrefix( "gui.AssignmentEditor.plot.Values" ), // X-Axis label
 						loc.getStringWithoutPrefix( "gui.AssignmentEditor.plot.Probability" ), // Y-Axis label
 						c, // Dataset
@@ -565,11 +555,11 @@ public class JAssignmentPanel extends JPanel {
 	 * distributions can be changed by an index and a name of the distribution
 	 * can be returned. This is used in the table, where rows belong to parameters.
 	 */
-	private class DistributionEntry {
+	private class DistributionEntry<E extends Number> {
 		private String name;
-		private Distribution distribution;
+		private Distribution<E> distribution;
 
-		DistributionEntry( String name, Distribution distribution ) {
+		DistributionEntry( String name, Distribution<E> distribution ) {
 			this.name = name;
 			this.distribution = distribution;
 		}
@@ -587,7 +577,7 @@ public class JAssignmentPanel extends JPanel {
 			return name;
 		}
 
-		public Distribution getDistribution() {
+		public Distribution<E> getDistribution() {
 			return distribution;
 		}
 
@@ -603,27 +593,27 @@ public class JAssignmentPanel extends JPanel {
 			} else if( distribution instanceof HyperExponentialDistribution ) {
 				return loc.getString( "gui.AssignmentEditor.Distribution.HyperExponentialDistribution" );
 			} else {
-				throw new UnsupportedOperationException( "Not supported yet." );
+				throw new AssertionError( "Not supported yet." );
 			}
 		}
 
-		public void setDistribution( Distribution distribution ) {
+		public void setDistribution( Distribution<E> distribution ) {
 			this.distribution = distribution;
 		}
 
 		public boolean useParam( int id ) {
 			if( distribution instanceof UniformDistribution ) {
-				return id >= 1 && id <= 2 ? true : false;
+				return id >= 1 && id <= 2;
 			} else if( distribution instanceof NormalDistribution ) {
-				return id >= 1 && id <= 4 ? true : false;
+				return id >= 1 && id <= 4;
 			} else if( distribution instanceof ErlangDistribution ) {
-				return id >= 1 && id <= 4 ? true : false;
+				return id >= 1 && id <= 4;
 			} else if( distribution instanceof ExponentialDistribution ) {
-				return id >= 1 && id <= 3 ? true : false;
+				return id >= 1 && id <= 3;
 			} else if( distribution instanceof HyperExponentialDistribution ) {
-				return id >= 1 && id <= 5 ? true : false;
+				return id >= 1 && id <= 5;
 			} else {
-				throw new UnsupportedOperationException( "Not supported yet." );
+				throw new AssertionError( "Not supported yet." );
 			}
 		}
 
@@ -780,7 +770,7 @@ public class JAssignmentPanel extends JPanel {
 	 */
 	private class AssignmentTableModel extends AbstractTableModel {
 		@Override
-		public Class getColumnClass( int column ) {
+		public Class<String> getColumnClass( int column ) {
 			switch( column ) {
 				case COL_NAME:
 					return String.class;
@@ -795,7 +785,7 @@ public class JAssignmentPanel extends JPanel {
 				case COL_PARAM4:
 					return String.class;
 				default:
-					return null;
+					throw new AssertionError( column );
 			}
 		}
 
@@ -926,10 +916,8 @@ public class JAssignmentPanel extends JPanel {
 					default:
 						throw new UnsupportedOperationException( "Not supported yet." );
 				}
-			} catch( java.text.ParseException e ) {
+			} catch( java.text.ParseException | java.lang.IllegalArgumentException e ) {
 				// Occurs, if a string not starting with a number is entered.
-			} catch( java.lang.IllegalArgumentException e ) {
-				// Occurs, if a parameter is out of bounds.
 			}
 			distributionTable.repaint(); // Necessary for (de)activating columns
 		}
@@ -940,7 +928,7 @@ public class JAssignmentPanel extends JPanel {
 	 * table and charts if at least one assignment type is present in the
 	 * current assignment.
 	 */
-	private class AssignmentTypeListModel extends DefaultListModel {
+	private class AssignmentTypeListModel extends DefaultListModel<AssignmentType> {
 
 		public void displayAssignmentTypes() {
 			removeAllElements();
@@ -959,7 +947,7 @@ public class JAssignmentPanel extends JPanel {
 	 * A model for the assignment list. Automatically selects the first type, if
 	 * present and resets components if necessary.
 	 */
-	private class AssignmentListModel extends DefaultListModel {
+	private class AssignmentListModel extends DefaultListModel<Assignment> {
 		public void displayAssignments( Project p ) {
 			removeAllElements();
 			if( p != null ) {
@@ -998,7 +986,7 @@ public class JAssignmentPanel extends JPanel {
 		@Override
 		public void setSelectionInterval( int index0, int index1 ) {
 			super.setSelectionInterval( index0, index1 );
-			currentAssignment = (Assignment) assignmentSelector.elementAt( getMinSelectionIndex() );
+			currentAssignment = assignmentSelector.elementAt( getMinSelectionIndex() );
 			addAssignmentText.setText( currentAssignment.getName() );
 			assignmentTypeSelector.displayAssignmentTypes();
 
@@ -1017,17 +1005,17 @@ public class JAssignmentPanel extends JPanel {
 	 * This class can display [@link Assignment} objects in a {@code JList}. The
 	 * currently selected assignment is printed bold.
 	 */
-	private class AssignmentListRenderer extends ComboBoxRenderer {
+	private class AssignmentListRenderer extends ComboBoxRenderer<Assignment> {
 		final private Font boldFont = getFont().deriveFont( Font.BOLD );
 		final private Font normalFont = getFont().deriveFont( Font.PLAIN );
 
 		@Override
-		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+		public Component getListCellRendererComponent( JList<? extends Assignment> list, Assignment value, int index, boolean isSelected, boolean cellHasFocus ) {
 			super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
 			if( value != null ) {
-				Assignment a = ((Assignment) value);
-				setFont( a == myProject.getCurrentAssignment() ? boldFont : normalFont );
+				Assignment a = value;
+				setFont( a == myProject.getProject().getCurrentAssignment() ? boldFont : normalFont );
 				setText( a.getName() );
 			}
 			return this;
@@ -1038,12 +1026,13 @@ public class JAssignmentPanel extends JPanel {
 	 * A model of {@link AssignmentType} objects in a {@code JList}. Automatically
 	 * updates the table and plot if an assignment type is selected.
 	 */
+	@SuppressWarnings("serial")
 	private class AssignmentTypeListSelectionModel extends DefaultListSelectionModel {
 		@Override
 		public void setSelectionInterval( int index0, int index1 ) {
 			super.setSelectionInterval( index0, index1 );
 
-			currentAssignmentType = (AssignmentType) assignmentTypeSelector.elementAt( getMinSelectionIndex() );
+			currentAssignmentType = assignmentTypeSelector.elementAt( getMinSelectionIndex() );
 
 			addAssignmentTypeText.setText( currentAssignmentType.getName() );
 			txtDefaultEvacuees.setText( Integer.toString( currentAssignmentType.getDefaultEvacuees() ) );
@@ -1061,12 +1050,14 @@ public class JAssignmentPanel extends JPanel {
 	 * Displays {@link AssignmentType} objects in a  {@code JList}. They are
 	 * represented by their name.
 	 */
-	private class AssignmentTypeListRenderer extends ComboBoxRenderer {
+	@SuppressWarnings("serial")
+	private class AssignmentTypeListRenderer extends ComboBoxRenderer<AssignmentType> {
 		@Override
-		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+		public Component getListCellRendererComponent( JList<? extends AssignmentType> list, AssignmentType value, int index, boolean isSelected, boolean cellHasFocus ) {
 			super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-			if( value != null )
-				setText( ((AssignmentType) value).getName() );
+			if( value != null ) {
+				setText( value.getName() );
+			}
 			return this;
 		}
 	}
@@ -1091,6 +1082,7 @@ public class JAssignmentPanel extends JPanel {
 	 * A {@code TableCellRenderer} that renders non-editable cells that are
 	 * especially marked.
 	 */
+	@SuppressWarnings("serial")
 	public class InactiveRenderer extends DefaultTableCellRenderer {
 		private final Color inactiveColor = Color.GRAY;
 		private Color activeColorSelected = null;

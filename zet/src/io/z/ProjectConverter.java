@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package io.z;
 
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -26,7 +27,8 @@ import ds.VisualProperties;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +41,7 @@ import java.util.logging.Logger;
  */
 public class ProjectConverter extends ReflectionConverter {
 
-	private Class myClass = Project.class;
+	private final static Class<Project> myClass = Project.class;
 
 	public ProjectConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
 		super( mapper, reflectionProvider );
@@ -71,16 +73,10 @@ public class ProjectConverter extends ReflectionConverter {
 					final java.lang.reflect.Field field = Room.class.getDeclaredField( "teleportAreas" );
 					field.setAccessible( true );
 					if( field.get( r ) == null ) {
-						field.set( r, new ArrayList<TeleportArea>() );
+						field.set( r, new ArrayList<>() );
 						teleportArea = true;
 					}
-				} catch( IllegalArgumentException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( IllegalAccessException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( NoSuchFieldException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( SecurityException ex ) {
+				} catch( IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex ) {
 					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
 				}
 
@@ -91,8 +87,16 @@ public class ProjectConverter extends ReflectionConverter {
 		for( Assignment a : result.getAssignments() ) {
 			if ( a == null ) {
 				System.err.println( "Assignment null" );
-				while( result.getAssignments().contains( null ) )
-					result.deleteAssignment( null );
+				while( result.getAssignments().contains( null ) ) {			
+					try {
+						Method method = result.getClass().getDeclaredMethod( "deleteAssignment" );
+						method.setAccessible( true );
+						method.invoke( result, (Object)null );
+						//result.deleteAssignment( null );
+					} catch( IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex ) {
+						Logger.getLogger( ProjectConverter.class.getName() ).log( Level.SEVERE, null, ex );
+					}
+				}
 			}
 		}
 		
