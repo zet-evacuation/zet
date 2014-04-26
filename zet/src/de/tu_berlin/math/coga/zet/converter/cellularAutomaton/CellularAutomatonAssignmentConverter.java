@@ -58,8 +58,8 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 		int individualCounter = 1;
 		for( Person p : concreteAssignment.getPersons() ) {
 			room = cca.getContainer().getRasteredRoom( p.getRoom() );
-			x = Math.round( (p.getPosition().getXInt() - 200 - p.getRoom().getxOffset()) / 400 );
-			y = Math.round( (p.getPosition().getYInt() - 200 - p.getRoom().getyOffset()) / 400 );
+			x = Math.round( (p.getPosition().getXInt() - 200 - p.getRoom().getPolygon().getxOffset()) / 400 );
+			y = Math.round( (p.getPosition().getYInt() - 200 - p.getRoom().getPolygon().getyOffset()) / 400 );
 			if( !room.isValid( x, y ) )
 				throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.IndividualOutsideException" ) );
 			c = cca.getMapping().get( room.getSquare( x, y ) );

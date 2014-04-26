@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * PolygonPopupListener.java
- * Created on 28. Dezember 2007, 13:11
- */
 package zet.gui.main.menu.popup;
 
 import de.tu_berlin.coga.zet.model.AssignmentArea;
@@ -25,9 +21,10 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;
 import gui.editor.Areas;
-import zet.gui.main.JZetWindow;
+import io.z.ProjectConverter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -41,11 +38,13 @@ public class PolygonPopupListener implements ActionListener {
 	private AssignmentType myType;
 	private PlanPolygon myPolygon;
 	private final GUIControl guiControl;
+	private ZControl projectControl;
 
 
-	public PolygonPopupListener( AssignmentType myType, GUIControl guiControl ) {
+	public PolygonPopupListener( AssignmentType myType, GUIControl guiControl, ZControl projectControl ) {
 		this.guiControl = guiControl;
 		this.myType = myType;
+		this.projectControl = projectControl;
 	}
 
 	/** This method should be called every time before the popup is shown.
@@ -61,10 +60,10 @@ public class PolygonPopupListener implements ActionListener {
 
 		for( int i = 0; i < points.size(); i++ )
 			newPoints.add( new PlanPoint( points.get( i ).getXInt(), points.get( i ).getYInt() ) );
-		AssignmentArea newAA = new AssignmentArea( (Room)myPolygon, myType );
-		newAA.replace( newPoints );
+		//AssignmentArea newAA = new AssignmentArea( (Room)myPolygon, myType );
+		AssignmentArea newAA = projectControl.createNewArea( myPolygon, myType, newPoints );// .newAssignmentArea();
+		//newAA.replace( newPoints );
 
-		//JEditor.getInstance().showArea( Areas.ASSIGNMENT );
 		guiControl.showArea( Areas.Assignment );
 		guiControl.setSelectedPolygon( newAA );
 	}

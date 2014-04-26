@@ -275,8 +275,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		final int width = rasteredRoom.getColumnCount();
 		final int height = rasteredRoom.getRowCount();
 		ds.ca.evac.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
-		int xOffset = rasteredRoom.getRoom().getxOffset() / 400;
-		int yOffset = rasteredRoom.getRoom().getyOffset() / 400;
+		int xOffset = rasteredRoom.getRoom().getPolygon().getxOffset() / 400;
+		int yOffset = rasteredRoom.getRoom().getPolygon().getyOffset() / 400;
 		convertedRoom.setXOffset( xOffset );
 		convertedRoom.setYOffset( yOffset );
 

@@ -149,7 +149,7 @@ public class BuildingResults implements VisualizationResult {
 					throw new RuntimeException( "Error while building the visualisation data out of the building plan: " + "There were two z-floors with the same id. " );
 
 				for( de.tu_berlin.coga.zet.model.Room room : zFloor.getRooms() ) {
-					addHeterogeneousEdgeList( room.edgeIterator( false ), room, buildingFloor );
+					addHeterogeneousEdgeList( room.getPolygon().edgeIterator( false ), room.getPolygon(), buildingFloor );
 					for( de.tu_berlin.coga.zet.model.Barrier barrier : room.getBarriers() ) {
 						Wall w = addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.ElementType.INACCESSIBLE );
 						w.setBarrier( true );
@@ -199,7 +199,7 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 	}
 
-	protected Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.PlanEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
+	protected final Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.PlanEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {

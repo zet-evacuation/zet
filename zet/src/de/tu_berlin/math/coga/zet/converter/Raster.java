@@ -38,12 +38,12 @@ import zet.util.ConversionTools;
  * @param <P> the type of {@link PlanPolygon} that is rasterized
  * @author Jan-Philipp Kappmeier
  */
-public class Raster<T extends RasterSquare, P extends PlanPolygon> {
+public class Raster<T extends RasterSquare > {
 
 	/** The class-type of the raster squares. */
 	private Class<T> squareClassType;
 	/** The class-type of the rasterized polygon. */
-	protected Class<P> polygonClassType;
+	//protected Class<P> polygonClassType;
 	/** Array containing the squares of the rasterized {@link ds.z.PlanPolygon} */
 	protected T[][] rasterSquares;
 	/** A list of squares intersecting the polygon. */
@@ -57,9 +57,9 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	/** The size of the raster used during rasterization process. Defines width and height of a square. */
 	private int raster = 400;
 
-	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p ) {
+	public Raster( Class<T> squareClassType, /*Class<P> polygonClassType, */PlanPolygon p ) {
 		this.squareClassType = squareClassType;
-		this.polygonClassType = polygonClassType;
+		//this.polygonClassType = polygonClassType;
 		this.p = p;
 	}
 
@@ -80,12 +80,12 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * @throws java.lang.IllegalArgumentException if raster is negative or zero
 	 * @author Jan-Philipp Kappmeier
 	 */
-	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, int raster ) throws java.lang.IllegalArgumentException {
+	public Raster( Class<T> squareClassType, /*Class<P> polygonClassType,*/ PlanPolygon p, int raster ) throws java.lang.IllegalArgumentException {
 		if( raster < 1 ) {
 			throw new java.lang.IllegalArgumentException (ZETLocalization2.loc.getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
-		this.polygonClassType = polygonClassType;
+		//this.polygonClassType = polygonClassType;
 		setRaster( raster );
 		this.p = p;
 	}
@@ -107,12 +107,12 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * @throws java.lang.IllegalArgumentException if raster is negative or zero
 	 * @author Jan-Philipp Kappmeier
 	 */
-	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
+	public Raster( Class<T> squareClassType, /*Class<P> polygonClassType,*/ PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
 		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
 			throw new java.lang.IllegalArgumentException (ZETLocalization2.loc.getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
-		this.polygonClassType = polygonClassType;
+		//this.polygonClassType = polygonClassType;
 		setRaster( raster );
 		this.p = p;
 	}
@@ -206,7 +206,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 				// Create square polygon to check
 				T square = null;
 				try {
-					square = squareClassType.getConstructor( this.polygonClassType, int.class, int.class, int.class ).newInstance( p, i, j, raster );
+					square = squareClassType.getConstructor( PlanPolygon.class, int.class, int.class, int.class ).newInstance( p, i, j, raster );
 				} catch( java.lang.NoSuchMethodException e ) {
 					System.err.println("NoSuchMethodException in Raster.java at creation of squares in rasterize().");
 				} catch( java.lang.InstantiationException e ) {

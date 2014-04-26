@@ -61,7 +61,7 @@ public final class RasterTools {
 	 * @param a the {@code x}-position of that the square should be
 	 * @param b the {@code y}-position of that the square should be
 	 */
-	private final static <T extends RoomRasterSquare> void addIfExistent( LinkedList<T> adjacentSquares, RoomRaster<T> raster, int a, int b ) {
+	private static <T extends RoomRasterSquare> void addIfExistent( LinkedList<T> adjacentSquares, RoomRaster<T> raster, int a, int b ) {
 		if( raster.isValid( a, b ) && raster.getSquare( a, b ).isAccessible() ) {
 			T square = raster.getSquare( a, b );
 			adjacentSquares.add( square );
@@ -85,11 +85,13 @@ public final class RasterTools {
 	 * have a y-coordinate &lt; y1) in increasing order (i.e. also
 	 * from left to right).
 	 *
+	 * @param <T>
 	 * @param edge An edge of a room
+	 * @param raster
 	 * @return A list of all squares adjacent to the edge.
 	 */
-	public final static <T extends RoomRasterSquare> List<T> getSquaresAlongEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
-		LinkedList<T> adjacentSquares = new LinkedList<T>();
+	public static <T extends RoomRasterSquare> List<T> getSquaresAlongEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		adjacentSquares.addAll( getSquaresAboveEdge( edge, raster ) );
 		adjacentSquares.addAll( getSquaresBelowEdge( edge, raster ) );
@@ -118,7 +120,7 @@ public final class RasterTools {
 		int rasterY1 = RasterTools.polyCoordToRasterCoord( edge.boundUpper(), raster.getYOffset(), raster );
 		int rasterY2 = RasterTools.polyCoordToRasterCoord( edge.boundLower(), raster.getYOffset(), raster );
 
-		LinkedList<T> adjacentSquares = new LinkedList<T>();
+		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		if( rasterX1 == rasterX2 )
 			return adjacentSquares;
@@ -151,7 +153,7 @@ public final class RasterTools {
 		int rasterY1 = RasterTools.polyCoordToRasterCoord( edge.boundUpper(), raster.getYOffset(), raster );
 		int rasterY2 = RasterTools.polyCoordToRasterCoord( edge.boundLower(), raster.getYOffset(), raster );
 
-		LinkedList<T> adjacentSquares = new LinkedList<T>();
+		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		if( rasterX1 == rasterX2 )
 			return adjacentSquares;
@@ -184,7 +186,7 @@ public final class RasterTools {
 		int rasterY1 = RasterTools.polyCoordToRasterCoord( edge.boundUpper(), raster.getYOffset(), raster );
 		int rasterY2 = RasterTools.polyCoordToRasterCoord( edge.boundLower(), raster.getYOffset(), raster );
 
-		LinkedList<T> adjacentSquares = new LinkedList<T>();
+		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		if( rasterY1 == rasterY2 )
 			return adjacentSquares;
@@ -217,7 +219,7 @@ public final class RasterTools {
 		int rasterY1 = RasterTools.polyCoordToRasterCoord( edge.boundUpper(), raster.getYOffset(), raster );
 		int rasterY2 = RasterTools.polyCoordToRasterCoord( edge.boundLower(), raster.getYOffset(), raster );
 
-		LinkedList<T> adjacentSquares = new LinkedList<T>();
+		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		if( rasterY1 == rasterY2 )
 			return adjacentSquares;

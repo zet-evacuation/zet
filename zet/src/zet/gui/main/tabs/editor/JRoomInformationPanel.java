@@ -103,7 +103,7 @@ public class JRoomInformationPanel extends JInformationPanel<Room> {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				//projectControl.refineRoomCoordinates( (Room)selection.getSelected().getPlanPolygon(), ZETProperties.getRasterSizeSnap() );
-				projectControl.refineRoomCoordinates( current, ZETProperties.getRasterSizeSnap() );
+				projectControl.refineRoomCoordinates( current.getPolygon(), ZETProperties.getRasterSizeSnap() );
 				//getLeftPanel().getMainComponent().displayFloor();
 			}
 		} );
@@ -121,7 +121,7 @@ public class JRoomInformationPanel extends JInformationPanel<Room> {
 		//txtRoomName.setText( ((Room)selection.getSelected().getPlanPolygon()).getName() );
 		txtRoomName.setText( current.getName() );
 		//double areaRoom = Math.round( selection.getSelected().getPlanPolygon().areaMeter() * 100 ) / 100.0;
-		double areaRoom = Math.round( current.areaMeter() * 100 ) / 100.0;
+		double areaRoom = Math.round( current.getPolygon().areaMeter() * 100 ) / 100.0;
 		lblRoomSize.setText( nfFloat.format( areaRoom ) + " m²" );
 	}
 

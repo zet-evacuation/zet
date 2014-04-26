@@ -14,14 +14,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * JPolygonPopupListener.java
- * Created on 28. Dezember 2007, 13:11
- */
 package zet.gui.main.menu.popup;
 
 import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
 import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.TeleportEdge;
@@ -83,7 +80,9 @@ public class EdgePopupListener implements ActionListener {
 					for( Room r : myRoom.getAssociatedFloor().getRooms() )
 						if( r != myRoom )
 							try {
-								partner = r.getEdge( (RoomEdge)myEdge );
+								PlanPolygon<RoomEdge> p = (PlanPolygon<RoomEdge>)r.getPolygon();
+								partner = p.getEdge( (RoomEdge)myEdge );
+								//partner = r.getPolygon().getEdge( (RoomEdge)myEdge );
 								break; // Break when successful
 							} catch( IllegalArgumentException ex ) { }
 					if( partner != null ) {
@@ -107,15 +106,10 @@ public class EdgePopupListener implements ActionListener {
 				projectControl.insertPoint( myEdge, newPoint );
 			} else if( e.getActionCommand().equals( "makeTeleport" ) )
 				if( myEdge instanceof RoomEdge )
-//					if( GUIOptionManager.getEditMode() != EditModeOld.TeleportEdgeCreation ) {
-										if( null != EditModeOld.TeleportEdgeCreation ) {
-						// Start teleport connection creation
-//						GUIOptionManager.setEditMode( EditModeOld.TeleportEdgeCreation );
-//						GUIOptionManager.getEditMode().getPayload().add( myEdge );
-
+					if( null != EditModeOld.TeleportEdgeCreation ) {
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 					} else {
-						Room.connectToWithTeleportEdge( (RoomEdge)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
+						projectControl.connectToWithTeleportEdge( (RoomEdge)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
 						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 					}
 				else
@@ -126,15 +120,11 @@ public class EdgePopupListener implements ActionListener {
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Evakuierungsausgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "createPassageRoom" ) ) {
-//				if( GUIOptionManager.getEditMode() == EditModeOld.TeleportEdgeCreation ) {
 				if( null == EditModeOld.TeleportEdgeCreation ) {
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Erzeugen sie erst die Teleport-Kante!" ) );
 					return;
 				}
-//				if( GUIOptionManager.getEditMode() != EditModeOld.PassableRoomCreation ) {
 				if( null != EditModeOld.PassableRoomCreation ) {
-//					GUIOptionManager.setEditMode( EditModeOld.PassableRoomCreation );
-//					GUIOptionManager.getEditMode().getPayload().add( myEdge );
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 				} else {
 					projectControl.connectRooms( (RoomEdge)EditModeOld.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );

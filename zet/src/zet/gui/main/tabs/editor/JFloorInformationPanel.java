@@ -6,7 +6,7 @@ package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
 import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Room;
 import gui.ZETLoader;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
@@ -169,8 +169,8 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 		txtFloorHeight.setText( Integer.toString( current.getHeight() ) );
 
 		double areaFloor = 0;
-		for( PlanPolygon<?> p : current )
-			areaFloor += p.areaMeter();
+		for( Room r : current )
+			areaFloor += r.getPolygon().areaMeter();
 
 		lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
 	}

@@ -15,47 +15,45 @@
  */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import de.tu_berlin.coga.zet.model.Room;
+public class ZToCARasterSquare extends RoomRasterSquare {
 
-public class ZToCARasterSquare extends RoomRasterSquare{
+	private boolean isDoor;
+	private Vector<ZToCARasterSquare> partnerDoors;
 
-    private boolean isDoor;
-    private Vector<ZToCARasterSquare> partnerDoors;
-    
-    
-    public ZToCARasterSquare(Room r, int column, int row, int raster) {
-        super(r, column, row, raster);
-        partnerDoors = new Vector<ZToCARasterSquare>(2);
-        this.isDoor = false;
-    }
-    
-    public void addPartner(ZToCARasterSquare partnerDoor){
-        partnerDoors.add(partnerDoor);
-    }
-    
-    public List<ZToCARasterSquare> getPartners(){
-        return Collections.unmodifiableList(partnerDoors);
-    }
-           
-    public boolean isDoor(){
-        return isDoor;
-    }
-    
-    public void setIsDoor(){
-        this.isDoor = true;
-    }
-    
-    public void clearIsDoor(){
-        this.isDoor = false;
-    }
-    
-    public void setIsDoor(boolean isDoor){
-        this.isDoor = isDoor;
-    }
-    
+	public ZToCARasterSquare( PlanPolygon r, int column, int row, int raster ) {
+		super( r, column, row, raster );
+		partnerDoors = new Vector<ZToCARasterSquare>( 2 );
+		this.isDoor = false;
+	}
+
+	public void addPartner( ZToCARasterSquare partnerDoor ) {
+		partnerDoors.add( partnerDoor );
+	}
+
+	public List<ZToCARasterSquare> getPartners() {
+		return Collections.unmodifiableList( partnerDoors );
+	}
+
+	public boolean isDoor() {
+		return isDoor;
+	}
+
+	public void setIsDoor() {
+		this.isDoor = true;
+	}
+
+	public void clearIsDoor() {
+		this.isDoor = false;
+	}
+
+	public void setIsDoor( boolean isDoor ) {
+		this.isDoor = isDoor;
+	}
+
 }
