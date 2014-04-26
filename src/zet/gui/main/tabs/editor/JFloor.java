@@ -114,7 +114,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		for( Room r : f.getRooms() ) {
 			JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
 			add( roomPolygon );
-			roomPolygon.displayPolygon( r );
+			roomPolygon.displayPolygon( r.getPolygon() );
 			roomToPolygonMapping.put( r, roomPolygon );
 		}
 
@@ -135,7 +135,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 			// cannot create a new room here!
 			JPolygon poly = roomToPolygonMapping.get( room );
 			assert poly != null;
-			poly.displayPolygon( room );
+			poly.displayPolygon( room.getPolygon() );
 			JPolygon jp = findPolygonToArea( this, e2.getAffectedArea().getPolygon() );
 			System.out.println( "Editing set to " + jp );
 			editStatus.setCurrentEditing( jp );
@@ -143,11 +143,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 			for( Room room : e.getAffectedRooms() ) {
 				JPolygon poly = roomToPolygonMapping.get( room );
 				if( poly != null )
-					poly.displayPolygon( room );
+					poly.displayPolygon( room.getPolygon() );
 				else { // we have a new room
 					JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
 					add( roomPolygon );
-					roomPolygon.displayPolygon( room );
+					roomPolygon.displayPolygon( room.getPolygon() );
 					roomToPolygonMapping.put( room, roomPolygon );
 					editStatus.setCurrentEditing( roomPolygon );
 				}
@@ -197,7 +197,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		for( Entry<Room,JPolygon> e : roomToPolygonMapping.entrySet() ) {
 			Room r = e.getKey();
 			JPolygon poly = e.getValue();
-			poly.displayPolygon( r );
+			poly.displayPolygon( r.getPolygon() );
 		}
 		getPlanImage().update();
 

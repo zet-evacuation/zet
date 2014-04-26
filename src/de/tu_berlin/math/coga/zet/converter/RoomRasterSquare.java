@@ -13,10 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * RoomRasterSquare.java
- *
- */
+
+
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.coga.zet.model.DelayArea;
@@ -31,6 +29,7 @@ import java.util.Locale;
 import java.util.Set;
 import de.tu_berlin.coga.common.util.Direction8;
 import de.tu_berlin.coga.common.util.Level;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.TeleportArea;
 
 /**
@@ -65,11 +64,11 @@ public class RoomRasterSquare extends RasterSquare {
 	 * @param row the row in the virtual raster-array
 	 * @param raster the width and height of the raster square
 	 */
-	public RoomRasterSquare( Room r, int column, int row, int raster ) {
+	public RoomRasterSquare( PlanPolygon r, int column, int row, int raster ) {
 		super( r, column, row, raster );
 
 		passable = EnumSet.allOf( Direction8.class );
-		levels = new EnumMap<Direction8, Level>( Direction8.class );
+		levels = new EnumMap<>( Direction8.class );
 		for( Direction8 direction : Direction8.values() )
 			levels.put( direction, Level.Equal );
 		if( properties != null )

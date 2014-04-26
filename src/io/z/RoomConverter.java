@@ -22,6 +22,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomImpl;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.TeleportArea;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class RoomConverter extends PlanPolygonConverter {
 	 */
 	@Override
 	public boolean canConvert( Class type ) {
-		return type.equals( Room.class );
+		return type.equals( RoomImpl.class );
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class RoomConverter extends PlanPolygonConverter {
 	 */
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
-		Room room = (Room) super.unmarshal( reader, context );
+		RoomImpl room = (RoomImpl) super.unmarshal( reader, context );
 
 		Class<?> c = room.getClass();
 		java.lang.reflect.Field field;

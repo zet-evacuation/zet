@@ -13,15 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * ZToGraphRasterSquare.java
- * 
- */
+
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import ds.graph.Node;
 import de.tu_berlin.coga.zet.model.AssignmentArea;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
 
 /**
@@ -47,7 +45,7 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 * @param row the row of this square in the corresponding room matrix.
 	 * @param raster the width / height of the square.
 	 */
-	public ZToGraphRasterSquare( Room r, int column, int row, int raster ) {
+	public ZToGraphRasterSquare( PlanPolygon r, int column, int row, int raster ) {
 		super( r, column, row, raster );
 		isSource = false;
 		check();

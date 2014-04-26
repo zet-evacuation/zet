@@ -75,7 +75,7 @@ public class DXFWriter {
 		int floorNr = 0;
 		for (Floor floor : buildingPlan.getFloors()){
 			for (Room room : floor.getRooms()){
-				for (RoomEdge edge : room.getEdges()){
+				for (RoomEdge edge : room.getPolygon().getEdges()){
 					if (edge.isPassable()){
 						output += edgeToLine(edge, floorNr,5);
 					} else {

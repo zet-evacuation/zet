@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class CAVisualizationMapping
- * Created 08.05.2008, 01:40:12
- */
 package io.visualization;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
@@ -98,8 +94,8 @@ public class CAVisualizationResults implements VisualizationResult {
 
 		for( ds.ca.evac.Room room : caMapping.getCARooms() ) {
 			de.tu_berlin.coga.zet.model.Room zRoom = caMapping.get( room ).getRoom();
-			double xOffset = zRoom.getxOffset();
-			double yOffset = zRoom.getyOffset();
+			double xOffset = zRoom.getPolygon().getxOffset();
+			double yOffset = zRoom.getPolygon().getyOffset();
 
 			caRoomToZOffsetMapping.put( room, new Vector3( xOffset, yOffset, 0 ) );
 		}

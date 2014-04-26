@@ -110,7 +110,7 @@ public class RasterContainerCreator {
 		i = 0;
 		for( Floor floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
-				for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getEdges() ) {
+				for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getPolygon().getEdges() ) {
 					RoomEdge rEdge = (RoomEdge) edge;
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
@@ -148,7 +148,7 @@ public class RasterContainerCreator {
 
 	private void saveListOfDoors( ZToGraphRoomRaster roomRaster, ZToGraphRasterContainer container ) {
 		de.tu_berlin.coga.zet.model.Room room = roomRaster.getRoom();
-		for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getEdges() ) {
+		for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getPolygon().getEdges() ) {
 			RoomEdge rEdge = (RoomEdge) edge;
 			if( (rEdge).isPassable() ) {
 				List<ZToGraphRasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
@@ -176,85 +176,86 @@ public class RasterContainerCreator {
 	}
 
 	public static Project makeComplexExample() {
-		Project project = new Project();
-		BuildingPlan bp = project.getBuildingPlan();
-		Floor mainFloor = new Floor( ZETLocalization2.loc.getString( "converter.groundFloor" ) );
-		bp.addFloor( mainFloor );
-
-		ArrayList<PlanPoint> points;
-
-		// Create Room 1
-		Room r01 = new Room( mainFloor, "Raum 1" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 0.4d, 0.4d, true ) );
-		points.add( new PlanPoint( 3.2d, 0.4d, true ) );
-		points.add( new PlanPoint( 3.2d, 2.4d, true ) );
-		points.add( new PlanPoint( 3.6d, 2.4d, true ) );
-		points.add( new PlanPoint( 3.6d, 2.8d, true ) );
-		points.add( new PlanPoint( 4d, 2.8d, true ) );
-		points.add( new PlanPoint( 4d, 3.2d, true ) );
-		points.add( new PlanPoint( 4.4d, 3.2d, true ) );
-		points.add( new PlanPoint( 4.4d, 3.6d, true ) );
-		points.add( new PlanPoint( 2d, 3.6d, true ) );
-		points.add( new PlanPoint( 1.6d, 3.6d, true ) );
-		points.add( new PlanPoint( 1.6d, 2.8d, true ) );
-		points.add( new PlanPoint( 1.2d, 2.8d, true ) );
-		points.add( new PlanPoint( 1.2d, 2d, true ) );
-		points.add( new PlanPoint( 0.8d, 2d, true ) );
-		points.add( new PlanPoint( 0.8d, 1.2d, true ) );
-		points.add( new PlanPoint( 0.4d, 1.2d, true ) );
-		points.add( new PlanPoint( 0.4d, 0.4d, true ) );
-		r01.defineByPoints( points );
-
-		Room r02 = new Room( mainFloor, "Raum 2" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 2d, 3.6d, true ) );
-		points.add( new PlanPoint( 4.4d, 3.6d, true ) );
-		points.add( new PlanPoint( 4.4d, 4d, true ) );
-		points.add( new PlanPoint( 2d, 4d, true ) );
-		r02.defineByPoints( points );
-
-		Room r03 = new Room( mainFloor, "Raum 3" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 2d, 4d, true ) );
-		points.add( new PlanPoint( 4.4d, 4d, true ) );
-		points.add( new PlanPoint( 4.8d, 4d, true ) );
-		points.add( new PlanPoint( 4.8d, 4.8d, true ) );
-		points.add( new PlanPoint( 4.4d, 4.8d, true ) );
-		points.add( new PlanPoint( 4d, 4.8d, true ) );
-		points.add( new PlanPoint( 2.4d, 4.8d, true ) );
-		points.add( new PlanPoint( 2.4d, 4.4d, true ) );
-		points.add( new PlanPoint( 2d, 4.4d, true ) );
-		r03.defineByPoints( points );
-
-		Room r04 = new Room( mainFloor, "Raum 4" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 4d, 4.8d, true ) );
-		points.add( new PlanPoint( 4.4d, 4.8d, true ) );
-		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
-		points.add( new PlanPoint( 4d, 6.4d, true ) );
-		points.add( new PlanPoint( 4d, 4.8d, true ) );
-		r04.defineByPoints( points );
-
-		Room r05 = new Room( mainFloor, "Raum 5" );
-		points = new ArrayList<>();
-		points.add( new PlanPoint( 2d, 6.4d, true ) );
-		points.add( new PlanPoint( 4d, 6.4d, true ) );
-		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
-		points.add( new PlanPoint( 8d, 6.4d, true ) );
-		points.add( new PlanPoint( 8d, 10d, true ) );
-		points.add( new PlanPoint( 2d, 10d, true ) );
-		points.add( new PlanPoint( 2d, 6.4d, true ) );
-		r05.defineByPoints( points );
-
-		// Connect Rooms of Floor 1
-
-		r01.connectTo( r02, new PlanPoint( 2, 3.6 ), new PlanPoint( 4.4, 3.6 ) );
-		r02.connectTo( r03, new PlanPoint( 2, 4 ), new PlanPoint( 4.4, 4 ) );
-		//r03.connectTo(r04, new PlanPoint(4, 4.8), new PlanPoint(4.4, 4.8));
-		//r04.connectTo(r05, new PlanPoint(4, 6.4), new PlanPoint(4.4, 6.4));
-
-		return project;
+//		Project project = new Project();
+//		BuildingPlan bp = project.getBuildingPlan();
+//		Floor mainFloor = new Floor( ZETLocalization2.loc.getString( "converter.groundFloor" ) );
+//		bp.addFloor( mainFloor );
+//
+//		ArrayList<PlanPoint> points;
+//
+//		// Create Room 1
+//		Room r01 = new Room( mainFloor, "Raum 1" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 0.4d, 0.4d, true ) );
+//		points.add( new PlanPoint( 3.2d, 0.4d, true ) );
+//		points.add( new PlanPoint( 3.2d, 2.4d, true ) );
+//		points.add( new PlanPoint( 3.6d, 2.4d, true ) );
+//		points.add( new PlanPoint( 3.6d, 2.8d, true ) );
+//		points.add( new PlanPoint( 4d, 2.8d, true ) );
+//		points.add( new PlanPoint( 4d, 3.2d, true ) );
+//		points.add( new PlanPoint( 4.4d, 3.2d, true ) );
+//		points.add( new PlanPoint( 4.4d, 3.6d, true ) );
+//		points.add( new PlanPoint( 2d, 3.6d, true ) );
+//		points.add( new PlanPoint( 1.6d, 3.6d, true ) );
+//		points.add( new PlanPoint( 1.6d, 2.8d, true ) );
+//		points.add( new PlanPoint( 1.2d, 2.8d, true ) );
+//		points.add( new PlanPoint( 1.2d, 2d, true ) );
+//		points.add( new PlanPoint( 0.8d, 2d, true ) );
+//		points.add( new PlanPoint( 0.8d, 1.2d, true ) );
+//		points.add( new PlanPoint( 0.4d, 1.2d, true ) );
+//		points.add( new PlanPoint( 0.4d, 0.4d, true ) );
+//		r01.defineByPoints( points );
+//
+//		Room r02 = new Room( mainFloor, "Raum 2" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 2d, 3.6d, true ) );
+//		points.add( new PlanPoint( 4.4d, 3.6d, true ) );
+//		points.add( new PlanPoint( 4.4d, 4d, true ) );
+//		points.add( new PlanPoint( 2d, 4d, true ) );
+//		r02.defineByPoints( points );
+//
+//		Room r03 = new Room( mainFloor, "Raum 3" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 2d, 4d, true ) );
+//		points.add( new PlanPoint( 4.4d, 4d, true ) );
+//		points.add( new PlanPoint( 4.8d, 4d, true ) );
+//		points.add( new PlanPoint( 4.8d, 4.8d, true ) );
+//		points.add( new PlanPoint( 4.4d, 4.8d, true ) );
+//		points.add( new PlanPoint( 4d, 4.8d, true ) );
+//		points.add( new PlanPoint( 2.4d, 4.8d, true ) );
+//		points.add( new PlanPoint( 2.4d, 4.4d, true ) );
+//		points.add( new PlanPoint( 2d, 4.4d, true ) );
+//		r03.defineByPoints( points );
+//
+//		Room r04 = new Room( mainFloor, "Raum 4" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 4d, 4.8d, true ) );
+//		points.add( new PlanPoint( 4.4d, 4.8d, true ) );
+//		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
+//		points.add( new PlanPoint( 4d, 6.4d, true ) );
+//		points.add( new PlanPoint( 4d, 4.8d, true ) );
+//		r04.defineByPoints( points );
+//
+//		Room r05 = new Room( mainFloor, "Raum 5" );
+//		points = new ArrayList<>();
+//		points.add( new PlanPoint( 2d, 6.4d, true ) );
+//		points.add( new PlanPoint( 4d, 6.4d, true ) );
+//		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
+//		points.add( new PlanPoint( 8d, 6.4d, true ) );
+//		points.add( new PlanPoint( 8d, 10d, true ) );
+//		points.add( new PlanPoint( 2d, 10d, true ) );
+//		points.add( new PlanPoint( 2d, 6.4d, true ) );
+//		r05.defineByPoints( points );
+//
+//		// Connect Rooms of Floor 1
+//
+//		r01.connectTo( r02, new PlanPoint( 2, 3.6 ), new PlanPoint( 4.4, 3.6 ) );
+//		r02.connectTo( r03, new PlanPoint( 2, 4 ), new PlanPoint( 4.4, 4 ) );
+//		//r03.connectTo(r04, new PlanPoint(4, 4.8), new PlanPoint(4.4, 4.8));
+//		//r04.connectTo(r05, new PlanPoint(4, 6.4), new PlanPoint(4.4, 6.4));
+//
+//		return project;
+		return null;
 	}
 
 	public static BuildingPlan makeAnotherExample() {

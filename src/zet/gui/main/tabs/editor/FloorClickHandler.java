@@ -1,7 +1,3 @@
-/**
- * FloorClickHandler.java
- * Created: Nov 2, 2012, 4:37:22 PM
- */
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.zet.model.PlanPoint;
@@ -70,7 +66,7 @@ public abstract class FloorClickHandler {
 				if( poly.getPlanPolygon() instanceof Room ) {
 					Room r = (Room)poly.getPlanPolygon();
 					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
-					if( r.contains( new PlanPoint( mousePosition ) ) )
+					if( r.getPolygon().contains( new PlanPoint( mousePosition ) ) )
 						return r;
 				}
 			}
@@ -86,7 +82,7 @@ public abstract class FloorClickHandler {
 				if( poly.getPlanPolygon() instanceof Room ) {
 					Room r = (Room)poly.getPlanPolygon();
 					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
-					if( r.contains( new PlanPoint( mousePosition ) ) )
+					if( r.getPolygon().contains( new PlanPoint( mousePosition ) ) )
 						ret.add( r );
 				}
 			}

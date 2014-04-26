@@ -19,6 +19,7 @@ import zet.gui.GUILocalization;
  * @param <U> The displayed object
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings("serial")
 public abstract class JInformationPanel<U> extends JPanel implements Localized {
 	/** The localization class. */
 	protected Localization loc;

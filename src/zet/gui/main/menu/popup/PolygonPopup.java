@@ -41,7 +41,7 @@ public class PolygonPopup extends JPopupMenu {
 			System.out.println( assignment.toString() );
 			PolygonPopupListener listener;
 			for( AssignmentType t : assignment.getAssignmentTypes() ) {
-				listener = new PolygonPopupListener( t , guiControl );
+				listener = new PolygonPopupListener( t , guiControl, null );
 				polygonPopupListeners.add( listener );
 				Menu.addMenuItem( jmnCreateAssArea, t.getName(), listener );
 			}
@@ -57,6 +57,7 @@ public class PolygonPopup extends JPopupMenu {
 		for( PolygonPopupListener p : polygonPopupListeners )
 			p.setPolygon( currentPolygon );
 	}
+	
 	/** Prohibits serialization. */
 	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
 		throw new UnsupportedOperationException( "Serialization not supported" );

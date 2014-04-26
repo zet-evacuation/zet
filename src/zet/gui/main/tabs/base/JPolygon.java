@@ -227,7 +227,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 			// Contains room-relative bounds
 			Rectangle bounds = new Rectangle( areabounds );
 			if( myPolygon instanceof Area ) {
-				Rectangle translatedBounds = CoordinateTools.translateToScreen( ((Area)myPolygon).getAssociatedRoom().bounds() );
+				Rectangle translatedBounds = CoordinateTools.translateToScreen( ((Area)myPolygon).getAssociatedRoom().getPolygon().bounds() );
 				bounds.x -= translatedBounds.x;
 				bounds.y -= translatedBounds.y;
 			} else {
