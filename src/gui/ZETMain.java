@@ -66,7 +66,7 @@ public class ZETMain {
 	public static void main( String[] args ) {
 		setUpLog( false, true, false, true );
 		privateLogging = false;
-		pm.addPluginsFrom( new File( "./dist" ).toURI() );
+		pm.addPluginsFrom( new File( "./plugins" ).toURI() );
 
 		//AwesomePlugin plugin = pm.getPlugin(AwesomePlugin.class);
 		AlgorithmicPlugin<?,?> plugin = pm.getPlugin(AlgorithmicPlugin.class);

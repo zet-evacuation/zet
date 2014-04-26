@@ -991,7 +991,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showAssignmentDialog() {
-		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), GUILocalization.loc.getString( "gui.AssignmentEditor.Title" ), 850, 400 );
+		JAssignment distribution = new JAssignment( editor, zcontrol, GUILocalization.loc.getString( "gui.AssignmentEditor.Title" ), 850, 400 );
 		distribution.setVisible( true );
 		distribution.dispose();
 	}
