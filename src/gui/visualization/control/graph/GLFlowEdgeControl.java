@@ -55,8 +55,12 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 
 		// general edge attributes
 		maxFlowRate = graphVisResult.getMaxFlowRate();
-		transitTime = graphVisResult.getTransitTimes().get( edge );
+    
+		//transitTime = graphVisResult.getTransitTimes().get( edge );
+    transitTime = 1;
+    
 		capacity = graphVisResult.getEdgeCapacities().get( edge );
+    capacity = 1;
 
 		// calculate flow on the edge
 		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
