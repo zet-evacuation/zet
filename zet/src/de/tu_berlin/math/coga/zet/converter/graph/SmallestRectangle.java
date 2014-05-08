@@ -8,8 +8,11 @@ import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import de.tu_berlin.coga.zet.model.PlanPoint;
-import java.util.LinkedList;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A class that represents the smallest rectangle containing a certain room
@@ -31,17 +34,7 @@ public class SmallestRectangle {
        x_extent = 0.0;
        y_extent = 0.0;
    }
-   
-   public SmallestRectangle()
-   {
-       
-   }
-   
-   public SmallestRectangle(Vector2 cent, List<PlanPoint> recPoi) {
-       this.center = cent;
-       this.recPoints = recPoi;
-   }
-   
+      
    /*
     * Computes the smallest rectangle containing all points of a given room
     * @param numPoints the number of given points 
@@ -119,8 +112,8 @@ public class SmallestRectangle {
        x_extent = 0.5*(max.getX() - min.getX());
        y_extent = 0.5*(max.getY() - min.getY());
 
-       getRectanglePoints();
-       getNodeRectanglePoints();
+       computeRectanglePoints();
+       computeNodeRectanglePoints();
        
        return recPoints;
        
@@ -130,15 +123,11 @@ public class SmallestRectangle {
            return this.center; 
        }
        
-       public List<PlanPoint> getPoints() {
-           return this.recPoints;
-       }
-       
        /*
         * Given a center and the axis of a rectangle, method computes the 4 corners of that 
         */
-       public void getRectanglePoints() {
-           recPoints = new LinkedList<>();
+       private void computeRectanglePoints() {
+           recPoints = new ArrayList<>( 4 );
            
            Vector2 extxAxis = axis[0].scalarMultiplicate(x_extent);
            Vector2 extyAxis = axis[1].scalarMultiplicate(y_extent);
@@ -155,12 +144,16 @@ public class SmallestRectangle {
            recPoints.add(po1);recPoints.add(po2);recPoints.add(po3);recPoints.add(po4);
        }
        
+       PlanPoint getPoint( int i ) {
+         return recPoints.get( i );
+       }
+       
        /*
         * Given 4 corners of a rectangle, method computes the north east, north west, south east and
         * south west point. Thereby the north west corner is always the one with the smallest x-value
         * and the smallest y-value
         */
-       public void getNodeRectanglePoints()
+       public void computeNodeRectanglePoints()
        {
            double xmax = Double.MIN_VALUE;
            double ymax = Double.MIN_VALUE;
@@ -172,8 +165,8 @@ public class SmallestRectangle {
            PlanPoint maxx = new PlanPoint(0,0);
            int numxval =0; int numyval =0;
            //saves the different x and y-points 
-           List<Double> xpoints = new LinkedList<>();
-					 List<Double> ypoints = new LinkedList<>() ;
+           Set<Double> xpoints = new HashSet<>();
+           Set<Double> ypoints = new HashSet<>();
            
            for (PlanPoint p: recPoints) {
                if (!(xpoints.contains(p.getX()))){
@@ -202,7 +195,7 @@ public class SmallestRectangle {
                     }   
            }
                 
-           recPoints = new LinkedList<>();
+           recPoints = new ArrayList<>( 4 );
            
            if (numxval==4 && numyval ==4) { //no rectangle edge is axis aligned
               recPoints.add(minx);
@@ -216,5 +209,18 @@ public class SmallestRectangle {
 						 recPoints.add( new PlanPoint( (int)xmax, (int)ymax ) );
            }
                           
+       }
+       
+       public double width() {
+          Point nw = recPoints.get( 0 );
+          Point ne = recPoints.get( 1 );
+          return Math.sqrt( Math.pow( nw.getX() - ne.getX(), 2 )
+                  + Math.pow( nw.getY() - ne.getY(), 2 ) );
+       }
+       
+       public double height() {
+          Point nw = recPoints.get( 0 );
+          Point sw = recPoints.get( 2 );
+          return Math.sqrt( Math.pow( nw.getX() - sw.getX(), 2 ) + Math.pow( nw.getY() - sw.getY(), 2 ) );
        }
    }

@@ -87,7 +87,7 @@ public class NodeRectangle{
 	 * @param se_x The x-coordinate of the south east corner of the rectangle.
 	 * @param se_y The y-coordinate of the south east corner of the rectangle.
 	 */
-	public NodeRectangle(int nw_x, int nw_y, int ne_x, int ne_y, int sw_x, int sw_y, int se_x, int se_y){
+	public NodeRectangle(int nw_x, int nw_y, int ne_x, int ne_y, int sw_x, int sw_y, int se_x, int se_y) {
 		this.nw = new NodeRectanglePoint(nw_x, nw_y);
 		this.ne = new NodeRectanglePoint(ne_x, ne_y); 
 		this.sw = new NodeRectanglePoint(sw_x, sw_y);

@@ -4,10 +4,10 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import de.tu_berlin.coga.common.util.Filter;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.Node;
@@ -29,10 +29,20 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected Graph roomGraph;
 	public int numStairEdges = 0;
 	public List<Edge> stairEdges = new LinkedList<>();
-	
-	public BaseZToGraphConverter() {
-		// set up the needed properties
+  protected Filter<Edge> checker;
+
+  
+  protected BaseZToGraphConverter() {
+    this.checker = (Edge e) -> true;
+  }
+  
+	protected BaseZToGraphConverter( Filter<Edge> checker ) {
+		this.checker = checker;
 	}
+  
+  protected NetworkFlowModel getModel() {
+    return model;
+  }
 	
 	
 
@@ -42,6 +52,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		model = new NetworkFlowModel( raster );
 		mapping = model.getZToGraphMapping();
+    checker = new DefaultEdgeFilter( model );
 		
 		createNodes();
 		// create edges, their capacities and the capacities of the nodes
@@ -58,8 +69,14 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		//model.setTransitTimes( exactTransitTimes.round() );
 		model.roundTransitTimes();
 
-		// duplicate the edges and their transit times (except those concerning the super sink)		
-		createReverseEdgesWithoutStairEdges( model );
+		// duplicate the edges and their transit times (except those concerning the super sink)
+    System.out.println( "Edgecaps: " + model.edgeCapacities.getDomainSize() );
+    //if( manualStairs ) {
+    //  createReverseEdgesWithoutStairEdges( model );
+    //} else {
+    createReverseEdges();
+    //}
+    System.out.println( "Edgecaps: " + model.edgeCapacities.getDomainSize() );
 
 		model.resetAssignment();
 
@@ -79,10 +96,10 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected abstract void computeTransitTimes();
 
 	protected void createReverseEdges() {
-		createReverseEdges( model );
+		createReverseEdges( model, checker );
 	}
 
-	public static void createReverseEdges(NetworkFlowModel model ) {
+	public static void createReverseEdges(NetworkFlowModel model, Filter<Edge> checker ) {
 		//int edgeIndex = numberOfEdges();
 		final int oldEdgeIndex = model.numberOfEdges();
 		model.setNumberOfEdges( model.numberOfEdges() * 2 - model.numberOfSinks() );
@@ -90,7 +107,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
 			Edge edge = model.getEdge( i );
-			if( !edge.isIncidentTo( model.getSupersink() ) ) {
+      if( checker.accept( edge ) ) {
+//if( !edge.isIncidentTo( model.getSupersink() ) ) {
 				Edge newEdge = model.createReverseEdge( edge );
 			}
 		}
@@ -100,7 +118,12 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected void createReverseEdgesWithoutStairEdges( NetworkFlowModel model ) {
 		int edgeIndex = model.numberOfEdges();
 		final int oldEdgeIndex = edgeIndex;
-		model.setNumberOfEdges( ((edgeIndex - numStairEdges) * 2) - model.numberOfSinks() );
+    
+    final int normalEdges = edgeIndex - numStairEdges;
+    // edges = 2*normal + existing stair edges. reduce by model.numberOfSinks because for sinks we do not create backward edges
+    
+    model.setNumberOfEdges( normalEdges * 2 + numStairEdges - model.numberOfSinks() );
+		//model.setNumberOfEdges( ((edgeIndex - numStairEdges) * 2) - model.numberOfSinks() );
 
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {

@@ -274,7 +274,7 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
                 {
                     System.out.println("Kante: " + e + "Cap: " + minspanmodel.getEdgeCapacity(e) + "Tran: " + minspanmodel.getTransitTime(e));
                 }*/
-                BaseZToGraphConverter.createReverseEdges( minspanmodel );
+                BaseZToGraphConverter.createReverseEdges( minspanmodel, new DefaultEdgeFilter( minspanmodel ) );
                 //minspanmodel.setNetwork(newgraph);               
                 //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());

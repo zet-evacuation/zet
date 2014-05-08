@@ -143,7 +143,7 @@ public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowM
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                BaseZToGraphConverter.createReverseEdges( minspanmodel );
+                BaseZToGraphConverter.createReverseEdges( minspanmodel, new DefaultEdgeFilter( minspanmodel ) );
                 
 								minspanmodel.resetAssignment();
                 return minspanmodel;
