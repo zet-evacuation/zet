@@ -16,13 +16,12 @@ import java.util.logging.Level;
  * @author Jan-Philipp Kappmeier
  */
 public class OptimalStaticSearchTreeAlgorithm<T extends Comparable<T>>
-        extends Algorithm<OptimalStaticSearchTreeInstance<T>,OptimalStaticSearchTree<T>>{
+        extends Algorithm<OptimalStaticSearchTreeInstance<T>,OptimalStaticSearchTree<T>> {
 
 	private double[][] c;
 	private int[][] s;
 
-	public OptimalStaticSearchTreeAlgorithm() {
-	}
+	public OptimalStaticSearchTreeAlgorithm() {}
 
 	@Override
 	protected OptimalStaticSearchTree<T> runAlgorithm( OptimalStaticSearchTreeInstance<T> problem ) {

@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * RectangleConverter.java
- *
- */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
@@ -42,7 +38,6 @@ import java.util.logging.Logger;
  *
  */
 public class RectangleConverter extends BaseZToGraphConverter {
-	final static boolean progress = false;
 	final static int FACTOR = 1;
 
 	static {
@@ -73,7 +68,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		//model.setSupersink( supersink );
 
 		Node supersink = model.getSupersink();
-		
+
 		mapping.setNodeSpeedFactor( supersink, 1 );
 		mapping.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
 		mapping.setFloorForNode( supersink, -1 );
@@ -149,7 +144,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 						square.setNode( node );
 						// If the isSource flag of the square is set,
 						// the node becomes a source.
-						if( square.isSource() )         
+						if( square.isSource() )
 							nodeIsSource = true;
 
 						// First part: Find the highest number n
@@ -283,8 +278,8 @@ public class RectangleConverter extends BaseZToGraphConverter {
 						// save the number of the floor the node belongs to
 						mapping.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
                                                 mapping.setRoomForNode(node, room.getRoom());
-																								
-						
+
+
 						//System.out.print( "Node "+ node.id() );
 						int nodex = (nodeRectangleNW_x + nodeRectangleSE_x)/2;
 						int nodey = (nodeRectangleNW_y + nodeRectangleSE_y)/2;
@@ -302,7 +297,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		// Set graph to model
 		//model.setNetwork( graph );
 		//model.setSources( sources );
-		Logger.getGlobal().fine( " fertig" );  
+		Logger.getGlobal().fine( " fertig" );
 	}
 
 	@Override
@@ -311,22 +306,10 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		ZToGraphMapping mappingLocal = model.getZToGraphMapping();
 
 		List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
-		int nextEdge = 0;
-
-		//DynamicNetwork graph = model.getDynamicNetwork();
-
-		//Two mappings to store capacities
-		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
-		//model.setNodeCapacities( nodesCap );
-		
-
-		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
-		//model.setEdgeCapacities( edgesCap );
 
 		model.ensureCapacities();
-		
+
 		// set node capacity of super sink to max value
-		//nodesCap.set( model.getSupersink(), Integer.MAX_VALUE );
 		model.setNodeCapacity( model.getSupersink(), Integer.MAX_VALUE );
 
 		for( ZToGraphRoomRaster room : rasteredRooms ) {
@@ -351,17 +334,17 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
 					if( nodesConnectable && connectionPassable ) {
 						Edge edge = model.getEdge( lastNode, node );
-						
-						//Edge edge = graph.getEdge( lastNode, node );
+
 						if( edge == null ) {
 							edge = model.newEdge( lastNode, node );
 							ZToGraphRasterSquare lastSquare = null;
-							if( col > 0 )
-								lastSquare = room.getSquare( col - 1, row );
-							else
-								throw new AssertionError( "Col should not be zero at this point." );
-							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
-						}
+              if( col > 0 ) {
+                lastSquare = room.getSquare( col - 1, row );
+              } else {
+                throw new AssertionError( "Col should not be zero at this point." );
+              }
+              mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
+            }
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
 						//edgesCap.increase( edge, 1 * FACTOR );
 					}
@@ -405,8 +388,6 @@ public class RectangleConverter extends BaseZToGraphConverter {
 				lastNode = null;
 			}// end of the outer for each loop
 		}//end for each room
-		//model.setNodeCapacities( nodesCap );
-		//model.setEdgeCapacities( edgesCap );
 		Logger.getGlobal().fine( "done." );
 	}
 
@@ -416,10 +397,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		final long startTT = System.currentTimeMillis();
 		log.log( java.util.logging.Level.FINE, "Computing transit times..." );
 
-		//protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
-		//exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
-		//Graph graph = model.getGraph();
 
 		// calculate INTRA-Room-Edge-Transit-Times
 		final long intraStart = System.currentTimeMillis();
@@ -457,7 +435,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							continue;
 						}
 						// add a transitTime-0-entry to the IIMapping for the current edge if there is not yet such an entry
-						if( /*! model.getExactTransitTime( edge )       xactTransitTimes.isDefinedFor( edge ) ||*/ model.getExactTransitTime( edge ) <= 0 )
+						if( model.getExactTransitTime( edge ) <= 0 )
 							model.setExactTransitTime( edge, 0 );
 						// if the transitTime for the current edge is not already modified
 						if( model.getExactTransitTime( edge ) <= 0 ) {
@@ -470,7 +448,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							NodeRectangle.NodeRectanglePoint endLowerRight = mapping.getNodeRectangles().get( end ).get_se_point();
 							int endCentreX = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterX() );
 							int endCentreY = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterY() );
-							                                                        
+
 							// describes the relative orientation of the start- and end-node rectangles
 							boolean startAboveEnd = false;
 							boolean startBeneathEnd = false;
@@ -489,23 +467,27 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							// coordinates of the point on the centre of the intersecting edge part
 							int intersectionPointX = 0;
 							int intersectionPointY = 0;
-                                                                                                                
+
 							// calculate the coordinates of the intersection point depending on the relative orientation of the two rectangles
 							if( startAboveEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ); 
+								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() )
+                        + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) );
 								intersectionPointY = startLowerRight.getY();
 							}
 							if( startBeneathEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) );
+								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() )
+                        + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) );
 								intersectionPointY = startUpperLeft.getY();
 							}
 							if( startLeftOfEnd ) {
 								intersectionPointX = startLowerRight.getX();
-								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
+								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() )
+                        + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
 							}
 							if( startRightOfEnd ) {
 								intersectionPointX = startUpperLeft.getY();
-								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
+								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() )
+                        + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
 							}
 
 							// speed factor within the node-squares
@@ -518,8 +500,10 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							double endPath;
 
 							// calculate the path length weighted with the appropriate node'Seconds speed factor
-							startPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) ) / startSpeedFactor;
-							endPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) ) / endSpeedFactor;
+							startPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 )
+                      + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) ) / startSpeedFactor;
+							endPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 )
+                      + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) ) / endSpeedFactor;
 							double transitTimeStartEnd = startPath + endPath;
 
 							// getting the graph precision factor, defining the exactness of the distances
@@ -611,164 +595,193 @@ public class RectangleConverter extends BaseZToGraphConverter {
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
 		Logger.getGlobal().log( java.util.logging.Level.FINEST, "  done in {0}.", Formatter.formatUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
-                
+
 		Logger.getGlobal().log( java.util.logging.Level.FINE, "done in {0}.", Formatter.formatUnit( (System.currentTimeMillis() - startTT), TimeUnits.MilliSeconds ) );
 	}
 
 	// i,j stehen fuer das eigentliche square, nicht fuer den nachbarn!
-	private static boolean isRightSquareBlocked( ZToGraphRoomRaster room, int i, int j, boolean careForDelayAreas, boolean careForAssignmentAreas ) {
-		int numOfColumns = room.getColumnCount();
-		int numOfRows = room.getRowCount();
+  private static boolean isRightSquareBlocked( ZToGraphRoomRaster room, int i, int j, boolean careForDelayAreas, boolean careForAssignmentAreas ) {
+    int numOfColumns = room.getColumnCount();
+    int numOfRows = room.getRowCount();
 
-		if( i >= numOfColumns - 1 )
-			return true;
-		if( j >= numOfRows )
-			return true;
+    if( i >= numOfColumns - 1 ) {
+      return true;
+    }
+    if( j >= numOfRows ) {
+      return true;
+    }
 
-		ZToGraphRasterSquare square = room.getSquare( i, j );
-		if( square.isBlocked( Direction8.Right ) )
-			return true;
+    ZToGraphRasterSquare square = room.getSquare( i, j );
+    if( square.isBlocked( Direction8.Right ) ) {
+      return true;
+    }
 
-		ZToGraphRasterSquare right = room.getSquare( i + 1, j );
+    ZToGraphRasterSquare right = room.getSquare( i + 1, j );
 
-		if( right.isInaccessible() )
-			return true;
-		if( right.isMarked() )
-			return true;
+    if( right.isInaccessible() ) {
+      return true;
+    }
+    if( right.isMarked() ) {
+      return true;
+    }
 
-		if( careForDelayAreas )
-			if( square.getSpeedFactor() != right.getSpeedFactor() )
-				return true;
+    if( careForDelayAreas ) {
+      if( square.getSpeedFactor() != right.getSpeedFactor() ) {
+        return true;
+      }
+    }
 
-		if( careForAssignmentAreas )
-			if( square.isSource() != right.isSource() )
-				return true;
+    if( careForAssignmentAreas ) {
+      if( square.isSource() != right.isSource() ) {
+        return true;
+      }
+    }
 
-		// a node is save or not but not both
-		if( square.isSave() != right.isSave() )
-			return true;
+    // a node is save or not but not both
+    if( square.isSave() != right.isSave() ) {
+      return true;
+    }
 
 		// Only squares from stairs with the same up and down speedfactor may be in the same node
-		// (or squares that are not in a stair with stairs that are also not in a stair)
-		if( square.getUpSpeedFactor() != right.getUpSpeedFactor() )
-			return true;
-		if( square.getDownSpeedFactor() != right.getDownSpeedFactor() )
-			return true;
+    // (or squares that are not in a stair with stairs that are also not in a stair)
+    if( square.getUpSpeedFactor() != right.getUpSpeedFactor() ) {
+      return true;
+    }
+    if( square.getDownSpeedFactor() != right.getDownSpeedFactor() ) {
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 	private static boolean isDownSquareBlocked( ZToGraphRoomRaster room, int i, int j, boolean careForDelayAreas, boolean careForAssignmentAreas ) {
-		int numOfColumns = room.getColumnCount();
-		int numOfRows = room.getRowCount();
+    int numOfColumns = room.getColumnCount();
+    int numOfRows = room.getRowCount();
 
-		if( i >= numOfColumns )
-			return true;
-		if( j >= numOfRows - 1 )
-			return true;
+    if( i >= numOfColumns ) {
+      return true;
+    }
+    if( j >= numOfRows - 1 ) {
+      return true;
+    }
 
-		ZToGraphRasterSquare square = room.getSquare( i, j );
-		if( square.isBlocked( Direction8.Down ) )
-			return true;
+    ZToGraphRasterSquare square = room.getSquare( i, j );
+    if( square.isBlocked( Direction8.Down ) ) {
+      return true;
+    }
 
-		ZToGraphRasterSquare down = room.getSquare( i, j + 1 );
+    ZToGraphRasterSquare down = room.getSquare( i, j + 1 );
 
-		if( down.isInaccessible() )
-			return true;
-		if( down.isMarked() )
-			return true;
+    if( down.isInaccessible() ) {
+      return true;
+    }
+    if( down.isMarked() ) {
+      return true;
+    }
 
-		if( careForDelayAreas )
-			if( square.getSpeedFactor() != down.getSpeedFactor() )
-				return true;
+    if( careForDelayAreas ) {
+      if( square.getSpeedFactor() != down.getSpeedFactor() ) {
+        return true;
+      }
+    }
 
-		if( careForAssignmentAreas )
-			if( square.isSource() != down.isSource() )
-				return true;
+    if( careForAssignmentAreas ) {
+      if( square.isSource() != down.isSource() ) {
+        return true;
+      }
+    }
 
-		// a node is save or not but not both
-		if( square.isSave() != down.isSave() )
-			return true;
+    // a node is save or not but not both
+    if( square.isSave() != down.isSave() ) {
+      return true;
+    }
 
 		// Only squares from stairs with the same up and down speedfactor may be in the same node
-		// (or squares that are not in a stair with stairs that are also not in a stair)
-		if( square.getUpSpeedFactor() != down.getUpSpeedFactor() )
-			return true;
-		if( square.getDownSpeedFactor() != down.getDownSpeedFactor() )
-			return true;
+    // (or squares that are not in a stair with stairs that are also not in a stair)
+    if( square.getUpSpeedFactor() != down.getUpSpeedFactor() ) {
+      return true;
+    }
+    if( square.getDownSpeedFactor() != down.getDownSpeedFactor() ) {
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 	/**
-	 * 
+	 *
 	 * @param node
 	 * @param squareList
-	 * @return 
+	 * @return
 	 */
 	private static PlanPoint calculateCentre( Node node, List<ZToGraphRasterSquare> squareList ) {
-		int nodeBreadth;
-		int nodeHeight;
+    int nodeBreadth;
+    int nodeHeight;
 
-		int nodeCentreX;
-		int nodeCentreY;
+    int nodeCentreX;
+    int nodeCentreY;
 
-		// coordinates of the upper Left corner of the upper Left square of the start node
-		int nodeUpperLeftX = Integer.MAX_VALUE;
-		int nodeUpperLeftY = Integer.MAX_VALUE;
-		// coordinates of the lower Right corner of the lower Right square of the start node
-		int nodeLowerRightX = 0;
-		int nodeLowerRightY = 0;
+    // coordinates of the upper Left corner of the upper Left square of the start node
+    int nodeUpperLeftX = Integer.MAX_VALUE;
+    int nodeUpperLeftY = Integer.MAX_VALUE;
+    // coordinates of the lower Right corner of the lower Right square of the start node
+    int nodeLowerRightX = 0;
+    int nodeLowerRightY = 0;
 
-		// find the coordinates of the upper Left and the lower Right square of the current start-node
-		for( ZToGraphRasterSquare square : squareList )
-			if( node.id() == square.getNode().id() ) {
-				if( square.getXOffset() <= nodeUpperLeftX )
-					nodeUpperLeftX = square.getXOffset();
-				if( square.getYOffset() <= nodeUpperLeftY )
-					nodeUpperLeftY = square.getYOffset();
-				if( square.getXOffset() >= nodeLowerRightX )
-					nodeLowerRightX = square.getXOffset();
-				if( square.getYOffset() >= nodeLowerRightY )
-					nodeLowerRightY = square.getYOffset();
-			}
-		// adapt to rectangle corner coordinates
-		nodeLowerRightX += 400;
-		nodeLowerRightY += 400;
-		// calculate the centre-coordinates of the start-node-rectangle
-		nodeBreadth = Math.abs( nodeLowerRightX - nodeUpperLeftX );
-		nodeHeight = Math.abs( nodeLowerRightY - nodeUpperLeftY );
-		nodeCentreX = (int) Math.round( 0.5 * nodeBreadth ) + nodeUpperLeftX;
-		nodeCentreY = (int) Math.round( 0.5 * nodeHeight ) + nodeUpperLeftY;
+    // find the coordinates of the upper Left and the lower Right square of the current start-node
+    for( ZToGraphRasterSquare square : squareList ) {
+      if( node.id() == square.getNode().id() ) {
+        if( square.getXOffset() <= nodeUpperLeftX ) {
+          nodeUpperLeftX = square.getXOffset();
+        }
+        if( square.getYOffset() <= nodeUpperLeftY ) {
+          nodeUpperLeftY = square.getYOffset();
+        }
+        if( square.getXOffset() >= nodeLowerRightX ) {
+          nodeLowerRightX = square.getXOffset();
+        }
+        if( square.getYOffset() >= nodeLowerRightY ) {
+          nodeLowerRightY = square.getYOffset();
+        }
+      }
+    }
+    // adapt to rectangle corner coordinates
+    nodeLowerRightX += 400;
+    nodeLowerRightY += 400;
+    // calculate the centre-coordinates of the start-node-rectangle
+    nodeBreadth = Math.abs( nodeLowerRightX - nodeUpperLeftX );
+    nodeHeight = Math.abs( nodeLowerRightY - nodeUpperLeftY );
+    nodeCentreX = (int)Math.round( 0.5 * nodeBreadth ) + nodeUpperLeftX;
+    nodeCentreY = (int)Math.round( 0.5 * nodeHeight ) + nodeUpperLeftY;
 
-		PlanPoint point = new PlanPoint( nodeCentreX, nodeCentreY );
-		return point;
+    PlanPoint point = new PlanPoint( nodeCentreX, nodeCentreY );
+    return point;
 	}
 
-	private static PlanPoint calculateCentre( ZToGraphRasterSquare square ) {
-		int squareCentreX, squareCentreY;
+  private static PlanPoint calculateCentre( ZToGraphRasterSquare square ) {
+    int squareCentreX, squareCentreY;
 
-		squareCentreX = square.getXOffset() + 200;
-		squareCentreY = square.getYOffset() + 200;
+    squareCentreX = square.getXOffset() + 200;
+    squareCentreY = square.getYOffset() + 200;
 
-		PlanPoint point = new PlanPoint( squareCentreX, squareCentreY );
-		return point;
-	}
+    PlanPoint point = new PlanPoint( squareCentreX, squareCentreY );
+    return point;
+  }
 
-	private static int calculateDistance( PlanPoint start, PlanPoint end ) {
-		int distance;
-		int distanceX, distanceY;
-		int startX = start.getXInt();
-		int startY = start.getYInt();
-		int endX = end.getXInt();
-		int endY = end.getYInt();
+  private static int calculateDistance( PlanPoint start, PlanPoint end ) {
+    int distance;
+    int distanceX, distanceY;
+    int startX = start.getXInt();
+    int startY = start.getYInt();
+    int endX = end.getXInt();
+    int endY = end.getYInt();
 
-		distanceX = Math.abs( startX - endX );
-		distanceY = Math.abs( startY - endY );
+    distanceX = Math.abs( startX - endX );
+    distanceY = Math.abs( startY - endY );
 
-		distance = (int) Math.round( Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) ) );
-		return distance;
-	}
+    distance = (int)Math.round( Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) ) );
+    return distance;
+  }
 
 	private HashMap<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms() {
 		Logger.getGlobal().fine( "Connect rooms... " );
@@ -779,29 +792,18 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		//Two mappings to store capacities
 		//just temporally.
 		Collection<ZToGraphRasteredDoor> doors = raster.getDoors();
-		//DynamicNetwork graph = model.getDynamicNetwork();
-		//IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();
-		//if( edgesCap == null ) {
-		//	edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() );
-			//model.setEdgeCapacities( edgesCap );
-		//}
 
-		//int nextEdge = graph.numberOfEdges();
 		for( ZToGraphRasteredDoor door : doors ) {
 			Node firstNode = door.getFirstDoorPart().getNode();
 			Node secondNode = door.getSecondDoorPart().getNode();
 
 			if( firstNode.id() < secondNode.id() )
 				continue;
-			
+
 			//Edge edge = graph.getEdge( firstNode, secondNode );
 			Edge edge = model.getEdge( firstNode, secondNode );
 			if( edge == null ) {
-				//edge = new Edge( nextEdge++, firstNode, secondNode );
 				edge = model.newEdge( firstNode, secondNode );
-				//graph.addEdge( edge );
-				//edgesCap.setDomainSize( edgesCap.getDomainSize() + 1 );
-				//edgesCap.set( edge, 0 );
 				mappingLocal.setEdgeLevel( edge, Level.Equal );
 
 			}
@@ -845,14 +847,10 @@ public class RectangleConverter extends BaseZToGraphConverter {
 					if( square.isSave() && square.isExit()) {
 						Node node = square.getNode();
 						Edge edge = model.getEdge( node, supersink );
-						//Edge edge = graph.getEdge( node, supersink );
 						if( edge == null ) {
-							//edge = new Edge( nextEdge++, node, supersink );
 							edge = model.newEdge( node, supersink );
-							//graph.addEdge( edge );
 							mappingLocal.setEdgeLevel( edge, Level.Equal );
 						}
-						//edgesCap.set( edge, Integer.MAX_VALUE );
 						model.setEdgeCapacity( edge, Integer.MAX_VALUE );
 					}// end if safe
 				}//end outer loop

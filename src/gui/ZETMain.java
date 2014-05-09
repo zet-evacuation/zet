@@ -73,9 +73,11 @@ public class ZETMain {
 
 		//System.out.println( plugin.howAreYou() );
 		if( plugin == null )
-			System.err.println( "Plugin is null!" );
+			//System.err.println( "Plugin is null!" );
+      log.log( Level.INFO, "Plugin is null!" );
 		else
-			System.out.println( plugin );
+      log.log( Level.INFO, plugin.toString() );
+			//System.out.println( plugin );
 
 		AtomicOperation<EarliestArrivalFlowProblem,PathBasedFlowOverTime> ao = new AtomicOperation<>( "EAFP", EarliestArrivalFlowProblem.class, PathBasedFlowOverTime.class );
 
