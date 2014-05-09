@@ -237,7 +237,8 @@ public class NetworkFlowModel implements Iterable<Node> {
 	void roundTransitTimes() {
 		transitTimes = exactTransitTimes.round();
 	}
-	Edge createReverseEdge( Edge edge ) {
+
+  Edge createReverseEdge( Edge edge ) {
 		Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
 
 		while( network.edges().contains( newEdge ) )
@@ -247,6 +248,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		setEdgeCapacity( newEdge, getEdgeCapacity( edge ) );
 		setTransitTime( newEdge, getTransitTime( edge ) );
 		network.setEdge( newEdge );
+    System.out.println( "Edge (" + newEdge.start() + "," + newEdge.end() + ") created." );
 		return newEdge;
 	}
 	void setNodeAssignment( Node node, int i ) {
@@ -274,6 +276,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 
 	public Edge newEdge( Node lastNode, Node node ) {
 		Edge edge = new Edge( edgeIndex++, lastNode, node );
+    System.out.println( "Edge (" + edge.start() + "," + edge.end() + ") created." );
 		network.setEdge( edge );
 		edgeCapacities.set( edge, 0 );
 		return edge;

@@ -2,6 +2,7 @@ package de.tu_berlin.math.coga.math.vectormath;
 
 
 import de.tu_berlin.coga.common.localization.LocalizationManager;
+import de.tu_berlin.coga.geom.Point;
 import de.tu_berlin.math.coga.math.Conversion;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -10,11 +11,11 @@ import java.text.ParseException;
  * Implements a two dimensional vector.
  * @author Jan-Philipp Kappmeier
  */
-public class Vector2 implements Cloneable {
+public class Vector2 implements Cloneable, Point {
 	/** The first or {@code x}-coordinate of the vector. */
-	public double x = 0;
+	private double x = 0;
 	/** The second or {@code y}-coordinate of the vector. */
-	public double y = 0;
+	private double y = 0;
 
 	/**
 	 * Initializes a zero vector in the origin.
@@ -352,13 +353,13 @@ public class Vector2 implements Cloneable {
 		final Vector2 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy
 	}
-	
+
 	public static double orientationE( Vector2 p, Vector2 q, Vector2 r ) {
 		final Vector2 u = p.sub( q );
 		final Vector2 v = r.sub( q );
 		return v.x * u.y - v.y * u.x; // return determinancy
 	}
-	
+
 	/**
 	 * Creates a vector orthogonal to the given vector. (By rotating the vector
 	 * 90 degrees counter clockwise)
@@ -380,6 +381,6 @@ public class Vector2 implements Cloneable {
 	final public double getAngleBetween( Vector2 a, Vector2 b ) {
 		final double cosine = (a.dotProduct( b ) / a.length()) / b.length();
 		final double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
-		return angle > 90.0 ? 180 - angle : angle; 
+		return angle > 90.0 ? 180 - angle : angle;
 	}
 }

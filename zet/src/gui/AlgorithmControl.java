@@ -154,6 +154,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 						System.err.println( "An error occured:" );
 						st.getError().printStackTrace( System.out );
 					} else {
+            System.out.println( st );
 						networkFlowModel = conv.getSolution();
 						System.out.println( "Nodes: " + networkFlowModel.numberOfNodes() );
 						System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );
@@ -309,9 +310,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 						//container = cca;
 						container = conv.getContainer();
 						caVisResults = visResults;
-						
+
 						caControl.tempSetParametersFromEx( caVisResults, ca );
-						
+
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 

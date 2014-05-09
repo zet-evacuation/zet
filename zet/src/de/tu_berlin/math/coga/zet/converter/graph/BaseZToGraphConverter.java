@@ -29,64 +29,47 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected Graph roomGraph;
 	public int numStairEdges = 0;
 	public List<Edge> stairEdges = new LinkedList<>();
-  protected Filter<Edge> checker;
 
-  
   protected BaseZToGraphConverter() {
-    this.checker = (Edge e) -> true;
   }
-  
-	protected BaseZToGraphConverter( Filter<Edge> checker ) {
-		this.checker = checker;
-	}
-  
+
   protected NetworkFlowModel getModel() {
     return model;
   }
-	
-	
+
+
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
-		//mapping = new ZToGraphMapping();
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		model = new NetworkFlowModel( raster );
 		mapping = model.getZToGraphMapping();
-    checker = new DefaultEdgeFilter( model );
-		
-		createNodes();
-		// create edges, their capacities and the capacities of the nodes
-		createEdgesAndCapacities();
-		// connect the nodes of different rooms with edges
-		//HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model); // done in compute transit times now!
-		// calculate the transit times for all edges
 
+		createNodes();
+
+    // create edges, their capacities and the capacities of the nodes
+		createEdgesAndCapacities();
+    log.info( "Alle Kanten erzeugt." );
+
+    // calculate the transit times for all edges
 		computeTransitTimes();
-		// adjust transit times according to stair speed factors
+
+		// duplicate the edges and their transit times (except those concerning the super sink)
+    createReverseEdges();
+
+    // adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
 
 		// set this before reverse edges are computed as they modify the model.
-		//model.setTransitTimes( exactTransitTimes.round() );
 		model.roundTransitTimes();
-
-		// duplicate the edges and their transit times (except those concerning the super sink)
-    System.out.println( "Edgecaps: " + model.edgeCapacities.getDomainSize() );
-    //if( manualStairs ) {
-    //  createReverseEdgesWithoutStairEdges( model );
-    //} else {
-    createReverseEdges();
-    //}
-    System.out.println( "Edgecaps: " + model.edgeCapacities.getDomainSize() );
 
 		model.resetAssignment();
 
 		assert checkParallelEdges();
-		
-		//model.setNetwork( model.getGraph().getAsStaticNetwork() );
+
 		log.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
 		log.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
 		return model;
-
 	}
 
 	protected abstract void createNodes();
@@ -96,10 +79,10 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected abstract void computeTransitTimes();
 
 	protected void createReverseEdges() {
-		createReverseEdges( model, checker );
+		createReverseEdges( model );
 	}
 
-	public static void createReverseEdges(NetworkFlowModel model, Filter<Edge> checker ) {
+	public static void createReverseEdges( NetworkFlowModel model ) {
 		//int edgeIndex = numberOfEdges();
 		final int oldEdgeIndex = model.numberOfEdges();
 		model.setNumberOfEdges( model.numberOfEdges() * 2 - model.numberOfSinks() );
@@ -107,47 +90,28 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
 			Edge edge = model.getEdge( i );
-      if( checker.accept( edge ) ) {
-//if( !edge.isIncidentTo( model.getSupersink() ) ) {
-				Edge newEdge = model.createReverseEdge( edge );
+      if( !edge.isIncidentTo( model.getSupersink() ) ) {
+				model.createReverseEdge( edge );
 			}
 		}
 	}
 
-	// TODO
-	protected void createReverseEdgesWithoutStairEdges( NetworkFlowModel model ) {
-		int edgeIndex = model.numberOfEdges();
-		final int oldEdgeIndex = edgeIndex;
-    
-    final int normalEdges = edgeIndex - numStairEdges;
-    // edges = 2*normal + existing stair edges. reduce by model.numberOfSinks because for sinks we do not create backward edges
-    
-    model.setNumberOfEdges( normalEdges * 2 + numStairEdges - model.numberOfSinks() );
-		//model.setNumberOfEdges( ((edgeIndex - numStairEdges) * 2) - model.numberOfSinks() );
-
-		// don't use an iterator here, as it will result in concurrent modification
-		for( int i = 0; i < oldEdgeIndex; ++i ) {
-			Edge edge = model.getEdge( i );
-			if( !stairEdges.contains( edge ) && !edge.isIncidentTo( model.getSupersink() ) ) {
-				Edge newEdge = model.createReverseEdge( edge );
-			}
-		}
-	}
-
-	protected void multiplyWithUpAndDownSpeedFactors() {
-		for( Edge edge : model.edges() )
-			if( !edge.isIncidentTo( model.getSupersink() ) )
-				switch( mapping.getEdgeLevel( edge ) ) {
-					case Higher:
-						model.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
-						//exactTransitTimes.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
-						break;
-					case Lower:
-						model.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
-						//exactTransitTimes.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
-						break;
-				}
-	}
+  protected void multiplyWithUpAndDownSpeedFactors() {
+    for( Edge edge : model.edges() ) {
+      if( !edge.isIncidentTo( model.getSupersink() ) ) {
+        switch( mapping.getEdgeLevel( edge ) ) {
+          case Higher:
+            model.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
+            log.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, mapping.getUpNodeSpeedFactor( edge.start() )});
+            break;
+          case Lower:
+            model.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
+            log.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, mapping.getDownNodeSpeedFactor( edge.start() )});
+            break;
+        }
+      }
+    }
+  }
 
 	/**
 	 * Checks if the generated network flow model contains at most one edge between
@@ -156,9 +120,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	 */
 	boolean checkParallelEdges() {
 		log.info( "Check for parallel edges..." );
-		
+
 		HashMap<Tuple<Node,Node>,Edge> usedEdges = new HashMap<>( (int)(model.numberOfEdges()/0.75)+1, 0.75f );
-		
+
 		for( Edge edge :  model.edges() ) {
 			final Tuple<Node,Node> nodePair = new Tuple<>( edge.start(), edge.end() );
 			if( usedEdges.containsKey( nodePair ) ) {
