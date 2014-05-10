@@ -41,7 +41,7 @@ public class ShortestPathExitAssignment extends Algorithm<NetworkFlowModel, Exit
         AbstractNetwork network = (AbstractNetwork)model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
-        IdentifiableObjectMapping<Node, MinHeap> exitDistances = new IdentifiableObjectMapping<Node, MinHeap>(network.nodes(), MinHeap.class);
+        IdentifiableObjectMapping<Node, MinHeap> exitDistances = new IdentifiableObjectMapping<>(network.nodes() );
         for (Node sink : sinks) {
             dijkstra.setSource(sink);
             dijkstra.run();

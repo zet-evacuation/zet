@@ -11,16 +11,16 @@ import ds.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.MinSpanningTree;
+import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.Node;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import java.util.Random;
 
 /**
  *
  * @author schwengf
  */
-public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTree>{
+public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree>{
     
     IdentifiableCollection<Edge> solEdges = new ListSequence();
     IdentifiableCollection<Node> centerNodes = new ListSequence();
@@ -29,7 +29,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
     IdentifiableCollection<Node> noncenterNodes = new ListSequence();
     IdentifiableCollection<Edge> incidentEdges = new ListSequence();
     IdentifiableCollection<Edge> currentEdges = new ListSequence();
-    int overalldist = 0;
+    //int overalldist = 0;
     int NumNodes;
     double prob;
     int i,j;
@@ -42,7 +42,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
     int NumCluster;
     
 	@Override
-    public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
+    public UndirectedTree runAlgorithm(MinSpanningTreeProblem minspan)
     {
         try{
             NetworkFlowModel OriginNetwork = minspan.getNetworkFlowModel(); 
@@ -222,7 +222,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
              System.out.println("Fehler in ClusterAlgo " + e.toString() + e.getLocalizedMessage());
          }
         
-         return new MinSpanningTree(minspan,solEdges,null, null,overalldist);
+         return new UndirectedTree( solEdges );
     }
     
    

@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * AbstractNetwork.java
- *
- */
+
 package ds.graph;
 
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
@@ -50,7 +47,7 @@ public class Forest extends Network {
     
     public Forest(IdentifiableCollection<Node> nodes, IdentifiableObjectMapping<Node, Edge> precedingEdges) {
         super(nodes.size(), nodes.size() - 1);
-        this.precedingEdges = new IdentifiableObjectMapping<Node, Edge>(nodes.size(), Edge.class);
+        this.precedingEdges = new IdentifiableObjectMapping<>(nodes.size() );
         for (Node node : nodes) {
             if (precedingEdges.get(node) == null) {
                 continue;

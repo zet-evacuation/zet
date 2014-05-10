@@ -29,7 +29,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 
 	//@SuppressWarnings( "unchecked" )
 	public BucketPriorityQueue( int domainSize, Class<E> rangeType ) {
-		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
+		next = new IdentifiableObjectMapping<>( domainSize );
 		this.rangeType = rangeType;
 		this.buckets = (E[])Array.newInstance( rangeType, domainSize );
 		active = new boolean[domainSize];

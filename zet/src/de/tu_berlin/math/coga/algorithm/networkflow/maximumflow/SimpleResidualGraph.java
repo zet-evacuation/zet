@@ -54,8 +54,8 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 		last = new IdentifiableIntegerMapping<>( n ); // last outgoing edge (index)
 		isReverseEdge = new IdentifiableBooleanMapping<>( 2*m );
 		residualCapacity = new IdentifiableIntegerMapping<>( 2*m );
-		reverseEdge = new IdentifiableObjectMapping<>( 2*m, Edge.class );
-		originalResidualEdgeMapping = new IdentifiableObjectMapping<>( 2*m, Edge.class );
+		reverseEdge = new IdentifiableObjectMapping<>( 2*m );
+		originalResidualEdgeMapping = new IdentifiableObjectMapping<>( 2*m );
 		this.m = m;
 	}
 

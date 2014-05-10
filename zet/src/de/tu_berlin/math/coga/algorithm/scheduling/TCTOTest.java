@@ -345,7 +345,7 @@ public class TCTOTest {
 		System.out.println( AoE );
 
 		System.out.println( "Create Dummy Jobs" );
-		IdentifiableObjectMapping<Edge,Job> jobs = new IdentifiableObjectMapping<>( AoE.getEdgeCapacity(), Job.class );
+		IdentifiableObjectMapping<Edge,Job> jobs = new IdentifiableObjectMapping<>( AoE.getEdgeCapacity() );
 
 		for( Edge e : AoE.edges() ) {
 			if( e.id() < originalJobs.size() )

@@ -157,7 +157,7 @@ public class PathDecomposition {
     	}
         PathBasedFlow pathDecomposition = new PathBasedFlow();        
         IdentifiableIntegerMapping<Edge> flow = (IdentifiableIntegerMapping<Edge>)startFlow.clone();
-        visited = new IdentifiableObjectMapping<Node,Boolean>(network.nodes().size(), Boolean.class);
+        visited = new IdentifiableObjectMapping<Node,Boolean>(network.nodes().size());
     	for (Node n : network.nodes())
     		visited.set(n, false);
         StaticPathFlow path = new StaticPathFlow();
@@ -187,7 +187,7 @@ public class PathDecomposition {
     public static PathBasedFlow calculatePathDecomposition(AbstractNetwork network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
         PathBasedFlow pathDecomposition = new PathBasedFlow();        
         IdentifiableIntegerMapping<Edge> flow = startFlow.clone();
-        visited = new IdentifiableObjectMapping<>(network.nodes().size(), Boolean.class);
+        visited = new IdentifiableObjectMapping<>(network.nodes().size());
     	for (Node n : network.nodes())
     		visited.set(n, false);
         StaticPathFlow path = new StaticPathFlow();

@@ -61,10 +61,10 @@ public class BinaryTree implements DirectedGraph {
 		for( int i = 0; i < initialNodeCapacity; i++ )
 			nodes.add( new Node( i ) );
 
-		incoming = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
+		incoming = new IdentifiableObjectMapping<>( initialNodeCapacity );
 
-		left = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
-		right = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
+		left = new IdentifiableObjectMapping<>( initialNodeCapacity );
+		right = new IdentifiableObjectMapping<>( initialNodeCapacity );
 		outdegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 		this.root = nodes.get( root );
 	}

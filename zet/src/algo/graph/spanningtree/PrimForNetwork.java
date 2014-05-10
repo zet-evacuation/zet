@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algo.graph.reduction;
+package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.network.DynamicNetwork;
@@ -12,9 +12,7 @@ import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.priority.MinHeap;
-import ds.graph.NetworkMST;
 import ds.graph.Node;
-import ds.graph.problem.NetworkMSTProblem;
 import java.util.Random;
 
 /**
@@ -25,8 +23,8 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
     
     DynamicNetwork OriginNetwork;
     Node startNode;
-    IdentifiableCollection<Node> solNodes = new ListSequence<Node>();
-    IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();  
+    IdentifiableCollection<Node> solNodes = new ListSequence<>();
+    IdentifiableCollection<Edge> solEdges = new ListSequence<>();  
     IdentifiableIntegerMapping<Node> distances;
     IdentifiableObjectMapping<Node, Edge> heapedges;
     int NumEdge = 0;
@@ -62,7 +60,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
         solNodes.add(startNode);
         //distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
         distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
-        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges(), Edge.class);
+        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges());
         MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.numberOfNodes());
         IdentifiableCollection<Edge> incidentEdges;
         for (Node node: OriginNetwork.nodes())

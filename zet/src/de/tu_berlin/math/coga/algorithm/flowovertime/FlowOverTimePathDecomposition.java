@@ -240,7 +240,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 	private static class IdentifiableIntegerObjectMapping<D extends Identifiable> extends IdentifiableObjectMapping<D, TimeEdgeClass> {
 
 		private IdentifiableIntegerObjectMapping( int domainSize ) {
-			super( domainSize, TimeEdgeClass.class );
+			super( domainSize );
 			for( int i = 0; i < domainSize; ++i ) {
 				mapping[i] = new TimeEdgeClass();
 			}

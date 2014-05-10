@@ -4,11 +4,11 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.reduction.Prim;
+import algo.graph.spanningtree.Prim;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.UndirectedTree;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import java.util.logging.Level;
 
 /**
@@ -42,7 +42,7 @@ public class SpanningTreeShrinker extends GraphShrinker {
 		log.info( "Compute minimum spanning tree using Prim... " );
 		primalgo.run();
 		log.log( Level.INFO, "done in {0}", primalgo.getRuntimeAsString());
-		MinSpanningTree minspantree = primalgo.getSolution();
+		UndirectedTree minspantree = primalgo.getSolution();
 		return minspantree.getEdges();
 	}
 }

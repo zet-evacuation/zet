@@ -16,10 +16,10 @@ import ds.graph.Node;
 public class NodePositionMapping extends IdentifiableObjectMapping<Node, Vector3> {
 
 	public NodePositionMapping() {
-		super( 0, Vector3.class );
+		super( 0 );
 	}
 
 	public NodePositionMapping( int domainSize ) {
-		super( domainSize, Vector3.class );
+		super( domainSize );
 	}
 }

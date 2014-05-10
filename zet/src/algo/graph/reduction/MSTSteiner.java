@@ -4,6 +4,7 @@
  */
 package algo.graph.reduction;
 
+import algo.graph.spanningtree.PrimForNetwork;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -14,13 +15,13 @@ import ds.graph.Forest;
 import ds.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSteinerTree;
-import ds.graph.NetworkMST;
+import algo.graph.spanningtree.NetworkMST;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.DynamicNetwork;
-import ds.graph.problem.MinSpanningTreeProblem;
-import ds.graph.problem.NetworkMSTProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
+import algo.graph.spanningtree.NetworkMSTProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 

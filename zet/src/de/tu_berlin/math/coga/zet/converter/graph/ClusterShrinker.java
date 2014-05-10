@@ -7,8 +7,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.ClusterAlgo;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.UndirectedTree;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 
 /**
  *
@@ -34,7 +34,7 @@ public class ClusterShrinker extends GraphShrinker {
 		System.out.print( "Compute Cluster... " );
 		clusteralgo.run();
 		System.out.println( "used time: " + clusteralgo.getRuntimeAsString() );
-		MinSpanningTree tree = clusteralgo.getSolution();
+		UndirectedTree tree = clusteralgo.getSolution();
 		IdentifiableCollection<Edge> MinEdges = tree.getEdges();
 		return MinEdges;
 	}

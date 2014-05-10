@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ds.graph;
+package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.problem.NetworkMSTProblem;
+import ds.graph.Edge;
 
 /**
  *

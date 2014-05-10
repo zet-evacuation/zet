@@ -6,7 +6,7 @@ package ds.graph;
 
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 
 /**
  *

@@ -138,7 +138,7 @@ public class GraphInstanceChecker {
      * in this scenario each source has to be reachable.
      */
     IdentifiableObjectMapping<Node, Boolean> reachable
-            = new IdentifiableObjectMapping<>( sources.size(), Boolean.class );
+            = new IdentifiableObjectMapping<>( sources.size() ); // TODO identifiableboolean mapping
     int reachableSources = 0;
 
     /* Go through all sinks. */

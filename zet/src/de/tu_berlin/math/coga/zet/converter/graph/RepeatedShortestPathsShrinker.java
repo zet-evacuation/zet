@@ -11,10 +11,10 @@ import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
+import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.AssignmentArea;
 import de.tu_berlin.coga.zet.model.PlanPoint;
@@ -32,7 +32,7 @@ public class RepeatedShortestPathsShrinker extends Algorithm<NetworkFlowModel, N
 
   public NetworkFlowModel minspanmodel;
   public MinSpanningTreeProblem minspanprob;
-  public MinSpanningTree spantree;
+  public UndirectedTree spantree;
   public IdentifiableIntegerMapping TransitForEdge;
   public IdentifiableIntegerMapping currentTransitForEdge;
   IdentifiableIntegerMapping<Edge> currentTransitForEdge2;

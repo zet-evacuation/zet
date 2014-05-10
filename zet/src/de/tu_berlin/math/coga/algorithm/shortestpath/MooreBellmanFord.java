@@ -115,8 +115,8 @@ public class MooreBellmanFord {
             return;
         }
         distances = new IdentifiableIntegerMapping<>(graph.numberOfNodes());
-        edges = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Edge.class);
-        nodes = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Node.class);
+        edges = new IdentifiableObjectMapping<>(graph.numberOfNodes());
+        nodes = new IdentifiableObjectMapping<>(graph.numberOfNodes());
         for (Node node : graph.nodes()) {
             distances.set(node, Integer.MAX_VALUE);
         }

@@ -10,10 +10,10 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
+import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.Node;
 import ds.graph.network.Network;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,12 +25,12 @@ import java.util.List;
  *
  * @author schwengf
  */
-public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTree> {
+public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree> {
 
   double t = 3;
   int[][] used;
   int Min = 100000;
-  int overalldist = 0;
+  //int overalldist = 0;
   int NumEdges = 0;
   int count = 0;
   Edge MinEdge;
@@ -54,7 +54,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTre
   IdentifiableIntegerMapping<Edge> cap = new IdentifiableIntegerMapping<>( 1 );
 
   @Override
-  public MinSpanningTree runAlgorithm( MinSpanningTreeProblem minspan ) {
+  public UndirectedTree runAlgorithm( MinSpanningTreeProblem minspan ) {
     try {
       OriginNetwork = minspan.getNetworkFlowModel();
       supersink = OriginNetwork.getSupersink();
@@ -175,7 +175,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTre
       System.out.println( "Fehler in runGreedyAlgo " + e.toString() );
     }
 
-    return new MinSpanningTree( minspan, solEdges, trans, cap, overalldist );
+    return new UndirectedTree( solEdges );
 
   }
 }

@@ -62,15 +62,15 @@ public class ZToGraphMapping {
 	}
 
 	public ZToGraphMapping( int numberOfNodes, int numberOfEdges ) {
-		nodeShapes = new IdentifiableObjectMapping<Node, Shape>( numberOfNodes, Shape.class );
-		nodeSpeedFactors = new IdentifiableObjectMapping<Node, Double>( numberOfNodes, Double.class );
-		nodeDownSpeedFactors = new IdentifiableObjectMapping<Node, Double>( numberOfNodes, Double.class );
-		nodeUpSpeedFactors = new IdentifiableObjectMapping<Node, Double>( numberOfNodes, Double.class );
-		edgeLevels = new IdentifiableObjectMapping<Edge, Level>( numberOfEdges, Level.class );
-		nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( numberOfNodes, NodeRectangle.class );
-		nodeFloorMapping = new IdentifiableIntegerMapping<Node>( numberOfNodes );
+		nodeShapes = new IdentifiableObjectMapping<>( numberOfNodes );
+		nodeSpeedFactors = new IdentifiableObjectMapping<>( numberOfNodes );
+		nodeDownSpeedFactors = new IdentifiableObjectMapping<>( numberOfNodes );
+		nodeUpSpeedFactors = new IdentifiableObjectMapping<>( numberOfNodes );
+		edgeLevels = new IdentifiableObjectMapping<>( numberOfEdges );
+		nodeRectangles = new IdentifiableObjectMapping<>( numberOfNodes );
+		nodeFloorMapping = new IdentifiableIntegerMapping<>( numberOfNodes );
 		nodeRoomMapping = new HashMap<>( numberOfNodes );
-		isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
+		isDeletedSourceNode = new IdentifiableObjectMapping<>( numberOfNodes );
 		exitName = new HashMap<>();
 		raster = null;
 	}

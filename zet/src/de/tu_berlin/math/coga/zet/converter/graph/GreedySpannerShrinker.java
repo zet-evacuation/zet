@@ -7,8 +7,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.GreedyAlgo;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.UndirectedTree;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
@@ -54,12 +54,12 @@ public class GreedySpannerShrinker extends GraphShrinker {
 		GreedyAlgo greedySpannerAlgorithm = new GreedyAlgo();
 		greedySpannerAlgorithm.setProblem( minimumSpanningTreeProblem );
 		greedySpannerAlgorithm.run();
-		MinSpanningTree minspantree = greedySpannerAlgorithm.getSolution();
+		UndirectedTree minspantree = greedySpannerAlgorithm.getSolution();
 		System.out.print( "Compute t-Spanner using greedy... " );
 		System.out.println( "used time: " + greedySpannerAlgorithm.getRuntimeAsString() );
 		IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-		IdentifiableIntegerMapping<Edge> transit = minspantree.getTransit();
-		IdentifiableIntegerMapping<Edge> cap = minspantree.getCapac();
+		//IdentifiableIntegerMapping<Edge> transit = minspantree.getTransit();
+		//IdentifiableIntegerMapping<Edge> cap = minspantree.getCapac();
 		return MinEdges;
 	}
 }

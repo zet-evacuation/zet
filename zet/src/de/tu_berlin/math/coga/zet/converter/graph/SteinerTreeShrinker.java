@@ -5,16 +5,16 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.MSTSteiner;
-import algo.graph.reduction.Prim;
+import algo.graph.spanningtree.Prim;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
+import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.MinSteinerTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.graph.problem.MinSpanningTreeProblem;
+import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
@@ -33,7 +33,7 @@ public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowM
     public MinSteinerTree steinertree;
     public Prim prim;
     public MinSpanningTreeProblem minspan;
-    public MinSpanningTree tree;
+    public UndirectedTree tree;
 
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {

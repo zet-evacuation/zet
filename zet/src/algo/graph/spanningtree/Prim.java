@@ -2,10 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algo.graph.reduction;
+package algo.graph.spanningtree;
 
-import ds.graph.MinSpanningTree;
-import ds.graph.problem.MinSpanningTreeProblem;
 import de.tu_berlin.coga.common.algorithm.Algorithm; 
 import ds.graph.Node;
 import java.util.Random;
@@ -24,15 +22,15 @@ import de.tu_berlin.coga.container.priority.MinHeap;
  *
  * @author schwengf
  */
-public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
+public class Prim extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
     
     
     IdentifiableIntegerMapping<Edge> currentEdgesTransit;
-    IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();    
-    IdentifiableCollection<Node> solNodes = new ListSequence<Node>();
-    IdentifiableCollection<Edge> currentEdges = new ListSequence<Edge>();
-    IdentifiableCollection<Edge> remaincurrentEdges = new ListSequence<Edge>();
-    IdentifiableCollection<Edge> edges = new ListSequence<Edge>();
+    IdentifiableCollection<Edge> solEdges = new ListSequence<>();    
+    IdentifiableCollection<Node> solNodes = new ListSequence<>();
+    IdentifiableCollection<Edge> currentEdges = new ListSequence<>();
+    IdentifiableCollection<Edge> remaincurrentEdges = new ListSequence<>();
+    IdentifiableCollection<Edge> edges = new ListSequence<>();
     Edge MinEdge;
     Edge supersinkedge;
     Node startNode;
@@ -40,7 +38,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
     Node currentNode;
     int Transit;
     int i;
-    int overalldist=0;
+    //int overalldist=0;
     int Min = 100000;
     NetworkFlowModel OriginNetwork;
     Graph OriginGraph;
@@ -50,7 +48,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
     IdentifiableObjectMapping<Node, Edge> heapedges;
     
     @Override
-    public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
+    public UndirectedTree runAlgorithm(MinSpanningTreeProblem minspan)
     {
         
         try{
@@ -81,7 +79,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
         solNodes.add(startNode);
          
         distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
-        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges(), Edge.class);
+        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges());
         MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.numberOfNodes());
         IdentifiableCollection<Edge> incidentEdges;
         
@@ -191,7 +189,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
              System.out.println("Fehler in runMinSpan " + e.toString());
          }
         //System.out.println("Overalldistance " + overalldist);
-        return new MinSpanningTree(minspan,solEdges,null, null,overalldist);
+        return new UndirectedTree( solEdges );
        
  
         

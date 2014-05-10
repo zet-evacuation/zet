@@ -155,8 +155,8 @@ public class CAPathPassabilityChecker {
 			individualsOfThisNode.add(ind);	
 		}
 		// map individuals and dynamic path flows and calculate potential and successor mapping
-		individualSuccessorNodeMapping = new IdentifiableObjectMapping<Individual, SuccessorNodeMapping>(numberOfIndividuals+1, SuccessorNodeMapping.class );
-		individualPotentialMapping = new IdentifiableObjectMapping<Individual, EvacPotential>(numberOfIndividuals+1, EvacPotential.class );
+		individualSuccessorNodeMapping = new IdentifiableObjectMapping<Individual, SuccessorNodeMapping>(numberOfIndividuals+1 );
+		individualPotentialMapping = new IdentifiableObjectMapping<Individual, EvacPotential>(numberOfIndividuals+1 );
 		for (FlowOverTimePath dynamicPathFlow : transshipment){
 			Individual chosenIndividual = null;
 			// get all individuals that stand in the start node of the path

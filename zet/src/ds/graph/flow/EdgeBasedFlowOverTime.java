@@ -45,7 +45,7 @@ public class EdgeBasedFlowOverTime {
      * @param network the network for which the empty flow shall be created.
      */
     public EdgeBasedFlowOverTime(AbstractNetwork network) {
-        map = new IdentifiableObjectMapping<Edge, TimeIntegerMapping>(network.getEdgeCapacity(), TimeIntegerMapping.class);
+        map = new IdentifiableObjectMapping<>(network.getEdgeCapacity());
         IdentifiableCollection<Edge> edges = network.edges();
         for (Edge edge : edges){
             map.set(edge, new TimeIntegerMapping());
@@ -61,9 +61,6 @@ public class EdgeBasedFlowOverTime {
     public EdgeBasedFlowOverTime(IdentifiableObjectMapping<Edge,TimeIntegerMapping> flowOnEdges){
         map = flowOnEdges;
     }
-/*
-    public EdgeBasedFlowOverTime(IdentifiableObjectMapping<Edge, IntegerIntegerArrayMapping> flow) {
-    }*/
 
     /**
      * Gets the {@code TimeIntegerMapping} that represents the flow
