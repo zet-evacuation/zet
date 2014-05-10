@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * BFS.java
- *
- */
+
 package algo.graph.traverse;
 
 import ds.graph.Edge;
@@ -43,8 +40,8 @@ public class BFS {
     public BFS(Graph graph) {
         this.graph = graph;
         distances = new IdentifiableIntegerMapping<>(graph.numberOfNodes());
-        predecedingEdges = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Edge.class);
-        visited = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Boolean.class);
+        predecedingEdges = new IdentifiableObjectMapping<>(graph.numberOfNodes());
+        visited = new IdentifiableObjectMapping<>(graph.numberOfNodes());
         for (Node node : graph.nodes()) {
             distances.set(node, Integer.MAX_VALUE);
             predecedingEdges.set(node, null);

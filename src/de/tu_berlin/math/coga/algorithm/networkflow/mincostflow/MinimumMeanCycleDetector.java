@@ -91,6 +91,7 @@ public abstract class MinimumMeanCycleDetector {
 		}
 
 		//Beginning of the algorithm - Initialization work
+    // TODO detetor, new or delete and make bug free
 		int n = g.numberOfNodes ();
 		// F is the minimum weight of an edge progression of length [k] (first index) from
 		// node s to node [x] (second index)
@@ -105,7 +106,7 @@ public abstract class MinimumMeanCycleDetector {
 		}
 		for (int k = 0; k <= n; k++) {
 			F[k] = new IdentifiableIntegerMapping<> (g.numberOfNodes ());
-			isInfinite[k] = new IdentifiableObjectMapping<> ( g.numberOfNodes (), Boolean.class);
+			isInfinite[k] = new IdentifiableObjectMapping<> ( g.numberOfNodes ());
 
 
 			for (Node x : g.nodes ()) {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ds.graph.problem;
+package algo.graph.spanningtree;
 
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;

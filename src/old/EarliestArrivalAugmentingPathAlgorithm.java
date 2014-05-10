@@ -56,11 +56,11 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         Node source = problem.getSource();
         Node sink = problem.getSink();
         int timeHorizon = problem.getTimeHorizon();
-        candidates = new LinkedList<Node>();
+        candidates = new LinkedList<>();
         labels = new IdentifiableIntegerMapping(network.nodes());
-        departureTimes = new IdentifiableObjectMapping<Node, TimeIntegerMapping>(network.nodes(), TimeIntegerMapping.class);
-        predecessorNodes = new IdentifiableObjectMapping<Node, Node[]>(network.nodes(), Node[].class);
-        predecessorEdges = new IdentifiableObjectMapping<Node, Edge[]>(network.nodes(), Edge[].class);
+        departureTimes = new IdentifiableObjectMapping<>(network.nodes());
+        predecessorNodes = new IdentifiableObjectMapping<>(network.nodes());
+        predecessorEdges = new IdentifiableObjectMapping<>(network.nodes());
         for (Node node : network.nodes()) {
             predecessorNodes.set(node, new Node[timeHorizon]);
             predecessorEdges.set(node, new Edge[timeHorizon]);

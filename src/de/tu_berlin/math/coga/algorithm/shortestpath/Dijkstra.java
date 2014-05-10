@@ -112,8 +112,8 @@ public class Dijkstra {
       return;
     }
     distances = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
-    edges = new IdentifiableObjectMapping<>( graph.numberOfEdges(), Edge.class );
-    nodes = new IdentifiableObjectMapping<>( graph.numberOfNodes(), Node.class );
+    edges = new IdentifiableObjectMapping<>( graph.numberOfEdges() );
+    nodes = new IdentifiableObjectMapping<>( graph.numberOfNodes() );
     MinHeap<Node, Integer> queue = new MinHeap<>( graph.numberOfNodes() );
     for( int v = 0; v < graph.numberOfNodes(); v++ ) {
       distances.set( graph.getNode( v ), Integer.MAX_VALUE );

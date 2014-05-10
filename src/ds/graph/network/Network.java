@@ -72,11 +72,11 @@ public class Network extends AbstractNetwork {
 		nodes = new HidingSet<>( Node.class, initialNodeCapacity );
 		for( int i = 0; i < initialNodeCapacity; i++ )
 			nodes.add( new Node( i ) );
-		incidentEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
+		incidentEdges = new IdentifiableObjectMapping<>( initialNodeCapacity );
 
-		incomingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
+		incomingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity );
 
-		outgoingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
+		outgoingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity );
 		for( Node node : nodes ) {
 			incidentEdges.set( node, new DependingListSequence<>( edges ) );
 			incomingEdges.set( node, new DependingListSequence<>( edges ) );

@@ -37,7 +37,7 @@ public class ExitAssignment extends IdentifiableObjectMapping<Node, List> {
     protected int numberOfEvacuees;
     
     public ExitAssignment(Iterable<Node> domain) {
-        super(domain, List.class);
+        super(domain );
         this.domain = domain;
         evacuees = new IdentifiableIntegerMapping<Node>(domain);
         numberOfEvacuees = 0;

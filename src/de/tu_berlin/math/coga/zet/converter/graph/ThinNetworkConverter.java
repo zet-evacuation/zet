@@ -1,4 +1,3 @@
-
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.common.debug.Debug;
@@ -35,8 +34,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * A network converter creating a small graph (compared to {@link RectangleConverter}) that is mostly built on
- * semantics of the building structure.
+ * A network converter creating a small graph (compared to
+ * {@link RectangleConverter}) that is mostly built on semantics of the building
+ * structure.
+ *
  * @author Marlen Schwengfelder
  * @author Jan-Philipp Kappmeier
  */
@@ -54,7 +55,8 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
   //...
   private HashMap<Room, Collection<PositionNode>> floorNodesForRoom = new HashMap<>();
   private Collection<PositionNode> floorNodes;
-  private IdentifiableObjectMapping<Node, Boolean> isfloorNode = new IdentifiableObjectMapping<>( 1, Boolean.class );
+  // TODO identifiable boolean mapping
+  private IdentifiableObjectMapping<Node, Boolean> isfloorNode = new IdentifiableObjectMapping<>( 1 );
   //stores the associated room of a floorNode
   private HashMap<Node, Room> linkTarget = new HashMap<>();
   private HashMap<Point, Integer> floorDoors = new HashMap<>();
@@ -65,12 +67,16 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
   //stores all neighbours for a room
   private Collection<Room> neighbours;
 
-  /** The number of neighbouring rooms for each room. */
+  /**
+   * The number of neighbouring rooms for each room.
+   */
   private final HashMap<Room, Integer> numberNeighborRooms = new HashMap<>();
   //stores the evacuationNode for a room
   private HashMap<Room, ListSequence<Node>> EvacuationNodes = new HashMap<>();
 
-  /** Nodes representing evacuation area, that means sources. */
+  /**
+   * Nodes representing evacuation area, that means sources.
+   */
   private ListSequence<Node> evacuationNodes;
 
 //stores the assignment nodes for a room
@@ -98,8 +104,10 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
   private HashMap<Room, List<Point>> smallRecForRoom = new HashMap<>();
 
-  /** Defines precision of created nodes for assignment areas,
-   * gives the max. number of persons that can be assigned to one node. */
+  /**
+   * Defines precision of created nodes for assignment areas, gives the max.
+   * number of persons that can be assigned to one node.
+   */
   private int AssignPrecision = 50;
   private final static boolean debug = false;
 
@@ -121,7 +129,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
     for( ZToGraphRoomRaster room : rasteredRooms ) {
       Logger log = Debug.globalLogger;
-      log.log( java.util.logging.Level.FINE, "Currently considered room: {0}on floor: {1}", new Object[]{room.getRoom().getName(), room.getRoom().getAssociatedFloor()});
+      log.log( java.util.logging.Level.FINE, "Currently considered room: {0}on floor: {1}", new Object[]{room.getRoom().getName(), room.getRoom().getAssociatedFloor()} );
       Room ZRoom = room.getRoom();
 
       doorNodes = new HashSet<>();
@@ -234,7 +242,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             double mindist = Double.MAX_VALUE;
             Point min = null;
             for( PlanPoint pp : Earea.getPlanPoints() ) {
-              double dist = calculateDistance( p, pp );
+              double dist = p.distance( pp );// calculateDistance( p, pp );
               if( dist < mindist ) {
                 mindist = dist;
                 min = pp;
@@ -267,7 +275,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
         }
       }
 
-                    //create door nodes for rooms with only one neighbour
+      //create door nodes for rooms with only one neighbour
       //if there is at least one evacuation or assignment area, create a node representing the doors
       if( (!(ZRoom.getEvacuationAreas().isEmpty() && ZRoom.getAssignmentAreas().isEmpty()) && (numberNeighborRooms.get( ZRoom ) == 1)) || (numberNeighborRooms.get( ZRoom ) == 1 && (floorNodesForRoom.containsKey( ZRoom ))) ) {
         HashMap<Point, Integer> doors = ZRoom.getDoors();
@@ -281,9 +289,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             }
             PositionNode pos = new PositionNode( node, p, doors.get( p ) );
             doorNodes.add( pos );
-                                    //nodeCount++;
-            //graph.setNode(node);
-            //DoorNodeForRoom.put(ZRoom, node);
             //length of door is returned in mm, Observation: 0.5 meter/person
             int width = (int) Math.floor( ((double) ZRoom.getLengthOfDoor( ZRoom )) / 1000.0 ) * 2;
             //System.out.println("Knotenkap: " + width);
@@ -291,8 +296,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             NodeRectangle rec = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
             mapping.setNodeRectangle( node, rec );
             model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
-                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
-            //model.getZToGraphMapping().setIsSourceNode(node, false);
             model.getZToGraphMapping().setDeletedSourceNode( node, false );
           }
         }
@@ -315,17 +318,12 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               }
               PositionNode pos = new PositionNode( node, p, doors.get( p ) );
               doorNodes.add( pos );
-              //graph.setNode(node);
               NodeRectangle rec = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
               mapping.setNodeRectangle( node, rec );
               model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
-                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
-              //model.getZToGraphMapping().setIsSourceNode(node, false);
               model.getZToGraphMapping().setDeletedSourceNode( node, false );
-              //nodeCount++;
             }
           } else {
-            //Node node = model.newNode(nodeCount);
             Node node = model.newNode();
             connection.put( p, node );
             model.setNodeCapacity( node, ZRoom.getPolygon().getMaxEvacuees() );
@@ -334,18 +332,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             }
             PositionNode pos = new PositionNode( node, p, doors.get( p ) );
             doorNodes.add( pos );
-            //raph.setNode(node);
             NodeRectangle rec = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
             mapping.setNodeRectangle( node, rec );
             model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
-                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
-            //model.getZToGraphMapping().setIsSourceNode(node, false);
             model.getZToGraphMapping().setDeletedSourceNode( node, false );
-            //nodeCount++;
           }
         }
 
-                    //only neighbours with one neighbour, Case 2b)
+        //only neighbours with one neighbour, Case 2b)
         //one evacuation node inside room and one in neighbourrooms
         if( numEvac2 == 1 && num == 0 && ZRoom.getEvacuationAreas().size() == 1 ) {
           SmallestRectangle rectangle = FindSmallestRectangle( room );
@@ -446,19 +440,18 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       floorNodesForRoom.put( ZRoom, floorNodes );
       for( PositionNode n : floorNodes ) {
         isfloorNode.set( n.getNode(), true );
-        //System.out.println("node is floornode: " + n.getNode());
       }
-
     } //end for all rastered rooms
-
-    if( debug ) {
-      System.out.print( "Created nodes: " );
-      for( Node node : model ) {
-        System.out.print( node + "; " );
-      }
-    }
   }
 
+  private Edge createEdge( Node from, Node to, int capacity ) {
+    Edge edge = model.newEdge( from, to );
+    mapping.setEdgeLevel( edge, Level.Equal );
+    model.setEdgeCapacity( edge, capacity );
+    return edge;
+  }
+
+  
   @Override
   protected void createEdgesAndCapacities() {
     System.out.println( "Set up edges and compute capacities... " );
@@ -474,9 +467,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     ZToGraphMapping mapping = model.getZToGraphMapping();
     List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
-        //mapping to store edge capacities
-    //IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
-    //model.setEdgeCapacities( edgesCap );
+    //mapping to store edge capacities
     for( ZToGraphRoomRaster room : rasteredRooms ) {
       if( debug ) {
         System.out.println( "Currently considered room: " + room.getRoom().getName() + "on floor: " + room.getRoom().getAssociatedFloor() );
@@ -489,16 +480,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
       for( Node evacNode : EvacuationNodes.get( room.getRoom() ) ) {
         Node node1 = evacNode;
-        Edge edge = model.newEdge( node1, supersink );
-        //Edge edge = model.newEdge(node1,supersink);
-        mapping.setEdgeLevel( edge, Level.Equal );
-        //graph.setEdge(edge);
-        if( debug ) {
-          System.out.println( "Edge to supersink: " + edge );
-        }
-        model.setEdgeCapacity( edge, Integer.MAX_VALUE );
-        System.out.println( "Create Edge " + edge.id() );
-        System.out.println( "Setting edge capacity to " + Integer.MAX_VALUE );
+        createEdge( node1, supersink, Integer.MAX_VALUE );
       }
       Collection<Room> neighbRooms = neighbourRooms.get( ZRoom );
       //connect the room with all of its neighbours
@@ -515,29 +497,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             Node first = NodesForAssignArea.get( a ).get( i ).getNode();
             Node second = NodesForAssignArea.get( a ).get( i + 1 ).getNode();
             if( ((i + 1) % numHeight) != 0 ) {
-              Edge edge = model.newEdge( first, second );
-              mapping.setEdgeLevel( edge, Level.Equal );
-              //graph.setEdge(edge);
-              if( debug ) {
-                System.out.println( "Edge between assignNodes: " + edge );
-              }
-              model.setEdgeCapacity( edge, Integer.MAX_VALUE );
-              System.out.println( "Create Edge " + edge.id() );
-              System.out.println( "Setting edge capacity to " + Integer.MAX_VALUE );
-
+              createEdge( first, second, Integer.MAX_VALUE );
             }
             if( i < (numWidth * numHeight) - numHeight ) {
               Node hor = NodesForAssignArea.get( a ).get( i + numHeight ).getNode();
-              Edge edge = model.newEdge( first, hor );
-              mapping.setEdgeLevel( edge, Level.Equal );
-              //graph.setEdge(edge);
-              if( debug ) {
-                System.out.println( "Edge between assignNodes: " + edge );
-              }
-              model.setEdgeCapacity( edge, Integer.MAX_VALUE );
-              System.out.println( "Create Edge " + edge.id() );
-              System.out.println( "Setting edge capacity to " + Integer.MAX_VALUE );
-
+              createEdge( first, hor, Integer.MAX_VALUE );
             }
           }
         }
@@ -549,19 +513,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
         if( ZRoom.getEvacuationAreas().size() > 0 ) {
           for( Node n1 : AssignmentNodes.get( ZRoom ) ) {
             for( Node n2 : EvacuationNodes.get( ZRoom ) ) {
-              Edge edge = model.newEdge( n1, n2 );
-              mapping.setEdgeLevel( edge, Level.Equal );
-              //graph.addEdge(edge);
-              if( debug ) {
-                System.out.println( "Edge between assignment area and evacuation area: " + edge );
-              }
+              // TODO
               //set the capacity of an edge to the max. number of persons(in this room) divided by number of assignment areas
               int cap = 2;
-              model.setEdgeCapacity( edge, cap );
-              System.out.println( "Create Edge " + edge.id() );
-              System.out.println( "Setting edge capacity to " + cap );
-              RoomEdges.add( edge );
-
+              Edge e = createEdge( n1, n2, cap );
+              RoomEdges.add( e );
             }
           }
 
@@ -572,16 +528,8 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 PositionNode evac = new PositionNode( n2, p );
                 List<PositionNode> nearest = FindNearestAssignNodes( NodesForAssignArea.get( area ), evac );
                 for( PositionNode near : nearest ) {
-                  Edge edge = model.newEdge( n2, near.getNode() );
-                  if( debug ) {
-                    System.out.println( "Edge between nearest assignment area and evac node: " + edge );
-                  }
-                  mapping.setEdgeLevel( edge, Level.Equal );
-                  //graph.addEdge(edge);
-                  model.setEdgeCapacity( edge, Integer.MAX_VALUE );
-                  System.out.println( "Create Edge " + edge.id() );
-                  System.out.println( "Setting edge capacity to " + Integer.MAX_VALUE );
-                  RoomEdges.add( edge );
+                  Edge e = createEdge( n2, near.getNode(), Integer.MAX_VALUE );
+                  RoomEdges.add( e );
                 }
               }
             }
@@ -610,13 +558,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             for( PositionNode n2 : doorNodesForRoom.get( ZRoom ) ) {
               List<PositionNode> nearest = FindNearestAssignNodes( NodesForAssignArea.get( area ), n2 );
               for( PositionNode near : nearest ) {
-                Edge edge = model.newEdge( n2.getNode(), near.getNode() );
-                if( debug ) {
-                  System.out.println( "Edge between nearest assignment area and door node: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                //graph.addEdge(edge);
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( n2.getNode(), near.getNode(), Integer.MAX_VALUE );
                 RoomEdges.add( edge );
               }
             }
@@ -632,13 +574,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
           for( Node node1 : EvacuationNodes.get( ZRoom ) ) {
             for( Node node2 : AssignmentNodes.get( ZRoom ) ) {
               //connect evacuation area and assignment area in one room directly
-              Edge edge = model.newEdge( node1, node2 );
-              if( debug ) {
-                System.out.println( "Edge between assign node and evacuation node: " + edge );
-              }
-              mapping.setEdgeLevel( edge, Level.Equal );
-              //graph.addEdge(edge);
-              model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+              Edge edge = createEdge( node1, node2, Integer.MAX_VALUE );
               RoomEdges.add( edge );
             }
           }
@@ -649,13 +585,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
           for( PositionNode n1 : flnodes ) {
             for( PositionNode n2 : doornodes ) {
               if( !(flnodes.contains( n2 )) ) {
-                Edge edge = model.newEdge( n1.getNode(), n2.getNode() );
-                if( debug ) {
-                  System.out.println( "Edge between door and floor connecting door: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                //graph.addEdge(edge);
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( n1.getNode(), n2.getNode(), Integer.MAX_VALUE );
                 RoomEdges.add( edge );
               }
             }
@@ -691,10 +621,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               if( r != EvacRoom ) {
                 for( PositionNode door2 : doorNodesForRoom.get( r ) ) {
                   if( door2 != null ) {
-                    Edge edge = model.newEdge( n.getNode(), door2.getNode() );
-                    mapping.setEdgeLevel( edge, Level.Equal );
-                    //graph.addEdge(edge);
-                    model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                    Edge edge = createEdge( n.getNode(), door2.getNode(), Integer.MAX_VALUE );
                     RoomEdges.add( edge );
                   }
                 }
@@ -705,26 +632,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               if( NodesForAssignArea.containsKey( area ) ) {
                 List<PositionNode> nearest = FindNearestAssignNodes( NodesForAssignArea.get( area ), n );
                 for( PositionNode near : nearest ) {
-                  Edge edge = model.newEdge( n.getNode(), near.getNode() );
-                  if( debug ) {
-                    System.out.println( "Edge between nearest assignment area and door node: " + edge );
-                  }
-                  mapping.setEdgeLevel( edge, Level.Equal );
-                  //graph.addEdge(edge);
-                  model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                  Edge edge = createEdge( n.getNode(), near.getNode(), Integer.MAX_VALUE );
                   RoomEdges.add( edge );
                 }
               }
             }
             if( !AssignmentNodes.get( ZRoom ).isEmpty() ) {
               for( Node n2 : AssignmentNodes.get( ZRoom ) ) {
-                Edge edge = model.newEdge( n.getNode(), n2 );
-                if( debug ) {
-                  System.out.println( "Edge between assignment area and door node: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                //graph.addEdge(edge);
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( n.getNode(), n2, Integer.MAX_VALUE );
                 RoomEdges.add( edge );
               }
             }
@@ -782,21 +697,12 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             }
           }
           coll.remove( want );
-                        //System.out.println("Coll: " + coll.toString());
+          //System.out.println("Coll: " + coll.toString());
           //System.out.println("want: " + want);
           ConnectWithCertainNode( ZRoom, coll, want );
           if( !ZRoom.getAssignmentAreas().isEmpty() ) {
             for( Node n : AssignmentNodes.get( ZRoom ) ) {
-              Edge edge = model.newEdge( n, want );
-              mapping.setEdgeLevel( edge, Level.Equal );
-              //graph.addEdge(edge);
-              if( debug ) {
-                System.out.println( "Assign Edge " + edge + "in Room: " + ZRoom.getName() );
-              }
-              model.setEdgeCapacity( edge, Integer.MAX_VALUE );
-              System.out.println( "Create Edge " + edge.id() );
-              System.out.println( "Setting edge capacity to " + Integer.MAX_VALUE );
-
+              createEdge( n, want, Integer.MAX_VALUE );
             }
           }
         } //exactly one room with more than one door and one evacuation area inside
@@ -815,14 +721,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             for( Point p2 : doors2.keySet() ) {
               if( p1.equals( p2 ) ) {
                 Node node1 = connection.get( p1 );
-                Edge edge = model.newEdge( node1, center );
-                if( debug ) {
-                  System.out.println( "Connection1: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                                    //graph.addEdge(edge);
-                //TODO: set edge capacity correctly
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( node1, center, Integer.MAX_VALUE );
                 RoomEdges.add( edge );
               }
             }
@@ -832,28 +731,15 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             if( r != MoreDoorRoom ) {
               Node door2 = doorNodeForRoom.get( r );
               if( door2 != null ) {
-                Edge edge = model.newEdge( center, door2 );
-                if( debug ) {
-                  System.out.println( "Connection2: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                                    //graph.addEdge(edge);
-                //TODO: set edge capacity correctly
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( center, door2, Integer.MAX_VALUE );
                 RoomEdges.add( edge );
               }
             }
           }
           //connect the evacuation node with center
           for( Node node : EvacuationNodes.get( ZRoom ) ) {
-            Edge edge = model.newEdge( center, node );
-            if( debug ) {
-              System.out.println( "Connection3: " + edge );
-            }
-            mapping.setEdgeLevel( edge, Level.Equal );
-                            //graph.addEdge(edge);
             //TODO: set edge capacity correctly (smaller than infinity..)
-            model.setEdgeCapacity( edge, 10 ); // todo ???
+            Edge edge = createEdge( center, node, 10 );
             RoomEdges.add( edge );
           }
 
@@ -883,20 +769,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 int evac_x = (int) mapping.nodeRectangles.get( node ).getCenterX();
                 int evac_y = (int) mapping.nodeRectangles.get( node ).getCenterY();
                 Point evacPoint = new Point( evac_x, evac_y );
-                Edge edge = model.newEdge( node, center );
-                if( debug ) {
-                  System.out.println( "Edge between center and evacuation node: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                             //graph.addEdge(edge);
                 //TODO: set edge capacity correctly
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( node, center, Integer.MAX_VALUE );
                 RoomEdges.add( edge );
                 for( PositionNode door : doors ) {
                   Point doorPoint = new Point( door.getPosition().x, -door.getPosition().y );
                   //System.out.println("assignPoint " + assignPoint + " door " + doorPoint + " centerPoint " + centerPoint);
-                  double dirPath = calculateDistance( evacPoint, doorPoint );
-                  double nondirPath = calculateDistance( evacPoint, centerPoint ) + calculateDistance( centerPoint, doorPoint );
+                  double dirPath = evacPoint.distance( doorPoint );
+                  double nondirPath = evacPoint.distance( centerPoint ) + centerPoint.distance( doorPoint );
                   //System.out.println("short " + dirPath + " long " + nondirPath);
                   if( nondirPath > 1.5 * dirPath ) {
                     Edge shortedge = model.newEdge( node, door.getNode() );
@@ -904,7 +784,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                       System.out.println( "direct edge between assignment node and door: " + shortedge );
                     }
                     mapping.setEdgeLevel( shortedge, Level.Equal );
-                                     //graph.addEdge(shortedge);
                     //TODO: set edge capacity correctly
                     model.setEdgeCapacity( shortedge, Integer.MAX_VALUE );
                     RoomEdges.add( shortedge );
@@ -919,19 +798,13 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 int assign_x = (int) mapping.nodeRectangles.get( node ).getCenterX();
                 int assign_y = (int) mapping.nodeRectangles.get( node ).getCenterY();
                 Point assignPoint = new Point( assign_x, assign_y );
-                Edge edge = model.newEdge( node, center );
-                if( debug ) {
-                  System.out.println( "edge between center and assignment node: " + edge );
-                }
-                mapping.setEdgeLevel( edge, Level.Equal );
-                //graph.addEdge(edge);
-                model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                Edge edge = createEdge( node, center, Integer.MAX_VALUE );
                 RoomEdges.add( edge );
                 for( PositionNode door : doors ) {
                   Point doorPoint = new Point( door.getPosition().x, -door.getPosition().y );
                   //System.out.println("assignPoint " + assignPoint + " door " + doorPoint + " centerPoint " + centerPoint);
-                  double dirPath = calculateDistance( assignPoint, doorPoint );
-                  double nondirPath = calculateDistance( assignPoint, centerPoint ) + calculateDistance( centerPoint, doorPoint );
+                  double dirPath = assignPoint.distance( doorPoint );
+                  double nondirPath = assignPoint.distance( centerPoint ) + centerPoint.distance( doorPoint );
                   //System.out.println("short " + dirPath + " long " + nondirPath);
                   if( nondirPath > 1.5 * dirPath ) {
                     Edge shortedge = model.newEdge( node, door.getNode() );
@@ -939,7 +812,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                       System.out.println( "direct edge between assignment node and door: " + shortedge );
                     }
                     mapping.setEdgeLevel( shortedge, Level.Equal );
-                    //graph.addEdge(shortedge);
                     model.setEdgeCapacity( shortedge, Integer.MAX_VALUE );
                     RoomEdges.add( shortedge );
                   }
@@ -952,13 +824,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 for( PositionNode door : doors ) {
                   List<PositionNode> nearest = FindNearestAssignNodes( NodesForAssignArea.get( area ), door );
                   for( PositionNode near : nearest ) {
-                    Edge edge = model.newEdge( near.getNode(), door.getNode() );
-                    if( debug ) {
-                      System.out.println( "edge between door and nearest assignment node... " + edge );
-                    }
-                    mapping.setEdgeLevel( edge, Level.Equal );
-                    //graph.addEdge(edge);
-                    model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+                    Edge edge = createEdge( near.getNode(), door.getNode(), Integer.MAX_VALUE );
                     RoomEdges.add( edge );
                   }
                 }
@@ -971,7 +837,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                     System.out.println( "edge between center and nearest assignment node...: " + shortedge );
                   }
                   mapping.setEdgeLevel( shortedge, Level.Equal );
-                  //graph.addEdge(shortedge);
                   model.setEdgeCapacity( shortedge, Integer.MAX_VALUE );
                   RoomEdges.add( shortedge );
                 }
@@ -979,34 +844,13 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             }
 
             for( PositionNode node : doors ) {
-              Edge edge = model.newEdge( node.getNode(), center );
-              if( debug ) {
-                System.out.println( "edge between center and door: " + edge );
-              }
-              mapping.setEdgeLevel( edge, Level.Equal );
-                         //graph.addEdge(edge);
-              //TODO: set edge capacity correctly
-              model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+              Edge edge = createEdge( node.getNode(), center, Integer.MAX_VALUE );
               RoomEdges.add( edge );
             }
 
           }
 
         }
-                //create edge between assignment- and evacuation nodes
-                /*for (Node node_a: EvacuationNodes.get(ZRoom))
-         {
-         for (Node node_b: AssignmentNodes.get(ZRoom))
-         {
-         Edge edge = model.newEdge( node_a, node_b);
-         mapping.setEdgeLevel(edge, Level.Equal);
-         //graph.addEdge(edge);
-         //TODO: set edge capacity correctly
-         model.setEdgeCapacity(edge, 10);
-         RoomEdges.add(edge);
-         }
-         }*/
-
       }
       //stores all the created edges for the current Room
       EdgesForRoom.put( ZRoom, RoomEdges );
@@ -1017,8 +861,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
   @Override
   protected void computeTransitTimes() {
-        //first set it to the euclidean distance between two points
-    //exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
+    //first set it to the euclidean distance between two points
     List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
     for( Edge edge : model.graph().edges() ) {
@@ -1130,13 +973,9 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 Point edgeStart = new Point( start_x, start_y );
                 Point LowerStair = new Point( (stair.getLowerLevelEnd().getXInt() + stair.getLowerLevelStart().getXInt()) / 2, (stair.getLowerLevelEnd().getYInt() + stair.getLowerLevelStart().getYInt()) / 2 );
                 Point UpperStair = new Point( (stair.getUpperLevelEnd().getXInt() + stair.getUpperLevelStart().getXInt()) / 2, (stair.getUpperLevelEnd().getYInt() + stair.getUpperLevelStart().getYInt()) / 2 );
-                double startToLower = calculateDistance( edgeStart, LowerStair );
-                double startToUpper = calculateDistance( edgeStart, UpperStair );
-                if( startToLower < startToUpper ) {
-                  directionUp = true;
-                } else {
-                  directionUp = false;
-                }
+                double startToLower = edgeStart.distance( LowerStair );
+                double startToUpper = edgeStart.distance( UpperStair );
+                directionUp = startToLower < startToUpper;
                 //System.out.println("Direction Up: " + directionUp);
                 double stairsize = ((double) count) / ((double) points.size());
                 //System.out.println("stairsize: " + stairsize);
@@ -1170,7 +1009,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                 transitUp = (transitUpDelay - transitOrig) * factor + transitOrig;
                 //System.out.println("Transit Up: " + transitUp);
                 transitDown = (transitDownDelay - transitOrig) * factor + transitOrig;
-                                     //System.out.println("Transit Down: " + transitDown);
+                //System.out.println("Transit Down: " + transitDown);
 
                 if( directionUp ) {
                   model.setExactTransitTime( edge, transitUp );
@@ -1193,7 +1032,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                   count++;
                 }
               }
-                                //System.out.println("punkte: " + points.size());
+              //System.out.println("punkte: " + points.size());
               //System.out.println("count: " + count);
               double delaysize = ((double) count) / ((double) points.size());
               //System.out.println("delaysize: " + delaysize);
@@ -1223,7 +1062,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               if( containsEdge ) {
                 int barrEndX = barrier.getxOffset() + barrier.getWidth();
                 int barrEndY = barrier.getyOffset() + barrier.getHeight();
-                                //System.out.println("Barrier x Offset: " + barrier.getxOffset());
+                //System.out.println("Barrier x Offset: " + barrier.getxOffset());
                 //System.out.println("Barrier y Offset: " + barrier.getyOffset());
                 //System.out.println("Barrier Endx: " + barrEndX);
                 //System.out.println("Barrier Endy: " + barrEndY);
@@ -1344,26 +1183,22 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
   @Override
   protected void createReverseEdges() {
-		int edgeIndex = model.numberOfEdges();
-		final int oldEdgeIndex = edgeIndex;
+    int edgeIndex = model.numberOfEdges();
+    final int oldEdgeIndex = edgeIndex;
 
     final int normalEdges = edgeIndex - numStairEdges;
-    // edges = 2*normal + existing stair edges. reduce by model.numberOfSinks because for sinks we do not create backward edges
 
     model.setNumberOfEdges( normalEdges * 2 + numStairEdges - model.numberOfSinks() );
-		//model.setNumberOfEdges( ((edgeIndex - numStairEdges) * 2) - model.numberOfSinks() );
 
-		// don't use an iterator here, as it will result in concurrent modification
-		for( int i = 0; i < oldEdgeIndex; ++i ) {
-			Edge edge = model.getEdge( i );
-			if( !stairEdges.contains( edge ) && !edge.isIncidentTo( model.getSupersink() ) ) {
-				model.createReverseEdge( edge );
-			}
-		}
+    // don't use an iterator here, as it will result in concurrent modification
+    for( int i = 0; i < oldEdgeIndex; ++i ) {
+      Edge edge = model.getEdge( i );
+      if( !stairEdges.contains( edge ) && !edge.isIncidentTo( model.getSupersink() ) ) {
+        model.createReverseEdge( edge );
+      }
+    }
 
   }
-
-
 
   public HashMap<Point, Integer> getFloorDoors( Room room ) {
     HashMap<Point, Integer> doors = new HashMap<>();
@@ -1437,8 +1272,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
           NodeRectangle rec1 = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
           mapping.setNodeRectangle( node1, rec1 );
           model.getZToGraphMapping().getNodeFloorMapping().set( node1, getProblem().getFloorID( room.getAssociatedFloor() ) );
-                        //model.getZToGraphMapping().setIsEvacuationNode( node1, false );
-          //model.getZToGraphMapping().setIsSourceNode(node1, false);
           model.getZToGraphMapping().setDeletedSourceNode( node1, false );
           if( edges.size() == 1 ) {
             int w = next.length();
@@ -1452,7 +1285,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             if( debug ) {
               System.out.println( "Floor Connecting Node_2: " + node + "at position: " + po + " for room: " + room.getName() );
             }
-            //graph.setNode(node);
             PositionNode pos = new PositionNode( node, p, longwidth );
             floorNodes.add( pos );
             doorNodes.add( pos );
@@ -1461,8 +1293,6 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             NodeRectangle rec = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
             mapping.setNodeRectangle( node, rec );
             model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getAssociatedFloor() ) );
-                            //model.getZToGraphMapping().setIsEvacuationNode( node, false );
-            //model.getZToGraphMapping().setIsSourceNode(node, false);
             model.getZToGraphMapping().setDeletedSourceNode( node, false );
           }
           start = next;
@@ -1493,15 +1323,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       NodeRectangle rec = new NodeRectangle( p.x - 1, -(p.y + 1), p.x + 1, -(p.y - 1) );
       mapping.setNodeRectangle( node, rec );
       model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getAssociatedFloor() ) );
-                //model.getZToGraphMapping().setIsEvacuationNode( node, false );
-      //model.getZToGraphMapping().setIsSourceNode(node, false);
       model.getZToGraphMapping().setDeletedSourceNode( node, false );
     }
     return doors;
   }
 
   /**
-   * Iterates over the building datastructure and counts the number of neighbor rooms for each room.
+   * Iterates over the building datastructure and counts the number of neighbor
+   * rooms for each room.
    */
   private void computeNeighbors() {
     log.finest( "Finding neighbourrooms started..." );
@@ -1560,13 +1389,12 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       numberNeighborRooms.put( room.getRoom(), neighbours.size() );
     }
   }
-  
+
   /*
    * Computes some values of neighbourrooms needed to create nodes and edges
    * (the number of neighbourrooms with only one neighbour, the number of neighbouring evacuation areas)
    * @param room the room for that neighbourrooms are scanned
    */
-
   public void ComputeNeighbourRoomValues( Room room ) {
     //gives the neighbours of the current room
     Collection<Room> neighbRooms = neighbourRooms.get( room );
@@ -1615,8 +1443,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     }
     //graph.setNode(node);
     centerNodeForRoom.put( r, node );
-              //TODO: define exact value of node capacity
-    //nodesCap.set(node, Integer.MAX_VALUE);
+    //TODO: define exact value of node capacity
     model.setNodeCapacity( node, Integer.MAX_VALUE );
     NodeRectangle rec = new NodeRectangle( nodepos.x - 1, nodepos.y + 1, nodepos.x + 1, nodepos.y - 1 );
     if( r.getInaccessibleAreas().size() > 0 ) {
@@ -1634,7 +1461,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     }
     mapping.setNodeRectangle( node, rec );
     model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( r.getAssociatedFloor() ) );
-              //model.getZToGraphMapping().setIsEvacuationNode( node, false );
+    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
     //model.getZToGraphMapping().setIsSourceNode(node, false);
     model.getZToGraphMapping().setDeletedSourceNode( node, false );
     System.out.println( "Node created (center)" );
@@ -1655,7 +1482,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     }
     //graph.setNode(node);
     centerNodeForRoom.put( ZRoom, node );
-        //TODO: define exact value of node capacity
+    //TODO: define exact value of node capacity
     //nodesCap.set(node, Integer.MAX_VALUE);
     model.setNodeCapacity( node, Integer.MAX_VALUE );
     NodeRectangle n = new NodeRectangle( (int) rectangle.getPoint( 0 ).getX(),
@@ -1782,11 +1609,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
       Rectangle covered;
       //TODO: transformiere Punkte zurueck in urspruengliche Lage
-      covered = new ArbitraryRectangle(UpperLeft, UpperRight, LowerRight, LowerLeft );
+      covered = new ArbitraryRectangle( UpperLeft, UpperRight, LowerRight, LowerLeft );
 
       Rectangle backrotate = coveredRectangle.rotate( -angle, nw );
 
-                 //System.out.println("covered: " + covered.toString());
+      //System.out.println("covered: " + covered.toString());
       //node at the left/upper end of rectangle
       Node node1 = model.newNode();
       //coveredArea.put( node1, covered );
@@ -1796,13 +1623,10 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       }
       //graph.setNode(node1);
       model.setNodeCapacity( node1, Integer.MAX_VALUE );
-      //NodeRectangle rec1 = new NodeRectangle(UpperLeft1_x,-(UpperLeft1_y),LowerRight1_x, -(LowerRight1_y));
-      NodeRectangle rec1 = new NodeRectangle( (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
+      NodeRectangle rec1 = new NodeRectangle( (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
       //System.out. println("NodeRectangle1: " + UpperLeft + " " + UpperRight + " " + LowerRight + " " + LowerLeft);
       mapping.setNodeRectangle( node1, rec1 );
       model.getZToGraphMapping().getNodeFloorMapping().set( node1, getProblem().getFloorID( Zroom.getFloor() ) );
-                 //model.getZToGraphMapping().setIsEvacuationNode(node1, false );
-      //model.getZToGraphMapping().setIsSourceNode(node1, false);
       model.getZToGraphMapping().setDeletedSourceNode( node1, false );
       System.out.println( "Node created (node1)" );
       nodes.add( node1 );
@@ -1832,15 +1656,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       coveredArea.put( node2, backrotate2 );
       //graph.setNode(node2);
       model.setNodeCapacity( node2, Integer.MAX_VALUE );
-//      NodeRectangle rec2 = new NodeRectangle( backrotate2.get( 0 ).getXInt(), -backrotate2.get( 0 ).getYInt(), backrotate2.get( 1 ).getXInt(), -backrotate2.get( 1 ).getYInt(), backrotate2.get( 2 ).getXInt(), -backrotate2.get( 2 ).getYInt(), backrotate2.get( 3 ).getXInt(), -backrotate2.get( 3 ).getYInt() );
       backrotate = backrotate2;
-      NodeRectangle rec2 = new NodeRectangle( (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
+      NodeRectangle rec2 = new NodeRectangle( (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
 
-      //NodeRectangle rec2 = new NodeRectangle(UpperLeft2_x,-(UpperLeft2_y),LowerRight2_x,-(LowerRight2_y));
       mapping.setNodeRectangle( node2, rec2 );
       model.getZToGraphMapping().getNodeFloorMapping().set( node2, getProblem().getFloorID( Zroom.getFloor() ) );
-                 //model.getZToGraphMapping().setIsEvacuationNode(node2, false );
-      //model.getZToGraphMapping().setIsSourceNode(node2, false);
       model.getZToGraphMapping().setDeletedSourceNode( node2, false );
       System.out.println( "Node created (node2)" );
       nodes.add( node2 );
@@ -1850,7 +1670,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     }
 
     Node middle = model.newNode();
-      System.out.println( "Node created (middle)" );
+    System.out.println( "Node created (middle)" );
     nodes.add( middle );
     if( debug ) {
       System.out.println( "node in the middle: " + middle );
@@ -1876,17 +1696,12 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
     //System.out.println("covered 3: " + covered.toString());
     coveredArea.put( middle, backrotate3 );
-    //NodeRectangle recmidd = new NodeRectangle(midUpperLeft_x, -(midUpperLeft_y),midLowerRight_x,-midLowerRight_y);
 
-//    NodeRectangle recmidd = new NodeRectangle( backrotate3.get( 0 ).getXInt(), -backrotate3.get( 0 ).getYInt(), backrotate3.get( 1 ).getXInt(), -backrotate3.get( 1 ).getYInt(), backrotate3.get( 2 ).getXInt(), -backrotate3.get( 2 ).getYInt(), backrotate3.get( 3 ).getXInt(), -backrotate3.get( 3 ).getYInt() );
-      Rectangle backrotate = backrotate3;
-      NodeRectangle recmidd = new NodeRectangle( (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int)backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int)-backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
-
+    Rectangle backrotate = backrotate3;
+    NodeRectangle recmidd = new NodeRectangle( (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.NE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.NW ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SE ).getY(), (int) backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getX(), (int) -backrotate.getCoordinate( Rectangle.CornerCoordinates.SW ).getY() );
 
     mapping.setNodeRectangle( middle, recmidd );
     model.getZToGraphMapping().getNodeFloorMapping().set( middle, getProblem().getFloorID( Zroom.getFloor() ) );
-            //model.getZToGraphMapping().setIsEvacuationNode( middle, false );
-    //model.getZToGraphMapping().setIsSourceNode(middle, false);
     model.getZToGraphMapping().setDeletedSourceNode( middle, false );
 
   }
@@ -1896,14 +1711,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     for( int i = 0; i < size - 2; i++ ) {
       Node node1 = nodesForRoom.get( room ).get( i );
       Node node2 = nodesForRoom.get( room ).get( i + 2 );
-      Edge edge = model.newEdge( node1, node2 );
-      if( debug ) {
-        System.out.println( "Dividing Edge: " + edge );
-      }
-      mapping.setEdgeLevel( edge, Level.Equal );
-                //graph.addEdge(edge);
-      //TODO: set edge capacity correctly
-      model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+      Edge edge = createEdge( node1, node2, Integer.MAX_VALUE );
       RoomEdges.add( edge );
     }
 
@@ -1914,7 +1722,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       System.out.println( "Last Edge: " + last );
     }
     mapping.setEdgeLevel( last, Level.Equal );
-            //graph.addEdge(last);
+    //graph.addEdge(last);
     //TODO: set edge capacity correctly
     model.setEdgeCapacity( last, Integer.MAX_VALUE );
     RoomEdges.add( last );
@@ -1929,34 +1737,26 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       for( Node n : innernodes ) {
         Point center = new Point( (int) mapping.getNodeRectangles().get( n ).getCenterX(), -(int) mapping.getNodeRectangles().get( n ).getCenterY() );
         Point point = new Point( node1.getPosition().x, node1.getPosition().y );
-        double distance = calculateDistance( point, center );
+        double distance = point.distance( center );
         if( distance < dist ) {
           dist = distance;
           nextto = n;
         }
       }
-      Edge edge = model.newEdge( nextto, node1.getNode() );
-      if( debug ) {
-        System.out.println( "Edge to door: " + edge );
-      }
-      mapping.setEdgeLevel( edge, Level.Equal );
-                 //graph.addEdge(edge);
       //TODO: set edge capacity correctly
-      model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+      Edge edge = createEdge( nextto, node1.getNode(), Integer.MAX_VALUE );
       RoomEdges.add( edge );
-
     }
 
     for( Node node2 : innernodes ) {
-
       Rectangle getPoints = coveredArea.get( node2 );
-      List<PlanPoint> p = new LinkedList<PlanPoint>();
+      List<PlanPoint> p = new LinkedList<>();
       for( de.tu_berlin.coga.geom.Point po : getPoints ) {
         p.add( new PlanPoint( po.getX(), po.getY() ) );
       }
       PlanPolygon poly = new PlanPolygon( de.tu_berlin.coga.zet.model.PlanEdge.class );
       poly.defineByPoints( p );
-                 //System.out.println("center: " + center);
+      //System.out.println("center: " + center);
 
       if( room.getAssignmentAreas().size() > 0 ) {
         for( Node node : AssignmentNodes.get( room ) ) {
@@ -1969,7 +1769,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               System.out.println( "Edge between center and assignment area: " + edge1 );
             }
             mapping.setEdgeLevel( edge1, Level.Equal );
-                                 //graph.addEdge(edge1);
+            //graph.addEdge(edge1);
             //TODO: set edge capacity correctly
             model.setEdgeCapacity( edge1, Integer.MAX_VALUE );
             RoomEdges.add( edge1 );
@@ -1987,7 +1787,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               System.out.println( "Edge between center and evacuation area: " + edge2 );
             }
             mapping.setEdgeLevel( edge2, Level.Equal );
-                                //graph.addEdge(edge2);
+            //graph.addEdge(edge2);
             //TODO: set edge capacity correctly (smaller than infinity, so that waiting is considered)
             model.setEdgeCapacity( edge2, Integer.MAX_VALUE );
             RoomEdges.add( edge2 );
@@ -2013,26 +1813,17 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
               //System.out.println("Is floor node2: " + isfloorNode.get(node1.getNode()));
               if( !isfloorNode.get( node2.getNode() ) ) {
                 if( node1.getPosition().equals( node2.getPosition() ) && used[node1.getNode().id()][node2.getNode().id()] == 0 ) {
-                  Edge edge = model.newEdge( node1.getNode(), node2.getNode() );
-                  mapping.setEdgeLevel( edge, Level.Equal );
-                  //graph.setEdge(edge);
-                  if( debug ) {
-                    System.out.println( "door connecting edge: " + edge );
-                  }
                   int width = (int) Math.floor( room.getDoors().get( node1.getPosition() ) / 1000 * 2 );
                   if( width == 0 ) {
                     width = 1;
                   }
-                               //System.out.println("Weite: " + Math.floor(room.getDoors().get(node1.getPosition())));
-                  //model.setEdgeCapacity(edge,width);
-                  model.setEdgeCapacity( edge, width );
+                  createEdge( node1.getNode(), node2.getNode(), width );
+                  //System.out.println("Weite: " + Math.floor(room.getDoors().get(node1.getPosition())));
                   used[node1.getNode().id()][node2.getNode().id()] = 1;
                   used[node2.getNode().id()][node1.getNode().id()] = 1;
                 }
-
               }
             }
-
           }
         }
       }
@@ -2041,33 +1832,15 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
   public void ConnectFloors( Room room ) {
     Collection<PositionNode> nodes1 = floorNodesForRoom.get( room );
-    //HashMap<Point,Integer> width = getFloorDoors(room);
     HashMap<Point, Integer> width = floorDoors;
-        //System.out.println("Room: " + room.getName());
 
     for( PositionNode n1 : nodes1 ) {
       Room connect = linkTarget.get( n1.getNode() );
       Collection<PositionNode> nodes2 = floorNodesForRoom.get( connect );
       for( PositionNode n2 : nodes2 ) {
         if( linkTarget.get( n2.getNode() ).equals( room ) ) {
-          Edge edge = model.newEdge( n1.getNode(), n2.getNode() );
-          if( debug ) {
-            System.out.println( "floor connecting edge: " + edge );
-          }
-          mapping.setEdgeLevel( edge, Level.Equal );
-          //graph.setEdge(edge);
-          if( debug ) {
-            System.out.println( "n1 position: " + n1.getPosition() );
-          }
-          if( debug ) {
-            System.out.println( "floor doors: " + floorDoors.toString() );
-          }
-          //int width1 = width.get(n2.getPosition());
           int width1 = width.get( n1.getPosition() );
-          model.setEdgeCapacity( edge, width1 );
-          if( debug ) {
-            System.out.println( "for room: " + room.getName() + "on floor: " + room.getAssociatedFloor().getName() + " and: " + connect.getName() + " on floor: " + connect.getAssociatedFloor().getName() );
-          }
+          createEdge( n1.getNode(), n2.getNode(), width1 );
         }
       }
     }
@@ -2075,30 +1848,9 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
   public void ConnectWithCertainNode( Room room, Collection<Node> nodes, Node DoorNode ) {
     for( Node node : nodes ) {
-      Edge edge = model.newEdge( node, DoorNode );
-      mapping.setEdgeLevel( edge, Level.Equal );
-      //graph.addEdge(edge);
-      if( debug ) {
-        System.out.println( "Edge " + edge + "in Room: " + room.getName() );
-      }
-      model.setEdgeCapacity( edge, Integer.MAX_VALUE );
+      Edge edge = createEdge( node, DoorNode, Integer.MAX_VALUE );
       RoomEdges.add( edge );
     }
-  }
-
-  private static double calculateDistance( Point start, Point end ) {
-    double distance;
-    double distanceX, distanceY;
-    double startX = start.getX();
-    double startY = start.getY();
-    double endX = end.getX();
-    double endY = end.getY();
-
-    distanceX = Math.abs( startX - endX );
-    distanceY = Math.abs( startY - endY );
-
-    distance = Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) );
-    return distance;
   }
 
   public List<PositionNode> FindNearestAssignNodes( List<PositionNode> nodes, PositionNode connect ) {
@@ -2112,7 +1864,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
 
     for( PositionNode n : nodes ) {
       //System.out.println("Node Position: " + n.getPosition());
-      double distance = calculateDistance( n.getPosition(), connect.getPosition() );
+      double distance = n.getPosition().distance( connect.getPosition() );
       if( distance < dist ) {
         dist = distance;
         near = n;
@@ -2122,7 +1874,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     //System.out.println("dist: " + dist + "for node: " + near.getNode() );
     for( PositionNode n : nodes ) {
       if( !n.getNode().equals( near.getNode() ) ) {
-        double distance = calculateDistance( n.getPosition(), connect.getPosition() );
+        double distance = n.getPosition().distance( connect.getPosition() );
         //System.out.println("distance: " + distance + "for node: " + n.getNode());
         if( distance == dist ) {
           nearest.add( n );

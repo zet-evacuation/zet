@@ -60,7 +60,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 		// TODO: set up node position mapping
 
 		int nodeCount = getNetwork().numberOfNodes();
-		this.nodeRectangles = new IdentifiableObjectMapping<>( nodeCount, NodeRectangle.class );
+		this.nodeRectangles = new IdentifiableObjectMapping<>( nodeCount );
 		for( Node node : getNetwork().nodes() ) {
 			int x = xPos.get( node );
 			int y = yPos.get( node );

@@ -87,9 +87,9 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {        
         super(problem.getNetwork().numberOfNodes() + ((problem.getSources().size() > 1)? 1 : 0), 
                 problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size()*2 : 0));
-        this.edgeTypes = new IdentifiableObjectMapping<>(getEdgeCapacity(), EdgeType.class);
+        this.edgeTypes = new IdentifiableObjectMapping<>(getEdgeCapacity());
         this.problem = problem;
-        this.reverseEdges = new IdentifiableObjectMapping<>(getEdgeCapacity(), Edge.class);
+        this.reverseEdges = new IdentifiableObjectMapping<>(getEdgeCapacity() );
         this.superSource = ((problem.getSources().size() > 1)? getNode(numberOfNodes() - 1) : problem.getSources().get(0));
         this.superSourceFlow = new IdentifiableIntegerMapping<>(getEdgeCapacity());
         setEdges(problem.getNetwork().edges());
@@ -110,11 +110,11 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 reverseEdges.set(reverse, edge);
             }
         }
-        flow = new IdentifiableObjectMapping<>(problem.getNetwork().edges(), TimeIntegerMapping.class);
+        flow = new IdentifiableObjectMapping<>(problem.getNetwork().edges());
         for (Edge edge : problem.getNetwork().edges()) {
             flow.set(edge, new TimeIntegerMapping());
         }
-        waiting = new IdentifiableObjectMapping<>(problem.getNetwork().nodes(), TimeIntegerMapping.class);
+        waiting = new IdentifiableObjectMapping<>(problem.getNetwork().nodes());
         for (Node node : problem.getNetwork().nodes()) {
             waiting.set(node, new TimeIntegerMapping());
         }

@@ -55,7 +55,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null);
-        IdentifiableObjectMapping<Edge, Boolean> shortestEdges = new IdentifiableObjectMapping<Edge, Boolean>(model.graph().edges(), Boolean.class);
+        IdentifiableObjectMapping<Edge, Boolean> shortestEdges = new IdentifiableObjectMapping<>(model.graph().edges() );
         for (Node source : model.getSources()) {
             dijkstra.setSource(source);
             dijkstra.run();

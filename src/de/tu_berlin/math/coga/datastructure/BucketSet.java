@@ -5,8 +5,6 @@
 package de.tu_berlin.math.coga.datastructure;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
-import de.tu_berlin.coga.container.mapping.Identifiable;
-import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 import java.util.Objects;
@@ -26,8 +24,8 @@ public class BucketSet<E extends Identifiable> {
 	protected int[] distanceLabels;
 
 	public BucketSet( int domainSize, Class<E> rangeType ) {
-		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
-		prev = new IdentifiableObjectMapping<>( domainSize, rangeType );
+		next = new IdentifiableObjectMapping<>( domainSize );
+		prev = new IdentifiableObjectMapping<>( domainSize );
 		this.rangeType = rangeType;
 		this.buckets = (E[]) Array.newInstance( rangeType, domainSize );
 		inactive = new boolean[domainSize];
