@@ -3,13 +3,13 @@ package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.collection.ArraySet;
-import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 
 
@@ -39,9 +39,9 @@ public class BinaryTree implements DirectedGraph {
 	 * Must not be null.
 	 */
 	protected IdentifiableIntegerMapping<Node> outdegree;
-	
+
 	protected Node root;
-	
+
 	/**
 	 * Creates a new AbstractNetwork with the specified capacities for edges and nodes.
 	 * Runtime O(max(initialNodeCapacity, initialEdgeCapacity)). Assumes that 0 is
@@ -51,7 +51,7 @@ public class BinaryTree implements DirectedGraph {
 	public BinaryTree( int initialNodeCapacity ) {
 		this( initialNodeCapacity, 0 );
 	}
-	
+
 	public BinaryTree( int initialNodeCapacity, int root ) {
 		if( root < 0 || root >= initialNodeCapacity )
 			throw new IllegalArgumentException( "Root index must be between 0 and " + initialNodeCapacity + ". Was: " + root );
@@ -98,7 +98,7 @@ public class BinaryTree implements DirectedGraph {
 	 * @return the number of nodes in this graph.
 	 */
 	@Override
-	public int numberOfNodes() {
+	public int nodeCount() {
 		return nodes().size();
 	}
 
@@ -233,7 +233,7 @@ public class BinaryTree implements DirectedGraph {
 		} else
 			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
-	
+
 	public Edge setLeft( Node start, Node end ) {
 		int id = idOfLastCreatedEdge + 1;
 		while( id < size-1 && edges.get( id % (size-1) ) != null )
@@ -246,7 +246,7 @@ public class BinaryTree implements DirectedGraph {
 		} else
 			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
-	
+
 	public Edge setRight( Node start, Node end ) {
 		int id = idOfLastCreatedEdge + 1;
 		while( id < size-1 && edges.get( id % (size-1) ) != null )
@@ -260,7 +260,7 @@ public class BinaryTree implements DirectedGraph {
 			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
 
-	
+
 	/**
 	 * Adds the specified edge to the graph by setting it to it ID's correct
 	 * position in the internal data structures. The correct position must be
@@ -270,25 +270,25 @@ public class BinaryTree implements DirectedGraph {
 	 */
 	public void setEdge( Edge edge ) {
 		if( edges.get( edge.id() ) == null ) {
-			
+
 			// check out, if left or right edge
 			Edge leftEdge = left.get( edge.start() );
 			Edge rightEdge = right.get( edge.start() );
-			
+
 			if( leftEdge != null && leftEdge.end().equals( edge.end() ) )
 				throw new IllegalArgumentException( "Edge between the nodes exists already as left edge!" );
 			if( rightEdge != null && rightEdge.end().equals( edge.end() ) )
 				throw new IllegalArgumentException( "Edge between the nodes exists already as right edge!" );
 			if( incoming.get( edge.end() ) != null &&  incoming.get( edge.end() ) != null )
 				throw new IllegalArgumentException( "End node " + edge.end() + " has already incoming edge!" );
-			
+
 			if( leftEdge != null && rightEdge != null )
 				throw new IllegalArgumentException( "Left and right edge are already occupied." );
 
 			edges.add( edge );
-		
+
 			incoming.set( edge.end(), edge );
-			
+
 			if( leftEdge == null ) {
 				left.set( edge.start(), edge );
 			} else
@@ -296,7 +296,7 @@ public class BinaryTree implements DirectedGraph {
 
 			outdegree.increase( edge.start(), 1 );
 		} else if( edges.get( edge.id() ).equals( edge ) ) {
-			
+
 		} else
 			throw new IllegalArgumentException( "Edge position is already occupied" );
 	}
@@ -306,52 +306,52 @@ public class BinaryTree implements DirectedGraph {
 		if( edges.get( edge.id() ) == null ) {
 			// check out, if left or right edge
 			Edge leftEdge = left.get( edge.start() );
-			
+
 			if( leftEdge != null && leftEdge.end().equals( edge.end() ) )
 				throw new IllegalArgumentException( "Edge between the nodes exists already as left edge!" );
 			if( incoming.get( edge.end() ) != null &&  incoming.get( edge.end() ) != null )
 				throw new IllegalArgumentException( "End node " + edge.end() + " has already incoming edge!" );
-			
+
 			if( leftEdge != null )
 				throw new IllegalArgumentException( "Left edge is already occupied." );
 
 			edges.add( edge );
-		
+
 			incoming.set( edge.end(), edge );
-			
+
 			left.set( edge.start(), edge );
 
 			outdegree.increase( edge.start(), 1 );
 		} else if( edges.get( edge.id() ).equals( edge ) ) {
-			
+
 		} else
 			throw new IllegalArgumentException( "Edge position is already occupied" );
 	}
 	private void setRight( Edge edge ) {
 		if( edges.get( edge.id() ) == null ) {
 			Edge rightEdge = right.get( edge.start() );
-			
+
 			if( rightEdge != null && rightEdge.end().equals( edge.end() ) )
 				throw new IllegalArgumentException( "Edge between the nodes exists already as right edge!" );
 			if( incoming.get( edge.end() ) != null &&  incoming.get( edge.end() ) != null )
 				throw new IllegalArgumentException( "End node " + edge.end() + " has already incoming edge!" );
-			
+
 			if( rightEdge != null )
 				throw new IllegalArgumentException( "Right edge is already occupied." );
 
 			edges.add( edge );
-		
+
 			incoming.set( edge.end(), edge );
-			
+
 			right.set( edge.start(), edge );
 
 			outdegree.increase( edge.start(), 1 );
 		} else if( edges.get( edge.id() ).equals( edge ) ) {
-			
+
 		} else
 			throw new IllegalArgumentException( "Edge position is already occupied" );
 	}
-	
+
 	/**
 	 * Returns an {@link ListSequence} containing all edges starting at
 	 * {@code start} and ending at
@@ -370,7 +370,7 @@ public class BinaryTree implements DirectedGraph {
 				result.add( edge );
 		return result;
 	}
-	
+
 	/**
 	 * Returns the node with the specified id or {@code null} if the graph
 	 * does not contain a node with the specified id. Runtime O(1).
@@ -398,7 +398,7 @@ public class BinaryTree implements DirectedGraph {
 			buffer.append( node.toString() );
 			buffer.append( ", " );
 		}
-		if( numberOfNodes() > 0 )
+		if( nodeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "}, {" );
 		int counter = 0;
@@ -416,7 +416,7 @@ public class BinaryTree implements DirectedGraph {
 		buffer.append( "})" );
 		return buffer.toString();
 	}
-	
+
 	public String deepToString() {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append( "V = {" );
@@ -424,7 +424,7 @@ public class BinaryTree implements DirectedGraph {
 			buffer.append( node.toString() );
 			buffer.append( ", " );
 		}
-		if( numberOfNodes() > 0 )
+		if( nodeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "\nE= {" );
 		int counter = 0;
@@ -442,7 +442,7 @@ public class BinaryTree implements DirectedGraph {
 		buffer.append( "}\n" );
 		return buffer.toString();
 	}
-	
+
 	@Override
 	public boolean existsPath( Node start, Node end ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
@@ -468,11 +468,11 @@ public class BinaryTree implements DirectedGraph {
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
 	}
-	
+
 	public int numOfChildren( Node node ) {
 		return outDegree( node );
 	}
-	
+
 	/**
 	 * Recursively traverses the tree, appends output of level
 	 * to given StringBuffer
@@ -493,7 +493,7 @@ public class BinaryTree implements DirectedGraph {
 		if( getLeft( node ) != null )
 			_tree2string( strbuf, level + 1, getLeft( node ) );
 	}
-	
+
 	public String toString2() {
 		StringBuffer strbuf = new StringBuffer( this.getClass() + ": " );
 
@@ -506,7 +506,7 @@ public class BinaryTree implements DirectedGraph {
 
 		return strbuf.toString();
 	}
-	
+
 	boolean isLeftChild( Node node ) {
 		if( node.equals( root ) )
 			return false;
@@ -523,11 +523,11 @@ public class BinaryTree implements DirectedGraph {
 		else
 			return getHeight( root );
 	}
-	
+
 	private int getHeight( Node node ) {
 		if( node == null )
 			return -1;
-		return 1 + Math.max( getHeight( getLeft( node ) ), getHeight( getRight( node ) ) );		
+		return 1 + Math.max( getHeight( getLeft( node ) ), getHeight( getRight( node ) ) );
 	}
 
 	void setRoot( int i ) {

@@ -4,9 +4,11 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ArraySet;
 import algo.graph.traverse.BFS;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 
 /**
@@ -149,7 +151,7 @@ public class StaticGraph implements Graph, DirectedGraph {
 	 * @return die Anzahl aller sichtbaren Knoten des Graphen.
 	 */
 	@Override
-	public int numberOfNodes() {
+	public int nodeCount() {
 		// return visibleNodes.size()-visibleNodes.numberOfHiddenElements();
 		return nodes.size();
 		//return visibleNodes.numberOfVisibleElements();
@@ -367,7 +369,7 @@ public class StaticGraph implements Graph, DirectedGraph {
 	 }
 	 }*/
 	/*public void createAllNodes() {
-	 createNodes(getNodeCapacity()-numberOfNodes()-numberOfHiddenNodes());
+	 createNodes(getNodeCapacity()-nodeCount()-numberOfHiddenNodes());
 	 }*/
 	/**
 	 * Gibt zur�ck, ob der angegebene Knoten versteckt ist. Laufzeit O(1).

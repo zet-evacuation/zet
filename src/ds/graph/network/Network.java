@@ -13,7 +13,7 @@ import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import ds.graph.Node;
 import ds.graph.Path;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
@@ -34,17 +34,17 @@ public class Network extends AbstractNetwork {
 	 * Caches the edges incident to a node for all nodes in the graph.
 	 * Must not be null.
 	 */
-	protected IdentifiableObjectMapping<Node, DependingListSequence> incidentEdges;
+	protected IdentifiableObjectMapping<Node, DependingListSequence<Edge>> incidentEdges;
 	/**
 	 * Caches the edges ending at a node for all nodes in the graph.
 	 * Must not be null.
 	 */
-	protected IdentifiableObjectMapping<Node, DependingListSequence> incomingEdges;
+	protected IdentifiableObjectMapping<Node, DependingListSequence<Edge>> incomingEdges;
 	/**
 	 * Caches the edges starting at a node for all nodes in the graph.
 	 * Must not be null.
 	 */
-	protected IdentifiableObjectMapping<Node, DependingListSequence> outgoingEdges;
+	protected IdentifiableObjectMapping<Node, DependingListSequence<Edge>> outgoingEdges;
 	/**
 	 * Caches the number of edges incident to a node for all nodes in the graph.
 	 * Must not be null.
@@ -149,7 +149,7 @@ public class Network extends AbstractNetwork {
 	 * @return the number of nodes in this graph.
 	 */
 	@Override
-	public int numberOfNodes() {
+	public int nodeCount() {
 		return nodes().size();
 	}
 
@@ -594,7 +594,7 @@ public class Network extends AbstractNetwork {
 	 */
 	@Override
 	public AbstractNetwork clone() {
-		Network clone = new Network( numberOfNodes(), numberOfEdges() );
+		Network clone = new Network( nodeCount(), numberOfEdges() );
 		clone.setNodes( nodes() );
 		clone.setEdges( edges() );
 		return clone;
@@ -644,7 +644,7 @@ public class Network extends AbstractNetwork {
 			buffer.append( node.toString() );
 			buffer.append( ", " );
 		}
-		if( numberOfNodes() > 0 )
+		if( nodeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "}, {" );
 		int counter = 0;
@@ -670,7 +670,7 @@ public class Network extends AbstractNetwork {
 			buffer.append( node.toString() );
 			buffer.append( ", " );
 		}
-		if( numberOfNodes() > 0 )
+		if( nodeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "\nE= {" );
 		int counter = 0;
@@ -742,7 +742,7 @@ public class Network extends AbstractNetwork {
 	 */
 	@Override
 	public Network createReverseNetwork() {
-		Network result = new Network( numberOfNodes(), numberOfEdges() );
+		Network result = new Network( nodeCount(), numberOfEdges() );
 		for( Edge edge : edges )
 			result.createAndSetEdge( edge.end(), edge.start() );
 		return result;

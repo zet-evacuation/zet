@@ -8,8 +8,9 @@ import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import ds.graph.Node;
 import gui.visualization.draw.graph.GLNashNode;
 
@@ -21,7 +22,7 @@ public class GLNashNodeControl extends GLSimpleNodeControl {
 	private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
 	private final NashFlowVisualization nfv;
 
-	public GLNashNodeControl( Graph graph, Node node, NodePositionMapping nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
+	public GLNashNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
 		super( graph, node, nodePositionMapping, false );
 		this.nashFlowMapping = nashFlowMapping;
 		this.nfv = nfv;

@@ -56,8 +56,8 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
-        int[][] distances = new int[network.numberOfNodes()][network.numberOfNodes()];
-        int[][] caps = new int[network.numberOfNodes()][network.numberOfNodes()];
+        int[][] distances = new int[network.nodeCount()][network.nodeCount()];
+        int[][] caps = new int[network.nodeCount()][network.nodeCount()];
         for (Node sink : sinks) {
             dijkstra.setSource(sink);
             dijkstra.run();

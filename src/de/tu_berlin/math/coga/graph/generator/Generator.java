@@ -5,7 +5,7 @@
 
 package de.tu_berlin.math.coga.graph.generator;
 
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 
 /**
  *

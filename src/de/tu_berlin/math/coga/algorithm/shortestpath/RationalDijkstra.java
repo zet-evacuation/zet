@@ -113,11 +113,11 @@ public class RationalDijkstra {
         if (graph == null) { throw new IllegalStateException("graph is null"); }
         if (source == null) { throw new IllegalStateException("source is null"); }
         if (distances != null) return;
-        distances = new HashMap<>(graph.numberOfNodes());
-        edges = new HashMap<>(graph.numberOfNodes());
-        nodes = new HashMap<>(graph.numberOfNodes());
-        MinHeap<Node,Double> queue = new MinHeap<>(graph.numberOfNodes());
-        for (int v=0; v<graph.numberOfNodes(); v++) {
+        distances = new HashMap<>(graph.nodeCount());
+        edges = new HashMap<>(graph.nodeCount());
+        nodes = new HashMap<>(graph.nodeCount());
+        MinHeap<Node,Double> queue = new MinHeap<>(graph.nodeCount());
+        for (int v=0; v<graph.nodeCount(); v++) {
             distances.put(graph.getNode(v),Double.POSITIVE_INFINITY);
             queue.insert(graph.getNode(v),Double.POSITIVE_INFINITY);
         }

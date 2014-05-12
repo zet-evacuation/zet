@@ -4,8 +4,9 @@
  */
 package gui.visualization.control.graph;
 
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import ds.graph.Node;
 import gui.visualization.draw.graph.GLGraph;
 import opengl.framework.abs.AbstractControl;
@@ -19,13 +20,13 @@ import opengl.helper.Frustum;
  */
 public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements DrawableControlable {
 	protected NodePositionMapping nodePositionMapping;
-	protected Graph graph;
+	protected DirectedGraph graph;
 
-	public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping ) {
+	public GLGraphControl( DirectedGraph graph, NodePositionMapping nodePositionMapping ) {
 		this( graph, nodePositionMapping, true );
 	}
 
-public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boolean setUpNodes ) {
+public GLGraphControl( DirectedGraph graph, NodePositionMapping nodePositionMapping, boolean setUpNodes ) {
 		this.nodePositionMapping = nodePositionMapping;
 		this.graph = graph;
 		if( setUpNodes )
@@ -44,7 +45,7 @@ public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boo
 	}
 
 	public void setFrustum( Frustum frustum ) {
-		
+
 	}
 
 	public Frustum getFrustum() {
@@ -60,7 +61,7 @@ public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boo
 	}
 
 	public void addTime( long timeNanoSeconds ) {
-		
+
 	}
 
 	public void setTime( long time ) {

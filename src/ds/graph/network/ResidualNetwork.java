@@ -133,7 +133,7 @@ public class ResidualNetwork extends Network {
 
 
 	private void setUp( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities  ) {
-		setNodeCapacity( network.numberOfNodes() );
+		setNodeCapacity( network.nodeCount() );
 		setEdgeCapacity( network.numberOfEdges() * 2 );
 		originalNumberOfEdges = network.numberOfEdges();
 

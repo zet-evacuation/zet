@@ -544,12 +544,12 @@ public class DatFileReaderWriter implements AlgorithmListener {
 	}
 
 	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename ) throws FileNotFoundException, IOException {
-		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		//writeFile( filename, eafp.getNetwork().nodeCount(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
 		writeFile( original, filename, -1, eafp.getNetwork().nodes(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies(), null );
 	}
 
 	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename, ZToGraphMapping mapping ) throws FileNotFoundException, IOException {
-		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		//writeFile( filename, eafp.getNetwork().nodeCount(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
 		writeFile( original, filename, -1, eafp.getNetwork().nodes(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies(), mapping.getNodeRectangles() );
 	}
 

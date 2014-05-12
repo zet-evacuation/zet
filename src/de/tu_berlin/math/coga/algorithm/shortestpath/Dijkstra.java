@@ -17,7 +17,6 @@
 package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
-import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.GraphLocalization;
@@ -25,6 +24,7 @@ import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -111,11 +111,11 @@ public class Dijkstra {
     if( distances != null ) {
       return;
     }
-    distances = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
+    distances = new IdentifiableIntegerMapping<>( graph.nodeCount() );
     edges = new IdentifiableObjectMapping<>( graph.numberOfEdges() );
-    nodes = new IdentifiableObjectMapping<>( graph.numberOfNodes() );
-    MinHeap<Node, Integer> queue = new MinHeap<>( graph.numberOfNodes() );
-    for( int v = 0; v < graph.numberOfNodes(); v++ ) {
+    nodes = new IdentifiableObjectMapping<>( graph.nodeCount() );
+    MinHeap<Node, Integer> queue = new MinHeap<>( graph.nodeCount() );
+    for( int v = 0; v < graph.nodeCount(); v++ ) {
       distances.set( graph.getNode( v ), Integer.MAX_VALUE );
       queue.insert( graph.getNode( v ), Integer.MAX_VALUE );
     }

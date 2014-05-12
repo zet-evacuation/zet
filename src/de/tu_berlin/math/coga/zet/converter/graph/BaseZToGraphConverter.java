@@ -9,7 +9,7 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.Edge;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import ds.graph.Node;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import java.util.HashMap;

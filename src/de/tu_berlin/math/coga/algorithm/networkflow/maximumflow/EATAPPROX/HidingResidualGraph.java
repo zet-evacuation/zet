@@ -50,7 +50,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	private IdentifiableIntegerMapping<Node> supplies;
 
 	public HidingResidualGraph( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,  List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Node> supplies ) {
-		super( network.numberOfNodes()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size(), (timeHorizon+1)*(network.numberOfEdges() + sources.size() + sinks.size() ) + sources.size() + sinks.size() );
+		super( network.nodeCount()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size(), (timeHorizon+1)*(network.numberOfEdges() + sources.size() + sinks.size() ) + sources.size() + sinks.size() );
 		// Formel zur Bestimmung der tatsächlichen Knotenzahl basierend auf n und m:
 		// Knoten: n*(t+1) + 1 + #sources + 1 + #sinks
 		// Kanten: m + (t+1) + #sources + #sinks + (t+1)*#sources + (t+1)*#sinks
@@ -69,7 +69,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		current = new IdentifiableIntegerMapping<>( network.numberOfEdges()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size() );
 
 		NODES = BASE_SOURCE + sources.size();
-		BASE_SINK = NODES + (timeHorizon+1)*network.numberOfNodes();
+		BASE_SINK = NODES + (timeHorizon+1)*network.nodeCount();
 		SUPER_SINK = BASE_SINK + sinks.size();
 		nodeCount = SUPER_SINK + 1;
 		knownEdges = new KnownEdgesList[nodeCount];
@@ -82,7 +82,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		System.out.println( "Create edges..." );
 		createEdges();
 
-		visibleNodeCount = 2 + sources.size() + sinks.size() + network.numberOfNodes();
+		visibleNodeCount = 2 + sources.size() + sinks.size() + network.nodeCount();
 		System.out.println( "Done." );
 	}
 
@@ -114,7 +114,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		assert id == NODES;
 		for( int t = 0; t <= timeHorizon; ++t ) {
 			//System.out.println( "Nodes layer " + t );
-			for( int i = 0; i < network.numberOfNodes(); ++i ) {
+			for( int i = 0; i < network.nodeCount(); ++i ) {
 				n = new Node( id++ );
 				nodes.add( n );
 				//knownEdges.set( n, new KnownEdgesList() );
@@ -339,7 +339,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 
 	public final Node getCopy( Node node, int t ) {
-		return nodes.get( NODES + network.numberOfNodes()* t + node.id() );
+		return nodes.get( NODES + network.nodeCount()* t + node.id() );
 	}
 
 	public final int getLayer( int nodeId ) {
@@ -350,7 +350,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		else if( nodeId > SUPER_SOURCE && nodeId < NODES || nodeId >= BASE_SINK )
 			return -1;
 		else {
-			int tl = (nodeId - NODES)/network.numberOfNodes();
+			int tl = (nodeId - NODES)/network.nodeCount();
 			return tl;
 		}
 	}
@@ -359,7 +359,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		assert getLayer( nodeId ) >= 0;
 
 		int tl = getLayer( nodeId );
-		return nodeId - NODES - tl * network.numberOfNodes();
+		return nodeId - NODES - tl * network.nodeCount();
 	}
 
 	public int lastLayer = 0;
@@ -402,7 +402,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 //			edgesSet.addAll( activeTimeLayerForNode( time, v ) );
 //		}
 
-		visibleNodeCount += network.numberOfNodes();
+		visibleNodeCount += network.nodeCount();
 		//System.out.println( "Now: number of nodes set to " + visibleNodeCount );
 
 

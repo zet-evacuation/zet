@@ -52,7 +52,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
-        int[][] distances = new int[network.numberOfNodes()][network.numberOfNodes()];
+        int[][] distances = new int[network.nodeCount()][network.nodeCount()];
         for (Node sink : sinks) {
             dijkstra.setSource(sink);
             dijkstra.run();

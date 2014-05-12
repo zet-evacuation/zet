@@ -56,12 +56,12 @@ public class Algorithms {
         Node solutionNode = nodeForClass.get(solution);
         if (problemNode == null) {
             network.setNodeCapacity(network.getNodeCapacity() + 1);
-            problemNode = network.getNode(network.numberOfNodes() - 1);
+            problemNode = network.getNode(network.nodeCount() - 1);
             nodeForClass.put(problem, problemNode);
         }
         if (solutionNode == null) {
             network.setNodeCapacity(network.getNodeCapacity() + 1);
-            solutionNode = network.getNode(network.numberOfNodes() - 1);
+            solutionNode = network.getNode(network.nodeCount() - 1);
             nodeForClass.put(solution, solutionNode);
         }
         network.setEdgeCapacity(network.getEdgeCapacity() + 1);

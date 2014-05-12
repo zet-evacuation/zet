@@ -152,7 +152,7 @@ public class TimeExpandedNetwork extends Network {
 			boolean allowStorageInNodes) {
 
     	// get ID+1 of node with highest ID
-    	int nodeCount = network.numberOfNodes();
+    	int nodeCount = network.nodeCount();
 
     	// Initialize data structures:
     	// list newNodes is to set nodes in the network later,
@@ -210,7 +210,7 @@ public class TimeExpandedNetwork extends Network {
         // If storage in nodes is allowed, hold-over edges must be counted
         // for all nodes, else only for the sources and the sinks
         if (allowStorageInNodes) {
-            edgeCount += (timeHorizon-1) * network.numberOfNodes();
+            edgeCount += (timeHorizon-1) * network.nodeCount();
         } else {
             edgeCount += (timeHorizon-1) * (sources.size() + sinks.size());
         }
@@ -232,8 +232,8 @@ public class TimeExpandedNetwork extends Network {
                 Node start = grid[edge.start().id()][t];
                 Node end = grid[edge.end().id()][t+transitTimes.get(edge)];
 
-                //Node start = nodes.get(t * network.numberOfNodes() + edge.start().id());
-                //Node end = nodes.get((t + (int) transitTimes.get(edge)) * network.numberOfNodes() + edge.end().id());
+                //Node start = nodes.get(t * network.nodeCount() + edge.start().id());
+                //Node end = nodes.get((t + (int) transitTimes.get(edge)) * network.nodeCount() + edge.end().id());
 
                 // Insert edge into time expanded network
                 // and copy transit time and capacities.
@@ -621,7 +621,7 @@ public class TimeExpandedNetwork extends Network {
                 if (delay > 0) {
                     result.append("[" + delay + "], ");
                 }
-                result.append(String.format("(%1$s [%2$s], %3$s [%4$s])", edge.start().id() % network.numberOfNodes(), edge.start().id() / network.numberOfNodes(), edge.end().id() % network.numberOfNodes(), edge.end().id() / network.numberOfNodes()));
+                result.append(String.format("(%1$s [%2$s], %3$s [%4$s])", edge.start().id() % network.nodeCount(), edge.start().id() / network.nodeCount(), edge.end().id() % network.nodeCount(), edge.end().id() / network.nodeCount()));
                 result.append(", ");
                 delay = 0;
             }
@@ -739,7 +739,7 @@ public class TimeExpandedNetwork extends Network {
      */
     @Override
     public TimeExpandedNetwork clone() {
-        TimeExpandedNetwork clone = new TimeExpandedNetwork(numberOfNodes(), numberOfEdges());
+        TimeExpandedNetwork clone = new TimeExpandedNetwork(nodeCount(), numberOfEdges());
         clone.setNodes(nodes());
         clone.setEdges(edges());
         clone.network = network;

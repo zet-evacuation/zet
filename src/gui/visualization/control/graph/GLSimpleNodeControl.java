@@ -4,10 +4,11 @@
  */
 package gui.visualization.control.graph;
 
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import ds.graph.Node;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.draw.graph.GLSimpleNode;
@@ -32,11 +33,11 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	private int duration;
 	private int startTime;
 	private boolean gridVisible = true;
-	protected final Graph graph;
+	protected final DirectedGraph graph;
 	protected final NodePositionMapping nodePositionMapping;
 	protected final Node node;
 
-	public GLSimpleNodeControl( Graph graph, Node node, NodePositionMapping nodePositionMapping ) {
+	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;
@@ -44,7 +45,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 		setUpEdges();
 	}
 
-	public GLSimpleNodeControl( Graph graph, Node node, NodePositionMapping nodePositionMapping, boolean setUpEdges ) {
+	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping, boolean setUpEdges ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;

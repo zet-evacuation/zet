@@ -12,7 +12,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSteinerTree;
 import algo.graph.spanningtree.NetworkMST;
@@ -63,7 +63,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         OriginNetwork = minspan.getNetworkFlowModel(); 
         Node supersink = minspan.getNetworkFlowModel().getSupersink();
         OriginGraph = OriginNetwork.graph();
-        int numNodes = OriginGraph.numberOfNodes();
+        int numNodes = OriginGraph.nodeCount();
         ZToGraphMapping mapping = OriginNetwork.getZToGraphMapping();
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.transitTimes();
         //saves the current considered network for different iterations

@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * AbstractNetwork.java
- *
- */
+
 package ds.graph.network;
 
 import ds.graph.Edge;
@@ -25,7 +22,7 @@ import ds.graph.Path;
 
 /**
  * The {@code AbstractNetwork</class> provides an implementation of a directed graph
- * optimized for use by flow algorithms. Examples of these optimizations 
+ * optimized for use by flow algorithms. Examples of these optimizations
  * include use of array based data structures for edges and nodes in order to
  * provide fast access, as well as the possiblity to hide edges and nodes (which
  * is useful for residual networks, for instance).
@@ -102,7 +99,7 @@ public abstract class AbstractNetwork implements NetworkInterface, Cloneable {
 	 * @param value the new value of the node's hidden state.
 	 */
 	public abstract void setHidden( Node node, boolean value );
-        
+
 	public abstract void setHiddenOnlyNode( Node node, boolean value );
 
 	public abstract void showAllEdges();
@@ -132,7 +129,7 @@ public abstract class AbstractNetwork implements NetworkInterface, Cloneable {
 	public abstract void setNodes( Iterable<Node> nodes );
 
 	public abstract Path getPath( Node start, Node end );
-        
+
 	/**
 	 * Checks whether at least one edge between the specified start and end nodes
 	 * exists.

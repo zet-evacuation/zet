@@ -50,7 +50,7 @@ public class GraphConverter implements Converter {
 		this.writer = writer;
 		// automatically done before. either by xstream or by GraphViewConverter
 		//writer.startNode("graph");
-		writer.addAttribute( "n", Integer.toString( graph.numberOfNodes() ) );
+		writer.addAttribute( "n", Integer.toString( graph.nodeCount() ) );
 		writer.addAttribute( "m", Integer.toString( graph.numberOfEdges() ) );
 		
 		for( Node node : graph.nodes() )

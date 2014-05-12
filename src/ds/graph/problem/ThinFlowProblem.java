@@ -46,9 +46,9 @@ public class ThinFlowProblem {
         setSource(source);
         setSink(sink);
         flowAmount = flowvalue;
-        //edgeflowvalues = new DoubleMap<Edge>(graph.numberOfNodes());
-        //nodelabels = new DoubleMap<Node>(graph.numberOfNodes());
-        nodedemands = new IdentifiableDoubleMapping<Node>(graph.numberOfNodes());
+        //edgeflowvalues = new DoubleMap<Edge>(graph.nodeCount());
+        //nodelabels = new DoubleMap<Node>(graph.nodeCount());
+        nodedemands = new IdentifiableDoubleMapping<Node>(graph.nodeCount());
         nodedemands.set(source, flowvalue);
         nodedemands.set(sink, -1*flowvalue);
 
@@ -60,7 +60,7 @@ public class ThinFlowProblem {
         setCapacities(capacities);
         setSource(source);
         setSink(sink);
-        nodedemands = new IdentifiableDoubleMapping<Node>(graph.numberOfNodes());
+        nodedemands = new IdentifiableDoubleMapping<Node>(graph.nodeCount());
         nodedemands.set(source,1.0);
         nodedemands.set(sink,-1.0);
     }

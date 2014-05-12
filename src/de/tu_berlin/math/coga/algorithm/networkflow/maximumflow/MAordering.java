@@ -32,9 +32,9 @@ public class MAordering {
 		capacities = cap;
 		source = s;
 		sink = t;
-		demands = new IdentifiableDoubleMapping<>( resGraph.numberOfNodes() );
-		VminusW = new ArrayList<>( resGraph.numberOfNodes() );
-		nodelist = new HashMap<>( resGraph.numberOfNodes() );
+		demands = new IdentifiableDoubleMapping<>( resGraph.nodeCount() );
+		VminusW = new ArrayList<>( resGraph.nodeCount() );
+		nodelist = new HashMap<>( resGraph.nodeCount() );
 		for( Node n : resGraph.nodes() ) {
 			demands.set( n, 0.0 );
 			nodelist.put( n, new ArrayList<>() );
@@ -44,7 +44,7 @@ public class MAordering {
 			}
 		}
 
-		ordering = new ArrayList<Node>( resGraph.numberOfNodes() );
+		ordering = new ArrayList<Node>( resGraph.nodeCount() );
 		iterations = 0;
 	}
 

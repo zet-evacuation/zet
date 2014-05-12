@@ -51,11 +51,11 @@ public class EATApprox {
 		int totalFlow = 0;
 
 		do {
-			AbstractNetwork n = new Network( problem.getNetwork().numberOfNodes() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
+			AbstractNetwork n = new Network( problem.getNetwork().nodeCount() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
 			IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( n.getEdgeCapacity() );
 
-			int superSource = problem.getNetwork().numberOfNodes();
-			int superSink = problem.getNetwork().numberOfNodes()+1;
+			int superSource = problem.getNetwork().nodeCount();
+			int superSink = problem.getNetwork().nodeCount()+1;
 
 			System.out.println( supplies.toString() );
 

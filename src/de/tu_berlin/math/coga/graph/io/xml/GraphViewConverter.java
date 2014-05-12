@@ -155,7 +155,7 @@ public class GraphViewConverter implements Converter {
 		reader.moveUp();
 
 		// assign default position to all nodes
-		xmlData.nodePositionMapping = new NodePositionMapping( xmlData.network.numberOfNodes() );
+		xmlData.nodePositionMapping = new NodePositionMapping( xmlData.network.nodeCount() );
 		for( Node node : xmlData.nodes.values() )
 			xmlData.nodePositionMapping.set( node, new Vector3() );
 
