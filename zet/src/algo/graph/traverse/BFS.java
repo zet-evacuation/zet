@@ -17,9 +17,9 @@
 package algo.graph.traverse;
 
 import ds.graph.Edge;
-import ds.graph.Graph;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,16 +32,16 @@ import java.util.HashSet;
  */
 public class BFS {
 
-    private Graph graph;
+    private DirectedGraph graph;
     private IdentifiableIntegerMapping<Node> distances;
     private IdentifiableObjectMapping<Node, Edge> predecedingEdges;
     private IdentifiableObjectMapping<Node, Boolean> visited;
 
-    public BFS(Graph graph) {
+    public BFS(DirectedGraph graph) {
         this.graph = graph;
-        distances = new IdentifiableIntegerMapping<>(graph.numberOfNodes());
-        predecedingEdges = new IdentifiableObjectMapping<>(graph.numberOfNodes());
-        visited = new IdentifiableObjectMapping<>(graph.numberOfNodes());
+        distances = new IdentifiableIntegerMapping<>(graph.nodeCount());
+        predecedingEdges = new IdentifiableObjectMapping<>(graph.nodeCount());
+        visited = new IdentifiableObjectMapping<>(graph.nodeCount());
         for (Node node : graph.nodes()) {
             distances.set(node, Integer.MAX_VALUE);
             predecedingEdges.set(node, null);
@@ -71,8 +71,8 @@ public class BFS {
         List<Node> sinks = new LinkedList<>();
         sinks.add(end);
         run(sources, sinks, false, false);
-    }    
-    
+    }
+
     public void run(Iterable<Node> sources, List<Node> sinks, boolean longest, boolean reverse) {
         Queue<Node> queue = new LinkedList<>();
         for (Node source : sources) {
@@ -106,35 +106,35 @@ public class BFS {
             }
         }
     }
-    
+
     public HashSet<Node> getReachableNodes(Node start) {
-        
+
         Queue<Node> queue = new LinkedList<>();
         queue.offer(start);
-        
+
         HashSet<Node> reachableNodes = new HashSet<>();
         reachableNodes.add(start);
         visited.set(start,true);
-       
+
         while (!queue.isEmpty()) {
-      
+
             Node v = queue.poll();
-            
+
             for(Edge edge : graph.outgoingEdges(v)) {
-                
+
                 Node w = edge.opposite(v);
                 if(!visited.get(w)) {
-                    
+
                     queue.offer(w);
                     visited.set(w,true);
                     reachableNodes.add(w);
                 }
-               
+
             }
-           
+
         }
         return reachableNodes;
     }
-    
-    
+
+
 }

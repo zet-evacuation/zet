@@ -13,11 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * GridGenerator.java
- *
- */
-
 package de.tu_berlin.math.coga.graph.generator;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
@@ -31,102 +26,112 @@ import java.util.Random;
  *
  */
 public class GridGenerator {
-    
-    public static AbstractNetwork generateGridNetwork(int width, int height) {
-        AbstractNetwork network = new Network(width * height, 4 * width * height - 2 * (width + height));
-        for (int row = 0; row < height; row++) {
-            for (int column = 1; column < width; column++) {
-                network.createAndSetEdge(network.getNode(row * width + column - 1), network.getNode(row * width + column));
-                network.createAndSetEdge(network.getNode(row * width + column), network.getNode(row * width + column - 1));
-            }
-        }
-        for (int column = 0; column < width; column++) {
-            for (int row = 1; row < height; row++) {            
-                network.createAndSetEdge(network.getNode((row - 1) * width + column), network.getNode(row * width + column));
-                network.createAndSetEdge(network.getNode(row * width + column), network.getNode((row - 1) * width + column));
-            }
-        }        
-        return network;
+
+  public static AbstractNetwork generateGridNetwork( int width, int height ) {
+    AbstractNetwork network = new Network( width * height, 4 * width * height - 2 * (width + height) );
+    for( int row = 0; row < height; row++ ) {
+      for( int column = 1; column < width; column++ ) {
+        network.createAndSetEdge( network.getNode( row * width + column - 1 ),
+                network.getNode( row * width + column ) );
+        network.createAndSetEdge( network.getNode( row * width + column ),
+                network.getNode( row * width + column - 1 ) );
+      }
     }
-    
-    public static AbstractNetwork generateDualGridNetwork(int width, int height) {
-        width--;
-        height--;
-        AbstractNetwork network = new Network(width * height + 2, 2 * width * height + (width + height));
-        Node source = network.getNode(network.numberOfNodes() - 2);
-        Node sink = network.getNode(network.numberOfNodes() - 1);
-        for (int row = 0; row < height; row++) {
-            for (int column = 1; column < width; column++) {
-                network.createAndSetEdge(network.getNode(row * width + column - 1), network.getNode(row * width + column));
-            }
-        }
-        for (int column = 0; column < width; column++) {
-            for (int row = 1; row < height; row++) {            
-                network.createAndSetEdge(network.getNode((row - 1) * width + column), network.getNode(row * width + column));
-            }
-        }        
-        for (int column = 0; column < width; column++) {
-            network.createAndSetEdge(source, network.getNode(column));
-        }                
-        for (int row = 0; row < height; row++) {            
-            network.createAndSetEdge(source, network.getNode(row * width + width - 1));
-        }                
-        for (int column = 0; column < width; column++) {
-            network.createAndSetEdge(network.getNode((height - 1) * width + column), sink);
-        }                
-        for (int row = 0; row < height; row++) {            
-            network.createAndSetEdge(network.getNode(row * width), sink);
-        }        
-        return network;
+    for( int column = 0; column < width; column++ ) {
+      for( int row = 1; row < height; row++ ) {
+        network.createAndSetEdge( network.getNode( (row - 1) * width + column ),
+                network.getNode( row * width + column ) );
+        network.createAndSetEdge( network.getNode( row * width + column ),
+                network.getNode( (row - 1) * width + column ) );
+      }
     }
-    
-    public static <T extends Identifiable> IdentifiableIntegerMapping<T> createCostFunction(int width, int height, AbstractNetwork network, IdentifiableIntegerMapping<T> capacities) {
-        IdentifiableIntegerMapping<T> costs = null;
-        Node source = network.getNode(network.numberOfNodes() - 2);
-        Node sink = network.getNode(network.numberOfNodes() - 1);
-        for (int row = 0; row < height; row++) {
-            for (int column = 1; column < width; column++) {
-                //network.createAndSetEdge(network.getNode(row * width + column - 1), network.getNode(row * width + column));
-                //capacities.get(identifiableObject);
-            }
-        }
-        for (int column = 0; column < width; column++) {
-            for (int row = 1; row < height; row++) {            
-                network.createAndSetEdge(network.getNode((row - 1) * width + column), network.getNode(row * width + column));
-            }
-        }        
-        for (int column = 0; column < width; column++) {
-            network.createAndSetEdge(source, network.getNode(column));
-        }                
-        for (int row = 0; row < height; row++) {            
-            network.createAndSetEdge(source, network.getNode(row * width + width - 1));
-        }                
-        for (int column = 0; column < width; column++) {
-            network.createAndSetEdge(network.getNode((height - 1) * width + column), sink);
-        }                
-        for (int row = 0; row < height; row++) {            
-            network.createAndSetEdge(network.getNode(row * width), sink);
-        }        
-        return costs;
-    }    
-    
-    public static <T extends Identifiable> IdentifiableIntegerMapping<T> generateMappingWithUniformlyDistributedFunctionValues(Iterable<T> domain, int min, int max) {
-        long seed = System.nanoTime();
-        System.out.println("Seed: " + seed);
-        return generateMappingWithUniformlyDistributedFunctionValues(domain, min, max, seed);
+    return network;
+  }
+
+  public static AbstractNetwork generateDualGridNetwork( int width, int height ) {
+    width--;
+    height--;
+    AbstractNetwork network = new Network( width * height + 2, 2 * width * height + (width + height) );
+    Node source = network.getNode( network.nodeCount() - 2 );
+    Node sink = network.getNode( network.nodeCount() - 1 );
+    for( int row = 0; row < height; row++ ) {
+      for( int column = 1; column < width; column++ ) {
+        network.createAndSetEdge( network.getNode( row * width + column - 1 ), network.getNode( row * width + column ) );
+      }
     }
-    
-    public static <T extends Identifiable> IdentifiableIntegerMapping<T> generateMappingWithUniformlyDistributedFunctionValues(Iterable<T> domain, int min, int max, long seed) {
-        int largestID = 0;
-        for (T x : domain) {
-            if (largestID < x.id()) largestID = x.id();
-        }
-        IdentifiableIntegerMapping<T> mapping = new IdentifiableIntegerMapping<>(largestID + 1);
-        Random rng = new Random(seed);
-        for (T x : domain) {
-            mapping.set(x, rng.nextInt(max - min + 1) + min);
-        }
-        return mapping;
+    for( int column = 0; column < width; column++ ) {
+      for( int row = 1; row < height; row++ ) {
+        network.createAndSetEdge( network.getNode( (row - 1) * width + column ), network.getNode( row * width + column ) );
+      }
     }
+    for( int column = 0; column < width; column++ ) {
+      network.createAndSetEdge( source, network.getNode( column ) );
+    }
+    for( int row = 0; row < height; row++ ) {
+      network.createAndSetEdge( source, network.getNode( row * width + width - 1 ) );
+    }
+    for( int column = 0; column < width; column++ ) {
+      network.createAndSetEdge( network.getNode( (height - 1) * width + column ), sink );
+    }
+    for( int row = 0; row < height; row++ ) {
+      network.createAndSetEdge( network.getNode( row * width ), sink );
+    }
+    return network;
+  }
+
+  public static <T extends Identifiable> IdentifiableIntegerMapping<T>
+        createCostFunction( int width, int height, AbstractNetwork network, IdentifiableIntegerMapping<T> capacities ) {
+    IdentifiableIntegerMapping<T> costs = null;
+    Node source = network.getNode( network.nodeCount() - 2 );
+    Node sink = network.getNode( network.nodeCount() - 1 );
+    for( int row = 0; row < height; row++ ) {
+      for( int column = 1; column < width; column++ ) {
+         //network.createAndSetEdge(network.getNode(row * width + column - 1), network.getNode(row * width + column));
+        //capacities.get(identifiableObject);
+      }
+    }
+    for( int column = 0; column < width; column++ ) {
+      for( int row = 1; row < height; row++ ) {
+        network.createAndSetEdge( network.getNode( (row - 1) * width + column ),
+                network.getNode( row * width + column ) );
+      }
+    }
+    for( int column = 0; column < width; column++ ) {
+      network.createAndSetEdge( source, network.getNode( column ) );
+    }
+    for( int row = 0; row < height; row++ ) {
+      network.createAndSetEdge( source, network.getNode( row * width + width - 1 ) );
+    }
+    for( int column = 0; column < width; column++ ) {
+      network.createAndSetEdge( network.getNode( (height - 1) * width + column ), sink );
+    }
+    for( int row = 0; row < height; row++ ) {
+      network.createAndSetEdge( network.getNode( row * width ), sink );
+    }
+    return costs;
+  }
+
+  public static <T extends Identifiable> IdentifiableIntegerMapping<T>
+        generateMappingWithUniformlyDistributedFunctionValues( Iterable<T> domain, int min, int max ) {
+    long seed = System.nanoTime();
+    System.out.println( "Seed: " + seed );
+    return generateMappingWithUniformlyDistributedFunctionValues( domain, min, max, seed );
+  }
+
+  public static <T extends Identifiable> IdentifiableIntegerMapping<T>
+        generateMappingWithUniformlyDistributedFunctionValues( Iterable<T> domain, int min, int max, long seed ) {
+    int largestID = 0;
+    for( T x : domain ) {
+      if( largestID < x.id() ) {
+        largestID = x.id();
+      }
+    }
+    IdentifiableIntegerMapping<T> mapping = new IdentifiableIntegerMapping<>( largestID + 1 );
+    Random rng = new Random( seed );
+    for( T x : domain ) {
+      mapping.set( x, rng.nextInt( max - min + 1 ) + min );
+    }
+    return mapping;
+  }
 
 }

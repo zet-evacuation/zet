@@ -283,7 +283,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		Node source = nashprob.getSource();
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
-		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.numberOfNodes() );
+		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
 		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
@@ -299,7 +299,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/
-		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.numberOfNodes() );
+		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.nodeCount() );
 		distanceMap = dijk.getDistances();
 
 		/*set Nodelabels equal to distances*/
@@ -546,7 +546,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
-		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.numberOfNodes() );
+		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
 		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
@@ -561,7 +561,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/
-		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.numberOfNodes() );
+		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.nodeCount() );
 		distanceMap = dijk.getDistances();
 
 
@@ -809,7 +809,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
-		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.numberOfNodes() );
+		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
 		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
@@ -824,7 +824,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/
-		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.numberOfNodes() );
+		Map<Node, Double> distanceMap = new HashMap<>( workingGraph.nodeCount() );
 		distanceMap = dijk.getDistances();
 
 

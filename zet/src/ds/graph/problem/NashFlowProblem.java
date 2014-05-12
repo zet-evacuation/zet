@@ -50,7 +50,7 @@ public class NashFlowProblem {
 	public NashFlowProblem( DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
 					IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink ) {
 		DynamicNetwork graphWithNewSource = new DynamicNetwork( graph );
-		Node newSource = new Node( graph.numberOfNodes() );
+		Node newSource = new Node( graph.nodeCount() );
 		Edge newEdge = new Edge( graph.numberOfEdges(), newSource, oldsource );
 		edgeSourceToOrigSource = newEdge;
 		graphWithNewSource.addNode( newSource );
@@ -70,7 +70,7 @@ public class NashFlowProblem {
 	public NashFlowProblem( DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
 					IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink, double initcapacity ) {
 		DynamicNetwork graphWithNewSource = new DynamicNetwork( graph );
-		Node newSource = new Node( graph.numberOfNodes() );
+		Node newSource = new Node( graph.nodeCount() );
 		Edge newEdge = new Edge( graph.numberOfEdges(), newSource, oldsource );
 		edgeSourceToOrigSource = newEdge;
 		graphWithNewSource.addNode( newSource );
@@ -102,7 +102,7 @@ public class NashFlowProblem {
 	public NashFlowProblem( DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
 					IdentifiableDoubleMapping<Edge> transit, HashMap<Node, Double> sourceDemands, Node sink ) {
 
-		Node SuperSource = new Node( graph.numberOfNodes() );
+		Node SuperSource = new Node( graph.nodeCount() );
 		graph.addNode( SuperSource );
 		for( Node origsource : sourceDemands.keySet() ) {
 			Edge newEdge = new Edge( graph.numberOfEdges(), SuperSource, origsource );

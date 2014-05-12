@@ -100,7 +100,7 @@ public class VisualTest extends JFrame {
         sinks.add(sink1);
         sinks.add(sink2);
         sinks.add(sink3);
-        IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<Node>(network.numberOfNodes());
+        IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<Node>(network.nodeCount());
         supplies.set(source1, 2);
         supplies.set(source2, 1);
         supplies.set(source3, 0);

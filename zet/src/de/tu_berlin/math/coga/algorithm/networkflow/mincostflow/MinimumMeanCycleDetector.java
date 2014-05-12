@@ -63,15 +63,15 @@ public abstract class MinimumMeanCycleDetector {
 		}
 		g = g.clone ();
 		// Reserve enough space in the graph structure for our operations
-		// MG: int nodes = g.numberOfNodes() + 1;
-		// MG: int edges = g.numberOfEdges() + g.numberOfNodes();
+		// MG: int nodes = g.nodeCount() + 1;
+		// MG: int edges = g.numberOfEdges() + g.nodeCount();
 		int nodes = g.getNodeCapacity () + 1;
-		int edges = g.getEdgeCapacity () + g.numberOfNodes ();
+		int edges = g.getEdgeCapacity () + g.nodeCount ();
 		g.setNodeCapacity (nodes);
 		g.setEdgeCapacity (edges);
 
 		// Add a node that can reach every other node with cost 0
-		// MG: Node newNode = g.getNode(g.numberOfNodes() - 1);
+		// MG: Node newNode = g.getNode(g.nodeCount() - 1);
 		Node newNode = g.getNode (g.getNodeCapacity () - 1);
 
 		for (Node n : g.nodes ()) {
@@ -92,7 +92,7 @@ public abstract class MinimumMeanCycleDetector {
 
 		//Beginning of the algorithm - Initialization work
     // TODO detetor, new or delete and make bug free
-		int n = g.numberOfNodes ();
+		int n = g.nodeCount ();
 		// F is the minimum weight of an edge progression of length [k] (first index) from
 		// node s to node [x] (second index)
 		IdentifiableIntegerMapping<Node> F[] = new IdentifiableIntegerMapping[n + 1];
@@ -105,8 +105,8 @@ public abstract class MinimumMeanCycleDetector {
 			System.out.println ("Graph here: " + g);
 		}
 		for (int k = 0; k <= n; k++) {
-			F[k] = new IdentifiableIntegerMapping<> (g.numberOfNodes ());
-			isInfinite[k] = new IdentifiableObjectMapping<> ( g.numberOfNodes ());
+			F[k] = new IdentifiableIntegerMapping<> (g.nodeCount ());
+			isInfinite[k] = new IdentifiableObjectMapping<> ( g.nodeCount ());
 
 
 			for (Node x : g.nodes ()) {
@@ -231,7 +231,7 @@ public abstract class MinimumMeanCycleDetector {
 			// path of the optimal solution in the dynamic programing table. To detect a
 			// circle we use this array of markers. Each of the boolean flags indicates 
 			// whether a given node was already visited.
-			boolean[] seenNodes = new boolean[g.numberOfNodes ()];
+			boolean[] seenNodes = new boolean[g.nodeCount ()];
 			for (int i = 0; i < seenNodes.length; i++) {
 				seenNodes[i] = false;
 			}

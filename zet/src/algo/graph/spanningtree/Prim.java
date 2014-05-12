@@ -10,7 +10,7 @@ import java.util.Random;
 import ds.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.network.DynamicNetwork;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
@@ -55,7 +55,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
         OriginNetwork = minspan.getNetworkFlowModel(); 
         Node supersink = minspan.getNetworkFlowModel().getSupersink();
         OriginGraph = OriginNetwork.graph();
-        int numNodes = OriginGraph.numberOfNodes();
+        int numNodes = OriginGraph.nodeCount();
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.transitTimes();
      
         //gives a random start node
@@ -148,7 +148,7 @@ public class Prim extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
         /*currentNode = startNode;
         currentEdges = OriginNetwork.getNetworkFlowModel().incidentEdges(startNode);
         
-        while (solNodes.size() < OriginGraph.numberOfNodes()+1)
+        while (solNodes.size() < OriginGraph.nodeCount()+1)
         {
             for (Edge edge: currentEdges)
             {

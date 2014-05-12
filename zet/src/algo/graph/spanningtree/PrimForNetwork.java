@@ -36,7 +36,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
         
         try{
         OriginNetwork = networkprob.getGraph();
-        int numNodes = OriginNetwork.numberOfNodes();
+        int numNodes = OriginNetwork.nodeCount();
         
         IdentifiableIntegerMapping<Edge> TransitForEdge = networkprob.getDistances();
      
@@ -58,10 +58,10 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
         }
         System.out.println("Startknoten: " + startNode);
         solNodes.add(startNode);
-        //distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
-        distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
+        //distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.nodeCount());
+        distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.nodeCount());
         heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges());
-        MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.numberOfNodes());
+        MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.nodeCount());
         IdentifiableCollection<Edge> incidentEdges;
         for (Node node: OriginNetwork.nodes())
         {

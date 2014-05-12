@@ -7,7 +7,7 @@ package algo.graph.spanningtree;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 
 /**
  *

@@ -239,8 +239,8 @@ public class FileFlow implements AlgorithmListener {
 	}
 
 	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename ) throws FileNotFoundException, IOException {
-		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
-		writeFile( original, filename, eafp.getNetwork().numberOfNodes(), -1, eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		//writeFile( filename, eafp.getNetwork().nodeCount(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		writeFile( original, filename, eafp.getNetwork().nodeCount(), -1, eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
 	}
 
 	public static void writeFile( String original, String filename, int nodeCount, int timeHorizon, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment ) throws FileNotFoundException, IOException {

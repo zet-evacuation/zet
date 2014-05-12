@@ -5,6 +5,7 @@
 package ds.graph;
 
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -12,7 +13,7 @@ import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
  */
 public class ResidualGraph extends StaticGraph {
 
-	private Graph graph;
+	private DirectedGraph graph;
 
 	private int maxnodeid; //maximal id of nodes in original graph
 	private int maxedgeid; //maximal id of edges in original graph
@@ -21,7 +22,7 @@ public class ResidualGraph extends StaticGraph {
 	private IdentifiableDoubleMapping<Edge> residualCapacities;
 	private IdentifiableDoubleMapping<Edge> residualTransitTimes;
 
-	public ResidualGraph( Graph gr, IdentifiableDoubleMapping<Edge> capacities, int mnodeid, int medgeid ) {
+	public ResidualGraph( DirectedGraph gr, IdentifiableDoubleMapping<Edge> capacities, int mnodeid, int medgeid ) {
 		super( true, (mnodeid + 1), (medgeid + 1) * 2 );
 		maxnodeid = mnodeid;
 		maxedgeid = medgeid;
@@ -34,9 +35,9 @@ public class ResidualGraph extends StaticGraph {
 			createEdge( edge.end(), edge.start(), edge.id() + (maxedgeid + 1) );
 		}
 
-		flow = new IdentifiableDoubleMapping<Edge>( gr.numberOfEdges() );
+		flow = new IdentifiableDoubleMapping<>( gr.numberOfEdges() );
 
-		residualCapacities = new IdentifiableDoubleMapping<Edge>( gr.numberOfEdges() * 2 );
+		residualCapacities = new IdentifiableDoubleMapping<>( gr.numberOfEdges() * 2 );
 
 		for( Edge edge : edges ) {
 
@@ -87,7 +88,7 @@ public class ResidualGraph extends StaticGraph {
 		return flow;
 	}
 
-	public Graph getGraph() {
+	public DirectedGraph getGraph() {
 		return graph;
 	}
 

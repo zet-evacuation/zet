@@ -17,10 +17,10 @@
 package ds.graph.network;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -169,7 +169,7 @@ public class DynamicNetwork implements DirectedGraph {
 		return edges.size();
 	}
 
-	public int numberOfNodes() {
+	public int nodeCount() {
 		return nodes.size();
 	}
 
@@ -344,7 +344,7 @@ public class DynamicNetwork implements DirectedGraph {
 	}
 
 	public AbstractNetwork getAsStaticNetwork() {
-		Network network = new Network( numberOfNodes(), numberOfEdges() );
+		Network network = new Network( nodeCount(), numberOfEdges() );
 		network.setNodes( nodes );
 		network.setEdges( edges );
 		return network;

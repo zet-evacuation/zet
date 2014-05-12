@@ -42,7 +42,7 @@ public class DotWriter {
 
 		writer.write( "digraph N {\n" );
 		//writer.write( "splines=line\n" );
-		writer.write( "  /* " + network.numberOfNodes() + " nodes */\n" );
+		writer.write( "  /* " + network.nodeCount() + " nodes */\n" );
 		for( Node node : network.nodes() ) {
 			writer.write( "  " + node.id() + ";\n");
 		}
@@ -64,7 +64,7 @@ public class DotWriter {
 
 		writer.write( "digraph N {\n" );
 		//writer.write( "splines=line\n" );
-		writer.write( "  /* " + network.numberOfNodes() + " nodes */\n" );
+		writer.write( "  /* " + network.nodeCount() + " nodes */\n" );
 		for( Node node : network.nodes() ) {
 			if( !node.equals( sink ) )
 				writer.write( "  " + node.id() + ";\n");

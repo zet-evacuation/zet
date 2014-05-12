@@ -56,10 +56,10 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	}
 	
 	public GraphVisualizationResults( EarliestArrivalFlowProblem earliestArrivalFlowProblem, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime flowOverTime ) {
-		super( earliestArrivalFlowProblem, new NodePositionMapping( earliestArrivalFlowProblem.getNetwork().numberOfNodes() ) );
+		super( earliestArrivalFlowProblem, new NodePositionMapping( earliestArrivalFlowProblem.getNetwork().nodeCount() ) );
 		// TODO: set up node position mapping
 
-		int nodeCount = getNetwork().numberOfNodes();
+		int nodeCount = getNetwork().nodeCount();
 		this.nodeRectangles = new IdentifiableObjectMapping<>( nodeCount );
 		for( Node node : getNetwork().nodes() ) {
 			int x = xPos.get( node );
@@ -73,7 +73,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	}
 	
 	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, NodePositionMapping nodePositionMapping ) {
-		//super( networkFlowModel.getNetwork(), new NodePositionMapping( networkFlowModel.getNetwork().numberOfNodes() ), networkFlowModel.getEdgeCapacities(), networkFlowModel.getNodeCapacities(), networkFlowModel.getTransitTimes(), networkFlowModel.getCurrentAssignment(), networkFlowModel.getSources(), networkFlowModel.getSinks());
+		//super( networkFlowModel.getNetwork(), new NodePositionMapping( networkFlowModel.getNetwork().nodeCount() ), networkFlowModel.getEdgeCapacities(), networkFlowModel.getNodeCapacities(), networkFlowModel.getTransitTimes(), networkFlowModel.getCurrentAssignment(), networkFlowModel.getSources(), networkFlowModel.getSinks());
 		super( networkFlowModel.getEAFP(), networkFlowModel.getNodeCoordinates() );
 
 	
@@ -216,9 +216,9 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //		// change this to something with NodePositionMapping!
 //		this.network = eatf.getNetwork();
 //
-//		nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+//		nodePositionMapping = new NodePositionMapping( network.nodeCount() );
 //
-//		int nodeCount = eatf.getNetwork().numberOfNodes();
+//		int nodeCount = eatf.getNetwork().nodeCount();
 //		this.nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( nodeCount, NodeRectangle.class );
 //		for( Node node : eatf.getNetwork().nodes() ) {
 //			int x = xPos.get( node );

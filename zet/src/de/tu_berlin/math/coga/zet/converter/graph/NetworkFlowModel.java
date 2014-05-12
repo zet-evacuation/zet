@@ -27,7 +27,6 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.Graph;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.network.AbstractNetwork;
@@ -35,6 +34,7 @@ import ds.graph.network.DynamicNetwork;
 import ds.graph.network.Network;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import gui.visualization.VisualizationOptionManager;
 import java.util.Collections;
 import java.util.Iterator;
@@ -112,7 +112,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return mapping;
 	}
 
-	public Graph graph() {
+	public DirectedGraph graph() {
 		return network;
 	}
 
@@ -146,7 +146,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	public int numberOfNodes() {
-		return network.numberOfNodes();
+		return network.nodeCount();
 	}
 
 	public int numberOfEdges() {
@@ -265,7 +265,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	void ensureCapacities() {
-		nodeCapacities.setDomainSize( network.numberOfNodes() );
+		nodeCapacities.setDomainSize( network.nodeCount() );
 
 		edgeCapacities.setDomainSize( network.numberOfEdges() * network.numberOfEdges() ); // TODO weird???
 	}
@@ -296,7 +296,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 
 
 	void resetAssignment() {
-		currentAssignment = new IdentifiableIntegerMapping<>( network.numberOfNodes() );
+		currentAssignment = new IdentifiableIntegerMapping<>( network.nodeCount() );
 		for( int i = 0; i < network.nodes().size(); i++ )
 			currentAssignment.set( network.nodes().get( i ), 0 );
 	}
@@ -319,7 +319,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	public NodePositionMapping getNodeCoordinates() {
-		NodePositionMapping nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+		NodePositionMapping nodePositionMapping = new NodePositionMapping( network.nodeCount() );
 		for( Node n : network.nodes() ) {
 			NodeRectangle rect = mapping.getNodeRectangles().get( n );
 			final double zs = mapping.getNodeFloorMapping().get( n ) * VisualizationOptionManager.getFloorDistance();

@@ -143,7 +143,7 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	Set<Node> cut;
 	public Set<Node> computeCutNodes() {
 		if( contained == null )
-			contained = new IdentifiableBooleanMapping<>( residualNetwork.numberOfNodes() );
+			contained = new IdentifiableBooleanMapping<>( residualNetwork.nodeCount() );
 		for( Node n : getProblem().getNetwork() ) {
 			contained.set( n, false );
 		}

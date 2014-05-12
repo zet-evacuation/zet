@@ -56,7 +56,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
 		source = getProblem().getSource();
 		sink = getProblem().getSink();
-		n = getProblem().getNetwork().numberOfNodes();
+		n = getProblem().getNetwork().nodeCount();
 		m = getProblem().getNetwork().numberOfEdges();
 		long start = System.nanoTime();
 		alloc();

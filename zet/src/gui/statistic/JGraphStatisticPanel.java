@@ -162,7 +162,7 @@ public class JGraphStatisticPanel extends JPanel {
             sinks.add(sink1);
             sinks.add(sink2);
             sinks.add(sink3);
-            IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<Node>(network.numberOfNodes());
+            IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<Node>(network.nodeCount());
             Random rng = new Random();
             int[] sup = new int[3];
             sup[0] = index;

@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * SuccessiveShortestPath.java
- *
- */
+
 package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.MooreBellmanFord;
@@ -177,7 +174,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
 						total += amount;
 						totalcost += amount * pathCost;
 						System.out.println( "Sent: " + total + " witch cost: " + totalcost );
-						
+
             balances.decrease(source, amount);
             balances.increase(sink, amount);
             LOGGER.finest("Es warten " + balances.get(source) + " Flusseinheiten in der Quelle, während " + balances.get(sink) + " Flusseinheiten in der Senke benötigt werden.");

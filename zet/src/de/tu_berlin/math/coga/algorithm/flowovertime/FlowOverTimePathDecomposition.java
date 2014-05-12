@@ -64,8 +64,8 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 		FlowOverTimePath path;
 		do {
 			// Find a source-sink-path
-			IdentifiableIntegerMapping<Node> arrivalTimes = new IdentifiableIntegerMapping<>( network.numberOfNodes() );
-			IdentifiableIntegerObjectMapping<Node> preceedingEdges = new IdentifiableIntegerObjectMapping<>( network.numberOfNodes() );
+			IdentifiableIntegerMapping<Node> arrivalTimes = new IdentifiableIntegerMapping<>( network.nodeCount() );
+			IdentifiableIntegerObjectMapping<Node> preceedingEdges = new IdentifiableIntegerObjectMapping<>( network.nodeCount() );
 			initialize( preceedingEdges, arrivalTimes );
 			// Trace back a path from the sink to the super source
 			path = constructPath( preceedingEdges, arrivalTimes.get( network.getProblem().getSink() ) );
@@ -96,8 +96,8 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 	 * @param arrivalTimes data structure to store the results.
 	 */
 	private void initialize( IdentifiableIntegerObjectMapping<Node> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes ) {
-		MinHeap<Node, Integer> queue = new MinHeap<>( network.numberOfNodes() );
-		for( int v = 0; v < network.numberOfNodes(); v++ ) {
+		MinHeap<Node, Integer> queue = new MinHeap<>( network.nodeCount() );
+		for( int v = 0; v < network.nodeCount(); v++ ) {
 			queue.insert( network.getNode( v ), Integer.MAX_VALUE );
 		}
 		// Start at the super source

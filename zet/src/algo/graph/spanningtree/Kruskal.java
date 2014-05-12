@@ -7,7 +7,7 @@ import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Edge;
-import ds.graph.Graph;
+import de.tu_berlin.coga.graph.Graph;
 import ds.graph.Node;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -47,7 +47,7 @@ public class Kruskal extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
     DisjointSet<Node> unionFind = new DisjointSet<>( graph.nodes() );
     
     time = System.nanoTime();
-    while( !heap.isEmpty() && treeEdges.size() != graph.numberOfNodes()-1 ) {
+    while( !heap.isEmpty() && treeEdges.size() != graph.nodeCount()-1 ) {
       Edge e = heap.poll();
       if( unionFind.find( e.start() ).id() != unionFind.find( e.end() ).id() ) {
         treeEdges.add( e );

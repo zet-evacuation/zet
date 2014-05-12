@@ -78,7 +78,7 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem, RationalMaxFlow
 	}
 
 	private IdentifiableDoubleMapping<Node> setBeta( Double d ) {
-		IdentifiableDoubleMapping<Node> betamap = new IdentifiableDoubleMapping<Node>( getProblem().getNetwork().numberOfNodes() );
+		IdentifiableDoubleMapping<Node> betamap = new IdentifiableDoubleMapping<Node>( getProblem().getNetwork().nodeCount() );
 		for( Node n : getProblem().getNetwork().nodes() ) {
 			if( n == getProblem().getSink() ) {
 				betamap.set( n, d );

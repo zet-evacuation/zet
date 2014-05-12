@@ -588,6 +588,6 @@ public class TCTOTest {
 
 		System.out.println( durations );
 
-		curve.add( new Tuple<> ( lst.get( AoE.getNode( AoE.numberOfNodes()-1) ), (int)cost ) );
+		curve.add( new Tuple<> ( lst.get( AoE.getNode( AoE.nodeCount()-1) ), (int)cost ) );
 	}
 }

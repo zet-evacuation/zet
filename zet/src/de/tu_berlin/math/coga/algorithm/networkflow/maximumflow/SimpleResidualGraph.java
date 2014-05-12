@@ -7,9 +7,7 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.graph.OutgoingStarGraph;
 import de.tu_berlin.math.coga.datastructure.graph.network.ResidualNetwork;
-import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.collection.ArraySet;
-import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
@@ -17,6 +15,7 @@ import ds.graph.network.NetworkInterface;
 import de.tu_berlin.coga.container.mapping.IdentifiableBooleanMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 
 /**
@@ -157,7 +156,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	}
 
 	@Override
-	public int numberOfNodes() {
+	public int nodeCount() {
 		return nodes.size();
 	}
 

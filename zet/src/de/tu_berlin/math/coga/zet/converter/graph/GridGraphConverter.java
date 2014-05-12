@@ -177,7 +177,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 		//DynamicNetwork graph = model.getDynamicNetwork();
 
 		//Two mappings to store capacities
-		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
+		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.nodeCount() );
 		//model.setNodeCapacities( nodesCap );
 
 		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
