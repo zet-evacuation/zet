@@ -28,7 +28,7 @@ public class InstanceGenerator {
 	@Test
 	public void testCreation() {
 		setUpInstance();
-		assertEquals( "Area of room", 12960000, r.area() );
+		assertEquals( "Area of room", 12960000, r.getPolygon().area() );
 		assertEquals( "Area of assignment area", 1440000, a.area() );
 		assertEquals( "Area of evacuation area", 1440000, e.area() );	}
 

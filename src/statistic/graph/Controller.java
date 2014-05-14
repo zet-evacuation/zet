@@ -125,10 +125,10 @@ public class Controller implements DiagramListener, ProfileListener, StatisticLi
             for (Node node : model.graph().predecessorNodes(model.getSupersink())) {
                 nodes.add(node);
             }
-			if (model.graph().numberOfEdges() > 0) {
+			if (model.graph().edgeCount() > 0) {
 				for (int i = 0; i < 3; i++) {
 					Random rng = new Random();
-					int r = rng.nextInt(model.graph().numberOfEdges());
+					int r = rng.nextInt(model.graph().edgeCount());
 					if (model.graph().getEdge(r) != null) {
 						edges.add(model.graph().getEdge(r));
 					}

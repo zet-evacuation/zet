@@ -59,7 +59,7 @@ public class GraphViewConverter implements Converter {
 		// write layouts
 		writer.startNode( "layouts" );
 		this.writeLayouts();
-//        for (int e=0; e<graph.numberOfEdges(); e++) {
+//        for (int e=0; e<graph.edgeCount(); e++) {
 //            convertEdgeLayout(graphView.getEdgeAttributes(graph.getEdge(e)));
 //        }
 //        for (int p=0; p<graphView.getNumberOfNodeLayoutProfiles(); p++) {

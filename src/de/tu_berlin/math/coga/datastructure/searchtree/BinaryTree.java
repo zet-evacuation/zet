@@ -89,7 +89,7 @@ public class BinaryTree implements DirectedGraph {
 	 * @return the number of edges in this graph.
 	 */
 	@Override
-	public int numberOfEdges() {
+	public int edgeCount() {
 		return edges().size();
 	}
 
@@ -411,7 +411,7 @@ public class BinaryTree implements DirectedGraph {
 			buffer.append( ", " );
 			counter++;
 		}
-		if( numberOfEdges() > 0 )
+		if( edgeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "})" );
 		return buffer.toString();
@@ -437,15 +437,10 @@ public class BinaryTree implements DirectedGraph {
 			buffer.append( ", " );
 			counter++;
 		}
-		if( numberOfEdges() > 0 )
+		if( edgeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "}\n" );
 		return buffer.toString();
-	}
-
-	@Override
-	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
 	public Node getParent( Node node ) {

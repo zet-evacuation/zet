@@ -27,14 +27,14 @@ public class Kruskal extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
             
     IdentifiableCollection<Edge> treeEdges = new ListSequence<>();
     
-    if( graph.numberOfEdges() == 0 ) {
+    if( graph.edgeCount() == 0 ) {
       return tree = new UndirectedTree( treeEdges );
     }
 
     final Comparator<Edge> comp = (Edge o1, Edge o2) -> weights.get( o1 ) - weights.get( o2 );
 
     long time = System.nanoTime();
-    PriorityQueue<Edge> heap = new PriorityQueue<>( graph.numberOfEdges(), comp );
+    PriorityQueue<Edge> heap = new PriorityQueue<>( graph.edgeCount(), comp );
 
     // iterate over all edges and add into list
     for( Edge e : graph.edges() ) {

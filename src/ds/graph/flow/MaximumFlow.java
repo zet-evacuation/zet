@@ -80,6 +80,6 @@ public class MaximumFlow extends Flow {
 				problems = false;
 			}
 		}
-		return problems;
+		return !problems;
 	}
 }

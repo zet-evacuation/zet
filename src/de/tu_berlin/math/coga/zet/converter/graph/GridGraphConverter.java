@@ -180,7 +180,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.nodeCount() );
 		//model.setNodeCapacities( nodesCap );
 
-		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
+		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.edgeCount() * graph.edgeCount() );
 		//model.setEdgeCapacities( edgesCap );
 
 		// set node capacity of super sink to max value
@@ -451,11 +451,11 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 		//DynamicNetwork graph = model.getDynamicNetwork();
 		//IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();
 		//if( edgesCap == null ) {
-		//	edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() );
+		//	edgesCap = new IdentifiableIntegerMapping<>( graph.edgeCount() );
 		//	model.setEdgeCapacities( edgesCap );
 		//}
 
-		//int nextEdge = graph.numberOfEdges();
+		//int nextEdge = graph.edgeCount();
 		for( ZToGraphRasteredDoor door : doors ) {
 			Node firstNode = door.getFirstDoorPart().getNode();
 			Node secondNode = door.getSecondDoorPart().getNode();

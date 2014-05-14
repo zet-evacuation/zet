@@ -284,10 +284,10 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
 		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
-		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
+		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.edgeCount() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
-		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.numberOfEdges() );
+		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.edgeCount() );
 		for( Edge e : workingGraph.edges() ) {
 			waitingtimes.set( e, 0.0 ); //set waiting time of every edge to zero
 			transitMap.put( e, nashprob.getEdgeTransitTime( e ) );
@@ -311,8 +311,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 		Node start, end;
 
-		ArrayList<Edge> E_1 = new ArrayList<>( workingGraph.numberOfEdges() );
-		ArrayList<Edge> E_GminusGtheta = new ArrayList<>( workingGraph.numberOfEdges() );
+		ArrayList<Edge> E_1 = new ArrayList<>( workingGraph.edgeCount() );
+		ArrayList<Edge> E_GminusGtheta = new ArrayList<>( workingGraph.edgeCount() );
 
 		int iteration = 0;
 
@@ -335,8 +335,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 				}
 			}
 
-			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() );
-			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() + E_1.size() );
+			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() );
+			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() + E_1.size() );
 			for( Edge ed : spNetwork.edges() ) {
 				spNetworkCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
 				thinflowCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
@@ -350,7 +350,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 			HashMap<Node, ArrayList<Edge>> identEdgeMap = new HashMap<>();
 			HashMap<Edge, Edge> newedgeToOrigedgeMap = new HashMap<>(); /*map for indentification in thinflow-Algorithm*/
 
-			int num = workingGraph.numberOfEdges();
+			int num = workingGraph.edgeCount();
 
 
 			/*create identEdgeMap*/
@@ -547,10 +547,10 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
 		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
-		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
+		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.edgeCount() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
-		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.numberOfEdges() );
+		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.edgeCount() );
 		for( Edge e : workingGraph.edges() ) {
 			waitingtimes.set( e, 0.0 ); //set waiting time of every edge to zero
 			transitMap.put( e, nashprob.getEdgeTransitTime( e ) );
@@ -572,8 +572,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 		Node start, end;
 
-		ArrayList<Edge> E_1 = new ArrayList( workingGraph.numberOfEdges() );
-		ArrayList<Edge> E_GminusGtheta = new ArrayList( workingGraph.numberOfEdges() );
+		ArrayList<Edge> E_1 = new ArrayList( workingGraph.edgeCount() );
+		ArrayList<Edge> E_GminusGtheta = new ArrayList( workingGraph.edgeCount() );
 
 		int iteration = 0;
 
@@ -596,8 +596,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 				}
 			}
 
-			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() );
-			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() + E_1.size() );
+			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() );
+			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() + E_1.size() );
 			for( Edge ed : spNetwork.edges() ) {
 				spNetworkCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
 				thinflowCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
@@ -612,7 +612,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 			HashMap<Node, ArrayList<Edge>> identEdgeMap = new HashMap<>();
 			HashMap<Edge, Edge> newedgeToOrigedgeMap = new HashMap<>(); /*map for indentification in thinflow-Algorithm*/
 
-			int num = workingGraph.numberOfEdges();
+			int num = workingGraph.edgeCount();
 
 
 			/*create identEdgeMap*/
@@ -810,10 +810,10 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		DynamicNetwork workingGraph = nashprob.getGraph();
 
 		IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping<>( workingGraph.nodeCount() );
-		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.numberOfEdges() );
+		IdentifiableDoubleMapping<Edge> waitingtimes = new IdentifiableDoubleMapping<>( workingGraph.edgeCount() );
 
 		/*convert (TransitTimes) DoubleMap to (transitMap) Java map*/
-		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.numberOfEdges() );
+		HashMap<Edge, Double> transitMap = new HashMap<>( workingGraph.edgeCount() );
 		for( Edge e : workingGraph.edges() ) {
 			waitingtimes.set( e, 0.0 ); //set waiting time of every edge to zero
 			transitMap.put( e, nashprob.getEdgeTransitTime( e ) );
@@ -835,8 +835,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 		Node start, end;
 
-		ArrayList<Edge> E_1 = new ArrayList( workingGraph.numberOfEdges() );
-		ArrayList<Edge> E_GminusGtheta = new ArrayList( workingGraph.numberOfEdges() );
+		ArrayList<Edge> E_1 = new ArrayList( workingGraph.edgeCount() );
+		ArrayList<Edge> E_GminusGtheta = new ArrayList( workingGraph.edgeCount() );
 
 		int iteration = 0;
 
@@ -859,8 +859,8 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 				}
 			}
 
-			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() );
-			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.numberOfEdges() + E_1.size() );
+			IdentifiableDoubleMapping spNetworkCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() );
+			IdentifiableDoubleMapping thinflowCapacities = new IdentifiableDoubleMapping( spNetwork.edgeCount() + E_1.size() );
 			for( Edge ed : spNetwork.edges() ) {
 				spNetworkCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
 				thinflowCapacities.set( ed, nashprob.getEdgeCapacity( ed ) );
@@ -875,7 +875,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 			HashMap<Node, ArrayList<Edge>> identEdgeMap = new HashMap<Node, ArrayList<Edge>>();
 			HashMap<Edge, Edge> newedgeToOrigedgeMap = new HashMap<Edge, Edge>(); /*map for indentification in thinflow-Algorithm*/
 
-			int num = workingGraph.numberOfEdges();
+			int num = workingGraph.edgeCount();
 
 
 			/*create identEdgeMap*/
@@ -1074,7 +1074,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 	}
 
 	private double[] computeInFlowValues( DynamicNetwork spNetwork, IdentifiableDoubleMapping<Edge> thinflowValues, IdentifiableDoubleMapping<Node> thinflowNodelabels ) {
-		double[] inflows = new double[getProblem().getGraph().numberOfEdges()];
+		double[] inflows = new double[getProblem().getGraph().edgeCount()];
 		Node start;
 		for( Edge e : spNetwork.edges() ) {
 			start = e.start();
@@ -1089,7 +1089,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 	}
 
 	private double[] computeOutFlowValues( DynamicNetwork spNetwork, IdentifiableDoubleMapping<Edge> thinflowValues, IdentifiableDoubleMapping<Node> thinflowNodelabels ) {
-		double[] outflows = new double[getProblem().getGraph().numberOfEdges()];
+		double[] outflows = new double[getProblem().getGraph().edgeCount()];
 		Node end;
 		for( Edge e : spNetwork.edges() ) {
 			end = e.end();

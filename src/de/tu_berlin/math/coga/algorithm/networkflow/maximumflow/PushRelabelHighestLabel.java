@@ -57,7 +57,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		source = getProblem().getSource();
 		sink = getProblem().getSink();
 		n = getProblem().getNetwork().nodeCount();
-		m = getProblem().getNetwork().numberOfEdges();
+		m = getProblem().getNetwork().edgeCount();
 		long start = System.nanoTime();
 		alloc();
 		init();
