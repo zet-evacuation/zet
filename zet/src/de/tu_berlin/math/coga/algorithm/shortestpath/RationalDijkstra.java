@@ -94,7 +94,7 @@ public class RationalDijkstra {
         for (Edge edge : edges.values()) {
             chosen.put(edge,true);
         }        
-        for (int i=0; i<graph.numberOfEdges(); i++) {
+        for (int i=0; i<graph.edgeCount(); i++) {
             Edge edge = graph.getEdge(i);
             if (chosen.containsKey(edge)) continue;
             if (distances.get(edge.start())+costs.get(edge) == distances.get(edge.end())) {

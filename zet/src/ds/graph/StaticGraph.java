@@ -7,7 +7,6 @@ package ds.graph;
 import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ArraySet;
-import algo.graph.traverse.BFS;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 
@@ -28,7 +27,6 @@ public class StaticGraph implements Graph, DirectedGraph {
 
 	public StaticGraph( boolean directed ) {
 		this( directed, 0, 0 );
-
 	}
 
 	public StaticGraph( boolean directed, int initialNodeCapacity, int initialEdgeCapacity ) {
@@ -134,7 +132,7 @@ public class StaticGraph implements Graph, DirectedGraph {
 	 * @return die Anzahl aller sichtbaren Kanten des Graphen.
 	 */
 	@Override
-	public int numberOfEdges() {
+	public int edgeCount() {
 		return visibleEdges.numberOfVisibleElements();
 	}
 
@@ -568,13 +566,6 @@ public class StaticGraph implements Graph, DirectedGraph {
 			incomingEdges = new HidingAdjacencySetForThinFlow[nodeCapacity];
 			outgoingEdges = new HidingAdjacencySetForThinFlow[nodeCapacity];
 		}
-	}
-
-	@Override
-	public boolean existsPath( Node start, Node end ) {
-		BFS bfs = new BFS( this );
-		bfs.run( start, end );
-		return bfs.distance( end ) < Integer.MAX_VALUE;
 	}
 
 	@Override

@@ -19,13 +19,13 @@ import ds.graph.Node;
 import ds.graph.Edge;
 import java.util.HashSet;
 import ds.graph.network.DynamicNetwork;
-import algo.graph.traverse.BFS;
 
 import ds.graph.ResidualGraph;
 
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.Fujishige;
 import ds.graph.problem.RationalMaxFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
 
 
 /* SparsestCut.java */
@@ -135,10 +135,11 @@ public class SparsestCut {
 
 		ResidualGraph resgraph = fuji.getResidualGraph();
 
-		BFS reachable = new BFS( resgraph );
-
-		HashSet<Node> cut;
-		cut = reachable.getReachableNodes( source );
+    BreadthFirstSearch bfs = new BreadthFirstSearch();
+    bfs.setProblem( resgraph );
+    bfs.setStart( source );
+    bfs.run();
+		HashSet<Node> cut = bfs.getReachableNodes();
 
 		return new MinCut( maxflow, cut, fuji.getFlow() );
 	}

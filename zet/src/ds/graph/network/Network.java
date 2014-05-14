@@ -140,7 +140,7 @@ public class Network extends AbstractNetwork {
 	 * @return the number of edges in this graph.
 	 */
 	@Override
-	public int numberOfEdges() {
+	public int edgeCount() {
 		return edges().size();
 	}
 
@@ -594,7 +594,7 @@ public class Network extends AbstractNetwork {
 	 */
 	@Override
 	public AbstractNetwork clone() {
-		Network clone = new Network( nodeCount(), numberOfEdges() );
+		Network clone = new Network( nodeCount(), edgeCount() );
 		clone.setNodes( nodes() );
 		clone.setEdges( edges() );
 		return clone;
@@ -657,7 +657,7 @@ public class Network extends AbstractNetwork {
 			buffer.append( ", " );
 			counter++;
 		}
-		if( numberOfEdges() > 0 )
+		if( edgeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "})" );
 		return buffer.toString();
@@ -683,45 +683,24 @@ public class Network extends AbstractNetwork {
 			buffer.append( ", " );
 			counter++;
 		}
-		if( numberOfEdges() > 0 )
+		if( edgeCount() > 0 )
 			buffer.delete( buffer.length() - 2, buffer.length() );
 		buffer.append( "}\n" );
 		return buffer.toString();
 	}
 
-	/**
-	 * Checks whether a directed path between the specified start and end nodes
-	 * exists.
-	 * @param start the start node of the path to be checked.
-	 * @param end the end node of the path to be checked.
-	 * @return {@code true} if a directed path between the start node and
-	 * the end node exists, {@code false} otherwise.
-	 */
-	@Override
-	public boolean existsPath( Node start, Node end ) {
-            Dijkstra dijkstra = new Dijkstra(this, Graph.UNIT_EDGE_MAPPING, start);
-            dijkstra.run();
-            Forest spt = dijkstra.getShortestPathTree();
-            Path path = spt.getPathToRoot(end);
-            if (path.first().start().equals(start)) {
-                return true;
-            } else {
-                return false;
-            }
-	}
-
-	@Override
-	public Path getPath( Node start, Node end ) {
-            Dijkstra dijkstra = new Dijkstra(this, Graph.UNIT_EDGE_MAPPING, start);
-            dijkstra.run();
-            Forest spt = dijkstra.getShortestPathTree();
-            Path path = spt.getPathToRoot(end);
-            if (path.first().start().equals(start)) {
-                return path;
-            } else {
-                return null;
-            }
-	}
+  @Override
+  public Path getPath( Node start, Node end ) {
+    Dijkstra dijkstra = new Dijkstra( this, Graph.UNIT_EDGE_MAPPING, start );
+    dijkstra.run();
+    Forest spt = dijkstra.getShortestPathTree();
+    Path path = spt.getPathToRoot( end );
+    if( path.first().start().equals( start ) ) {
+      return path;
+    } else {
+      return null;
+    }
+  }
 
 	/**
 	 * Checks whether at least one edge between the specified start and end nodes
@@ -742,7 +721,7 @@ public class Network extends AbstractNetwork {
 	 */
 	@Override
 	public Network createReverseNetwork() {
-		Network result = new Network( nodeCount(), numberOfEdges() );
+		Network result = new Network( nodeCount(), edgeCount() );
 		for( Edge edge : edges )
 			result.createAndSetEdge( edge.end(), edge.start() );
 		return result;

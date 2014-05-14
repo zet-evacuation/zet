@@ -169,7 +169,7 @@ public class RMFGEN implements Generator {
   }
 
   public int getEdgeCount() {
-    return network.numberOfEdges();
+    return network.edgeCount();
   }
 
   public int getNodeCount() {

@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Path.java
- *
- */
 
 package ds.graph;
 
@@ -29,31 +25,31 @@ import java.util.Iterator;
  * in nodes: Flow going through a network can (sometimes) wait in nodes, therefore
  * we consider a dynamic flow as a alternating sequence of delay times and edges.
  * In this class delay times get saved together with edges: The delay time
- * corresponding to an edge is the delay time in the start node of the edge, 
+ * corresponding to an edge is the delay time in the start node of the edge,
  * i.e. the delays are always directly before the corresponding edge.
  * The delay times are internally stored in a {@code ArrayList}.
  */
-public class DynamicPath extends StaticPath{
-    
+public class DynamicPath extends StaticPath {
+
     private ArrayList<Integer> delays;
-    
+
     /**
-     * Constructs a new {@code DynamicPath} without edges. 
+     * Constructs a new {@code DynamicPath} without edges.
      * Edges can be added with the corresponding methods.
      */
     public DynamicPath() {
         super();
-        delays = new ArrayList<Integer>();
+        delays = new ArrayList<>();
     }
-    
+
     /**
-     * Constructs a new {@code DynamicPath} with the given edges. 
-     * The delays in the startnode of the edges are set to zero. 
+     * Constructs a new {@code DynamicPath} with the given edges.
+     * The delays in the startnode of the edges are set to zero.
      * They can be changed later by using {@code setDelay(Edge edge, int delay}.
      * The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an {@code IllegalArgumentException} 
+     * If the edges are not consistent, an {@code IllegalArgumentException}
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -63,15 +59,15 @@ public class DynamicPath extends StaticPath{
             this.addLastEdge(edge);
         }
     }
-    
+
     /**
-     * Constructs a new {@code DynamicPath} with the given edges. 
-     * The delays in the startnode of the edges are set to zero. 
+     * Constructs a new {@code DynamicPath} with the given edges.
+     * The delays in the startnode of the edges are set to zero.
      * They can be changed later by using {@code setDelay(Edge edge, int delay}.
      * The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an {@code IllegalArgumentException} 
+     * If the edges are not consistent, an {@code IllegalArgumentException}
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -81,7 +77,7 @@ public class DynamicPath extends StaticPath{
             this.addLastEdge(edge);
         }
     }
-    
+
     /**
      * Extends the path by adding an edge at the end and sets the delay
      * in the startnode of {@code edge} to {@code delay}.
@@ -99,7 +95,7 @@ public class DynamicPath extends StaticPath{
             delays.add(delay);
         return successful;
     }
-    
+
     /**
      * Extends the path by adding an edge at the start and sets the delay
      * in the startnode of {@code edge} to {@code delay}.
@@ -119,7 +115,7 @@ public class DynamicPath extends StaticPath{
             delays.add(0,delay);
         return successful;
     }
-    
+
     /**
      * Extends the path by adding an edge at the end.
      * The edge must be consistent to the current last edge of the path,
@@ -131,10 +127,10 @@ public class DynamicPath extends StaticPath{
      * {@code false} else.
      */
     @Override
-    public boolean addLastEdge(Edge edge) {        
+    public boolean addLastEdge(Edge edge) {
         return addLastEdge(edge, 0);
     }
-    
+
     /**
      * Extends the path by adding an edge at the start.
      * The edge must be consistent to the current first edge of the path,
@@ -159,8 +155,8 @@ public class DynamicPath extends StaticPath{
     @Override
     public Iterator<Edge> iterator() {
         return super.iterator();
-    }    
-    
+    }
+
     /**
      * Returns the delay in the startnode of an edge.
      * If the edge is not present in the path, -1 will be returned.
@@ -179,7 +175,7 @@ public class DynamicPath extends StaticPath{
             return (-1);
         }
     }
-    
+
     /**
      * Sets the delay in the startnode of edge {@code edge}.
      * If the edge is not present in the path, nothing happens.
@@ -194,7 +190,7 @@ public class DynamicPath extends StaticPath{
             delays.set(edges.indexOf(edge), delay);
         }
     }
-    
+
     /**
      * Shortens the path by removing the first edge. The delay time in the
      * startnode of this edge will also be deleted.
@@ -220,19 +216,19 @@ public class DynamicPath extends StaticPath{
      */
     @Override
     public boolean removeLastEdge() {
-        boolean successful = super.removeLastEdge();        
+        boolean successful = super.removeLastEdge();
         if (successful && delays.size() >= edges.size()){
             delays.remove(delays.size()-1);
             return true;
         } else
-            return false;        
-    }    
+            return false;
+    }
 
     /**
      * Returns a String containing tuples of delay times and edges.
      * The delay time in a tuple belongs to the startnode of the
      * edge in the tuple.
-     * An edge e=(a,b) will be represented by (a,b) in the string. 
+     * An edge e=(a,b) will be represented by (a,b) in the string.
      * @return a String containing tuples of delay times and edges.
      */
     public String nodesAndDelaysToString() {
@@ -242,14 +238,14 @@ public class DynamicPath extends StaticPath{
         }
         if (length() > 0) builder.deleteCharAt(builder.length()-1);
         return builder.toString();
-    } 
-    
-    /** 
+    }
+
+    /**
      * Returns a String containing tuples of delay times and edge IDs.
      * The delay time in a tuple belongs to the startnode of the
      * edge in the tuple.
      * @return a String containing tuples of delay times and edge IDs.
-     */    
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -263,26 +259,26 @@ public class DynamicPath extends StaticPath{
     /**
      * Clones this path by cloning all edges and delays
      * and creating a new {@code DynamicPath} object with the clone.
-     * @return a {@code Dynamic} object with clones of the edges and 
+     * @return a {@code Dynamic} object with clones of the edges and
      * delays of this object.
      */
     @Override
     public DynamicPath clone(){
-        DynamicPath dynamicPath = new DynamicPath();        
+        DynamicPath dynamicPath = new DynamicPath();
         Iterator<Edge> it = edges.iterator();
         for (int i = 0; i < edges.size(); i++){
             Edge e = (Edge)(it.next()).clone();
             if (delays.size() > i)
                 dynamicPath.addLastEdge(e,delays.get(i));
-            else 
+            else
                 dynamicPath.addLastEdge(e,0);
         }
         return dynamicPath;
     }
-    
-    
+
+
     /**
-     * Returns the hash code of this dynamic path. 
+     * Returns the hash code of this dynamic path.
      * The hash code is calculated by computing the arithmetic mean
      * of the delays together with the hash codes of all edges.
      * Therefore the hash code is equal for dynamic path equal according to
@@ -303,10 +299,10 @@ public class DynamicPath extends StaticPath{
         }
         return h;
     }
-    
+
     /**
      * Returns whether an object is equal to this dynamic path.
-     * The result is true if and only if the argument is not null and is a 
+     * The result is true if and only if the argument is not null and is a
      * {@code DynamicPath} object having a sequence of edges that is
      * equal to this path's sequence of edges (i.e. all edges must have
      * the same IDs) and all the delays are equal.
@@ -330,5 +326,5 @@ public class DynamicPath extends StaticPath{
             return true;
         }
     }
-    
+
 }

@@ -151,7 +151,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	}
 
 	@Override
-	public int numberOfEdges() {
+	public int edgeCount() {
 		return edges.size();
 	}
 
@@ -233,11 +233,6 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	@Override
 	public Node getNode( int id ) {
 		return nodes.get( id );
-	}
-
-	@Override
-	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
 	public int getResidualCapacity( int i ) {

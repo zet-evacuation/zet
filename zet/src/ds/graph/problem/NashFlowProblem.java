@@ -51,7 +51,7 @@ public class NashFlowProblem {
 					IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink ) {
 		DynamicNetwork graphWithNewSource = new DynamicNetwork( graph );
 		Node newSource = new Node( graph.nodeCount() );
-		Edge newEdge = new Edge( graph.numberOfEdges(), newSource, oldsource );
+		Edge newEdge = new Edge( graph.edgeCount(), newSource, oldsource );
 		edgeSourceToOrigSource = newEdge;
 		graphWithNewSource.addNode( newSource );
 		graphWithNewSource.addEdge( newEdge );
@@ -71,7 +71,7 @@ public class NashFlowProblem {
 					IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink, double initcapacity ) {
 		DynamicNetwork graphWithNewSource = new DynamicNetwork( graph );
 		Node newSource = new Node( graph.nodeCount() );
-		Edge newEdge = new Edge( graph.numberOfEdges(), newSource, oldsource );
+		Edge newEdge = new Edge( graph.edgeCount(), newSource, oldsource );
 		edgeSourceToOrigSource = newEdge;
 		graphWithNewSource.addNode( newSource );
 		graphWithNewSource.addEdge( newEdge );
@@ -105,7 +105,7 @@ public class NashFlowProblem {
 		Node SuperSource = new Node( graph.nodeCount() );
 		graph.addNode( SuperSource );
 		for( Node origsource : sourceDemands.keySet() ) {
-			Edge newEdge = new Edge( graph.numberOfEdges(), SuperSource, origsource );
+			Edge newEdge = new Edge( graph.edgeCount(), SuperSource, origsource );
 			graph.addEdge( newEdge );
 			edgesToOrigSources.add( newEdge );
 			capacities.set( newEdge, Double.MAX_VALUE );

@@ -63,7 +63,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		FakeMaximumFlowProblem myProblem = (FakeMaximumFlowProblem)problem;
 		n = myProblem.getNetwork().nodeCount();
-		m = myProblem.getNetwork().numberOfEdges();
+		m = myProblem.getNetwork().edgeCount();
 
 		long start = System.nanoTime();
 		alloc();

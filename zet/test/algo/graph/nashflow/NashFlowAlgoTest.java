@@ -111,8 +111,8 @@ public class NashFlowAlgoTest {
         dnet.setEdge(e18);
         dnet.setEdge(e19);
         
-        IdentifiableDoubleMapping<Edge> capacities = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
-        IdentifiableDoubleMapping<Edge> transitTimes = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
+        IdentifiableDoubleMapping<Edge> capacities = new IdentifiableDoubleMapping<Edge>(dnet.edgeCount());
+        IdentifiableDoubleMapping<Edge> transitTimes = new IdentifiableDoubleMapping<Edge>(dnet.edgeCount());
         for(Edge e: dnet.edges()) {
             capacities.set(e, 2.0);
             transitTimes.set(e, 1.0);

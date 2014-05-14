@@ -86,7 +86,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      */
     public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {        
         super(problem.getNetwork().nodeCount() + ((problem.getSources().size() > 1)? 1 : 0), 
-                problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size()*2 : 0));
+                problem.getNetwork().edgeCount() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size()*2 : 0));
         this.edgeTypes = new IdentifiableObjectMapping<>(getEdgeCapacity());
         this.problem = problem;
         this.reverseEdges = new IdentifiableObjectMapping<>(getEdgeCapacity() );

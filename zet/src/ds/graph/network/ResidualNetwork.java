@@ -134,16 +134,16 @@ public class ResidualNetwork extends Network {
 
 	private void setUp( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities  ) {
 		setNodeCapacity( network.nodeCount() );
-		setEdgeCapacity( network.numberOfEdges() * 2 );
-		originalNumberOfEdges = network.numberOfEdges();
+		setEdgeCapacity( network.edgeCount() * 2 );
+		originalNumberOfEdges = network.edgeCount();
 
 		setNodes( network.nodes() );
 		setEdges( network.edges() );
 		for( Edge edge : network.edges() )
 			createAndSetEdge( edge.end(), edge.start() );
 		this.network = network;
-		flow = new IdentifiableIntegerMapping<>( network.numberOfEdges() );
-		residualCapacities = new IdentifiableIntegerMapping<>( network.numberOfEdges() * 2 );
+		flow = new IdentifiableIntegerMapping<>( network.edgeCount() );
+		residualCapacities = new IdentifiableIntegerMapping<>( network.edgeCount() * 2 );
 		for( Edge edge : edges )
 			if( isReverseEdge( edge ) ) {
 				residualCapacities.set( edge, 0 );
@@ -165,7 +165,7 @@ public class ResidualNetwork extends Network {
 		this( network, capacities );
 		residualTransitTimes = expandCostFunction( transitTimes );
 		/*
-		residualTransitTimes = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges() * 2);
+		residualTransitTimes = new IdentifiableIntegerMapping<Edge>(network.edgeCount() * 2);
 		for (Edge edge : edges) {
 		System.out.println(edge);
 		if (isReverseEdge(edge)) {

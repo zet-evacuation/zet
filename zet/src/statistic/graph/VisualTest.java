@@ -70,7 +70,7 @@ public class VisualTest extends JFrame {
         network.setEdge(l);
         network.setEdge(m);
         network.setEdge(n);
-        IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges());
+        IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>(network.edgeCount());
         capacities.set(e, 1);
         capacities.set(f, 1);
         capacities.set(g, 2);
@@ -81,7 +81,7 @@ public class VisualTest extends JFrame {
         capacities.set(l, 2);
         capacities.set(m, 1);
         capacities.set(n, 1);
-        IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges());
+        IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(network.edgeCount());
         transitTimes.set(e, 1);
         transitTimes.set(f, 1);
         transitTimes.set(g, 2);

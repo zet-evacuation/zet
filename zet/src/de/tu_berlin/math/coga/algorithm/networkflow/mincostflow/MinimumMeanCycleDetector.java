@@ -64,7 +64,7 @@ public abstract class MinimumMeanCycleDetector {
 		g = g.clone ();
 		// Reserve enough space in the graph structure for our operations
 		// MG: int nodes = g.nodeCount() + 1;
-		// MG: int edges = g.numberOfEdges() + g.nodeCount();
+		// MG: int edges = g.edgeCount() + g.nodeCount();
 		int nodes = g.getNodeCapacity () + 1;
 		int edges = g.getEdgeCapacity () + g.nodeCount ();
 		g.setNodeCapacity (nodes);
@@ -81,7 +81,7 @@ public abstract class MinimumMeanCycleDetector {
 		}
 		// Copy the costs / Add the 0 costs for edges leaving node "newNode"
 		IdentifiableIntegerMapping<Edge> res_cost =
-				new IdentifiableIntegerMapping<> (g.numberOfEdges ());
+				new IdentifiableIntegerMapping<> (g.edgeCount ());
 		for (Edge e : g.edges ()) {
 			if (e.start () == newNode) {
 				res_cost.set (e, 0);

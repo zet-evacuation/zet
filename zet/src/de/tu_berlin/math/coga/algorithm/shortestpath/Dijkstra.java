@@ -112,7 +112,7 @@ public class Dijkstra {
       return;
     }
     distances = new IdentifiableIntegerMapping<>( graph.nodeCount() );
-    edges = new IdentifiableObjectMapping<>( graph.numberOfEdges() );
+    edges = new IdentifiableObjectMapping<>( graph.edgeCount() );
     nodes = new IdentifiableObjectMapping<>( graph.nodeCount() );
     MinHeap<Node, Integer> queue = new MinHeap<>( graph.nodeCount() );
     for( int v = 0; v < graph.nodeCount(); v++ ) {

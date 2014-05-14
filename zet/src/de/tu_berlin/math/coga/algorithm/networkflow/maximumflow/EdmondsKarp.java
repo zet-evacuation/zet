@@ -1,12 +1,7 @@
-/**
- * EdmondsKarp.java
- * Created: Oct 8, 2010, 11:39:11 AM
- */
+
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
-import algo.graph.traverse.BFS;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
 import ds.graph.StaticPath;
 
 
@@ -19,10 +14,6 @@ import ds.graph.StaticPath;
  */
 public class EdmondsKarp extends FordFulkerson {
 
-	public EdmondsKarp() {
-		super();
-	}
-
 	/**
 	 * Finds a shortest path such that the Ford and Fulkerson algorithm runs in
 	 * polynomial time.
@@ -30,19 +21,11 @@ public class EdmondsKarp extends FordFulkerson {
 	 */
 	@Override
 	protected StaticPath findPath() {
-		BFS bfs = new BFS( residualNetwork );
-		bfs.run( source, sink );
-
-		StaticPath path = new StaticPath();
-
-		Node current = sink;
-		do {
-			final Edge e = bfs.predecedingEdge( current );
-			if( e == null )
-				return path;
-			path.addFirstEdge( e );
-			current = e.start();
-		} while( !current.equals( source ) );
-		return path;
+    BreadthFirstSearch bfs = new BreadthFirstSearch();
+    bfs.setProblem( residualNetwork );
+    bfs.setStart( source );
+    bfs.setStop( sink );
+    bfs.run();
+		return new StaticPath( bfs );
 	}
 }

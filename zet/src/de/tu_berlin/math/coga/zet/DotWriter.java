@@ -46,7 +46,7 @@ public class DotWriter {
 		for( Node node : network.nodes() ) {
 			writer.write( "  " + node.id() + ";\n");
 		}
-		writer.write( "  /* " + network.numberOfEdges() + " edges */\n" );
+		writer.write( "  /* " + network.edgeCount() + " edges */\n" );
 		for( Edge edge : network.edges() ) {
 			writer.write( "  " + edge.start().id() + "->" + edge.end().id() + '\n' );
 		}
@@ -71,7 +71,7 @@ public class DotWriter {
 			else
 				System.err.println( "Sink skipped" );
 		}
-		writer.write( "  /* " + network.numberOfEdges() + " edges */\n" );
+		writer.write( "  /* " + network.edgeCount() + " edges */\n" );
 		for( Edge edge : network.edges() ) {
 			if( !edge.start().equals( sink ) && !edge.start().equals( sink ) )
 			writer.write( "  " + edge.start().id() + "->" + edge.end().id() + '\n' );

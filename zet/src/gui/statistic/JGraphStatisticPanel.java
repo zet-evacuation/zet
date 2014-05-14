@@ -124,7 +124,7 @@ public class JGraphStatisticPanel extends JPanel {
             network.setEdge(p);
             network.setEdge(q);
             network.setEdge(r);
-            IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(network.numberOfEdges());
+            IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(network.edgeCount());
             capacities.set(e, 1);
             capacities.set(f, 1);
             capacities.set(g, 2);
@@ -139,7 +139,7 @@ public class JGraphStatisticPanel extends JPanel {
             capacities.set(p, 1000);
             capacities.set(q, 1000);
             capacities.set(r, 1000);
-            IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges());
+            IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(network.edgeCount());
             transitTimes.set(e, 1);
             transitTimes.set(f, 1);
             transitTimes.set(g, 2);

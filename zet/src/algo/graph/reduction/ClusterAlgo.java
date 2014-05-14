@@ -105,7 +105,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTre
             for (Node v: noncenterNodes)
             {
                 int transitMin = 100000;
-                TransitForCenterEdges = new IdentifiableIntegerMapping<>(OriginGraph.numberOfEdges());
+                TransitForCenterEdges = new IdentifiableIntegerMapping<>(OriginGraph.edgeCount());
                 incidentEdges = OriginGraph.incidentEdges(v);
                 int count = 0;
                 for (Edge edge: incidentEdges)

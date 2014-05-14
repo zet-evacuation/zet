@@ -35,9 +35,9 @@ public class ResidualGraph extends StaticGraph {
 			createEdge( edge.end(), edge.start(), edge.id() + (maxedgeid + 1) );
 		}
 
-		flow = new IdentifiableDoubleMapping<>( gr.numberOfEdges() );
+		flow = new IdentifiableDoubleMapping<>( gr.edgeCount() );
 
-		residualCapacities = new IdentifiableDoubleMapping<>( gr.numberOfEdges() * 2 );
+		residualCapacities = new IdentifiableDoubleMapping<>( gr.edgeCount() * 2 );
 
 		for( Edge edge : edges ) {
 
@@ -93,7 +93,7 @@ public class ResidualGraph extends StaticGraph {
 	}
 
 	public Edge getReverseEdge( Edge edge ) {
-		if( edge.id() <= maxedgeid ) {       //changed by Sebastian: edge.id() < graph.numberOfEdges()
+		if( edge.id() <= maxedgeid ) {       //changed by Sebastian: edge.id() < graph.edgeCount()
 			return edges.get( edge.id() + (maxedgeid + 1) );
 		} else {
 			return edges.get( edge.id() - (maxedgeid + 1) );
@@ -102,7 +102,7 @@ public class ResidualGraph extends StaticGraph {
 
 	public boolean isReverseEdge( Edge edge ) {
 
-		return (edge.id() > maxedgeid); //changed by Sebastian: edge.id() >= graph.numberOfEdges();
+		return (edge.id() > maxedgeid); //changed by Sebastian: edge.id() >= graph.edgeCount();
 	}
 
 	public static boolean eq( double x, double y ) {

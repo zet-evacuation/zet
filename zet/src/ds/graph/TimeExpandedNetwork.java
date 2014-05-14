@@ -739,7 +739,7 @@ public class TimeExpandedNetwork extends Network {
      */
     @Override
     public TimeExpandedNetwork clone() {
-        TimeExpandedNetwork clone = new TimeExpandedNetwork(nodeCount(), numberOfEdges());
+        TimeExpandedNetwork clone = new TimeExpandedNetwork(nodeCount(), edgeCount());
         clone.setNodes(nodes());
         clone.setEdges(edges());
         clone.network = network;
@@ -825,7 +825,7 @@ public class TimeExpandedNetwork extends Network {
             builder.append(", ");
             counter++;
         }
-        if (numberOfEdges() > 0) builder.delete(builder.length()-2, builder.length());
+        if (edgeCount() > 0) builder.delete(builder.length()-2, builder.length());
 
         builder.append("\n");
         builder.append("Time expanded capacities: \n" + capacities.toString() + "\n");

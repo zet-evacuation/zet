@@ -255,7 +255,7 @@ public class RepeatedShortestPathsShrinker extends Algorithm<NetworkFlowModel, N
     BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 //minspanmodel.setNetwork(newgraph);
     //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-    //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());
+    //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().edgeCount());
     minspanmodel.resetAssignment();
     return minspanmodel;
 

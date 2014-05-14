@@ -150,7 +150,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	public int numberOfEdges() {
-		return network.numberOfEdges();
+		return network.edgeCount();
 	}
 
 	public Iterable<Edge> edges() {
@@ -267,7 +267,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	void ensureCapacities() {
 		nodeCapacities.setDomainSize( network.nodeCount() );
 
-		edgeCapacities.setDomainSize( network.numberOfEdges() * network.numberOfEdges() ); // TODO weird???
+		edgeCapacities.setDomainSize( network.edgeCount() * network.edgeCount() ); // TODO weird???
 	}
 
 	void increaseNodeCapacity( Node node, int i ) {

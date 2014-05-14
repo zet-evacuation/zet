@@ -60,7 +60,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
         solNodes.add(startNode);
         //distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.nodeCount());
         distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.nodeCount());
-        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges());
+        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.edgeCount());
         MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.nodeCount());
         IdentifiableCollection<Edge> incidentEdges;
         for (Node node: OriginNetwork.nodes())

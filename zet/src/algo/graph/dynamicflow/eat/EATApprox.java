@@ -51,7 +51,7 @@ public class EATApprox {
 		int totalFlow = 0;
 
 		do {
-			AbstractNetwork n = new Network( problem.getNetwork().nodeCount() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
+			AbstractNetwork n = new Network( problem.getNetwork().nodeCount() + 2, problem.getNetwork().edgeCount() + sinkCount + sourceCount );
 			IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( n.getEdgeCapacity() );
 
 			int superSource = problem.getNetwork().nodeCount();

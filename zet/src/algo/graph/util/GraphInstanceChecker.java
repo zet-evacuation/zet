@@ -17,12 +17,12 @@
 package algo.graph.util;
 
 import algo.graph.Flags;
-import algo.graph.traverse.DFS;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.traversal.DepthFirstSearch;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -144,11 +144,15 @@ public class GraphInstanceChecker {
     /* Go through all sinks. */
     for( Node sink : sinks ) {
       /* Call depth first search. */
-      DFS dfs = new DFS( network );
-      dfs.run( sink, true );
+      DepthFirstSearch dfs = new DepthFirstSearch();
+      dfs.setProblem( network );
+      dfs.setStart( sink );
+      dfs.setReverse( true );
+      dfs.setStart( sink );
+      dfs.run();
       for( Node source : sources ) {
         /* Check whether the source is reachable.*/
-        if( dfs.state( source ) == DFS.State.DONE ) {
+        if( dfs.getNumber( source ) != 0 ) {
           reachableSources++;
           reachable.set( source, true );
         } else {

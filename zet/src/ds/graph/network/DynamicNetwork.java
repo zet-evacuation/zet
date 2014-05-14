@@ -165,7 +165,7 @@ public class DynamicNetwork implements DirectedGraph {
 		return outgoingEdges( node ).size();
 	}
 
-	public int numberOfEdges() {
+	public int edgeCount() {
 		return edges.size();
 	}
 
@@ -338,13 +338,8 @@ public class DynamicNetwork implements DirectedGraph {
 		throw new UnsupportedOperationException( GraphLocalization.loc.getString( "ds.graph.NotSupportedException" ) );
 	}
 
-	@Override
-	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( GraphLocalization.loc.getString( "ds.graph.NotSupportedException" ) );
-	}
-
 	public AbstractNetwork getAsStaticNetwork() {
-		Network network = new Network( nodeCount(), numberOfEdges() );
+		Network network = new Network( nodeCount(), edgeCount() );
 		network.setNodes( nodes );
 		network.setEdges( edges );
 		return network;

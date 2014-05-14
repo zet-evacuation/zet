@@ -43,7 +43,7 @@ public class MaxFlowOverTimeTest {
 		Edge e9 = network.createAndSetEdge( b, sink2 );
 		Edge e10 = network.createAndSetEdge( sink2, sink3 );
 
-		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( network.numberOfEdges() );
+		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( network.edgeCount() );
 		capacities.set( e1, 1 );
 		capacities.set( e2, 1 );
 		capacities.set( e3, 2 );
@@ -54,7 +54,7 @@ public class MaxFlowOverTimeTest {
 		capacities.set( e9, 2 );
 		capacities.set( e5, 1 );
 		capacities.set( e10, 1 );
-		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.numberOfEdges() );
+		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.edgeCount() );
 		transitTimes.set( e1, 1 );
 		transitTimes.set( e2, 1 );
 		transitTimes.set( e3, 2 );
@@ -109,7 +109,7 @@ public class MaxFlowOverTimeTest {
 		Edge e6 = network.createAndSetEdge( v3, v4 );
 		Edge e7 = network.createAndSetEdge( v4, t );
 		
-		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( network.numberOfEdges() );
+		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( network.edgeCount() );
 		capacities.set( e1, 1 );
 		capacities.set( e2, 1 );
 		capacities.set( e3, 1 );
@@ -117,7 +117,7 @@ public class MaxFlowOverTimeTest {
 		capacities.set( e5, 1 );
 		capacities.set( e6, 1 );
 		capacities.set( e7, 1 );
-		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.numberOfEdges() );
+		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.edgeCount() );
 		transitTimes.set( e1, 3 );
 		transitTimes.set( e2, 2 );
 		transitTimes.set( e3, 3 );

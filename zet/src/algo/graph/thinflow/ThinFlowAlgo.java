@@ -112,7 +112,7 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
         DynamicNetwork workingGraph = getProblem().getGraph();
         IdentifiableDoubleMapping<Node> workingDemands = new IdentifiableDoubleMapping(getProblem().getNodeDemands());
         IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping(getProblem().getGraph().nodeCount());
-        IdentifiableDoubleMapping<Edge> flowvalues = new IdentifiableDoubleMapping(getProblem().getGraph().numberOfEdges()+getNewedgeToOrigedgeMapSize());
+        IdentifiableDoubleMapping<Edge> flowvalues = new IdentifiableDoubleMapping(getProblem().getGraph().edgeCount()+getNewedgeToOrigedgeMapSize());
         Double q; //congestion
         HashSet<Node> spcutSet;
         HashSet<Edge> exitEdges;
