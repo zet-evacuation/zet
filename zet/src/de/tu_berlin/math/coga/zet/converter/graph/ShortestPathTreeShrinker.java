@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.network.DynamicNetwork;
 import java.util.HashMap;

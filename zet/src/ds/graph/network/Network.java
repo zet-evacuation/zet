@@ -4,20 +4,20 @@
  */
 package ds.graph.network;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.coga.container.collection.DependingListSequence;
 import de.tu_berlin.coga.container.collection.HidingSet;
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Graph;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.Path;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.util.GraphUtil;
+import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import java.util.Iterator;
 
 /**
@@ -691,7 +691,7 @@ public class Network extends AbstractNetwork {
 
   @Override
   public Path getPath( Node start, Node end ) {
-    Dijkstra dijkstra = new Dijkstra( this, Graph.UNIT_EDGE_MAPPING, start );
+    Dijkstra dijkstra = new Dijkstra( this, GraphUtil.UNIT_EDGE_MAPPING, start );
     dijkstra.run();
     Forest spt = dijkstra.getShortestPathTree();
     Path path = spt.getPathToRoot( end );

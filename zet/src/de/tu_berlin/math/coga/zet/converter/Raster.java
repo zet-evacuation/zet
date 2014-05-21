@@ -27,7 +27,7 @@ import zet.util.ConversionTools;
 
 /**
  * The {@code Raster} class provides basic rasterization of polygonal objects. These
- * object have to be of the type {@link ds.z.PlanPolygon}. The bounding of the polygon is
+ * object have to be of the type {@link de.tu_berlin.coga.zet.model.PlanPolygon}. The bounding of the polygon is
  * divided into squares, which can be inside or outside the polygon or intersect, if they
  * are not completely inside or outside.
  * <p>The type of the squares is defined through the generic parameter, which has to be
@@ -44,11 +44,11 @@ public class Raster<T extends RasterSquare > {
 	private Class<T> squareClassType;
 	/** The class-type of the rasterized polygon. */
 	//protected Class<P> polygonClassType;
-	/** Array containing the squares of the rasterized {@link ds.z.PlanPolygon} */
+	/** Array containing the squares of the rasterized {@link de.tu_berlin.coga.zet.model.PlanPolygon} */
 	protected T[][] rasterSquares;
 	/** A list of squares intersecting the polygon. */
 	private ArrayList<T> insideSquares;
-	/** The rasterized {@link ds.z.PlanPolygon}*/
+	/** The rasterized {@link de.tu_berlin.coga.zet.model.PlanPolygon}*/
 	protected PlanPolygon p;
 	/** The width of the array for the squares. */
 	private int width = 0;
@@ -64,7 +64,7 @@ public class Raster<T extends RasterSquare > {
 	}
 
 	/**
-	 * Performs the rasterization of a simple polygon defined by {@link ds.z.PlanPolygon} inside the range of a
+	 * Performs the rasterization of a simple polygon defined by {@link de.tu_berlin.coga.zet.model.PlanPolygon} inside the range of a
 	 * bounding box of the polygon.
 	 * <p>During the rasterization an array representing the individual squares of the grid is
 	 * created. The array stores {@link RasterSquare}-objects representing all necessary information
@@ -91,7 +91,7 @@ public class Raster<T extends RasterSquare > {
 	}
 
 	/**
-	 * Performs the rasterization of a simple polygon defined by {@link ds.z.PlanPolygon} inside the range of a
+	 * Performs the rasterization of a simple polygon defined by {@link de.tu_berlin.coga.zet.model.PlanPolygon} inside the range of a
 	 * bounding box of the polygon.
 	 * <p>During the rasterization an array representing the individual squares of the grid is
 	 * created. The array stores {@link RasterSquare}-objects representing all necessary information

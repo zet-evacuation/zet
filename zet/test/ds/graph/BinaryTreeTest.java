@@ -4,6 +4,8 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

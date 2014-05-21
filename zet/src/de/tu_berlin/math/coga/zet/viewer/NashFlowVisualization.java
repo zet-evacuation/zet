@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.viewer;
 
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.Network;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;

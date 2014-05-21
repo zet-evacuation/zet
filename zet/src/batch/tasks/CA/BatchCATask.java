@@ -51,7 +51,7 @@ public class BatchCATask implements Runnable {
 	private int runNumber;
 	/** A map storing statistics with run number as key. */
 	private TreeMap<Integer, Integer> median;
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 	/** The used assignment for the ca run. */
 	private Assignment assignment;

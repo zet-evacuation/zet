@@ -19,7 +19,7 @@
  */
 package statistic.graph;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import static statistic.graph.DynamicEdgeStatistic.*;
 
 /**

@@ -19,6 +19,8 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;

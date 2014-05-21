@@ -17,11 +17,11 @@ package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.MooreBellmanFord;
 import ds.graph.Path;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.ResidualNetwork;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.network.Network;

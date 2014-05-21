@@ -15,10 +15,10 @@
  */
 package algo.graph.nashflow;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
 import java.util.HashMap;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import java.util.List;
 import java.util.ArrayList;

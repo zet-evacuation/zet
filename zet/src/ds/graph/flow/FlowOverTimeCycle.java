@@ -20,7 +20,7 @@
 package ds.graph.flow;
 
 import ds.graph.DynamicPath;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Path;
 

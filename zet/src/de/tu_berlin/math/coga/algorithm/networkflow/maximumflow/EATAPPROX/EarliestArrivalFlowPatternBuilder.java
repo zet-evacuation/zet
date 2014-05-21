@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;

@@ -4,6 +4,7 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Node;
 import java.awt.Point;
 
 /**

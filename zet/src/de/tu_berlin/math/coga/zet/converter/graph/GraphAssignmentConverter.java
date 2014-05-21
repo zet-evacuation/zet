@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Person;
 import de.tu_berlin.coga.zet.model.PlanPoint;

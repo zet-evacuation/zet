@@ -18,7 +18,7 @@ package algo.graph.dynamicflow;
 import algo.graph.Flags;
 import algo.graph.util.PathDecomposition;
 import ds.graph.DynamicPath;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.StaticPath;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.flow.FlowOverTime;

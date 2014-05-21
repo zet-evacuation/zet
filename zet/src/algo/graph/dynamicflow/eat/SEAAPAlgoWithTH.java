@@ -7,7 +7,7 @@ package algo.graph.dynamicflow.eat;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;
 import java.util.LinkedList;

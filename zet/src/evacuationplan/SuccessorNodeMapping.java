@@ -20,8 +20,8 @@
 
 package evacuationplan;
 import ds.graph.flow.FlowOverTimePath;
-import ds.graph.Node;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
 import java.util.HashMap;
 
 

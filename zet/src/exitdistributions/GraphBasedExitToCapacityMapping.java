@@ -22,7 +22,7 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -20,6 +20,8 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.util.PathDecomposition;

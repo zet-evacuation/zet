@@ -6,9 +6,9 @@ import de.tu_berlin.coga.container.collection.DisjointSet;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Graph;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 

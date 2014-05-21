@@ -5,7 +5,7 @@
 package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 
 /**
  *

@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 
 
 /**

@@ -3,10 +3,10 @@ package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.collection.ArraySet;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;

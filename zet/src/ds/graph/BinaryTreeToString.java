@@ -5,7 +5,7 @@
 package ds.graph;
 
 import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableMapping;
 import java.util.LinkedList;
 import java.util.Queue;

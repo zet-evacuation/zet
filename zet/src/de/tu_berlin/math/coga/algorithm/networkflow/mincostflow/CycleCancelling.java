@@ -22,7 +22,7 @@ package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import algo.graph.staticflow.StaticTransshipment;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.ResidualNetwork;

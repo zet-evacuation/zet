@@ -35,9 +35,9 @@ import de.tu_berlin.coga.zet.model.StairArea;
 import java.util.Iterator;
 
 /**
- * The {@code RoomRaster} class provides rasterization of a {@link ds.z.Room}
+ * The {@code RoomRaster} class provides rasterization of a {@link de.tu_berlin.coga.zet.model.Room}
  * object. The squares of the raster have to be of the type {@link RoomRaster}
- * which allows to describe the {@link ds.z.Area} in which a square lies.
+ * which allows to describe the {@link de.tu_berlin.coga.zet.model.Area} in which a square lies.
  *
  * @param <T> the type of the used raster, have to be at least
  * {@link RoomRasterSquare} objects
@@ -45,9 +45,9 @@ import java.util.Iterator;
  */
 public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 
-	/** The {@link ds.z.Floor} of this room. */
+	/** The {@link de.tu_berlin.coga.zet.model.Floor} of this room. */
 	Floor floor;
-	/** The {@link ds.z.Room} that is rastered. Redundant save helps avoiding
+	/** The {@link de.tu_berlin.coga.zet.model.Room} that is rastered. Redundant save helps avoiding
 	 * casts. */
 	Room r;
 	LinkedList<T> accessibleSquares;

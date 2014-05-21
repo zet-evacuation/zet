@@ -21,10 +21,10 @@
 package algo.graph.staticflow;
 
 import ds.graph.problem.MaximumFlowProblem;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.ResidualNetwork;
 import java.util.LinkedList;
 import java.util.List;

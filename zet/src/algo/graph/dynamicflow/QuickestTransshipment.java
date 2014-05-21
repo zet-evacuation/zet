@@ -15,10 +15,10 @@
  */
 package algo.graph.dynamicflow;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  * The class {@code QuickestTransshipment} calculates the smallest

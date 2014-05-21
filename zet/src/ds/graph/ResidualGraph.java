@@ -4,6 +4,7 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
 

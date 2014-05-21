@@ -7,11 +7,11 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Graph;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import gui.visualization.draw.graph.GLNashNode;
 
 /**

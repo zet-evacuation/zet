@@ -23,7 +23,7 @@ package zet.tasks;
 import de.tu_berlin.coga.zet.model.Project;
 
 /**
- * Performs the rasterization of a {@link ds.z.BuildingPlan}.
+ * Performs the rasterization of a {@link de.tu_berlin.coga.zet.model.BuildingPlan}.
  * @author Jan-Philipp Kappmeier
  */
 public class RasterizeTask implements Runnable {

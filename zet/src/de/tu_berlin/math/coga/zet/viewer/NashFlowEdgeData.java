@@ -23,7 +23,7 @@ import java.util.Iterator;
  */
 public class NashFlowEdgeData implements Iterable<FlowData> {
 	/** A list of the Nash flows on the edge. One element for each iteration. */
-	ArrayList<FlowData> flowDatas = new ArrayList<FlowData>();
+	ArrayList<FlowData> flowDatas = new ArrayList<>();
 	/** The capacity of the edge. */
 	double capacity = 1;
 	/** The capacity of the edge. */

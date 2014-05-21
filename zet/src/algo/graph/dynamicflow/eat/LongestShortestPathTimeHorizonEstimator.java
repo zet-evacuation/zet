@@ -22,7 +22,7 @@ package algo.graph.dynamicflow.eat;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  *

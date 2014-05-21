@@ -24,7 +24,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResults;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLFlowGraph;
 import java.util.HashMap;

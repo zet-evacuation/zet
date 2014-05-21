@@ -17,7 +17,7 @@
 package ds.graph.flow;
 
 import ds.graph.GraphLocalization;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.StaticPath;
 import java.util.Iterator;

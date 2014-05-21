@@ -4,7 +4,7 @@
  */
 package algo.graph.reduction;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.List;
 import java.util.Vector;
 

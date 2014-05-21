@@ -21,7 +21,7 @@
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  *

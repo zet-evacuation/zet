@@ -10,6 +10,7 @@ package ds.graph;
  * @author Sebastian Schenker
  */
 
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import java.util.Iterator;
 import java.util.LinkedList;

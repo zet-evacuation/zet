@@ -14,6 +14,8 @@ import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.Earlie
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
 import de.tu_berlin.coga.common.debug.Debug;
+import de.tu_berlin.coga.common.util.Quantity;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -22,8 +24,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.StaticPath;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
@@ -415,7 +417,7 @@ public class CZET {
 		}
 	}
 
-	MedianCalculator<Long> m;
+	MedianCalculator<Quantity<TimeUnits>> m;
 
 	private void computeZET() throws IOException {
 		// Try to load some properties
@@ -474,56 +476,56 @@ public class CZET {
 					log.info( "\n\n" );
 					log.info( "Runtimes for conversion:" );
 					String out = "";
-					for( long j : m.getValues( 1 ) )
+					for( Quantity<TimeUnits> j : m.getValues( 1 ) )
 						out += j + "\t";
 					log.info( out );
 					log.info( "" );
 
 					log.fine( "Outliers:" );
 					out = "";
-					for( long l : m.getOutlier( 1 ) )
+					for( Quantity<TimeUnits> l : m.getOutlier( 1 ) )
 						out += l + "\t";
 					log.fine( out );
 					log.fine( "" );
 
 					log.finer( "Valid Runtimes for Conversion:" );
 					out = "";
-					for( long l : m.getValid( 1 ) )
+					for( Quantity<TimeUnits> l : m.getValid( 1 ) )
 						out += l + "\t";
 					log.finer( out );
 					log.finer( "" );
 
 					log.info( "Runtimes for EAT:" );
 					out = "";
-					for( long l : m.getValues( 0 ) )
+					for( Quantity<TimeUnits> l : m.getValues( 0 ) )
 						out += l + "\t";
 					log.info( out );
 					log.info( "" );
 
 					log.fine( "Outliers:" );
 					out = "";
-					for( long l : m.getOutlier( 0 ) )
+					for( Quantity<TimeUnits> l : m.getOutlier( 0 ) )
 						out += l + "\t";
 					log.fine( out );
 					log.fine( "" );
 
 					log.finer( "Valid Runtimes for EAT:" );
 					out = "";
-					for( long l : m.getValid( 0 ) )
+					for( Quantity<TimeUnits> l : m.getValid( 0 ) )
 						out += l + "\t";
 					log.finer( out );
 					log.finer( "" );
 
 					log.info( "Average conversion:" );
 					long total = 0;
-					for( Long r : m.getValid( 1 ) )
-						total += r;
+					for( Quantity<TimeUnits> r : m.getValid( 1 ) )
+						total += r.getValue();
 					log.info( "" + total / (double)validCount );
 					total = 0;
 					assert validCount == m.getValid( 1 ).size();
 					log.info( "Average EAT:" );
-					for( Long r : m.getValid( 0 ) )
-						total += r;
+					for( Quantity<TimeUnits> r : m.getValid( 0 ) )
+						total += r.getValue();
 					log.log( Level.INFO, "{0}", total / (double)validCount );
 				}
 				break;
@@ -556,7 +558,7 @@ public class CZET {
 				};
 				RunnableFuture<Void> thread = a.convertGraph( pr, projectConverter );
 
-				long cr = 0;
+				Quantity<TimeUnits> cr = null;
 				try { // Wait for the thread to end
 					thread.get();
 
@@ -625,7 +627,7 @@ public class CZET {
 		switch( computationMode ) {
 			case EarliestArrivalFlow:
 				log.fine( "Perform EAT" );
-				Long[] rt = new Long[2];
+				Quantity<TimeUnits>[] rt = new Quantity[2];
 				FlowOverTimeImplicit fot = eat( eafp, rt );
 				rt[1] = end-start;
 				m.addData( rt );
@@ -852,7 +854,7 @@ public class CZET {
 		};
 		RunnableFuture<Void> thread = a.convertGraph( pr, projectConverter );
 
-		long cr = 0;
+		Quantity<TimeUnits> cr = null;
 		try { // Wait for the thread to end
 			thread.get();
 
@@ -882,7 +884,7 @@ public class CZET {
 		EarliestArrivalFlowProblem eafp = nfm.getEAFP();
 		eafp.setTimeHorizon( 254 );
 
-		Long[] rt = new Long[2];
+		Quantity<TimeUnits>[] rt = new Quantity[2];
 		eat( eafp, rt );
 		//rt[0] = algo.getRuntime();
 		rt[1] = cr;
@@ -896,7 +898,7 @@ public class CZET {
 	 * @param rt
 	 * @return
 	 */
-	private FlowOverTimeImplicit eat( EarliestArrivalFlowProblem eafp, Long[] rt ) {
+	private FlowOverTimeImplicit eat( EarliestArrivalFlowProblem eafp, Quantity<TimeUnits>[] rt ) {
 		log.fine( "Earliest Arrival computation starts..." );
 
 		if( eafp.getTimeHorizon() <= 0 ) {

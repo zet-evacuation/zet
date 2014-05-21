@@ -16,9 +16,10 @@
 
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ListSequence;
-import de.tu_berlin.coga.graph.PredecessorMap;
+import de.tu_berlin.coga.graph.util.PredecessorMap;
 import java.util.Iterator;
 
 /**

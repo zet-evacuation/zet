@@ -16,6 +16,8 @@
 
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.network.Network;
 import ds.graph.network.NetworkInterface;

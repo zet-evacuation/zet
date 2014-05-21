@@ -21,9 +21,9 @@ package algo.graph.dynamicflow.eat;
 
 //import cern.colt.Arrays;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;

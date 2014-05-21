@@ -20,10 +20,10 @@
 package old;
 
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 //import ds.graph.flow.FlowOverTimeEdgeSequence;
 import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimeEdgeSequence;

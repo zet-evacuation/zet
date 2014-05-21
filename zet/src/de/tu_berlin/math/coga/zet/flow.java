@@ -26,6 +26,7 @@ import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.Quantity;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
@@ -34,7 +35,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.problem.MaximumFlowProblem;
@@ -425,9 +426,9 @@ public class flow implements AlgorithmListener {
 
 	int index = 1;
 
-	long end;
-	long start = 0;
-	long pathDecompositionStart = 0;
+	Quantity<TimeUnits> end;
+	Quantity<TimeUnits> start = null;
+	Quantity<TimeUnits> pathDecompositionStart = null;
 	@Override
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
@@ -443,14 +444,14 @@ public class flow implements AlgorithmListener {
 			start = event.getEventTime();
 		} else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
-			final long end = event.getEventTime();
+			final Quantity<TimeUnits> end = event.getEventTime();
 			System.out.println( "PathDecomposition runtime: " + Formatter.formatUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
 			try {
-				System.out.println( "Overall runtime flow computation: " + Formatter.formatUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+				System.out.println( "Overall runtime flow computation: " + event.getAlgorithm().getRuntime() );
 			} catch( IllegalStateException ex ) {
 				System.out.println( "The illegal state exception occured once again." );
 			}
-			System.out.println( "Fraction of path decomposition: " + ( Formatter.formatPercent( (end-pathDecompositionStart)/(double)event.getAlgorithm().getRuntime() )) );
+			System.out.println( "Fraction of path decomposition: " + ( Formatter.formatPercent( (end-pathDecompositionStart)/(double)event.getAlgorithm().getRuntime().getValue() )) );
 		} else if( event instanceof AlgorithmStatusEvent ) {
 			if( ((AlgorithmStatusEvent)event).getMessage().equals( "INIT_PATH_DECOMPOSITION" ) ) {
 				pathDecompositionStart = event.getEventTime();

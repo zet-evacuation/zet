@@ -21,9 +21,9 @@
 package de.tu_berlin.math.coga.algorithm.flowovertime.maxflow;
 
 import ds.graph.problem.MaximumFlowProblem;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.NetworkInterface;
 import java.util.List;
 

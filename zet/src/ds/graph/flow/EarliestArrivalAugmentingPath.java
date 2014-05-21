@@ -19,7 +19,7 @@
  */
 package ds.graph.flow;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.LinkedList;
 import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;

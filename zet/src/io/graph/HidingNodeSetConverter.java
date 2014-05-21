@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.coga.container.collection.HidingSet;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  *

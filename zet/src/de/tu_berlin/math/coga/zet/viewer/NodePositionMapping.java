@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.viewer;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 
 /**

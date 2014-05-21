@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;

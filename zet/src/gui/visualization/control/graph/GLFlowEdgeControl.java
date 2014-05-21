@@ -17,7 +17,7 @@ package gui.visualization.control.graph;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import gui.visualization.draw.graph.GLFlowEdge;

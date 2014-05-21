@@ -43,7 +43,7 @@ public class RoomConverter extends PlanPolygonConverter {
 	}
 
 	/**
-	 * Checks whether an object is of the type {@link ds.z.Room} and thus can be
+	 * Checks whether an object is of the type {@link de.tu_berlin.coga.zet.model.Room} and thus can be
 	 * converted by this class.
 	 * @param type the object
 	 * @return {@code true} if the object can be converted
@@ -59,7 +59,7 @@ public class RoomConverter extends PlanPolygonConverter {
 	}
 
 	/**
-	 * Allows reading an {@link ds.z.Room} class. Due to format extensions,
+	 * Allows reading an {@link de.tu_berlin.coga.zet.model.Room} class. Due to format extensions,
 	 * needed lists for stair areas and teleport areas are created if they are
 	 * missing. Also, a convenient-copy of all lists in an array is created as it
 	 * is not stored in the file.

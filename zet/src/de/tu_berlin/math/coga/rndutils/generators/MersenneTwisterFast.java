@@ -77,9 +77,9 @@ import java.util.Random;
  * java.util.Random -- namely, it seeds based on the current time in
  * milliseconds.
  *
- * <p><b>Changes Since V4:</b> New initialization algorithms. See (see <a
- * href="http://www.math.keio.ac.jp/matumoto/MT2002/emt19937ar.html"</a>
- * http://www.math.keio.ac.jp/matumoto/MT2002/emt19937ar.html</a>)
+ * <p><b>Changes Since V4:</b> New initialization algorithms. See <a
+ * href="http://www.math.keio.ac.jp/matumoto/MT2002/emt19937ar.html"
+ * http://www.math.keio.ac.jp/matumoto/MT2002/emt19937ar.html</a>.
  *
  * <p>The MersenneTwister code is based on standard MT19937 C/C++ code by Takuji
  * Nishimura, with suggestions from Topher Cooper and Marc Rieffel, July 1997.
@@ -691,7 +691,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable, GeneralRand
 
 	/**
 	 * Returns a long drawn uniformly from 0 to n-1. Suffice it to say, n must be
-	 * > 0, or an IllegalArgumentException is raised.
+	 * &gt; 0, or an IllegalArgumentException is raised.
 	 */
 	public final long nextLong( final long n ) {
 		if( n <= 0 )
@@ -996,7 +996,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable, GeneralRand
 
 	/**
 	 * Returns an integer drawn uniformly from 0 to n-1. Suffice it to say, n must
-	 * be > 0, or an IllegalArgumentException is raised.
+	 * be &gt; 0, or an IllegalArgumentException is raised.
 	 */
 	@Override
 	public final int nextInt( final int n ) {

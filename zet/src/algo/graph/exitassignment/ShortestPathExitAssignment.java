@@ -25,7 +25,7 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 

@@ -11,7 +11,7 @@ package zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;

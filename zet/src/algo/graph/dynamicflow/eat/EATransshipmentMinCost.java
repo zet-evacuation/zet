@@ -18,11 +18,11 @@ package algo.graph.dynamicflow.eat;
 import algo.graph.dynamicflow.DynamicTransshipment;
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.TransshipmentFramework;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.flow.FlowOverTime;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  * The class {@code EATransshipment} solves two variants

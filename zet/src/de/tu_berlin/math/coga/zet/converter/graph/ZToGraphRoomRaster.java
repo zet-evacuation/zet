@@ -20,7 +20,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRaster;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.zet.model.Room;
 
 /**

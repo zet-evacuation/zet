@@ -71,7 +71,7 @@ abstract public class AbstractPolygon<E extends AbstractFloor> extends JComponen
 
 
 	/**
-	 * Returns the {@link ds.z.PlanPolygon} represented by this instance.
+	 * Returns the {@link de.tu_berlin.coga.zet.model.PlanPolygon} represented by this instance.
 	 * @return the polygon
 	 */
 	public final PlanPolygon<?> getPlanPolygon () { return myPolygon; }

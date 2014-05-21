@@ -20,8 +20,8 @@
 package algo.graph.dynamicflow.eat;
 
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;

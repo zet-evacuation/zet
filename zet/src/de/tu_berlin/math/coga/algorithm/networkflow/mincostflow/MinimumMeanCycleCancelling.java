@@ -20,7 +20,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.StaticPath;

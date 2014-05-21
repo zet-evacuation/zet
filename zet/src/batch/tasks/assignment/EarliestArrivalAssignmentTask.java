@@ -32,7 +32,7 @@ import de.tu_berlin.coga.zet.model.Project;
  * @author Jan-Philipp Kappmeier
  */
 public class EarliestArrivalAssignmentTask extends AssignmentTask {
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 	/** The used assignment for the ca run. */
 	private Assignment assignment;
