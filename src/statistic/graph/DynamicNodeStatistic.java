@@ -19,8 +19,8 @@
  */
 package statistic.graph;
 
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import static statistic.graph.DynamicEdgeStatistic.*;
 
 /**

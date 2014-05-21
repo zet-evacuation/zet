@@ -16,6 +16,7 @@
 
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
 import java.util.ArrayList;
 import java.util.Iterator;
 

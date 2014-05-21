@@ -7,7 +7,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Graph;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import gui.visualization.draw.graph.GLGraph;
 import opengl.framework.abs.AbstractControl;
 import opengl.framework.abs.DrawableControlable;

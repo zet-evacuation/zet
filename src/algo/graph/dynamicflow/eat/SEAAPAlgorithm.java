@@ -24,7 +24,7 @@ import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.common.algorithm.AlgorithmStatusEvent;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;

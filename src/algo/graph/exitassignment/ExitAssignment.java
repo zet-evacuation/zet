@@ -22,7 +22,7 @@ package algo.graph.exitassignment;
 
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
 

@@ -12,6 +12,7 @@ import algo.graph.exitassignment.ExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.Quantity;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
@@ -91,7 +92,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	public void convertBuildingPlan( ) {
 		convertBuildingPlan( null );
 	}
-	long conversionTime = 0;
+	Quantity<TimeUnits> conversionTime;
 	public void convertBuildingPlan( PropertyChangeListener pcl ) {
 		final BuildingPlanConverter bpc = new BuildingPlanConverter();
 		bpc.setProblem( project.getBuildingPlan() );
@@ -115,7 +116,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		//buildingResults = bpc.getSolution();
 	}
 
-	public long getConversionRuntime() {
+	public Quantity<TimeUnits> getConversionRuntime() {
 		return conversionTime;
 	}
 

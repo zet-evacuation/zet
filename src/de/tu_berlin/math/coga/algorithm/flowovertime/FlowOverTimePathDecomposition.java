@@ -6,9 +6,9 @@ package de.tu_berlin.math.coga.algorithm.flowovertime;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.container.priority.MinHeap;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimePath;

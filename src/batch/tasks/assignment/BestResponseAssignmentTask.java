@@ -37,7 +37,7 @@ import zet.tasks.CellularAutomatonAlgorithms;
  *
  */
 public class BestResponseAssignmentTask extends AssignmentTask {
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 	/** The batch object which stores the calculated results. */
 	private BatchResultEntry res;

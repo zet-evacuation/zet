@@ -17,8 +17,8 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.ResidualGraph;
 import ds.graph.flow.RationalMaxFlow;
 import ds.graph.network.DynamicNetwork;

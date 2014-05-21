@@ -32,7 +32,7 @@ import de.tu_berlin.coga.zet.model.ConcreteAssignment;
  * @author Timon Kelter
  */
 public class ShortestPathAssignmentTask extends AssignmentTask {
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 	/** The used assignment for the ca run. */
 	private Assignment assignment;

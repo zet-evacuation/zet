@@ -1,8 +1,8 @@
 package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.DynamicNetwork;
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -4,7 +4,7 @@
  */
 package ds.graph.network;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**

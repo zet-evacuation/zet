@@ -36,7 +36,7 @@ public class CreateCellularAutomatonTask implements Runnable {
 	private BatchResultEntry res;
 	/** The number of the run, used for accessing the result in {@link res} */
 	private int runNumber;
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 
 	/**

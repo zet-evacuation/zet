@@ -2,7 +2,7 @@
 package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 
 /**
  *
@@ -13,7 +13,7 @@ public class UndirectedTree {
 
   private IdentifiableCollection<Edge> edges;
 
-  public UndirectedTree( IdentifiableCollection<Edge> edges  ) {
+  public UndirectedTree( IdentifiableCollection<Edge> edges ) {
     this.edges = edges;
   }
 

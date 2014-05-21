@@ -170,7 +170,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
 	private ZControl projectControl;
-	/** The currently visible {@link ds.z.Floor} */
+	/** The currently visible {@link de.tu_berlin.coga.zet.model.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
 	private FloorComboBox<Floor> floorSelector;
@@ -388,7 +388,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	}
 
 	/**
-	 * Sets the z {@link ds.z.Project} that is displayed in the edit view.
+	 * Sets the z {@link de.tu_berlin.coga.zet.model.Project} that is displayed in the edit view.
 	 * @param projectControl
 	 */
 	final public void displayProject( ZControl projectControl ) {

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  * <p>A {@code RasterSquare} is an element of a {@link RoomRaster} of a
- * {@link ds.z.PlanPolygon}, especially for a {@link ds.z.Room}.</p>
+ * {@link de.tu_berlin.coga.zet.model.PlanPolygon}, especially for a {@link de.tu_berlin.coga.zet.model.Room}.</p>
  * <p>The polygon is divided in a raster of squares. Each square can intersect
  * the polyonom, or not and has a position in the global coordinate system of
  * the rasterized polygon.</p>
@@ -43,16 +43,16 @@ public class RasterSquare {
 	 * @author Jan-Philipp Kappmeier
 	 */
 	public enum FieldIntersectType {
-		/** The {@link RasterSquare} is completely inside the {@link ds.z.PlanPolygon}. */
+		/** The {@link RasterSquare} is completely inside the {@link de.tu_berlin.coga.zet.model.PlanPolygon}. */
 		Inside,
-		/** The {@link RasterSquare} intersects the {@link ds.z.PlanPolygon} but is not contained completely in it. */
+		/** The {@link RasterSquare} intersects the {@link de.tu_berlin.coga.zet.model.PlanPolygon} but is not contained completely in it. */
 		Intersects,
-		/** The {@link RasterSquare} is completely outside the {@link ds.z.PlanPolygon}. */
+		/** The {@link RasterSquare} is completely outside the {@link de.tu_berlin.coga.zet.model.PlanPolygon}. */
 		Outside;
 	}
-	/** The {@link ds.z.PlanPolygon} describing the coordinates of this square. */
+	/** The {@link de.tu_berlin.coga.zet.model.PlanPolygon} describing the coordinates of this square. */
 	private PlanPolygon<?> square;
-	/** The {@link ds.z.PlanPolygon} that is rasterized. */
+	/** The {@link de.tu_berlin.coga.zet.model.PlanPolygon} that is rasterized. */
 	private PlanPolygon<?> p;
 	/** Describes the the squares intersection status. */
 	private FieldIntersectType intersectType;
@@ -69,7 +69,7 @@ public class RasterSquare {
 	private int stairPotential;
 
 	/**
-	 * Creates a new instance of {@code RasterSquare} belonging to a {@link ds.z.PlanPolygon}.
+	 * Creates a new instance of {@code RasterSquare} belonging to a {@link de.tu_berlin.coga.zet.model.PlanPolygon}.
 	 * @param p the polygon to which this square belongs
 	 * @param column the column-index of this square in the array of raster-squares, starting with 0
 	 * @param row the row-index of this square in the array of raster-squares, starting with 0
@@ -98,7 +98,7 @@ public class RasterSquare {
 	}
 
 	/**
-	 * Checks whether this square intersects a {@link ds.z.PlanPolygon} or not. The
+	 * Checks whether this square intersects a {@link de.tu_berlin.coga.zet.model.PlanPolygon} or not. The
 	 * status is stored and can be accessed via {@link #getIntersectType()}. The
 	 * polygon has to be set in the constructor.
 	 */

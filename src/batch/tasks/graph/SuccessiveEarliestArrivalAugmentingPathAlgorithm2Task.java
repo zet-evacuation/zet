@@ -45,7 +45,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task extends Netwo
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
 		//AlgorithmTask.getInstance().publish(100, result, "");
-		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
+		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime().getValue() / 1000000 ) );
 		return df;
 	}
 }

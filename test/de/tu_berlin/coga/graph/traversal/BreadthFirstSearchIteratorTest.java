@@ -2,7 +2,6 @@
 package de.tu_berlin.coga.graph.traversal;
 
 import de.tu_berlin.coga.common.util.Helper;
-import de.tu_berlin.coga.graph.EdgeNodePair;
 import java.util.Arrays;
 import org.junit.Test;
 

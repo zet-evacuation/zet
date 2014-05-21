@@ -22,8 +22,8 @@
 package ds.graph.flow;
 
 import ds.graph.problem.ThinFlowProblem;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**

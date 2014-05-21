@@ -24,7 +24,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.Iterator;

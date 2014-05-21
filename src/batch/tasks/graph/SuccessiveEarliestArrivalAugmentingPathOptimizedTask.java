@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * EATransshipmentTask.java
- * 
- */
+
 package batch.tasks.graph;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
@@ -58,7 +55,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
 		System.out.println( result );
 		System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
 		//AlgorithmTask.getInstance().publish(100, result, "");
-		System.out.println( "Sending the flow units required " + Formatter.formatUnit( getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+		System.out.println( "Sending the flow units required " + getAlgorithm().getRuntime() );
 		return df;
 	}
 }

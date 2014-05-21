@@ -26,7 +26,7 @@ import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.dynamicflow.eat.TimeHorizonBounds;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;

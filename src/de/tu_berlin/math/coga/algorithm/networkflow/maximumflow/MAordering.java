@@ -4,10 +4,10 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.List;
 import java.util.ArrayList;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import java.util.HashMap;
 import ds.graph.ResidualGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;

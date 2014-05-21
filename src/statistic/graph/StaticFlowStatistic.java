@@ -20,7 +20,7 @@
 package statistic.graph;
 
 import ds.graph.flow.FlowOverTimePath;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.flow.FlowOverTimeEdge;
 import static statistic.graph.NodeFlowStatistic.*;
 

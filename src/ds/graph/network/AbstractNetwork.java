@@ -16,12 +16,12 @@
 
 package ds.graph.network;
 
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.Path;
 
 /**
- * The {@code AbstractNetwork</class> provides an implementation of a directed graph
+ * The {@code AbstractNetwork} provides an implementation of a directed graph
  * optimized for use by flow algorithms. Examples of these optimizations
  * include use of array based data structures for edges and nodes in order to
  * provide fast access, as well as the possiblity to hide edges and nodes (which

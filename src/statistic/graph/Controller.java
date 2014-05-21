@@ -21,9 +21,9 @@ package statistic.graph;
 
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;

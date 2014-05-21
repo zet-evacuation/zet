@@ -5,8 +5,8 @@
 package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;

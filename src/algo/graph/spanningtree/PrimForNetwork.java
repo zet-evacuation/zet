@@ -6,13 +6,13 @@ package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.network.DynamicNetwork;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.priority.MinHeap;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.Random;
 
 /**

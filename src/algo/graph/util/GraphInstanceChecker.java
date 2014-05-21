@@ -18,7 +18,7 @@ package algo.graph.util;
 
 import algo.graph.Flags;
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;

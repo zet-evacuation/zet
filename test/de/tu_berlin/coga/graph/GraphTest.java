@@ -1,7 +1,6 @@
 
 package de.tu_berlin.coga.graph;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
 import ds.graph.network.Network;
 
 

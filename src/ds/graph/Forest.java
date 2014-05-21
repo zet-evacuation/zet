@@ -16,6 +16,8 @@
 
 package ds.graph;
 
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import com.thoughtworks.xstream.annotations.XStreamAlias;

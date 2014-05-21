@@ -14,14 +14,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class GLGraphFloor
- * Erstellt 08.05.2008, 01:30:50
- */
-
 package gui.visualization.draw.graph;
 
-import gui.visualization.control.graph.GLFlowGraphControl;
 import gui.visualization.control.graph.GLGraphFloorControl;
 import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;

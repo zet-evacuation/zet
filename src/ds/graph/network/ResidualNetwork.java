@@ -19,7 +19,7 @@
  */
 package ds.graph.network;
 
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.Mappings;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;

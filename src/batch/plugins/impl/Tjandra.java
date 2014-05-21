@@ -52,7 +52,7 @@ public class Tjandra implements AlgorithmicPlugin<EarliestArrivalFlowProblem, Pa
 			System.out.println( result );
 			System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
 			//AlgorithmTask.getInstance().publish(100, result, "");
-			System.out.println( "Sending the flow units required " + Formatter.formatUnit( getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+			System.out.println( "Sending the flow units required " + getAlgorithm().getRuntime() );
 			return df;
 			}
 		};

@@ -4,7 +4,7 @@
  */
 package ds.graph.network;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  * A special {@code Network} extending an static network, i.e. a network that

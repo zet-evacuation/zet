@@ -18,7 +18,7 @@ package algo.graph.dynamicflow.eat;
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.TransshipmentWithTimeHorizon;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.TimeExpandedNetwork;
 

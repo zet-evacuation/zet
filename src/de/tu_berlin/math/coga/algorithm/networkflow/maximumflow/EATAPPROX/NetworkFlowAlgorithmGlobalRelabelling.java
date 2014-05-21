@@ -7,8 +7,8 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;

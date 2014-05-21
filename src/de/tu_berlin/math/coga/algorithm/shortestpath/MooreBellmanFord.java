@@ -17,11 +17,11 @@
 package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 import ds.graph.GraphLocalization;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.Path;
 import ds.graph.StaticPath;
 

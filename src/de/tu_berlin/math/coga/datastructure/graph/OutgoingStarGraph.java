@@ -5,7 +5,7 @@
 
 package de.tu_berlin.math.coga.datastructure.graph;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 
 /**
  * Provides means to access a graph or network in the manner of outgoing star

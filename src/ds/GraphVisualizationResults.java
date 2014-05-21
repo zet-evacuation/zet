@@ -22,7 +22,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;

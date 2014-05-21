@@ -23,7 +23,7 @@ package ds.graph.flow;
 
 import ds.graph.problem.NashFlowProblem;
 import java.util.Vector;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**

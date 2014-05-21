@@ -15,8 +15,8 @@
  */
 package algo.graph.thinflow;
 
-import ds.graph.Node;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
 import ds.graph.network.DynamicNetwork;
 

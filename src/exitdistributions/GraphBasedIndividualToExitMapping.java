@@ -33,7 +33,7 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
 import ds.ca.evac.DeathCause;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 
 /**

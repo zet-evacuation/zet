@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.ClusterAlgo;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import algo.graph.spanningtree.MinSpanningTreeProblem;

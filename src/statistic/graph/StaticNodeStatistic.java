@@ -19,7 +19,7 @@
  */
 package statistic.graph;
 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import static statistic.graph.DynamicNodeStatistic.*;
 
 /**

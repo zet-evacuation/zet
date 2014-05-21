@@ -25,9 +25,9 @@ import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighe
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;

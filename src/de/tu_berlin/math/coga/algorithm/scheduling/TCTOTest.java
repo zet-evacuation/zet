@@ -6,8 +6,8 @@ package de.tu_berlin.math.coga.algorithm.scheduling;
 
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EdmondsKarp;
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import ds.graph.Edge;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;

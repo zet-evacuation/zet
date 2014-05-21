@@ -17,11 +17,11 @@
 package ds.graph.network;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.DirectedGraph;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

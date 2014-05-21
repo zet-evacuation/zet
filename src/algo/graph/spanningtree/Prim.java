@@ -5,9 +5,9 @@
 package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm; 
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import java.util.Random;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.network.DynamicNetwork;
 import de.tu_berlin.coga.graph.Graph;

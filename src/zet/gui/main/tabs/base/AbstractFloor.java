@@ -63,7 +63,7 @@ public class AbstractFloor extends JPanel {
 
 	/**
 	 * Updates the floor offset values. The size is, if
-	 * necessary, enlarged by the value given by getBorderWidth().</p>
+	 * necessary, enlarged by the value given by getBorderWidth().
 	 *
 	 * @param floor The Floor that should be displayed
 	 */

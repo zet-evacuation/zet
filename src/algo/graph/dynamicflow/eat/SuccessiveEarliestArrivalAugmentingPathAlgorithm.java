@@ -21,7 +21,7 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.LinkedList;
 import de.tu_berlin.coga.common.algorithm.Algorithm;

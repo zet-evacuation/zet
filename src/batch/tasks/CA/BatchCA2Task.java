@@ -45,7 +45,7 @@ import zet.tasks.CellularAutomatonAlgorithms;
  * @author Jan-Philipp Kappmeier
  */
 public class BatchCA2Task implements Runnable {
-	/** The {@link ds.z.Project} */
+	/** The {@link de.tu_berlin.coga.zet.model.Project} */
 	private Project project;
 	/** The used assignment for the ca run. */
 	private Assignment assignment;

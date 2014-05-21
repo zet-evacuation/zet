@@ -14,11 +14,11 @@ import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
-import ds.graph.Edge;
+import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import de.tu_berlin.coga.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.network.Network;
 import java.io.BufferedReader;
@@ -174,7 +174,7 @@ public class FileFlow implements AlgorithmListener {
 
 
 
-    System.out.println( Formatter.formatUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
+    System.out.println( algo.getRuntime() );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
@@ -195,7 +195,7 @@ public class FileFlow implements AlgorithmListener {
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
-			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+			System.out.println( "Laufzeit Flussalgorithmus: " + event.getAlgorithm().getRuntime() );
 		else
 			System.out.println( event.toString() );
 	}
