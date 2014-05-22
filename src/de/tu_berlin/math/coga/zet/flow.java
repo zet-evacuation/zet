@@ -383,23 +383,23 @@ public class flow implements AlgorithmListener {
 	private void computeMaximumFlow() {
 
 		DimacsReader dl = new DimacsReader( inputFileName );
-		start = System.nanoTime();
+		start = new Quantity<>( System.nanoTime(), TimeUnits.NanoSeconds );
 
 		dl.load();
-		end = System.nanoTime();
-		System.out.println( "Loading: " + Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
+		end = new Quantity<>( System.nanoTime(), TimeUnits.NanoSeconds );
+		System.out.println( "Loading: " + end.sub( start ) );
 
 		MaximumFlowProblem mfp = dl.getMaximumFlowProblem();
 		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 		hipr.setProblem( mfp );
-		start = System.nanoTime();
+		start = new Quantity<>( System.nanoTime(), TimeUnits.NanoSeconds );
 		hipr.run();
-		end = System.nanoTime();
+		end =  new Quantity<>( System.nanoTime(), TimeUnits.NanoSeconds );
 		System.out.println( "Init: " + Formatter.formatUnit( hipr.getInitTime(), TimeUnits.NanoSeconds ) );
 		System.out.println( "MaxFlow: " + Formatter.formatUnit( hipr.getPhase1Time(), TimeUnits.NanoSeconds ) );
 		System.out.println( "Cut: " + Formatter.formatUnit( hipr.getPhase2Time(), TimeUnits.NanoSeconds ) );
 		System.out.println( "" );
-		System.out.println( "Overall: " + Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( "Overall: " + end.sub( start ) );
 		System.out.println();
 		System.out.println( "Flow value: " + hipr.getFlowValue() );
 		System.out.println();
@@ -445,17 +445,17 @@ public class flow implements AlgorithmListener {
 		} else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
 			final Quantity<TimeUnits> end = event.getEventTime();
-			System.out.println( "PathDecomposition runtime: " + Formatter.formatUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
+			System.out.println( "PathDecomposition runtime: " + end.sub( pathDecompositionStart ) );
 			try {
 				System.out.println( "Overall runtime flow computation: " + event.getAlgorithm().getRuntime() );
 			} catch( IllegalStateException ex ) {
 				System.out.println( "The illegal state exception occured once again." );
 			}
-			System.out.println( "Fraction of path decomposition: " + ( Formatter.formatPercent( (end-pathDecompositionStart)/(double)event.getAlgorithm().getRuntime().getValue() )) );
+			System.out.println( "Fraction of path decomposition: " + ( Formatter.formatPercent( (end.sub( pathDecompositionStart ).getValue())/(double)event.getAlgorithm().getRuntime().getValue() ) ) );
 		} else if( event instanceof AlgorithmStatusEvent ) {
 			if( ((AlgorithmStatusEvent)event).getMessage().equals( "INIT_PATH_DECOMPOSITION" ) ) {
 				pathDecompositionStart = event.getEventTime();
-				System.out.println( "\nSEAAP runtime: " + Formatter.formatUnit( pathDecompositionStart - start, TimeUnits.MilliSeconds ) );
+				System.out.println( "\nSEAAP runtime: " + pathDecompositionStart.sub( start ) );
 			}
 		} else
 			;//System.out.println( event.toString() );
