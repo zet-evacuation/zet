@@ -629,7 +629,7 @@ public class CZET {
 				log.fine( "Perform EAT" );
 				Quantity<TimeUnits>[] rt = new Quantity[2];
 				FlowOverTimeImplicit fot = eat( eafp, rt );
-				rt[1] = end-start;
+				rt[1] = new Quantity( end-start, TimeUnits.NanoSeconds );
 				m.addData( rt );
 
 
@@ -927,22 +927,22 @@ public class CZET {
 		log.log( Level.INFO, "Flow amount: {0}", algo.getSolution().getFlowAmount());
 		log.log( Level.INFO, "Runtime: {0}", algo.getRuntimeAsString());
 
-		
+
 		EarliestArrivalFlowPattern pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
 		log.log( Level.INFO, "Pattern: {0}", pattern );
 
-		
+
 		// transform the transit times
 		// compute shortest paths
-		
+
 		Dijkstra dijkstra;
 		Network n = (Network)eafp.getNetwork();
-		
+
 
 		IdentifiableIntegerMapping<Edge> transitTimes;
 
 		transitTimes = eafp.getTransitTimes();
-		
+
 		ExtendedNetwork ex = new ExtendedNetwork( n, 1, eafp.getSources().size() );
 		Node superNode = ex.getFirstNewNode();
 
@@ -953,31 +953,31 @@ public class CZET {
 			transitTimes.set( newEdge, 0 );
 		}
 
-		
-		
+
+
 		dijkstra = new Dijkstra( ex, eafp.getTransitTimes(), superNode );
 		dijkstra.run();
-		
+
 		dijkstra.getShortestPathTree();
 		log.info( "Solution: " + dijkstra.getShortestPathTree() );
-		
-		
-		
+
+
+
 		transitTimes = eafp.getTransitTimes();
 		IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>( transitTimes );
-		
+
 		for( Edge e : eafp.getNetwork().edges() ) {
 			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
 			log.log( Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
-			newTransitTimes.set( e, newTransit );			
+			newTransitTimes.set( e, newTransit );
 		}
-		
+
 		log.log( Level.INFO, "Old transit: {0}", transitTimes);
 		log.log( Level.INFO, "new transit: {0}", newTransitTimes);
-		
+
 
 		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
-		
+
 		algo = new SEAAPAlgorithm();
 
 		algo.setProblem( eafp );
@@ -996,15 +996,15 @@ public class CZET {
 		log.log( Level.INFO, "Flow amount: {0}", algo.getSolution().getFlowAmount());
 		log.log( Level.INFO, "Runtime: {0}", algo.getRuntimeAsString());
 
-		
+
 		pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
 		log.log( Level.INFO, "Pattern: {0}", pattern );
 
-		
+
 		pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, transitTimes, oldNeededTimeHorizon );
 		log.log( Level.INFO, "Pattern with original transit times: {0}", pattern );
-		
-		
+
+
 		rt[0] = algo.getRuntime();
 		return algo.getSolution();
 	}
