@@ -4,11 +4,11 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.io.BufferedWriter;
 import java.io.File;

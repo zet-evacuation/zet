@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.util.HashMap;
 import java.util.Iterator;

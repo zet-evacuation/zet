@@ -4,13 +4,13 @@
  */
 package batch.plugins.impl;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 

@@ -19,16 +19,16 @@
  */
 package old;
 
-import ds.graph.ImplicitTimeExpandedResidualNetwork;
+import de.tu_berlin.coga.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.Node;
 //import ds.graph.flow.FlowOverTimeEdgeSequence;
-import ds.graph.flow.FlowOverTimeEdge;
-import ds.graph.flow.FlowOverTimeEdgeSequence;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdgeSequence;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;

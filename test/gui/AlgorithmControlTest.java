@@ -5,6 +5,8 @@
 package gui;
 
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.coga.common.util.Quantity;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -135,7 +137,7 @@ public class AlgorithmControlTest {
 		System.out.println( "getConversionRuntime" );
 		AlgorithmControl instance = null;
 		long expResult = 0L;
-		long result = instance.getConversionRuntime();
+		Quantity<TimeUnits> result = instance.getConversionRuntime();
 		assertEquals( expResult, result );
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );

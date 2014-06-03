@@ -9,7 +9,7 @@
  */
 package zet;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.Node;
 import java.io.FileNotFoundException;

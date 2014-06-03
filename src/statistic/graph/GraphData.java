@@ -16,16 +16,16 @@
 
 package statistic.graph;
 
-import algo.graph.util.PathComposition;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.flow.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.classic.PathComposition;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.FlowOverTimeEdge;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
 import java.util.HashMap;
 import java.util.Map;
 

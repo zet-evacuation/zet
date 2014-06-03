@@ -4,15 +4,15 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.tasks.ProcessUpdateMessage;
 import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import javax.swing.SwingWorker;
 
 /**

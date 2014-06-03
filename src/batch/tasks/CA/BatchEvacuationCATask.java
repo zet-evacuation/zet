@@ -34,7 +34,7 @@ import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;

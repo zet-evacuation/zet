@@ -4,12 +4,12 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
 import java.util.List;

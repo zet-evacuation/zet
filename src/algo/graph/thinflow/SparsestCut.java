@@ -18,12 +18,11 @@ package algo.graph.thinflow;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.ResidualGraph;
 
-import ds.graph.ResidualGraph;
-
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.Fujishige;
-import ds.graph.problem.RationalMaxFlowProblem;
+import de.tu_berlin.coga.netflow.classic.maxflow.Fujishige;
+import de.tu_berlin.coga.netflow.classic.problems.RationalMaxFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
 

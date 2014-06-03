@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EdmondsKarp;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabel;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabel;
+import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
+import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabel;
+import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabel;
 import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
@@ -16,11 +16,11 @@ import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import de.tu_berlin.coga.graph.Edge;import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.MaximumFlow;
-import ds.graph.network.Network;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
+import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

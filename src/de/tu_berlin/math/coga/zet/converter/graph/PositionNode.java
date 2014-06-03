@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ds.graph;
+package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.graph.Node;
 import java.awt.Point;
@@ -11,7 +11,7 @@ import java.awt.Point;
  *
  * @author marlenschwengfelder
  */
-public class PositionNode {
+class PositionNode {
     
     public Point p; 
     public Node n;

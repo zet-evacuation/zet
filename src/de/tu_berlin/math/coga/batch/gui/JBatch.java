@@ -8,7 +8,7 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonFrontToBack;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.load.BatchProjectEntry;
 import batch.plugins.AlgorithmicPlugin;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;

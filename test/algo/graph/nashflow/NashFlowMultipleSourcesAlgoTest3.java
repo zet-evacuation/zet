@@ -24,7 +24,7 @@ import ds.graph.flow.NashFlow;
 
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 

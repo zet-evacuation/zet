@@ -5,7 +5,7 @@
 package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;

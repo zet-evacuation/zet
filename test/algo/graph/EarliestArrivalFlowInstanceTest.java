@@ -4,8 +4,8 @@
  */
 package algo.graph;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
@@ -13,10 +13,10 @@ import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -157,7 +157,7 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 
 
 		Node sink = network.getNode( nodeMap.get( sink_id.get( 0 ) ) );
-		ArrayList<Node> sources = new ArrayList<Node>();
+		ArrayList<Node> sources = new ArrayList<>();
 		for( int i = 0; i < source_id.size(); ++i )
 			sources.add( network.getNode( nodeMap.get( source_id.get( i ) ) ) );
 
@@ -168,14 +168,14 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		algo.setProblem( eat );
 		algo.addAlgorithmListener( this );
 		algo.run();
-		System.err.println( Formatter.formatUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
+		System.err.println( algo.getRuntime() );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
 		//AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
-		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
+		System.out.println( "Sending the flow units required " + algo.getRuntime() + "." );
 //		System.out.println( df.toString() );
 		System.err.println( Formatter.formatUnit( end - start, TimeUnits.NanoSeconds ) );
 

@@ -8,7 +8,6 @@ import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.graph.PositionNode;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.geom.ArbitraryRectangle;
 import de.tu_berlin.coga.geom.Rectangle;

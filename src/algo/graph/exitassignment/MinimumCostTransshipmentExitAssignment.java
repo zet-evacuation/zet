@@ -20,20 +20,20 @@
 package algo.graph.exitassignment;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import algo.graph.util.PathDecomposition;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
+import de.tu_berlin.coga.netflow.classic.maxflow.PathDecomposition;
+import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.coga.netflow.classic.mincost.SuccessiveShortestPath;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.MaximumFlow;
-import ds.graph.flow.PathBasedFlow;
-import ds.graph.flow.StaticPathFlow;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.network.Network;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlow;
+import de.tu_berlin.coga.netflow.ds.structure.StaticFlowPath;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
@@ -107,7 +107,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
         for (Node sink : sinks) {
             sinks2.add(sink);
         }
-        for (StaticPathFlow path : pathDecomposition) {
+        for (StaticFlowPath path : pathDecomposition) {
             Edge edge = path.firstEdge();
             Node source = model.getSources().get(edge.start().id());
             Node sink = sinks2.get(edge.end().id() - model.getSources().size());

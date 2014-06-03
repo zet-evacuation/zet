@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
 import com.thoughtworks.xstream.XStream;
 import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
@@ -14,7 +14,6 @@ import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.LocalizationManager;
-import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;

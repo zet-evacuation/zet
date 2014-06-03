@@ -12,7 +12,7 @@ import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.Collection;

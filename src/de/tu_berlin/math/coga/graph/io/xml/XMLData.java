@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedHashMap;

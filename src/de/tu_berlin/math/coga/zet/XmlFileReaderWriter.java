@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.zet;
 
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.classic.mincost.SuccessiveShortestPath;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
@@ -14,9 +14,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.TimeExpandedNetwork;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.problem.MinimumCostFlowProblem;
+import de.tu_berlin.coga.netflow.ds.network.TimeExpandedNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.ZControl;

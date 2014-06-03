@@ -16,15 +16,15 @@
 
 package batch.tasks.graph;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import de.tu_berlin.coga.common.algorithm.Transformation;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.flow.FlowOverTimeImplicit;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  * Transforms an instance of {@link NetworkFlowModel} to an {@link EarliestArrivalFlowProblem}

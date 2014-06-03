@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -15,9 +15,9 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPattern;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPatternBuilder;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
+import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
+import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
@@ -36,9 +36,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.io.File;
 import java.io.FileNotFoundException;

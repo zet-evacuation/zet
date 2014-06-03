@@ -20,10 +20,10 @@ import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.Path;
-import ds.graph.StaticPath;
+import de.tu_berlin.coga.graph.structure.Path;
+import de.tu_berlin.coga.graph.structure.StaticPath;
 
 /**
  *

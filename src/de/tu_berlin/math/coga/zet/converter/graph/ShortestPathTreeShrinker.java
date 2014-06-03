@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import java.util.HashMap;
 import java.util.Map;
 

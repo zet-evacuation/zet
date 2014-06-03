@@ -4,7 +4,7 @@
  */
 package gui;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.BatchResult;
 import batch.BatchResultEntry;
 import batch.tasks.AlgorithmTask;

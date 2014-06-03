@@ -6,8 +6,8 @@ package de.tu_berlin.math.coga.batch.input.converter;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.network.Network;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import ds.graph.problem.RawMaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 

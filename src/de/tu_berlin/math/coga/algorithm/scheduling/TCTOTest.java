@@ -4,12 +4,12 @@
  */
 package de.tu_berlin.math.coga.algorithm.scheduling;
 
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EdmondsKarp;
+import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.Network;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;

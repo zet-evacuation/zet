@@ -13,7 +13,7 @@ import ds.PropertyContainer;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;

@@ -19,25 +19,25 @@
  */
 package algo.graph.exitassignment;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import algo.graph.dynamicflow.eat.TimeHorizonBounds;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.TimeHorizonBounds;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.Forest;
+import de.tu_berlin.coga.graph.structure.Forest;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.Path;
-import ds.graph.flow.FlowOverTimeImplicit;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.MaximumFlow;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.coga.graph.structure.Path;
+import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 

@@ -19,7 +19,7 @@
  */
 
 package evacuationplan;
-import ds.graph.flow.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.Edge;
 import java.util.HashMap;
