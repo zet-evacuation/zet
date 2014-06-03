@@ -19,7 +19,7 @@ import algo.graph.thinflow.ThinFlowAlgo;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import ds.graph.problem.NashFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;

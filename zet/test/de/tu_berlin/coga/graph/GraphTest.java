@@ -1,7 +1,7 @@
 
 package de.tu_berlin.coga.graph;
 
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 
 
 /**

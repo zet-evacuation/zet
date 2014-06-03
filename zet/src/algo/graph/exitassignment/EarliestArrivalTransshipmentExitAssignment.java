@@ -20,16 +20,16 @@
 
 package algo.graph.exitassignment;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import algo.graph.dynamicflow.eat.TimeHorizonBounds;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.TimeHorizonBounds;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.flow.FlowOverTimeImplicit;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  *

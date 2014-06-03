@@ -4,11 +4,12 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
+import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;

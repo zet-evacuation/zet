@@ -19,8 +19,8 @@
  */
 package statistic.graph;
 
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.flow.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;

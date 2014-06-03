@@ -16,7 +16,7 @@
 package batch;
 
 import com.thoughtworks.xstream.XStream;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;

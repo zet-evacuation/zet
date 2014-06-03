@@ -3,8 +3,8 @@ package de.tu_berlin.math.coga.batch.input.converter;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.Network;
-import ds.graph.problem.MinimumCostFlowProblem;
+import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 

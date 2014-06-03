@@ -19,8 +19,8 @@
  */
 package statistic.graph;
 
-import ds.graph.flow.FlowOverTimeEdge;
-import ds.graph.flow.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 
 /**
  *

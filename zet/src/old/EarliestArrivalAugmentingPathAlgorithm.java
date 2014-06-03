@@ -19,9 +19,9 @@
  */
 package old;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalAugmentingPathProblem;
-import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.graph.ImplicitTimeExpandedResidualNetwork;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EarliestArrivalAugmentingPathProblem;
+import de.tu_berlin.coga.netflow.ds.structure.EarliestArrivalAugmentingPath;
+import de.tu_berlin.coga.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;

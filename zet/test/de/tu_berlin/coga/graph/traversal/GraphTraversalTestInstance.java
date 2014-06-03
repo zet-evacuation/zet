@@ -1,7 +1,7 @@
 package de.tu_berlin.coga.graph.traversal;
 
 import de.tu_berlin.coga.graph.DirectedGraph;
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;

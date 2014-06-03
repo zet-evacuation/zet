@@ -17,9 +17,9 @@ package de.tu_berlin.math.coga.graph.generator;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import ds.graph.network.Network;
+import de.tu_berlin.coga.netflow.ds.network.Network;
 import java.util.Random;
 
 /**

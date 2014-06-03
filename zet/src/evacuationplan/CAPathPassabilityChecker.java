@@ -17,8 +17,8 @@ package evacuationplan;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.flow.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.Node;
 import ds.ca.evac.EvacCell;

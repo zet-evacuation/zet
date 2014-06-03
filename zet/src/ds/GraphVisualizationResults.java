@@ -15,8 +15,8 @@
  */
 package ds;
 
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.util.PathComposition;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.classic.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -24,9 +24,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.util.ArrayList;

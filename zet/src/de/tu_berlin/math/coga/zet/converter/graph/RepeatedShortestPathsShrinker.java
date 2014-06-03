@@ -9,7 +9,7 @@ import algo.graph.reduction.YenPath;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.Forest;
+import de.tu_berlin.coga.graph.structure.Forest;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import de.tu_berlin.coga.graph.Node;

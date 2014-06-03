@@ -12,7 +12,7 @@ import java.util.Vector;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import java.util.*;
         
 

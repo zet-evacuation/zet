@@ -6,17 +6,17 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import algo.graph.util.PathComposition;
+import de.tu_berlin.coga.netflow.classic.PathComposition;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.flow.FlowOverTimeEdge;
-import ds.graph.flow.FlowOverTimeEdgeSequence;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdgeSequence;
+import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.Iterator;
 
 /**

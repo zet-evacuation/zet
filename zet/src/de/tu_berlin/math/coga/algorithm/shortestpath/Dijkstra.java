@@ -18,7 +18,7 @@ package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
 import de.tu_berlin.coga.graph.Edge;
-import ds.graph.Forest;
+import de.tu_berlin.coga.graph.structure.Forest;
 import ds.graph.GraphLocalization;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;

@@ -16,24 +16,24 @@
 
 package zet.tasks;
 
-import algo.graph.dynamicflow.DynamicTransshipmentProblem;
-import algo.graph.dynamicflow.QuickestTransshipment;
-import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
-import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
-import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
-import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.problems.DynamicTransshipmentProblem;
+import de.tu_berlin.coga.netflow.dynamic.transshipment.QuickestTransshipment;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EATransshipmentMinCost;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EATransshipmentSSSP;
+import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
+import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.maxflow.TimeExpandedMaximumFlowOverTime;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
-import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
+import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.network.AbstractNetwork;
+import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 
 /**
  * Enumerates the types of graph algorithms and assigns each of them a way
