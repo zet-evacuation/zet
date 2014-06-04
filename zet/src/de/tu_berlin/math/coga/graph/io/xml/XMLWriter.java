@@ -9,9 +9,9 @@ import com.thoughtworks.xstream.XStream;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -46,13 +46,13 @@ public class XMLWriter {
 	 * @param graph the graph
 	 * @throws IOException if some error reading the file occurs
 	 */
-	public void writeGraph( AbstractNetwork graph ) throws IOException {
+	public void writeGraph( DirectedGraph graph ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graph;
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
-			xstream.alias( "network", Network.class );
+			xstream.alias( "graph", DirectedGraph.class );
+			xstream.alias( "network", DefaultDirectedGraph.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -69,7 +69,7 @@ public class XMLWriter {
 		}
 	}
 
-		public void writeGraph( AbstractNetwork graph, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> edgeCosts, IdentifiableIntegerMapping<Node> nodeSupplies ) throws IOException {
+		public void writeGraph( DirectedGraph graph, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> edgeCosts, IdentifiableIntegerMapping<Node> nodeSupplies ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graph;
 		xmlData.edgeCapacitiesIntegral = edgeCapacities;
@@ -77,8 +77,8 @@ public class XMLWriter {
 		xmlData.suppliesIntegral = nodeSupplies;
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", DirectedGraph.class );
+			xstream.alias( "graph", DefaultDirectedGraph.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -110,7 +110,7 @@ public class XMLWriter {
 
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "graph", DirectedGraph.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -143,7 +143,7 @@ public class XMLWriter {
 
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "graph", DirectedGraph.class );
 			xstream.alias( "graphLayout", GraphVisualization.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
@@ -152,7 +152,7 @@ public class XMLWriter {
 			xstream.registerConverter( new GraphViewConverter( xmlData ) );
 			xstream.registerConverter( new GraphConverter( xmlData ) );
 			//xstream.registerConverter(new NodeShapeConverter());
-			//xstream.toXML( eafp.getNetwork(), writer );
+			//xstream.toXML( eafp.getGraph(), writer );
 			xstream.toXML( graphView, writer );
 		} finally {
 			if( writer != null ) {

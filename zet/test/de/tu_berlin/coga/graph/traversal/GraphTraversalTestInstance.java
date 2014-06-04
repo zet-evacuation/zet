@@ -1,7 +1,7 @@
 package de.tu_berlin.coga.graph.traversal;
 
 import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -111,7 +111,7 @@ public final class GraphTraversalTestInstance {
 	 * Initializer for the static instances.
 	 */
 	static {
-		Network g = new Network( 4, 5 );
+		DefaultDirectedGraph g = new DefaultDirectedGraph( 4, 5 );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 1 ) );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 2 ) );
 		g.createAndSetEdge( g.getNode( 1 ), g.getNode( 2 ) );
@@ -120,7 +120,7 @@ public final class GraphTraversalTestInstance {
 		SIMPLE_1 = new GraphTraversalTestInstance( g, new int[]{0, 1, 1, 2}, "Simple 1", 0 );
 		LAST_NODE = new GraphTraversalTestInstance( g, new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0}, "Last node", 3 );
 
-		g = new Network( 4, 6 );
+		g = new DefaultDirectedGraph( 4, 6 );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 1 ) );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 3 ) );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 2 ) );
@@ -129,10 +129,10 @@ public final class GraphTraversalTestInstance {
 		g.createAndSetEdge( g.getNode( 2 ), g.getNode( 3 ) );
 		SIMPLE_2 = new GraphTraversalTestInstance( g, new int[]{0, 1, 1, 1}, "Simple 2", 0 );
 
-		g = new Network( 1, 0 );
+		g = new DefaultDirectedGraph( 1, 0 );
 		SMALL = new GraphTraversalTestInstance( g, new int[]{0}, "Small", 0 );
 
-		g = new Network( 6, 6 );
+		g = new DefaultDirectedGraph( 6, 6 );
 		g.createAndSetEdge( g.getNode( 0 ), g.getNode( 1 ) );
 		g.createAndSetEdge( g.getNode( 1 ), g.getNode( 2 ) );
 		g.createAndSetEdge( g.getNode( 2 ), g.getNode( 0 ) );
@@ -141,7 +141,7 @@ public final class GraphTraversalTestInstance {
 		g.createAndSetEdge( g.getNode( 5 ), g.getNode( 3 ) );
 		DISJOINT_TRIANGLE = new GraphTraversalTestInstance( g, new int[]{2, 0, 1, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, "Disjoint triangles", 1 );
 
-		g = new Network( 101, 100 );
+		g = new DefaultDirectedGraph( 101, 100 );
 		for( int i = 1; i <= 100; ++i )
 			g.createAndSetEdge( g.getNode( 0 ), g.getNode( i ) );
 		int[] expected = new int[101];
@@ -150,7 +150,7 @@ public final class GraphTraversalTestInstance {
 		expected[0] = 0;
 		STAR = new GraphTraversalTestInstance( g, expected, "Star", 0 );
 
-		g = new Network( 101, 200 );
+		g = new DefaultDirectedGraph( 101, 200 );
 		for( int i = 1; i <= 100; ++i ) {
 			g.createAndSetEdge( g.getNode( 0 ), g.getNode( i ) );
 			g.createAndSetEdge( g.getNode( i ), g.getNode( ((i + 1) % 100) + 1 ) );
@@ -164,7 +164,7 @@ public final class GraphTraversalTestInstance {
 		expected = new int[32];
 		Random r = new Random();
 		int rnd = r.nextInt( expected.length );
-		g = new Network( expected.length, (expected.length*(expected.length-1)) );
+		g = new DefaultDirectedGraph( expected.length, (expected.length*(expected.length-1)) );
 		for( int i = 0; i < expected.length - 1; ++i )
 			for( int j = i + 1; j < expected.length; ++j ) {
 				g.createAndSetEdge( g.getNode( i ), g.getNode( j ) );
@@ -177,7 +177,7 @@ public final class GraphTraversalTestInstance {
 
 		expected = new int[16];
 		rnd = r.nextInt( expected.length );
-		g = new Network( expected.length, (expected.length*(expected.length-1))/2 );
+		g = new DefaultDirectedGraph( expected.length, (expected.length*(expected.length-1))/2 );
 		for( int i = 0; i < expected.length - 1; ++i )
 			for( int j = i + 1; j < expected.length; ++j )
 				g.createAndSetEdge( g.getNode( i ), g.getNode( j ) );
@@ -189,7 +189,7 @@ public final class GraphTraversalTestInstance {
 		COMPLETE_NO_CYCLES = new GraphTraversalTestInstance( g, expected, "Complete, no cycles", rnd );
 
 		expected = new int[42];
-		g = new Network( expected.length, expected.length-1 );
+		g = new DefaultDirectedGraph( expected.length, expected.length-1 );
 		for( int i = 0; i < expected.length - 1; )
 			g.createAndSetEdge( g.getNode( i ), g.getNode( ++i ) );
 		for( int i = 0; i < expected.length; ++i )
@@ -200,7 +200,7 @@ public final class GraphTraversalTestInstance {
 		int i = 1;
 		Queue<Tuple> q = new LinkedList<>();
 		q.offer( new Tuple( 0, 0 ) );
-		g = new Network( expected.length, expected.length*2 );
+		g = new DefaultDirectedGraph( expected.length, expected.length*2 );
 		while( i < expected.length ) {
 			Tuple current = q.poll();
 			g.createAndSetEdge( g.getNode( current.x ), g.getNode( current.x * 2 + 1 ) );

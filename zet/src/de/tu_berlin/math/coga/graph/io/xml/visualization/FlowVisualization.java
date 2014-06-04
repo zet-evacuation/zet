@@ -9,8 +9,8 @@ import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ public class FlowVisualization extends GraphVisualization {
 	int maxFlowRate;
 	boolean edgesDoubled = false;
 
-	public FlowVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
+	public FlowVisualization( DirectedGraph network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
 		super( network, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks );
 		flow = new EdgeBasedFlowOverTime( getNetwork() );
 	}

@@ -299,8 +299,8 @@ public class flow implements AlgorithmListener {
 			//NetworkFlowModel nfm = new NetworkFlowModel();
 
 
-		//System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
-		//System.out.println( "Edges: " + eafp.getNetwork().numberOfEdges() );
+		//System.out.println( "Noides: " + eafp.getGraph().numberOfNodes() );
+		//System.out.println( "Edges: " + eafp.getGraph().numberOfEdges() );
 
 		System.out.println( "NFM: " );
 		System.out.println( "EAFP: " + pattern.toString() );
@@ -344,14 +344,14 @@ public class flow implements AlgorithmListener {
 //			System.out.println( "Flow amount: " + algo2.getSolution().getFlowAmount() );
 
 			//		} else {
-//			SuccessiveEarliestArrivalAugmentingPathAlgorithmTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmTH( eafp.getNetwork(), eafp.getTransitTimes(), eafp.getEdgeCapacities(), eafp.getNodeCapacities(), eafp.getSupplies(), 16 );
+//			SuccessiveEarliestArrivalAugmentingPathAlgorithmTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmTH( eafp.getGraph(), eafp.getTransitTimes(), eafp.getEdgeCapacities(), eafp.getNodeCapacities(), eafp.getSupplies(), 16 );
 
 //
 //				EATransshipmentWithTHSSSP staticalgo = new EATransshipmentWithTHSSSP();
 //
-//				DynamicFlowProblem dfp = new DynamicFlowProblem( eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getTransitTimes() );
+//				DynamicFlowProblem dfp = new DynamicFlowProblem( eafp.getEdgeCapacities(), eafp.getGraph(), eafp.getTransitTimes() );
 //				//dfp.setCapacities( eafp.getEdgeCapacities() );
-//				//dfp.setNetwork( eafp.getNetwork() );
+//				//dfp.setNetwork( eafp.getGraph() );
 //				//dfp.setTransitTimes( eafp.getTransitTimes() );
 //
 //				eafp.setTimeHorizon( 43 );

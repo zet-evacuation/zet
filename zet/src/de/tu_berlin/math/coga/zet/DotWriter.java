@@ -4,18 +4,15 @@
  */
 package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 
 /**
@@ -23,7 +20,7 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public class DotWriter {
-	public static void writeDot( String original, String filename, AbstractNetwork network ) throws FileNotFoundException, IOException {
+	public static void writeDot( String original, String filename, DirectedGraph network ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
 
 //		digraph G {
@@ -55,7 +52,7 @@ public class DotWriter {
 		writer.close();
 	}
 
-	public static void writeDotWithoutSuperSink( String original, String filename, AbstractNetwork network, Node sink ) throws FileNotFoundException, IOException {
+	public static void writeDotWithoutSuperSink( String original, String filename, DirectedGraph network, Node sink ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
 
 		writer.write( "/* Written by ZET DotWriter */\n" );

@@ -3,7 +3,7 @@ package de.tu_berlin.math.coga.batch.input.converter;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
@@ -21,7 +21,7 @@ public class RawToFullMinimumFlowProblemConverter extends Algorithm<RawMinimumCo
      */
     @Override
     protected MinimumCostFlowProblem runAlgorithm(RawMinimumCostFlowProblem problem) {
-        Network network = new Network(problem.getNumberOfNodes(), problem.getNumberOfEdges());
+        DefaultDirectedGraph network = new DefaultDirectedGraph(problem.getNumberOfNodes(), problem.getNumberOfEdges());
         IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(problem.getNumberOfEdges());
         IdentifiableIntegerMapping<Edge> costs = new IdentifiableIntegerMapping<>(problem.getNumberOfEdges());
         IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<>(problem.getNumberOfNodes());

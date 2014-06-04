@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.netflow.classic.mincost.SuccessiveShortestPath;
@@ -15,16 +16,13 @@ import ds.PropertyContainer;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.network.TimeExpandedNetwork;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.ZControl;
-import de.tu_berlin.coga.zet.model.ZLocalization;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
-import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +43,7 @@ public class XmlFileReaderWriter {
 		System.out.println( "Loading a network." );
 		//XMLReader reader = new XMLReader( "./testinstanz/small_graph.xml" );
 		XMLReader reader = new XMLReader( "./testinstanz/2 rooms demo.xml" );
-		AbstractNetwork n = reader.readGraph();		
+		DirectedGraph n = reader.readGraph();		
 		System.out.println( n.toString() );
 		
 		

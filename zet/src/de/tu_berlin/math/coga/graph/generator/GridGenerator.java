@@ -13,13 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package de.tu_berlin.math.coga.graph.generator;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Random;
 
 /**
@@ -27,8 +28,8 @@ import java.util.Random;
  */
 public class GridGenerator {
 
-  public static AbstractNetwork generateGridNetwork( int width, int height ) {
-    AbstractNetwork network = new Network( width * height, 4 * width * height - 2 * (width + height) );
+  public static DirectedGraph generateGridGraph( int width, int height ) {
+    DefaultDirectedGraph network = new DefaultDirectedGraph( width * height, 4 * width * height - 2 * (width + height) );
     for( int row = 0; row < height; row++ ) {
       for( int column = 1; column < width; column++ ) {
         network.createAndSetEdge( network.getNode( row * width + column - 1 ),
@@ -48,10 +49,10 @@ public class GridGenerator {
     return network;
   }
 
-  public static AbstractNetwork generateDualGridNetwork( int width, int height ) {
+  public static DirectedGraph generateDualGridGraph( int width, int height ) {
     width--;
     height--;
-    AbstractNetwork network = new Network( width * height + 2, 2 * width * height + (width + height) );
+    DefaultDirectedGraph network = new DefaultDirectedGraph( width * height + 2, 2 * width * height + (width + height) );
     Node source = network.getNode( network.nodeCount() - 2 );
     Node sink = network.getNode( network.nodeCount() - 1 );
     for( int row = 0; row < height; row++ ) {
@@ -80,7 +81,7 @@ public class GridGenerator {
   }
 
   public static <T extends Identifiable> IdentifiableIntegerMapping<T>
-        createCostFunction( int width, int height, AbstractNetwork network, IdentifiableIntegerMapping<T> capacities ) {
+        createCostFunction( int width, int height, DefaultDirectedGraph network, IdentifiableIntegerMapping<T> capacities ) {
     IdentifiableIntegerMapping<T> costs = null;
     Node source = network.getNode( network.nodeCount() - 2 );
     Node sink = network.getNode( network.nodeCount() - 1 );

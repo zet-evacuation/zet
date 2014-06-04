@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * ShortestPathExitAssignment.java
- *
- */
 
 package algo.graph.exitassignment;
 
@@ -26,8 +22,8 @@ import de.tu_berlin.coga.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -38,7 +34,7 @@ public class ShortestPathExitAssignment extends Algorithm<NetworkFlowModel, Exit
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.graph().nodes());
-        AbstractNetwork network = (AbstractNetwork)model.graph();
+        DirectedGraph network = model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
         IdentifiableObjectMapping<Node, MinHeap> exitDistances = new IdentifiableObjectMapping<>(network.nodes() );

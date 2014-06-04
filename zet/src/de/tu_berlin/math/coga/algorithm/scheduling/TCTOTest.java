@@ -8,7 +8,7 @@ import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
@@ -314,7 +314,7 @@ public class TCTOTest {
 		for( Job j : originalJobs )
 			successors += j.getSuccessors().size();
 
-		Network AoN = new Network( originalJobs.size(), successors );
+		DefaultDirectedGraph AoN = new DefaultDirectedGraph( originalJobs.size(), successors );
 		for( Job j : originalJobs ) {
 			Node node = new Node( j.id() ); // Node and Job id are equal
 			AoN.setNode( node );
@@ -329,7 +329,7 @@ public class TCTOTest {
 		System.out.println( "Konvertiere zu Activity on Edge" );
 		int nodeCount = (originalJobs.size())*2;
 		int edgeCount = (AoN.getEdgeCapacity()) + (originalJobs.size()); // AoN.getEdgeCapacity() = successors
-		AoE = new Network( nodeCount, edgeCount );
+		AoE = new DefaultDirectedGraph( nodeCount, edgeCount );
 
 		for( Job j : originalJobs ) {
 			Node start = new Node( 2*j.id() );
@@ -405,7 +405,7 @@ public class TCTOTest {
 		System.out.println( curve );
 	}
 
-	static Network AoE;
+	static DefaultDirectedGraph AoE;
 	static LinkedList<Edge> topSort;
 	static IdentifiableDoubleMapping<Edge> durations;
 	static IdentifiableObjectMapping<Edge,Job> jobMapping;

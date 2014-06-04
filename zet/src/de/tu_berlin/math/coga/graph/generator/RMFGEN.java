@@ -7,9 +7,9 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class RMFGEN implements Generator {
   protected DiscreteDistribution dist;
-  AbstractNetwork network;
+  DefaultDirectedGraph network;
   private IdentifiableIntegerMapping<Edge> capacities;
 
   public void setDistribution( DiscreteDistribution dist ) {
@@ -43,7 +43,7 @@ public class RMFGEN implements Generator {
     System.out.println( "Generate with " + frameSize * frameSize * frames + " nodes." );
     final int edges = 4 * frames * (frameSize * frameSize - frameSize) + (frames - 1) * frameSize * frameSize;
     System.out.println( "Generate with " + edges + " edges." );
-    network = new Network( frameSize * frameSize * frames, edges );
+    network = new DefaultDirectedGraph( frameSize * frameSize * frames, edges );
     capacities = new IdentifiableIntegerMapping<>( edges );
     source = network.getNode( 0 );
     sink = network.getNode( network.nodeCount() - 1 );
@@ -164,7 +164,7 @@ public class RMFGEN implements Generator {
     //e.setUsed( flow );
   }
 
-  public AbstractNetwork getGraph() {
+  public DirectedGraph getGraph() {
     return network;
   }
 

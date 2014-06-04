@@ -16,10 +16,10 @@ import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import de.tu_berlin.coga.graph.Edge;import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,7 +36,7 @@ import java.util.StringTokenizer;
 public class DimacsReader implements AlgorithmListener {
 	BufferedReader reader;
 	BufferedWriter writer;
-	protected AbstractNetwork network;
+	protected DefaultDirectedGraph network;
 	ArrayList<Node> vertices = null;
 	String filename = "network.max";
 	boolean simpleTerminals = false;
@@ -146,7 +146,7 @@ public class DimacsReader implements AlgorithmListener {
 
 
 		long memStart = rt.totalMemory() - rt.freeMemory();
-		network = new Network( nodes, edges );
+		network = new DefaultDirectedGraph( nodes, edges );
 		long memEnd = rt.totalMemory() - rt.freeMemory();
 		if( verbose )
 			System.out.println( "Memory for network: " + Formatter.formatUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
@@ -227,7 +227,7 @@ public class DimacsReader implements AlgorithmListener {
 		mfp = new MaximumFlowProblem( network, capacities, network.getNode( source-1 ), network.getNode( sink-1 ) );
 	}
 
-	public AbstractNetwork getNetwork() {
+	public DirectedGraph getGraph() {
 		return network;
 	}
 
@@ -369,8 +369,8 @@ public class DimacsReader implements AlgorithmListener {
 		gen.generateCompleteGraph( 3,3 ); // smallest example where algorithm fails is 4,6
 		System.out.println( "RMFGEN Knoten: " + gen.getNodeCount() + ", Kanten: " + gen.getEdgeCount() );
 
-		AbstractNetwork network;
-		network = dl.getNetwork();
+		DirectedGraph network;
+		network = dl.getGraph();
 		//network = gen.getGraph();
 
 		//System.out.println( network.toString() );

@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * NetworkFlowModel.java
- *
- */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -29,9 +25,8 @@ import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
@@ -46,7 +41,7 @@ import java.util.List;
  */
 @XStreamAlias( "networkFlowModel" )
 public class NetworkFlowModel implements Iterable<Node> {
-	protected Network netw;
+	protected DefaultDirectedGraph netw;
 	protected DynamicNetwork network;
 	protected IdentifiableIntegerMapping<Edge> edgeCapacities;
 	protected IdentifiableIntegerMapping<Node> nodeCapacities;
@@ -189,7 +184,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	public void checkSupplies() {
-		AbstractNetwork network = this.network.getAsStaticNetwork();
+		DirectedGraph network = this.network.getAsStaticNetwork();
 		IdentifiableIntegerMapping<Node> supplies = currentAssignment;
 
 		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );

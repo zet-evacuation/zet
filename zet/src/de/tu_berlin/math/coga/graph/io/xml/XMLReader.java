@@ -11,7 +11,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.coga.graph.Node;
 import io.FileTypeException;
 import java.io.BufferedReader;
@@ -91,12 +92,12 @@ public class XMLReader {
 		return result;
 	}
 
-	public AbstractNetwork readGraph() throws FileNotFoundException, IOException {
+	public DirectedGraph readGraph() throws FileNotFoundException, IOException {
 		BufferedReader reader = null;
-		AbstractNetwork result = null;
+		DefaultDirectedGraph result = null;
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "graph", DirectedGraph.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );
 			xstream.registerConverter( new FontConverter() );
@@ -104,7 +105,7 @@ public class XMLReader {
 			xstream.registerConverter( new GraphConverter( xmlData ) );
 			//xstream.registerConverter( new FlowVisualisationConverter() );
 			//xstream.registerConverter(new NodeShapeConverter());
-			result = (AbstractNetwork)xstream.fromXML( reader );
+			result = (DefaultDirectedGraph)xstream.fromXML( reader );
 		} finally {
 			if( reader != null )
 				reader.close();
@@ -138,7 +139,7 @@ public class XMLReader {
 		EarliestArrivalFlowProblem eafp = null;
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
-			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "graph", DirectedGraph.class );
 			xstream.alias( "graphLayout", GraphVisualization.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );

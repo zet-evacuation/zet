@@ -1,8 +1,6 @@
 
 package de.tu_berlin.coga.graph;
 
-import de.tu_berlin.coga.netflow.ds.network.Network;
-
 
 /**
  * Unit test for graphs.
@@ -44,7 +42,7 @@ public class GraphTest {
    * @return a directed graph
    */
   public static DirectedGraph generateDirected( int nodes, int[][] edges ) {
-    Network g = new Network( nodes, edges.length );
+    DefaultDirectedGraph g = new DefaultDirectedGraph( nodes, edges.length );
 
     for( int i = 0; i < edges.length; ++i ) {
       g.createAndSetEdge( g.getNode( edges[i][0] ), g.getNode( edges[i][1] ) );

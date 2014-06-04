@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * NetworkFlowModelConverter.java
- *
- */
 
 package io.graph;
 
@@ -30,8 +26,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.LinkedList;
 
 /**
@@ -102,7 +98,7 @@ public class NetworkFlowModelConverter implements Converter {
 		
         // Read the network
         reader.moveDown();
-        AbstractNetwork network = (AbstractNetwork) context.convertAnother(null, AbstractNetwork.class, networkConverter);
+        DirectedGraph network = (DirectedGraph) context.convertAnother(null, DirectedGraph.class, networkConverter);
         reader.moveUp();
         // Read the edge capacities
         reader.moveDown();

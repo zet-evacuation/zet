@@ -21,11 +21,10 @@ import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -263,7 +262,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		System.out.print( "Create network..." );
 
 
-		AbstractNetwork network = new Network( nodeCount, edgeCount );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( nodeCount, edgeCount );
 		for( int i = 0; i < (sinks > 1 ? edgeCount - sinks : edgeCount); ++i )
 			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
 		Long t;
@@ -429,7 +428,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		System.out.println( "Erzeuge Netzwerk..." );
 
 
-		AbstractNetwork network = new Network( nodeCount, edgeCount );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( nodeCount, edgeCount );
 		for( int i = 0; i < edgeCount; ++i )
 			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
 		Long t;

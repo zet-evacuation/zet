@@ -11,9 +11,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,12 +41,12 @@ public class GraphConverter implements Converter {
 	 */
 	@Override
 	public boolean canConvert( Class type ) {
-		return AbstractNetwork.class.isAssignableFrom( type ); // type.equals( AbstractNetwork.class );
+		return DirectedGraph.class.isAssignableFrom( type ); // type.equals( AbstractNetwork.class );
 	}
 
 	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
-		AbstractNetwork graph = (AbstractNetwork) source;
+		DirectedGraph graph = (DirectedGraph) source;
 		this.writer = writer;
 		// automatically done before. either by xstream or by GraphViewConverter
 		//writer.startNode("graph");
@@ -88,7 +88,7 @@ public class GraphConverter implements Converter {
 
 	@Override
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-		AbstractNetwork graph = new Network( 0, 0 );
+		DefaultDirectedGraph graph = new DefaultDirectedGraph( 0, 0 );
 		int nid = 0;
 		int eid = 0;
 		this.reader = reader;
@@ -152,7 +152,7 @@ public class GraphConverter implements Converter {
 		return graph;
 	}
 
-	protected Node readNode( AbstractNetwork graph, int nid ) {
+	protected Node readNode( DefaultDirectedGraph graph, int nid ) {
 		Node node;
 		String id = null;
 		String balance = "0";
@@ -180,7 +180,7 @@ public class GraphConverter implements Converter {
 		return node;
 	}
 
-	protected void readSink( AbstractNetwork graph, int nid ) {
+	protected void readSink( DefaultDirectedGraph graph, int nid ) {
 		Node node = readNode( graph, nid );
 		//if( xmlData.suppliesIntegral.get( node ) > 0 )
 		if( xmlData.supplies.get( node ) > 0 )
@@ -191,7 +191,7 @@ public class GraphConverter implements Converter {
 			xmlData.sinks.add( node );
 	}
 
-	protected void readSource( AbstractNetwork graph, int nid ) {
+	protected void readSource( DefaultDirectedGraph graph, int nid ) {
 		Node node = readNode( graph, nid );
 		//if( xmlData.suppliesIntegral.get( node ) < 0 )
 		if( xmlData.supplies.get( node ) < 0 )
@@ -202,7 +202,7 @@ public class GraphConverter implements Converter {
 			xmlData.sources.add( node );
 	}
 
-	protected void readEdge( AbstractNetwork graph, int eid ) {
+	protected void readEdge( DefaultDirectedGraph graph, int eid ) {
 		String id = null;
 		String source = null;
 		String target = null;

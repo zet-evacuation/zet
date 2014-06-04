@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * MinimumCostTransshipmentExitAssignment.java
- *
- */
+
 package algo.graph.exitassignment;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -36,10 +33,10 @@ import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -51,7 +48,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.graph().nodes());
 
-        AbstractNetwork network = (AbstractNetwork)model.graph();
+        DirectedGraph network = model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null);
@@ -119,7 +116,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
                 newCapacities.set(edge, 0);
             }
         }
-        MaximumFlowProblem problem = new MaximumFlowProblem((AbstractNetwork)model.graph(), newCapacities, model.getSources(), sink);
+        MaximumFlowProblem problem = new MaximumFlowProblem(model.graph(), newCapacities, model.getSources(), sink);
         Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();

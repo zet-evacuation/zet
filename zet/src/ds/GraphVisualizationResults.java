@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package ds;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -26,11 +27,10 @@ import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.ArrayList;
-import java.util.List;
 import opengl.framework.abs.VisualizationResult;
 
 /**
@@ -93,7 +93,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //
 		this.floorToNodeMapping = new ArrayList<>();
 		
-		AbstractNetwork network = networkFlowModel.getEAFP().getNetwork();
+		DirectedGraph network = networkFlowModel.getEAFP().getNetwork();
 		
 		for( Node node : network.nodes() ) {
 			int floor = this.nodeToFloorMapping.get( node );
