@@ -33,7 +33,6 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 
 /**
  * Enumerates the types of graph algorithms and assigns each of them a way
@@ -53,7 +52,7 @@ public enum GraphAlgorithmEnumeration {
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					EATransshipmentSSSP algo = new EATransshipmentSSSP();
 					
-					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), (AbstractNetwork)model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
 					algo.setProblem( dtp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
@@ -74,7 +73,7 @@ public enum GraphAlgorithmEnumeration {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					EATransshipmentMinCost algo = new EATransshipmentMinCost();
-					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), (AbstractNetwork)model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
 					//DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
 					algo.setProblem( dtp );
 					algo.run();
@@ -123,7 +122,7 @@ public enum GraphAlgorithmEnumeration {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					MaxFlowOverTime maxFlowOverTimeAlgo = new MaxFlowOverTime();
-					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( (AbstractNetwork)model.graph(), model.edgeCapacities(), model.transitTimes(), model.getSinks(), model.getSources(), timeHorizon ) );
+					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( model.graph(), model.edgeCapacities(), model.transitTimes(), model.getSinks(), model.getSources(), timeHorizon ) );
 					maxFlowOverTimeAlgo.run();
 					return maxFlowOverTimeAlgo.getSolution();
 				}
@@ -140,7 +139,7 @@ public enum GraphAlgorithmEnumeration {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo = new TimeExpandedMaximumFlowOverTime();
-					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( (AbstractNetwork)model.graph(), model.edgeCapacities(), model.transitTimes(), model.getSinks(), model.getSources(), timeHorizon ) );
+					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( model.graph(), model.edgeCapacities(), model.transitTimes(), model.getSinks(), model.getSources(), timeHorizon ) );
 					//maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), timeHorizon ) );
 					maxFlowOverTimeAlgo.run();
 					return maxFlowOverTimeAlgo.getSolution();
@@ -157,7 +156,7 @@ public enum GraphAlgorithmEnumeration {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					QuickestTransshipment algo = new QuickestTransshipment();
-					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), (AbstractNetwork)model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
 					//DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
 					algo.setProblem( dtp );
 					algo.run();

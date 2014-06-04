@@ -5,10 +5,11 @@
 package de.tu_berlin.math.coga.batch.algorithm;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.structure.Path;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
+import de.tu_berlin.coga.graph.util.GraphUtil;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Algorithms {
         return instance;
     }
 
-    private AbstractNetwork network; 
+    private DefaultDirectedGraph network;
     
     private HashMap<Edge, Algorithm> algorithmForEdge;
     private HashMap<Class, Node> nodeForClass;    
@@ -39,7 +40,7 @@ public class Algorithms {
     }
 
     public List<Algorithm<?,?>> getAlgorithms(Class<?> problem, Class<?> solution) {
-        Path path = network.getPath(nodeForClass.get(problem), nodeForClass.get(solution));
+      Path path = GraphUtil.getPath( network, nodeForClass.get(problem), nodeForClass.get(solution));
         if (path == null) {
             return null;
         } else {

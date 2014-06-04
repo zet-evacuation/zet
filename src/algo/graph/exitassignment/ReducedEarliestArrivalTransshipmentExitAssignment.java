@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * MinimumCostTransshipmentExitAssignment.java
- *
- */
+
 package algo.graph.exitassignment;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -30,7 +27,6 @@ import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.structure.Forest;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
@@ -40,7 +36,8 @@ import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -52,7 +49,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.graph().nodes());
 
-        AbstractNetwork network = (AbstractNetwork)model.graph();
+        DirectedGraph network = model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
@@ -68,7 +65,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             }
         }
 
-        AbstractNetwork reducedNetwork = new Network(sinks.size() + model.getSources().size() + 1, sinks.size() * model.getSources().size() + sinks.size());
+        DefaultDirectedGraph reducedNetwork = new DefaultDirectedGraph(sinks.size() + model.getSources().size() + 1, sinks.size() * model.getSources().size() + sinks.size());
         IdentifiableIntegerMapping<Edge> reducedTransitTimes = new IdentifiableIntegerMapping<>(sinks.size() * model.getSources().size());
         IdentifiableIntegerMapping<Edge> reducedCapacities = new IdentifiableIntegerMapping<>(sinks.size() * model.getSources().size());
         IdentifiableIntegerMapping<Node> reducedNodeCapacities = new IdentifiableIntegerMapping<>(sinks.size() + model.getSources().size() + 1);
@@ -157,7 +154,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             //}
             }
         }
-        MaximumFlowProblem problem = new MaximumFlowProblem((AbstractNetwork)model.graph(), newCapacities, model.getSources(), sink);
+        MaximumFlowProblem problem = new MaximumFlowProblem(model.graph(), newCapacities, model.getSources(), sink);
         Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();

@@ -9,8 +9,8 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GraphVisualization {
 	/** The graph. */
-	AbstractNetwork network;
+	DirectedGraph network;
 	/** The positions for the nodes. */
 	NodePositionMapping nodePositionMapping;
 	/** Capacities for all edges. */
@@ -54,7 +54,7 @@ public class GraphVisualization {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
+	public GraphVisualization( DirectedGraph network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -102,11 +102,11 @@ public class GraphVisualization {
 }
 
 
-	public AbstractNetwork getNetwork() {
+	public DirectedGraph getNetwork() {
 		return network;
 	}
 
-	public void setNetwork( AbstractNetwork network ) {
+	public void setNetwork( DirectedGraph network ) {
 		this.network = network;
 	}
 

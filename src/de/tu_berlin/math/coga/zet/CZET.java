@@ -31,7 +31,7 @@ import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.ds.network.ExtendedNetwork;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
@@ -936,7 +936,7 @@ public class CZET {
 		// compute shortest paths
 
 		Dijkstra dijkstra;
-		Network n = (Network)eafp.getNetwork();
+		DefaultDirectedGraph n = (DefaultDirectedGraph)eafp.getNetwork();
 
 
 		IdentifiableIntegerMapping<Edge> transitTimes;

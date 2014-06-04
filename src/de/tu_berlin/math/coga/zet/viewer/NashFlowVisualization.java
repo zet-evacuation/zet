@@ -8,9 +8,8 @@ import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;
@@ -69,7 +68,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 		flowDatas4.add( 21.125, 31.175, 1, 6.325, 4, 14.375, 24.375 );
 
 		// set up some edges
-		Network network = new Network( 4, 5 );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( 4, 5 );
 		network.setNode( new Node( 0 ) );
 		network.setNode( new Node( 1 ) );
 		network.setNode( new Node( 2 ) );

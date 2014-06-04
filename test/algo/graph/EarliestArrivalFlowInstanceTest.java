@@ -13,10 +13,9 @@ import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -131,7 +130,7 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		System.out.println( "Erzeuge Netzwerk..." );
 
 
-		AbstractNetwork network = new Network( nodeCount, edgeCount );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( nodeCount, edgeCount );
 		for( int i = 0; i < edgeCount; ++i )
 			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
 		Long t;

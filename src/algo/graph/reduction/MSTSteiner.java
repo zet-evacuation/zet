@@ -18,16 +18,15 @@ import ds.graph.MinSteinerTree;
 import algo.graph.spanningtree.NetworkMST;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.structure.Path;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import algo.graph.spanningtree.NetworkMSTProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>{
     
@@ -95,7 +94,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         while (!SteinerNodes.empty())
         {
             Node node = SteinerNodes.first();
-            dijkstra = new Dijkstra(((AbstractNetwork)OriginNetwork.graph()).getAsStaticNetwork(), TransitForEdge, node, true);
+            dijkstra = new Dijkstra(OriginNetwork.graph(), TransitForEdge, node, true);
             dijkstra.run();
            
             SteinerNodes.remove(SteinerNodes.first());

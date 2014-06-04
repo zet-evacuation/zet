@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * NetworkConverter.java
- *
- */
 
 package io.graph;
 
@@ -27,9 +23,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.HidingSet;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
@@ -45,11 +41,11 @@ public class NetworkConverter implements Converter {
     }
     
     public boolean canConvert(Class type) {
-        return type.equals(AbstractNetwork.class);
+        return type.equals(DirectedGraph.class);
     }
 
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        AbstractNetwork network = (AbstractNetwork) source;
+        DirectedGraph network = (DirectedGraph) source;
         writer.startNode("nodes");
         context.convertAnother(network.nodes(), nodesConverter);
         writer.endNode();
@@ -59,7 +55,7 @@ public class NetworkConverter implements Converter {
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        AbstractNetwork result = new Network(0, 0);
+        DefaultDirectedGraph result = new DefaultDirectedGraph(0, 0);
         reader.moveDown();
         HidingSet<Node> nodes = (HidingSet<Node>) context.convertAnother(result, HidingSet.class, nodesConverter);
         result.setNodeCapacity(nodes.getCapacity());

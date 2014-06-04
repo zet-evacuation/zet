@@ -12,7 +12,7 @@ import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree
   Edge MinEdge;
   Edge currentEdge;
   NetworkFlowModel OriginNetwork;
-  Network network;
+  DefaultDirectedGraph network;
   IdentifiableIntegerMapping<Edge> TransitForEdge;
   IdentifiableIntegerMapping<Edge> capForEdge;
   /* gives distance of nodes in current graph G'. */
@@ -100,7 +100,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree
        System.out.println("Kante: " + sortededges.get(k) + "für Transitzeit: "
       + OriginNetwork.getExactTransitTime(sortededges.get(k)));
        }*/
-      network = new Network( OriginNetwork.numberOfNodes(), OriginNetwork.numberOfEdges() );
+      network = new DefaultDirectedGraph( OriginNetwork.numberOfNodes(), OriginNetwork.numberOfEdges() );
       for( Node node : OriginNetwork ) {
         network.setNode( node );
       }

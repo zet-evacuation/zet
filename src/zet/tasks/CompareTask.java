@@ -12,7 +12,6 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
@@ -70,14 +69,14 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
         
         //gets TimeHorizon for the Original Network
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(OrigNetwork.edgeCapacities(), (AbstractNetwork)OrigNetwork.graph(), OrigNetwork.nodeCapacities() , OrigNetwork.getSupersink(), OrigNetwork.getSources(), 100, OrigNetwork.transitTimes(), OrigNetwork.currentAssignment());
+        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(OrigNetwork.edgeCapacities(), OrigNetwork.graph(), OrigNetwork.nodeCapacities() , OrigNetwork.getSupersink(), OrigNetwork.getSources(), 100, OrigNetwork.transitTimes(), OrigNetwork.currentAssignment());
         estimator.setProblem(problem);
         estimator.run();
         System.out.println("Geschaetzte Loesung Original: " + estimator.getSolution());
         
         //gets TimeHorizon for the Thin Network
         LongestShortestPathTimeHorizonEstimator estimator2 = new LongestShortestPathTimeHorizonEstimator();
-        EarliestArrivalFlowProblem problem2 = new EarliestArrivalFlowProblem(ThinNetwork.edgeCapacities(), (AbstractNetwork)ThinNetwork.graph(), ThinNetwork.nodeCapacities() , ThinNetwork.getSupersink(), ThinNetwork.getSources(), 100, ThinNetwork.transitTimes(), ThinNetwork.currentAssignment());
+        EarliestArrivalFlowProblem problem2 = new EarliestArrivalFlowProblem(ThinNetwork.edgeCapacities(), ThinNetwork.graph(), ThinNetwork.nodeCapacities() , ThinNetwork.getSupersink(), ThinNetwork.getSources(), 100, ThinNetwork.transitTimes(), ThinNetwork.currentAssignment());
         estimator2.setProblem(problem2);
         estimator2.run();
         System.out.println("Geschaetzte Loesung Kleineres Netzwerk: " + estimator2.getSolution());

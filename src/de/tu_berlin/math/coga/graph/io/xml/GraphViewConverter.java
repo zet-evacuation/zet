@@ -10,9 +10,9 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -151,7 +151,7 @@ public class GraphViewConverter implements Converter {
 		if( !reader.getNodeName().equals( "graph" ) )
 			throw new InvalidFileFormatException( "Graph layout must start with a graph." );
 		graphConverter = new GraphConverter( xmlData );
-		xmlData.network = (AbstractNetwork) graphConverter.unmarshal( reader, context );
+		xmlData.network = (DirectedGraph) graphConverter.unmarshal( reader, context );
 		reader.moveUp();
 
 		// assign default position to all nodes

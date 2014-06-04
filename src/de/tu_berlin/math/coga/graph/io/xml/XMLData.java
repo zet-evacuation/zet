@@ -8,9 +8,9 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class XMLData {
 	List<Node> sinks;
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<>();
 	LinkedHashMap<String, Edge> edges = new LinkedHashMap<>();
-	AbstractNetwork network;
+	DirectedGraph network;
 	NodePositionMapping nodePositionMapping = new NodePositionMapping();
 	boolean doubleEdges = false;
 	double scaleVal;
@@ -96,7 +96,7 @@ public class XMLData {
 		return transitTimesIntegral;
 	}
 
-	public AbstractNetwork getNetwork() {
+	public DirectedGraph getGraph() {
 		return network;
 	}
 
@@ -133,7 +133,7 @@ public class XMLData {
 	}
 
 	public GraphVisualization generateGraphView() {
-		GraphVisualization createdGraphView = new GraphVisualization( getNetwork(), getNodePositionMapping(), getEdgeCapacitiesIntegral(), getNodeCapacitiesIntegral(), getTransitTimesIntegral(), getSuppliesIntegral(), getSources(), sinks );
+		GraphVisualization createdGraphView = new GraphVisualization( getGraph(), getNodePositionMapping(), getEdgeCapacitiesIntegral(), getNodeCapacitiesIntegral(), getTransitTimesIntegral(), getSuppliesIntegral(), getSources(), sinks );
 		createdGraphView.setScale( scaleVal );
 		createdGraphView.setContainsSuperSink( containsSuperSink );
 		return createdGraphView;

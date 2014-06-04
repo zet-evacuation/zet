@@ -21,8 +21,8 @@ import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
@@ -40,7 +40,7 @@ public class GraphData extends Data{
     private int[][] distances;
     private IdentifiableIntegerMapping<Edge> edgeCapacities;
     private Map<Edge, IntegerDoubleMapping> edgeFlows;
-    private AbstractNetwork network;
+    private DirectedGraph network;
     private Iterable<Node> sinks;
     private IdentifiableIntegerMapping<Node> nodeCapacities;
     private PathBasedFlowOverTime pathFlows;
@@ -50,14 +50,14 @@ public class GraphData extends Data{
 
     @Deprecated
     public GraphData(NetworkFlowModel networkFlowModel, PathBasedFlowOverTime pathFlows) {
-        this((AbstractNetwork)networkFlowModel.graph(), networkFlowModel.edgeCapacities(),
+        this(networkFlowModel.graph(), networkFlowModel.edgeCapacities(),
                 networkFlowModel.nodeCapacities(), networkFlowModel.transitTimes(),
                 networkFlowModel.currentAssignment(),
                 networkFlowModel.graph().predecessorNodes(networkFlowModel.getSupersink()),
                 pathFlows);
     }
 
-    public GraphData(AbstractNetwork network, IdentifiableIntegerMapping<Edge> edgeCapacities,
+    public GraphData(DirectedGraph network, IdentifiableIntegerMapping<Edge> edgeCapacities,
             IdentifiableIntegerMapping<Node> nodeCapacities,
             IdentifiableIntegerMapping<Edge> transitTimes,
             IdentifiableIntegerMapping<Node> supplies,
@@ -76,7 +76,7 @@ public class GraphData extends Data{
     }
 
     protected void calculateDistances() {
-        distances = new int[network.getNodeCapacity()][network.getNodeCapacity()];
+        distances = new int[network.nodeCount()][network.edgeCount()];
         for (Node from : network.nodes()) {
             Dijkstra dijkstra = new Dijkstra(network, transitTimes, from);
             dijkstra.run();
@@ -90,7 +90,7 @@ public class GraphData extends Data{
     protected void calculateEdgeFlows() {
         PathComposition fc = new PathComposition(network, transitTimes, pathFlows);
         fc.run();
-        this.edgeFlows = new HashMap(network.getEdgeCapacity());
+        this.edgeFlows = new HashMap(network.edgeCount());
         for (Edge edge : network.edges()) {
             edgeFlows.put(edge, new IntegerDoubleMapping(fc.getEdgeFlows().get(edge)));
         }
@@ -127,7 +127,7 @@ public class GraphData extends Data{
         return edgeFlows.get(edge);
     }
 
-    public AbstractNetwork getNetwork() {
+    public DirectedGraph getNetwork() {
         return network;
     }
 

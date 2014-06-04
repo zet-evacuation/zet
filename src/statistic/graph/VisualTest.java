@@ -22,10 +22,8 @@ package statistic.graph;
 
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +38,7 @@ import javax.swing.JFrame;
 public class VisualTest extends JFrame {
 
     public static void main(String[] args) {
-        Network network = new Network(9, 10);
+        DefaultDirectedGraph network = new DefaultDirectedGraph(9, 10);
         Node source1 = network.getNode(0);
         Node source2 = network.getNode(1);
         Node source3 = network.getNode(4);

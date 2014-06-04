@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.batch.input.converter;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import ds.graph.problem.RawMaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
@@ -24,7 +24,7 @@ public class RawToFullMaximumFlowProblemConverter extends Algorithm<RawMaximumFl
      */
     @Override
     protected MaximumFlowProblem runAlgorithm(RawMaximumFlowProblem problem) {
-        Network network = new Network(problem.getNumberOfNodes(), problem.getNumberOfEdges());
+        DefaultDirectedGraph network = new DefaultDirectedGraph(problem.getNumberOfNodes(), problem.getNumberOfEdges());
         IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(problem.getNumberOfEdges());
         for (int nodeIndex = 0; nodeIndex < problem.getNumberOfNodes(); nodeIndex++) {
             int nextStartIndex = ((nodeIndex+1 < problem.getNumberOfNodes())? problem.getNodeStartIndices()[nodeIndex+1] : problem.getNumberOfNodes());

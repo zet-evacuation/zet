@@ -8,8 +8,7 @@ import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
 import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MaxFlowOverTimeTest {
 	@Test
 	public void MaxFlowTest() {
 		System.out.println( "TEST 1:" );
-		AbstractNetwork network = new Network( 9, 10 );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( 9, 10 );
 		Node source1 = network.getNode( 0 );
 		Node source2 = network.getNode( 1 );
 		Node source3 = network.getNode( 2 );
@@ -94,7 +93,7 @@ public class MaxFlowOverTimeTest {
 	@Test
 	public void MaxFlowTest2() {
 		System.out.println( "TEST 2:" );
-		AbstractNetwork network = new Network( 6, 7 );
+		DefaultDirectedGraph network = new DefaultDirectedGraph( 6, 7 );
 		Node s = network.getNode( 0 );
 		Node t = network.getNode( 1 );
 		Node v1 = network.getNode( 2 );

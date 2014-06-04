@@ -27,10 +27,8 @@ import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.ds.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.Network;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -77,7 +75,7 @@ public class Test {
             Controller controller = Controller.getInstance();            
             StatisticsCollection runs = new StatisticsCollection();
             for (int index = 0; index < 5; index++) {
-                Network network = new Network(10, 14);
+                DefaultDirectedGraph network = new DefaultDirectedGraph(10, 14);
                 Node source1 = network.getNode(0);
                 Node source2 = network.getNode(1);
                 Node source3 = network.getNode(4);
