@@ -17,9 +17,8 @@
 package algo.graph.exitassignment;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.TimeHorizonBounds;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
@@ -37,6 +36,7 @@ import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
+import de.tu_berlin.coga.netflow.dynamic.TimeHorizonBounds;
 
 /**
  *
@@ -74,13 +74,13 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
             }
         }
 
-        EarliestArrivalFlowProblem problem;// = new EarliestArrivalFlowProblem(reducedCapacities, model.graph(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());            
+        EarliestArrivalFlowProblem problem;// = new EarliestArrivalFlowProblem(reducedCapacities, model.graph(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
 				problem = model.getEAFP();
         Algorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
-        
-        //problem = new EarliestArrivalFlowProblem(reducedCapacities, model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());       
+
+        //problem = new EarliestArrivalFlowProblem(reducedCapacities, model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
 				problem = model.getEAFP( estimator.getSolution().getUpperBound() );
         Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
@@ -92,7 +92,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
             for (int i = 0; i < path.getRate(); i++) {
                 solution.assignIndividualToExit(start, exit);
             }
-        }        
+        }
         return solution;
     }
 
