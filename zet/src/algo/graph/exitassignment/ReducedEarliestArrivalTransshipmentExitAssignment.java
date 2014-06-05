@@ -17,9 +17,8 @@
 package algo.graph.exitassignment;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.TimeHorizonBounds;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
@@ -38,6 +37,7 @@ import java.util.List;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.graph.DirectedGraph;
+import de.tu_berlin.coga.netflow.dynamic.TimeHorizonBounds;
 
 /**
  *
@@ -61,7 +61,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             Forest shortestPathTree = dijkstra.getShortestPathTree();
             for (Node source : model.getSources()) {
                 distances[source.id()][sink.id()] = dijkstra.getDistance(source);
-                caps[source.id()][sink.id()] = model.edgeCapacities().minimum(shortestPathTree.getPathToRoot(source)); 
+                caps[source.id()][sink.id()] = model.edgeCapacities().minimum(shortestPathTree.getPathToRoot(source));
             }
         }
 
@@ -95,7 +95,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             Edge edge = reducedNetwork.createAndSetEdge(reducedNetwork.getNode(model.getSources().size() + sinkIndex), supersink);
             reducedTransitTimes.set(edge, 0);
             reducedCapacities.set(edge, Integer.MAX_VALUE);
-            sinkIndex++;            
+            sinkIndex++;
         }
         int totalSupplies = 0;
         for (Node source : model.getSources()) {
@@ -104,18 +104,18 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         for (Node node : reducedNetwork.nodes()) {
             reducedNodeCapacities.set(node, Integer.MAX_VALUE);
         }
-        reducedBalances.set(supersink, -totalSupplies);        
-        
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, 0, reducedTransitTimes, reducedBalances);            
+        reducedBalances.set(supersink, -totalSupplies);
+
+        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, 0, reducedTransitTimes, reducedBalances);
         Algorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
-        
-        problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, estimator.getSolution().getUpperBound(), reducedTransitTimes, reducedBalances);       
+
+        problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, estimator.getSolution().getUpperBound(), reducedTransitTimes, reducedBalances);
         Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
-        
+
         PathBasedFlowOverTime paths = algorithm.getSolution().getPathBased();
         LinkedList<Node> sinks2 = new LinkedList<Node>();
         for (Node sink : sinks) {
@@ -124,11 +124,11 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         for (FlowOverTimePath path : paths) {
             Edge edge = path.firstEdge();
             Node source = model.getSources().get(edge.start().id());
-            Node sink = sinks2.get(edge.end().id() - model.getSources().size());            
+            Node sink = sinks2.get(edge.end().id() - model.getSources().size());
             for (int i = 0; i < path.getRate(); i++) {
                 solution.assignIndividualToExit(source, sink);
             }
-        }        
+        }
         return solution;
     }
 

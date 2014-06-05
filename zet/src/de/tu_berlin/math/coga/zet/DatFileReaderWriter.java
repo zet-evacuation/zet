@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.coga.common.algorithm.Algorithm;

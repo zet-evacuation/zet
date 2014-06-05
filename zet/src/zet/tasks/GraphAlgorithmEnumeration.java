@@ -18,10 +18,10 @@ package zet.tasks;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.DynamicTransshipmentProblem;
 import de.tu_berlin.coga.netflow.dynamic.transshipment.QuickestTransshipment;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EATransshipmentMinCost;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EATransshipmentSSSP;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentMinCost;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentSSSP;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
 import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
 import de.tu_berlin.coga.netflow.dynamic.maxflow.TimeExpandedMaximumFlowOverTime;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;

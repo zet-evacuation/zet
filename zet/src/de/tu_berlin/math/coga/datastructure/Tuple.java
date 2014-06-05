@@ -14,19 +14,19 @@ import java.util.Objects;
  * @author Jan-Philipp Kappmeier
  */
 public class Tuple<U,V> {
-	
+
 	private U u;
 	private V v;
 
 	/**
-	 * 
+	 *
 	 * @param u
-	 * @param v 
+	 * @param v
 	 * @throws NullPointerException if one of the arguments is {@code null}
 	 */
 	public Tuple( U u, V v ) throws NullPointerException {
 		this.u = Objects.requireNonNull( u , "u must not be null" );
-		this.v = Objects.requireNonNull( v , "v must not be null" );
+		this.v = v; //Objects.requireNonNull( v , "v must not be null" );
 	}
 
 	public U getU() {
@@ -61,7 +61,7 @@ public class Tuple<U,V> {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" +  u + ',' + v + ')';

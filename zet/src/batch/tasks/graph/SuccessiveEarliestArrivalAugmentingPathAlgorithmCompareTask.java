@@ -5,7 +5,7 @@
 package batch.tasks.graph;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgoWithTH;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.SEAAPAlgoWithTH;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;

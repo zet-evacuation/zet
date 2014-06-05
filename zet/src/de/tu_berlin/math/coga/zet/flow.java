@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.LongestShortestPathTimeHorizonEstimator;
+import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import com.martiansoftware.jsap.FlaggedOption;
@@ -36,10 +36,10 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentSSSP;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -220,8 +220,6 @@ public class flow implements AlgorithmListener {
 	}
 
 	private void computeEarliestArrivalFlow() {
-
-
 		if( eafp.getTimeHorizon() <= 0 ) {
 			System.out.print( "Estimating time horizon..." );
 			LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
@@ -244,10 +242,10 @@ public class flow implements AlgorithmListener {
 //		eatMin.setProblem( eafp );
 //		eatMin.run();
 //
-//		System.out.println( "\nSSSPCost:" );
-//		EATransshipmentSSSP eatSSSP = new EATransshipmentSSSP( );
-//		eatSSSP.setProblem( eafp );
-//		eatSSSP.run();
+		System.out.println( "\nSSSPCost:" );
+		EATransshipmentSSSP eatSSSP = new EATransshipmentSSSP( );
+		eatSSSP.setProblem( eafp );
+		eatSSSP.run();
 //
 //		if( 1 == 1 )
 //			return;
@@ -255,6 +253,9 @@ public class flow implements AlgorithmListener {
 		System.out.println( eafp.getNetwork().toString() );
 
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
+    //SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
+
+    eafp.setTimeHorizon( 1000 );
 
 		algo.setProblem( eafp );
 		//algo.addAlgorithmListener( this );
@@ -272,11 +273,11 @@ public class flow implements AlgorithmListener {
 		Logger.getGlobal().info( "Runtime: " + algo.getRuntimeAsString() );
 
 		System.out.println( "Path-Decomposition: " );
-		System.out.println( df.toString( eafp.getTransitTimes() ) );
+		//System.out.println( df.toString( eafp.getTransitTimes() ) );
 
 		EarliestArrivalFlowPattern pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
 
-		System.out.println( pattern );
+		//System.out.println( pattern );
 
 		if( 1 == 1 )
 			return;
