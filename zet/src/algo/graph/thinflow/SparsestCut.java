@@ -19,7 +19,7 @@ import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
 import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
-import de.tu_berlin.coga.netflow.ds.network.ResidualGraph;
+import de.tu_berlin.coga.netflow.ds.network.rational.RationalResidualGraph;
 
 import de.tu_berlin.coga.netflow.classic.maxflow.Fujishige;
 import de.tu_berlin.coga.netflow.classic.problems.RationalMaxFlowProblem;
@@ -132,7 +132,7 @@ public class SparsestCut {
 
 		double maxflow = fuji.getSolution().getFlowValue();
 
-		ResidualGraph resgraph = fuji.getResidualGraph();
+		RationalResidualGraph resgraph = fuji.getResidualGraph();
 
     BreadthFirstSearch bfs = new BreadthFirstSearch();
     bfs.setProblem( resgraph );
