@@ -13,7 +13,16 @@ import java.io.IOException;
  * @author Jan-Philipp Kappmeier
  */
 public abstract class LineBasedReader<T> extends InputFileReader<T> {
+  private boolean stop = false;
 
+  public boolean isStop() {
+    return stop;
+  }
+
+  public void setStop( boolean stop ) {
+    this.stop = stop;
+  }
+  
   /**
    * Reads the minimum cost flow problem from the specified file.
    * @param file the file which contains the minimum cost flow problem.
@@ -21,6 +30,7 @@ public abstract class LineBasedReader<T> extends InputFileReader<T> {
    */
   @Override
   protected T runAlgorithm( File file ) {
+    setStop( false );
     preOperation();
     switch( getOptimization() ) {
       case SPEED:
@@ -41,11 +51,11 @@ public abstract class LineBasedReader<T> extends InputFileReader<T> {
    * @param propertiesOnly whether only the number of nodes, edges and supply should be read. Much faster than reading
    * the whole file.
    */
-  protected void runAlgorithmSpeed( File file, boolean propertiesOnly ) {
+  private void runAlgorithmSpeed( File file, boolean propertiesOnly ) {
     String line = null;
     int lineIndex = 0;
     try (BufferedReader reader = new BufferedReader( new FileReader( file ) )) {
-      while( (line = reader.readLine()) != null ) {
+      while( (line = reader.readLine()) != null && !stop ) {
         ++lineIndex;
         if( line.trim().isEmpty() ) {
           continue;
