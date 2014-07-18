@@ -14,7 +14,7 @@ import java.util.HashMap;
 public abstract class DimacsReader<T> extends LineBasedReader<T> {
   private HashMap<Character,DimacsLineOperation> characterOperationMap;
 
-  private final DimacsLineOperation commentLine = new DimacsLineOperation() {
+  public final static DimacsLineOperation commentLine = new DimacsLineOperation() {
     @Override
     public void parseLine( String[] line ) {
       // do nothing
@@ -23,7 +23,7 @@ public abstract class DimacsReader<T> extends LineBasedReader<T> {
 
   public DimacsReader() {
     characterOperationMap = new HashMap<>();
-    characterOperationMap.put( '#', commentLine );
+    characterOperationMap.put( 'c', commentLine );
   }
 
   @Override
@@ -37,7 +37,7 @@ public abstract class DimacsReader<T> extends LineBasedReader<T> {
   @Override
   protected void phaseComplete() {
     characterOperationMap.clear();
-    characterOperationMap.put( '#', commentLine );
+    characterOperationMap.put( 'c', commentLine );
   }
 
   protected void registerLineOperation( char c, DimacsLineOperation op ) {
