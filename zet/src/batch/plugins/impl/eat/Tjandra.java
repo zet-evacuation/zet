@@ -1,18 +1,12 @@
-/**
- * Tjandra.java
- * Created: 27.03.2014, 15:02:45
- */
-package batch.plugins.impl;
+
+package batch.plugins.impl.eat;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 
 /**
  *

@@ -24,8 +24,8 @@ import zet.tasks.GraphAlgorithmEnumeration;
  */
 public class BasicOptimization extends AbstractOperation implements Operation {
 	InputFileReader<Project> input;
-		AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
-		AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
+	AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
+	AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
 
 	public BasicOptimization() {
 		// First, we go from zet to network flow model
@@ -120,6 +120,4 @@ public class BasicOptimization extends AbstractOperation implements Operation {
 		// create graph vis result
 		GraphVisualizationResults gvr = new GraphVisualizationResults( cav.getSolution(), gt.getSolution() );
 	}
-
-
 }

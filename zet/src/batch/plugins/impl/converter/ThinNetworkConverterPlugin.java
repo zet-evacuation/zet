@@ -2,7 +2,7 @@
  * ThinNetworkConverterPlugin.java
  * Created: 03.04.2014, 17:11:46
  */
-package batch.plugins.impl;
+package batch.plugins.impl.converter;
 
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;

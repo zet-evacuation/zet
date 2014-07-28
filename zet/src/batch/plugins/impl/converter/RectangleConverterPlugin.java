@@ -2,7 +2,7 @@
  * ConverterPlugin.java
  * Created: 28.03.2014, 17:26:39
  */
-package batch.plugins.impl;
+package batch.plugins.impl.converter;
 
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
