@@ -1,6 +1,4 @@
-/**
- * DimacsMaximumFlowFileReader.java Created: 18.07.2014, 18:25:31
- */
+
 package de.tu_berlin.math.coga.batch.input.reader;
 
 import ds.graph.problem.RawMaximumFlowProblem;
@@ -187,7 +185,7 @@ public class DimacsMaximumFlowFileReader extends DimacsReader<RawMaximumFlowProb
       edges = new int[numberOfEdges];
       registerLineOperation( 'p', commentLine );
       registerLineOperation( 'n', commentLine );
-      
+      registerLineOperation( 'n', new CharA3() );
     }
   }
 
