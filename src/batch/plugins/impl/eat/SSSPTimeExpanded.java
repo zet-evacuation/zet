@@ -1,8 +1,5 @@
-/**
- * SSSPTimeExpanded.java
- * Created: 28.03.2014, 17:43:58
- */
-package batch.plugins.impl;
+
+package batch.plugins.impl.eat;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.plugins.AlgorithmicPlugin;
