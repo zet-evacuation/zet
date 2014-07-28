@@ -1,7 +1,4 @@
-/**
- * DimacsReader.java
- * Created: 18.07.2014, 18:15:04
- */
+
 package de.tu_berlin.math.coga.batch.input.reader;
 
 import java.util.HashMap;
@@ -12,7 +9,7 @@ import java.util.HashMap;
  * @author Jan-Philipp Kappmeier
  */
 public abstract class DimacsReader<T> extends LineBasedReader<T> {
-  private HashMap<Character,DimacsLineOperation> characterOperationMap;
+  private final HashMap<Character,DimacsLineOperation> characterOperationMap;
 
   public final static DimacsLineOperation commentLine = new DimacsLineOperation() {
     @Override
@@ -29,7 +26,7 @@ public abstract class DimacsReader<T> extends LineBasedReader<T> {
   @Override
   protected void parseLine( String line ) {
     if( characterOperationMap.containsKey( line.charAt( 0 ) ) ) {
-      String[] tokens = line.substring( 2 ).split("\\s+");
+      String[] tokens = line.substring( 2 ).trim().split("\\s+");
       characterOperationMap.get( line.charAt( 0 ) ).parseLine( tokens );
     }
   }
