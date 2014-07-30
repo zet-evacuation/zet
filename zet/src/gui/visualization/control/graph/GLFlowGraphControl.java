@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class GLFlowGraphControl
- * Created 02.05.2008, 18:44:28
- */
-
 package gui.visualization.control.graph;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
@@ -29,6 +24,8 @@ import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLFlowGraph;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
 import opengl.helper.Frustum;
@@ -57,15 +54,14 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	double scaling = 1;
 	double defaultFloorHeight = 25;
 	private GraphVisualizationResults graphVisResult;
+	private static final Logger log = Logger.getGlobal();
 
 	public GLFlowGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
 		this.graphVisResult = graphVisResult;
-    System.out.println( "GraphVisualizationResults" );
 	}
 
 	public void build( ) {
-    System.out.println( "We are in build." );
 		mainControl = this;
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
@@ -76,8 +72,6 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		supportsFloors = true;
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
 		clear();
-
-    System.out.println( graphVisResult.getFlow() );
 
 		for( int i = 0; i < floorCount; i++ ) {
 				GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
@@ -91,7 +85,6 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 
 	public GLFlowGraphControl( FlowVisualization fv ) {
 		mainControl = this;
-    System.out.println( "FlowVisualization" );
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = fv.getNetwork().nodes().size();
@@ -198,7 +191,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 					edge.stepUpdate();
 				node.stepUpdate( (int) step );
 			}
-		System.out.println( "SET TIME AUFGERUFEN" );
+		log.fine( "Start Flow Visualization." );
 		finished = stepCount == 0 || step > stepCount;
 	}
 
@@ -238,7 +231,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		this.nanoSecondsPerStep = nanoSecondsPerStep;
 		secondsPerStep = nanoSecondsPerStep * Conversion.nanoSecondsToSec;
 
-		System.out.println( "Berechnete Graph-Geschwindigkeit: " + nanoSecondsPerStep );
+   	log.log( Level.FINE, "Berechnete Graph-Geschwindigkeit: {0}", nanoSecondsPerStep);
 	}
 
 	/**
@@ -255,7 +248,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		if( nanoSecondsPerStep == 0 )
 			finished = true;
 
-		System.out.println( "Berechnete Graph-Geschwindigkeit: " + nanoSecondsPerStep );
+		log.log( Level.FINE, "Berechnete Graph-Geschwindigkeit: {0}", nanoSecondsPerStep);
 	}
 
 	public void setSpeedFactor( double speedFactor ) {

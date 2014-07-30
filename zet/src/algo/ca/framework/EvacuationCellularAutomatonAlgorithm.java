@@ -1,7 +1,4 @@
-/**
- * EvacuationCellularAutomatonAlgorithm.java
- * Created: 25.10.2012, 17:26:13
- */
+
 package algo.ca.framework;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
@@ -57,7 +54,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellu
 		//caController.getPotentialController().updateDynamicPotential( caController.parameterSet.probabilityDynamicIncrease(), caController.parameterSet.probabilityDynamicDecrease() );
 		getProblem().eca.nextTimeStep();
 
-		fireProgressEvent( getProgress(), String.format( "%1$s von %2$s Personen evakuiert.", getProblem().eca.getInitialIndividualCount()-getProblem().eca.getIndividualCount(), getProblem().eca.getIndividualCount() ) );
+		fireProgressEvent( getProgress(), String.format( "%1$s von %2$s Personen evakuiert.", getProblem().eca.getInitialIndividualCount()-getProblem().eca.getIndividualCount(), getProblem().eca.getInitialIndividualCount() ) );
 	}
 
 	@Override

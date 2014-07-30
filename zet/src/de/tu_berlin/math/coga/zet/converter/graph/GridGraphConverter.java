@@ -1,7 +1,4 @@
-/**
- * GridGraphConverter.java
- * Created: 26.07.2011, 15:43:27
- */
+
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
