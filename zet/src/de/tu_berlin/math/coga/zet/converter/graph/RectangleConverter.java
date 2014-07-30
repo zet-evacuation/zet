@@ -514,6 +514,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							transitTimeStartEnd = transitTimeStartEnd * precision / 400.0d;
 
 							// write the new transitTime into the IIMapping
+              System.out.println( "Set transit time for " + edge + " to " + transitTimeStartEnd );
 							model.setExactTransitTime( edge, transitTimeStartEnd );
 						}
 					}
@@ -589,6 +590,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							// adjusting the transit time according to the graph precision value
 							transitTimeAB = transitTimeAB * precision / 400.0d;
 
+              System.out.println( "Set transit time for " + edge + " to " + transitTimeAB );
 							model.setExactTransitTime( edge, transitTimeAB );
 						}
 					}

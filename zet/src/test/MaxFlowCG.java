@@ -35,7 +35,7 @@ public class MaxFlowCG {
   int maxFlow = 0;
   PathBasedFlow solution = new PathBasedFlow();
   LinkedList<PathVariableTuple> usedPaths = new LinkedList<>();
-  
+
   public MaxFlowCG() throws GRBException {
     network = new DefaultDirectedGraph( 4, 5 );
 
@@ -129,7 +129,7 @@ public class MaxFlowCG {
     while( !p.first().start().equals( s ) ) {
       p.addFirstEdge( d.getLastEdge( p.first().start() ) );
     }
-    
+
     return p;
   }
 
@@ -137,7 +137,7 @@ public class MaxFlowCG {
    * Adds a new path as a variable to the optimization model. The variable is
    * introduced to the constraint belonging to the edges on the path.
    * @param path the path
-   * @throws GRBException if something went wrong 
+   * @throws GRBException if something went wrong
    */
   public void addColumn( StaticPath path ) throws GRBException {
     GRBVar pathVar = model.addVar( 0.0, GRB.INFINITY, 1.0, GRB.CONTINUOUS, "p" + pathCount++ );
@@ -148,7 +148,7 @@ public class MaxFlowCG {
     model.update();
     usedPaths.add( new PathVariableTuple( path, pathVar ) );
   }
-  
+
   /**
    * Generates a path based flow solution.
    * @throws GRBException if variable access doesn't work

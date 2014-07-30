@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -19,6 +16,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.text.ParseException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,6 +25,7 @@ import javax.swing.JTextField;
 import zet.gui.components.model.AssignmentTypeComboBoxModel;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.main.JZetWindow;
+import static zet.gui.main.tabs.editor.JInformationPanel.nfInteger;
 
 /**
  *
@@ -107,17 +106,19 @@ public class JAssignmentAreaInformationPanel extends JInformationPanel<Assignmen
 				JZetWindow.setEditing( false );
 			}
 		} );
+
 		txtNumberOfPersons.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					;
-//					try {
-//						int persons = Math.min( nfInteger.parse( txtNumberOfPersons.getText() ).intValue(), ((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).getMaxEvacuees() );
-//						((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setEvacuees( persons );
-//					} catch( ParseException | IllegalArgumentException ex ) {
+
+					try {
+            final int maxEvacuees = current.getMaxEvacuees();
+            final int typedPersons = nfInteger.parse( txtNumberOfPersons.getText() ).intValue();
+            current.setEvacuees( Math.min( maxEvacuees, typedPersons ) );
+					} catch( ParseException | IllegalArgumentException ex ) {
 //						ZETLoader.sendError( ex.getLocalizedMessage() );
-//					}
+					}
 			}
 		} );
 		this.add( txtNumberOfPersons, "0, " + row++ );
@@ -127,10 +128,8 @@ public class JAssignmentAreaInformationPanel extends JInformationPanel<Assignmen
 		btnAssignmentSetDefaultEvacuees.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				//AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-				//int persons = Math.min( a.getAssignmentType().getDefaultEvacuees(), a.getMaxEvacuees() );
-				//a.setEvacuees( persons );
-				//txtNumberOfPersons.setText( nfInteger.format( a.getEvacuees() ) );
+				current.setEvacuees( Math.min( current.getAssignmentType().getDefaultEvacuees(), current.getMaxEvacuees() ) );
+				txtNumberOfPersons.setText( nfInteger.format( current.getEvacuees() ) );
 			}
 		} );
 		this.add( btnAssignmentSetDefaultEvacuees, "0, " + row++ );
@@ -147,7 +146,7 @@ public class JAssignmentAreaInformationPanel extends JInformationPanel<Assignmen
 					return;
 //				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
 //					AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-//					a.setExitArea( (EvacuationArea)cbxPreferredExit.getSelectedItem() );
+//					a.setxitArea( (EvacuationArea)cbxPreferredExit.getSelectedItem() );
 //				}
 			}
 		} );

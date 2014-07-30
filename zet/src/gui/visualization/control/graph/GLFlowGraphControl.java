@@ -61,9 +61,11 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public GLFlowGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
 		this.graphVisResult = graphVisResult;
+    System.out.println( "GraphVisualizationResults" );
 	}
-	
+
 	public void build( ) {
+    System.out.println( "We are in build." );
 		mainControl = this;
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
@@ -74,6 +76,9 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		supportsFloors = true;
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
 		clear();
+
+    System.out.println( graphVisResult.getFlow() );
+
 		for( int i = 0; i < floorCount; i++ ) {
 				GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
 				add( floorControl );
@@ -86,6 +91,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 
 	public GLFlowGraphControl( FlowVisualization fv ) {
 		mainControl = this;
+    System.out.println( "FlowVisualization" );
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = fv.getNetwork().nodes().size();
@@ -105,7 +111,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		this.setView( new GLFlowGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );
-		
+
 		if( nanoSecondsPerStep == 0 )
 			finished = true;
 	}
@@ -222,7 +228,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	 * Sets the time needed for one step of the graph in nano seconds. A graph
 	 * step equals a time unit of the network flow.
 	 * @param nanoSecondsPerStep the nano seconds needed for one graph step
-	 * @see #setSecondsPerStep(double) 
+	 * @see #setSecondsPerStep(double)
 	 */
 	public void setNanoSecondsPerStep( long nanoSecondsPerStep ) {
 		if( nanoSecondsPerStep < 0 )
@@ -283,7 +289,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	}
 
 	/**
-	 * 
+	 *
 	 * @param frustum
 	 */
 	@Override
@@ -294,7 +300,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	Frustum frustum;
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
