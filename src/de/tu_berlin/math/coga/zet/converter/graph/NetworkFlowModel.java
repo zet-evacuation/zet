@@ -233,6 +233,12 @@ public class NetworkFlowModel implements Iterable<Node> {
 		transitTimes = exactTransitTimes.round();
 	}
 
+  /**
+   * This should be called before rounding as it uses the exact transit times. Also, multiplication with up/down speed
+   * factors may create rounding errors and thus, rounding should be the last operation.
+   * @param edge
+   * @return
+   */
   Edge createReverseEdge( Edge edge ) {
 		Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
 
@@ -241,9 +247,10 @@ public class NetworkFlowModel implements Iterable<Node> {
 
 		mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
 		setEdgeCapacity( newEdge, getEdgeCapacity( edge ) );
-		setTransitTime( newEdge, getTransitTime( edge ) );
+		setExactTransitTime( newEdge, getExactTransitTime( edge ) );
 		network.setEdge( newEdge );
-    System.out.println( "Edge (" + newEdge.start() + "," + newEdge.end() + ") created." );
+    System.out.println( "Reverse Edge (" + newEdge.start() + "," + newEdge.end() + ") created." );
+    System.out.println( " - capacity " + getEdgeCapacity( edge ) + " transit time + " + getExactTransitTime( edge ) );
 		return newEdge;
 	}
 	void setNodeAssignment( Node node, int i ) {

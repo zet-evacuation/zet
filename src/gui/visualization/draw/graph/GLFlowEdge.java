@@ -261,6 +261,8 @@ public class GLFlowEdge extends GLEdge {
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
+    if( fcontrol.edge.id() == 0 )
+      return;
 		drawFlow( gl );
 	}
 
