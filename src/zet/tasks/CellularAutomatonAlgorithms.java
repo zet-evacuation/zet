@@ -23,11 +23,6 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import io.visualization.CAVisualizationResults;
 
 /**
  * Some cellular automaton simulation algorithms. Creates the algorithm objects

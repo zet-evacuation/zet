@@ -43,6 +43,7 @@ import de.tu_berlin.math.coga.batch.operations.OperationList;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.ProjectLoader;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import gui.GUIControl;
 import java.awt.BorderLayout;
@@ -136,6 +137,7 @@ public class JBatch extends JPanel {
 			addInputFilesAction.setEnabled( !selectedComputations.isEmpty() );
 
 			basicOptimization.setEnabled( !selectedComputations.isEmpty() );
+			basicSimulation.setEnabled( !selectedComputations.isEmpty() );
       maxFlowOperation.setEnabled( !selectedComputations.isEmpty() );
 		}
 	}
@@ -156,6 +158,7 @@ public class JBatch extends JPanel {
 	private final AddAlgorithmAction cellularAutomaton4;
 	private final NewComputationAction newComputationAction = null;
 	private final OperationAction basicOptimization;
+	private final OperationAction basicSimulation;
 	private final OperationAction maxFlowOperation;
 
 	public JBatch( GUIControl control ) {
@@ -181,6 +184,9 @@ public class JBatch extends JPanel {
 
 		basicOptimization = new OperationAction( this, new BasicOptimization(), "Basic Optimization" );
 		activityPane.add( basicOptimization );
+    
+		basicSimulation = new OperationAction( this, new BasicSimulation(), "Simulation" );
+		activityPane.add( basicSimulation );
     
     maxFlowOperation = new OperationAction( this, new MaximumFlowComputation(), "Max Flow Optimization" );
 		activityPane.add( maxFlowOperation );

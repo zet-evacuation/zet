@@ -1,7 +1,4 @@
-/**
- * BasicOptimization.java
- * Created: 27.03.2014, 16:28:25
- */
+
 package de.tu_berlin.math.coga.batch.operations;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -16,7 +13,6 @@ import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import zet.tasks.GraphAlgorithmEnumeration;
-
 
 /**
  *
@@ -66,8 +62,6 @@ public class BasicOptimization extends AbstractOperation implements Operation {
 
 		System.out.println( project );
 
-
-
 		if( !project.getBuildingPlan().isRastered() ) {
 			System.out.print( "Building is not rasterized. Rastering... " );
 			project.getBuildingPlan().rasterize();
@@ -92,9 +86,9 @@ public class BasicOptimization extends AbstractOperation implements Operation {
 
 
 		//if( networkFlowModel == null ) {
-			conv.setProblem( project.getBuildingPlan() );
-			conv.run();
-			networkFlowModel = conv.getSolution();
+    conv.setProblem( project.getBuildingPlan() );
+    conv.run();
+    networkFlowModel = conv.getSolution();
 		//}
 
 		// convert and create the concrete assignment
