@@ -9,6 +9,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
@@ -102,12 +103,30 @@ public class BasicOptimization extends AbstractOperation implements Operation {
 
 
 		// call the graph algorithm
+
+
+    Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> gt = eafAlgorithm.getSelectedAlgorithm();
+
+ 		EarliestArrivalFlowProblem eafp = networkFlowModel.getEAFP();
+
+
+		System.out.println( "Earliest arrival transshipment calculation starts" );
+		//EarliestArrivalFlowProblem problem = originalProblem.getEAFP();
+		LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+		estimator.setProblem( eafp );
+		estimator.run();
+		System.out.println( "Geschätzte Lösung:" + estimator.getSolution() );
+		eafp = networkFlowModel.getEAFP( estimator.getSolution().getUpperBound() );
+
+
+
+    gt.setProblem( eafp );
 		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
+		//Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
 		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
 
-		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
-		gt.setProblem( cav.getSolution() );
+		//gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
+		//gt.setProblem( cav.getSolution() );
 		//gt.addAlgorithmListener( this );
 		gt.run();
 
