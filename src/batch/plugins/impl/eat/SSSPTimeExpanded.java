@@ -5,6 +5,7 @@ import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentWithTHSSSP;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 
@@ -32,7 +33,23 @@ public class SSSPTimeExpanded implements AlgorithmicPlugin<EarliestArrivalFlowPr
 
 	@Override
 	public Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> getAlgorithm() {
-		throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+    System.err.println( "Testing with fixed time horizon 18!" );
+
+    Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> algo = new Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime>() {
+
+      @Override
+      protected PathBasedFlowOverTime runAlgorithm( EarliestArrivalFlowProblem problem ) {
+        EATransshipmentWithTHSSSP eat = new EATransshipmentWithTHSSSP();
+        //problem.setTimeHorizon( getFeasibleTimeHorizon() );
+        problem.setTimeHorizon( 18 );
+
+        eat.setProblem( problem );
+        eat.run();
+        return eat.getSolution().getPathBased();
+      }
+    };
+    return algo;
+
 	}
 
 }

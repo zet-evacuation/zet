@@ -51,8 +51,8 @@ public enum GraphAlgorithmEnumeration {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
 					EATransshipmentSSSP algo = new EATransshipmentSSSP();
-					
-					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.edgeCapacities(), model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() );
+
+					EarliestArrivalFlowProblem dtp = new EarliestArrivalFlowProblem( new DynamicTransshipmentProblem( model.edgeCapacities(), model.graph(), null, timeHorizon, model.transitTimes(), model.currentAssignment() ) );
 					algo.setProblem( dtp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
