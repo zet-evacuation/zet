@@ -59,6 +59,11 @@ import gui.visualization.control.ZETGLControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.DXFWriter;
 import de.tu_berlin.coga.util.movies.MovieManager;
+import de.tu_berlin.math.coga.batch.input.InputDirectory;
+import de.tu_berlin.math.coga.batch.input.InputFiles;
+import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
+import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
+import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -74,6 +79,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -184,7 +190,18 @@ public class GUIControl implements AlgorithmListener {
 		editview = Localizer.instance().registerNewComponent( new JEditView( editStatus, this, selection ) );
 		selection.addObserver( editview );
 		caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
-		JComponent batchView = new JBatch( this );
+		JBatch batchView = new JBatch( this );
+    // Initialize batchView
+    batchView.registerInputAction( new ProjectInput( this ), "Add current project", new ImageIcon("./icons/box_24.png" ) );
+    batchView.registerInputAction( new InputFiles( batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
+    batchView.registerInputAction( new InputDirectory( batchView ), "Add input directory", new ImageIcon("./icons/folder_add_24.png" ) );
+    
+    batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
+    batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
+    batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
+    
+    
+    
 		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
 		JComponent caStatisticView = new JStatisticPanel();
 		JComponent graphStatisticView = new JGraphStatisticPanel();
