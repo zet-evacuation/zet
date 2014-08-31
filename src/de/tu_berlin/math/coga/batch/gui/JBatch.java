@@ -1,17 +1,12 @@
 
 package de.tu_berlin.math.coga.batch.gui;
 
-import batch.load.BatchProjectEntry;
 import batch.plugins.AlgorithmicPlugin;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.ComputationList;
-import de.tu_berlin.math.coga.batch.algorithm.AlgorithmList;
-import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
-import de.tu_berlin.math.coga.batch.input.InputDirectory;
-import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.gui.action.NewComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.OperationAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
@@ -22,34 +17,26 @@ import de.tu_berlin.math.coga.batch.gui.input.ComputationNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import de.tu_berlin.math.coga.batch.gui.input.OperationAlgorithmSelectNode;
-import de.tu_berlin.math.coga.batch.input.FileCrawler;
-import de.tu_berlin.math.coga.batch.input.FileFormat;
-import de.tu_berlin.math.coga.batch.input.InputAlgorithm;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
 import de.tu_berlin.math.coga.batch.operations.AtomicOperation;
 import de.tu_berlin.math.coga.batch.operations.Operation;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.ProjectLoader;
-import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.math.coga.batch.gui.action.BatchAction;
 import de.tu_berlin.math.coga.batch.input.Input;
 import de.tu_berlin.math.coga.batch.gui.action.InputAction;
-import gui.GUIControl;
+import de.tu_berlin.math.coga.batch.gui.action.OutputAction;
+import de.tu_berlin.math.coga.batch.output.Output;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -65,82 +52,42 @@ import javax.swing.tree.TreePath;
 public class JBatch extends JPanel {
 
 	private JInputView table;
-	private final InputDirectory addInputDirectoryAction;
-	private final InputFiles addInputFilesAction;
 	private final ComputationList computationList;
-	private final GUIControl control;
-	//private final AddCurrentProjectAction addCurrentProjectAction;
-	private AddAlgorithmAction addAlgorithmAction;
 	private final InputSelectionListener selectionListener;
 	private final InputKeyListener keyListener;
-	//private final AddAlgorithmAction tjandraOptimized;
-	//private final AddAlgorithmAction cellularAutomaton;
-	//private final AddAlgorithmAction cellularAutomaton2;
-	//private final AddAlgorithmAction cellularAutomaton3;
-	//private final AddAlgorithmAction cellularAutomaton4;
-	private final NewComputationAction newComputationAction = null;
 
 	private final JTaskPaneGroup inputPane = new JTaskPaneGroup();
   private final JTaskPaneGroup activityPane = new JTaskPaneGroup();
   private final JTaskPaneGroup outputPane = new JTaskPaneGroup();
   
   private final ArrayList<BatchAction> actions = new ArrayList<>();
-  
-  public final void registerInputAction( Input input, String title, Icon icon ) {
-    InputAction action = new InputAction(this, input, title, icon );
-    actions.add( action );
-    inputPane.add( action );
-  }
 
-  public final void registerOperationAction( Operation operation, String title ) {
-    OperationAction action = new OperationAction( this, operation, title );
-    actions.add( action );
-    activityPane.add( action );
-  }
-  
-  public final void registerOutputAction( Operation operation, String title ) {
-
-  }
-
-  public JBatch( GUIControl control ) {
+  public JBatch() {
 		super( new BorderLayout() );
-		this.control = control;
 		JTaskPane taskPaneContainer = new JTaskPane();
 		// add JTaskPaneGroups to the container
 		JTaskPaneGroup actionPane = new JTaskPaneGroup();
 		actionPane.setTitle( "Computation" );
 		actionPane.setSpecial( true );
 		actionPane.add( new NewComputationAction( this ) );
+		actionPane.add( new RunComputationAction( this ) );
+		actionPane.add( new StopComputationAction( this ) );
 
 		inputPane.setTitle( "Input" );
 		inputPane.setSpecial( true );
-		//inputPane.add( addCurrentProjectAction = new AddCurrentProjectAction( this ) );
-		//inputPane.add(
-    addInputFilesAction = new InputFiles( this );// );
-		//inputPane.add(
-    addInputDirectoryAction = new InputDirectory( this );// );
-		//actionPane.add(inputPane);
 
-		//activityPane = new JTaskPaneGroup();
-		activityPane.setTitle( "Use cases" );
+    activityPane.setTitle( "Use cases" );
     activityPane.setSpecial( true );
 
-    
-    
-    
-
-		//JTaskPaneGroup simulationPane 
-		//optimizationPane.add( eafPane );
-
-		actionPane.add( new RunComputationAction( this ) );
-		actionPane.add( new StopComputationAction( this ) );
+    outputPane.setTitle( "Output" );
+    outputPane.setSpecial( true );
 
 		taskPaneContainer.add( actionPane );
 		taskPaneContainer.add( inputPane );
 		taskPaneContainer.add( activityPane );
-		//taskPaneContainer.add( simulationPane );
-		//taskPaneContainer.add( optimizationPane );
-		add( new JScrollPane( taskPaneContainer ), BorderLayout.WEST );
+		taskPaneContainer.add( outputPane );
+		
+    add( new JScrollPane( taskPaneContainer ), BorderLayout.WEST );
 
 		table = new JInputView();
 		table.getTree().addTreeSelectionListener( selectionListener = new InputSelectionListener() );
@@ -207,21 +154,23 @@ public class JBatch extends JPanel {
 		table.getTree().getTreeSelectionModel().setSelectionPath( path );
 	}
 
-	public GUIControl getControl() {
-		return control;
-	}
+  public final void registerInputAction( Input input, String title, Icon icon ) {
+    InputAction action = new InputAction(this, input, title, icon );
+    actions.add( action );
+    inputPane.add( action );
+  }
 
-	public void add( BatchProjectEntry entry ) {
-	}
-
-	public void addAlgorithm( Class<? extends Algorithm> algorithmClass, String title ) {
-		for( Computation computation : selectionListener.getSelectedComputations() ) {
-			AlgorithmList algorithmList = computation.getAlgorithms();
-			InputAlgorithm algorithm = new InputAlgorithm( algorithmClass, title );
-			algorithmList.add( algorithm );
-		}
-		updateTreeTable();
-	}
+  public final void registerOperationAction( Operation operation, String title ) {
+    OperationAction action = new OperationAction( this, operation, title );
+    actions.add( action );
+    activityPane.add( action );
+  }
+  
+  public final void registerOutputAction( Output output, String title, Icon icon ) {
+    OutputAction action = new OutputAction( this, output, title, icon );
+    actions.add( action );
+    outputPane.add( action );
+  }
 
   public void addInput( Input input ) {
     for( Computation computation : selectionListener.getSelectedComputations() ) {
@@ -244,58 +193,16 @@ public class JBatch extends JPanel {
 		updateTreeTable();
 	}
 
-	public void addComputation( Computation computation ) {
+  public void addOutput( Output output ) {
+
+    updateTreeTable();
+  }
+
+  public void addComputation( Computation computation ) {
 		computationList.add( computation );
 		updateTreeTable();
 	}
-
-	public void addCurrentProject() {
-		addProject( control.getZControl().getProject() );
-	}
-
-	public void addInputFiles( File[] selectedFiles ) {
-		addInputFiles( selectedFiles, false, false );
-	}
-
-	public void addInputFiles( File[] selectedFiles, boolean recursive, boolean followingLinks ) {
-		FileCrawler crawler = new FileCrawler( recursive, followingLinks );
-		List<String> extensions = FileFormat.getAllKnownExtensions();
-		List<File> files = new LinkedList<>();
-		for( File file : selectedFiles )
-			if( file.isDirectory() )
-				files.addAll( crawler.listFiles( file, extensions ) );
-			else if( file.isFile() )
-				files.add( file );
-
-    for( Computation computation : selectionListener.getSelectedComputations() ) {
-			final InputList input = computation.getInput();
-			for( File file : files ) {
-				final InputFile inputFile = new InputFile( file );
-				if( !input.contains( inputFile ) ) {
-					input.add( inputFile );
-				}
-			}
-		}
-		updateTreeTable();
-	}
-
-	public void addProject( Project project ) {
-		try {
-			ProjectLoader.save( project );
-		} catch( IOException ex ) {
-			Logger.getLogger( JBatch.class.getName() ).log( Level.SEVERE, null, ex );
-		}
-
-    File file = project.getProjectFile();
-		for( Computation computation : selectionListener.getSelectedComputations() ) {
-			InputList input = computation.getInput();
-			InputFile inputFile = new InputFile( file );
-			if( !input.contains( inputFile ) )
-				input.add( inputFile );
-		}
-		updateTreeTable();
-	}
-
+  
 	public ComputationList getComputationList() {
 		return computationList;
 	}
@@ -325,6 +232,7 @@ public class JBatch extends JPanel {
 		 JTree tree;
 		 System.out.println(table.getTree().getPathForRow(4));*/
 	}
+
 	private class InputKeyListener extends KeyAdapter {
 
 		@Override
@@ -349,7 +257,7 @@ public class JBatch extends JPanel {
 
 	private class InputSelectionListener implements TreeSelectionListener {
 
-		private ComputationList selectedComputations;
+		private final ComputationList selectedComputations;
 
 		public InputSelectionListener() {
 			selectedComputations = new ComputationList();
@@ -371,23 +279,9 @@ public class JBatch extends JPanel {
 				for( Object object : path.getPath() )
 					if( object instanceof ComputationNode )
 						selectedComputations.add( ((ComputationNode)object).getComputation() );
-			//cellularAutomaton.setEnabled( !selectedComputations.isEmpty() );
-			//cellularAutomaton2.setEnabled( !selectedComputations.isEmpty() );
-			//cellularAutomaton3.setEnabled( !selectedComputations.isEmpty() );
-			//cellularAutomaton4.setEnabled( !selectedComputations.isEmpty() );
-			//tjandraOptimized.setEnabled( !selectedComputations.isEmpty() );
-			//addCurrentProjectAction.setEnabled( !selectedComputations.isEmpty() );
-			//addInputDirectoryAction.setEnabled( !selectedComputations.isEmpty() );
-			//addInputFilesAction.setEnabled( !selectedComputations.isEmpty() );
 
       for( BatchAction b : actions )
         b.setEnabled( !selectedComputations.isEmpty() );
-      
-			//basicOptimization.setEnabled( !selectedComputations.isEmpty() );
-			//basicSimulation.setEnabled( !selectedComputations.isEmpty() );
-      //maxFlowOperation.setEnabled( !selectedComputations.isEmpty() );
 		}
 	}
-
-
 }

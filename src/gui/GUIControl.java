@@ -190,7 +190,7 @@ public class GUIControl implements AlgorithmListener {
 		editview = Localizer.instance().registerNewComponent( new JEditView( editStatus, this, selection ) );
 		selection.addObserver( editview );
 		caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
-		JBatch batchView = new JBatch( this );
+		JBatch batchView = new JBatch();
     // Initialize batchView
     batchView.registerInputAction( new ProjectInput( this ), "Add current project", new ImageIcon("./icons/box_24.png" ) );
     batchView.registerInputAction( new InputFiles( batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
