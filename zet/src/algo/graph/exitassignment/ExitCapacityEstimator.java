@@ -25,11 +25,10 @@ import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
  *
- * @author Joscha
+ * @author Joscha Kulbatzki
  */
 public class ExitCapacityEstimator {
 

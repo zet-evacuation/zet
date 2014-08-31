@@ -119,7 +119,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	 * @return {@code true} if the network does not contain parallel arcs. Otherwise, an {@link AssertionError} is thrown
 	 */
 	boolean checkParallelEdges() {
-		log.info( "Check for parallel edges..." );
+		int count = 0;
+    log.info( "Check for parallel edges..." );
 
 		HashMap<Tuple<Node,Node>,Edge> usedEdges = new HashMap<>( (int)(model.numberOfEdges()/0.75)+1, 0.75f );
 
@@ -127,11 +128,13 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 			final Tuple<Node,Node> nodePair = new Tuple<>( edge.start(), edge.end() );
 			if( usedEdges.containsKey( nodePair ) ) {
 				log.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
-				return false;
+				//return false;
+        count++;
 			}
 			usedEdges.put( nodePair, edge );
 		}
 		log.log( Level.INFO, "No parallel edges found." );
+    System.err.println( "Parallel edges: " + count );
 		return true;
 	}
 }

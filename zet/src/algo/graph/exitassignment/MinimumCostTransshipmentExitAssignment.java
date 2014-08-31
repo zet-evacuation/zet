@@ -100,7 +100,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
         ssp.run();
 
         PathBasedFlow pathDecomposition = PathDecomposition.calculatePathDecomposition(reducedNetwork, reducedBalances, reducedSources, reducedSinks, ssp.getFlow());
-        LinkedList<Node> sinks2 = new LinkedList<Node>();
+        LinkedList<Node> sinks2 = new LinkedList<>();
         for (Node sink : sinks) {
             sinks2.add(sink);
         }
@@ -148,6 +148,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
      * Returns the calculated exit assignment.
      * @return the calculated exit assignment.
      */
+    @Override
     public ExitAssignment getExitAssignment() {
         return getSolution();
     }

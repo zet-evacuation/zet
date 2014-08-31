@@ -16,7 +16,8 @@ import java.util.List;
 
 /**
  * The class {@code BestResponseDynamics} ...
- * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
+ * @author Joscha Kulbatzki
+ * @author Jan-Philipp Kappmeier
  */
 public class BestResponseDynamics {
 
@@ -47,7 +48,7 @@ public class BestResponseDynamics {
 	}
 
 	public int computePotential( EvacCell cell, EvacuationCellularAutomaton ca ) {
-		ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
+		ArrayList<StaticPotential> exits = new ArrayList<>();
 		exits.addAll( ca.getPotentialManager().getStaticPotentials() );
 		StaticPotential newPot = cell.getIndividual().getStaticPotential();
 		double response = Double.MAX_VALUE;
@@ -77,26 +78,25 @@ public class BestResponseDynamics {
 			distance = pot.getDistance( cell );
 		double movingTime = distance / speed;
 
-		double exitCapacity = ca.getExitToCapacityMapping().get( pot ).doubleValue();
+		double exitCapacity = ca.getExitToCapacityMapping().get( pot );
 		//System.out.println("Exit: " + pot.getID() + " : " + exitCapacity);
 
 		// calculate number of individuals that are heading to the same exit and closer to it
-		ArrayList<Individual> otherInds = new ArrayList<Individual>();
+		ArrayList<Individual> otherInds = new ArrayList<>();
 		//cell.getRoom().getIndividuals();
-		ArrayList<Room> rooms = new ArrayList<Room>();
+		ArrayList<Room> rooms = new ArrayList<>();
 		rooms.addAll( ca.getRooms() );
 		for( Room room : rooms )
 			for( Individual i : room.getIndividuals() )
 				otherInds.add( i );
 
 		int queueLength = 0;
-		if( otherInds != null )
-			for( Individual otherInd : otherInds )
-				if( !otherInd.equals( ind ) )
-					if( otherInd.getStaticPotential() == pot )
-						if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) >= 0 )
-							if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) < distance )
-								queueLength++;
+    for( Individual otherInd : otherInds )
+      if( !otherInd.equals( ind ) )
+        if( otherInd.getStaticPotential() == pot )
+          if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) >= 0 )
+            if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) < distance )
+              queueLength++;
 		//System.out.println("Potential = " + pot.getID());
 		//System.out.println("Queue / Kapa = " + queueLength + " / " + exitCapacity + " = " + (queueLength / exitCapacity));
 		//System.out.println("Dist / Speed = " + distance + " / " + speed + " = " + (distance / speed));

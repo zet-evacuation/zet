@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * ExitAssignment.java
- *
- */
 
 package algo.graph.exitassignment;
 
@@ -30,7 +26,7 @@ import java.util.List;
  *
  * @author Martin Groß
  */
-public class ExitAssignment extends IdentifiableObjectMapping<Node, List> {
+public class ExitAssignment extends IdentifiableObjectMapping<Node, List<Node>> {
 
     protected Iterable<Node> domain;
     protected IdentifiableIntegerMapping<Node> evacuees;
@@ -39,13 +35,13 @@ public class ExitAssignment extends IdentifiableObjectMapping<Node, List> {
     public ExitAssignment(Iterable<Node> domain) {
         super(domain );
         this.domain = domain;
-        evacuees = new IdentifiableIntegerMapping<Node>(domain);
+        evacuees = new IdentifiableIntegerMapping<>(domain);
         numberOfEvacuees = 0;
     }
 
     public void assignIndividualToExit(Node node, Node exit) {
         if (!isDefinedFor(node)) {
-            set(node, new LinkedList<Node>());
+            set(node, new LinkedList<>());
         }
         get(node).add(exit);
         evacuees.increase(exit, 1);
