@@ -1,7 +1,4 @@
-/**
- * Operation.java
- * Created: 27.03.2014, 16:27:14
- */
+
 package de.tu_berlin.math.coga.batch.operations;
 
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
