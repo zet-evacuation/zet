@@ -118,7 +118,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.g .caStatisticWriter.getStoredCAStatisticResults() ) );
 		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( null ) );
 		// TODO RASTER
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
+		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca2 ) );
 		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 		// Gather median information

@@ -123,7 +123,7 @@ public class BatchCA2Task implements Runnable {
 		CAStatistic statistic = null;//new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().getStoredCAStatisticResults ());
 		res.setCellularAutomatonStatistic (runNumber, statistic);
 		// TODO RASTER
-		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), null);
+		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), null, ca2);
 //		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), ZToCAConverter.getInstance ().getLatestMapping ());
    	visres.statistic = statistic;
 

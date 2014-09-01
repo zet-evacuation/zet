@@ -168,7 +168,7 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
 
     System.out.println( "Recording stopped." );
 
-    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );    
+    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );    
   }
 
   @Override

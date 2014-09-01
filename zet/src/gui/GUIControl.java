@@ -66,6 +66,7 @@ import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.ExitAssignment;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
+import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -1236,8 +1237,17 @@ public class GUIControl implements AlgorithmListener {
 		return false;
 	}
 
+  public void addVisualization( BuildingResults br ) {
+    visualization.getControl().setBuildingControl( br );
+    visualizationView.updateFloorSelector( 0 );
+  }
+
   public void addVisualization( GraphVisualizationResults gvr ) {
     visualization.getControl().setGraphControl( gvr );
+  }
+
+  public void addVisualization( CAVisualizationResults cav ) {
+    visualization.getControl().setCellularAutomatonControl( cav );
   }
 
 	public void createCellularAutomaton() {
@@ -1271,9 +1281,9 @@ public class GUIControl implements AlgorithmListener {
 							}
 						}
 					} else {
-						CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
+						CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager(), algorithmControl.getCellularAutomaton() );
 
-						visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
+						visualization.getControl().setCellularAutomatonControl( caVis );
 						visualizationView.updatePotentialSelector();
 //						visualizationView.updateFloorSelector();
 						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
@@ -1307,7 +1317,7 @@ public class GUIControl implements AlgorithmListener {
 						algorithmControl.getError().printStackTrace( System.err );
 					} else {
 						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
-						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults() );
 						visualizationView.updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
 						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
@@ -1377,7 +1387,7 @@ public class GUIControl implements AlgorithmListener {
 		}, this );
 
 		log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
-		visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+		visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults() );
 		visualizationView.updatePotentialSelector();
 		visualizationToolBar.setEnabledPlayback( true );
 		caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
@@ -1543,4 +1553,5 @@ public class GUIControl implements AlgorithmListener {
 	public JEditView getEditView() {
 		return editview;
 	}
+
 }

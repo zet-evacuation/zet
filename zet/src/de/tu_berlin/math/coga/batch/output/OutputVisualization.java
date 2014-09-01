@@ -1,8 +1,10 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
+import de.tu_berlin.coga.zet.model.BuildingPlan;
 import ds.GraphVisualizationResults;
 import gui.GUIControl;
+import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,7 +24,7 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
 
   @Override
   public boolean consumes( Class<?> c ) {
-    return( c.equals( GraphVisualizationResults.class ) || c.equals( CAVisualizationResults.class ) );
+    return( c.equals( GraphVisualizationResults.class ) || c.equals( CAVisualizationResults.class ) || c.equals( BuildingPlan.class ) );
   }
 
   @Override
@@ -31,10 +33,18 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
       showGraphResults( (GraphVisualizationResults) o );
     } else if( o instanceof CAVisualizationResults ) {
       showCellularAutomatonResults( (CAVisualizationResults) o );
+    } else if( o instanceof BuildingPlan ) {
+      showBuildingPlan( (BuildingPlan)o );
     } else {
       throw new IllegalArgumentException( "Type " + o.getClass() + " is not supported! Only "
               + GraphVisualizationResults.class + " and " + CAVisualizationResults.class + " are possible." );
     }
+  }
+
+  private void showBuildingPlan( BuildingPlan buildingPlan ) {
+    BuildingResults br = new BuildingResults( buildingPlan );
+    control.addVisualization( br );
+    
   }
 
   /**
@@ -42,10 +52,8 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
    * @param gvr
    */
   private void showGraphResults( GraphVisualizationResults gvr ) {
-    //GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
   	control.addVisualization( gvr );
-    //visualization.getControl().setGraphControl( gvr );
-    //visualization = visualizationView.getGLContainer();
+    
   }
 
   /**
@@ -53,7 +61,8 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
    * @param cav
    */
   private void showCellularAutomatonResults( CAVisualizationResults cav ) {
-    System.err.println( "Call to unsupported operation visualization of simulation results!" );
+    control.addVisualization( cav );
+    
   }
 
   @Override
@@ -71,5 +80,4 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
   public Icon getIcon() {
     return visIcon;
   }
-
 }

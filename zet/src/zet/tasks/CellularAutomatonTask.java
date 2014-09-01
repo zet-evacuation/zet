@@ -69,7 +69,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		caAlgo.run();
 		ca.stopRecording();
     
-		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
+		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
 		return visResults;
 	}
 

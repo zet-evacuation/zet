@@ -2,7 +2,7 @@
 package de.tu_berlin.math.coga.batch.operations;
 
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
-
+import java.util.List;
 
 /**
  * An operation defines a list of algorithms that are executed to convert one
@@ -26,6 +26,10 @@ public interface Operation<Consume,Produce> extends Runnable {
    * @return
    */
 	public Class<Produce> produces();
+  
+  public List<Class<?>> getProducts();
 
   public Produce getProduced();
+  
+  public Object getProduct( Class<?> productType );
 }

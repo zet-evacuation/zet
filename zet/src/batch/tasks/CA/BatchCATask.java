@@ -131,7 +131,7 @@ public class BatchCATask implements Runnable {
 		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
 
 		// TODO raster
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
+		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca ) );
 		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 //// Get the results
