@@ -1,7 +1,3 @@
-/**
- * ConvertedCellularAutomaton.java
- * Created: Jul 28, 2010,5:10:10 PM
- */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import ds.ca.evac.EvacuationCellularAutomaton;

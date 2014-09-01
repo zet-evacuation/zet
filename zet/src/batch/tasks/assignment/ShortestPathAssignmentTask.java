@@ -13,13 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class MinCostAssignmentTask
- * Erstellt 23.11.2008, 22:17:59
- */
 
 package batch.tasks.assignment;
 
+import algo.graph.exitassignment.Assignable;
 import batch.tasks.*;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.BatchResultEntry;
@@ -42,7 +39,10 @@ public class ShortestPathAssignmentTask extends AssignmentTask {
 	private ConcreteAssignment[] concreteAssignments;
 	/** The run number. */
 	private int runNumber;
-				
+
+  /** The calculated object delivering an exit assignment. */
+	protected Assignable exitAssignment;
+
 	/**
 	 * Initializes a new instance of this task.
 	 * @param res the object containing which stores the results
@@ -58,7 +58,7 @@ public class ShortestPathAssignmentTask extends AssignmentTask {
 		this.concreteAssignments = concreteAssignments;
 		this.runNumber = runNumber;
 	}
-	
+
 	/**
 	 * Calculates the exit assignment using shortest paths. After that it can be
 	 * delivered using {@link #getExitAssignment()}.
@@ -69,7 +69,7 @@ public class ShortestPathAssignmentTask extends AssignmentTask {
 		spExitAssignment.setProblem( res.getNetworkFlowModel() );
 		spExitAssignment.run();
 		exitAssignment = spExitAssignment;
-		
+
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;

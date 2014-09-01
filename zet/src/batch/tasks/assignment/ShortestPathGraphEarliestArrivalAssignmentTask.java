@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class EarliestArrivalAssignmentTask
- * Erstellt 24.11.2008, 00:16:08
- */
+
 package batch.tasks.assignment;
 
 import batch.tasks.*;
@@ -59,7 +56,7 @@ public class ShortestPathGraphEarliestArrivalAssignmentTask extends AssignmentTa
         eatAssignment.setProblem(res.getNetworkFlowModel());
         eatAssignment.run();
         exitAssignment = eatAssignment;
-		
+
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;

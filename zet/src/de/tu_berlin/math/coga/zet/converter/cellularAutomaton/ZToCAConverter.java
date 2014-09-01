@@ -43,22 +43,21 @@ import java.util.logging.Logger;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.
- * @author Daniel Plümpe, Jan-Philipp Kappmeier
+ * @author Daniel Plümpe
+ * @author Jan-Philipp Kappmeier
  *
  */
 public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAutomaton> {
-	/** The private instance of this singleton. */
-	//private static ZToCAConverter instance = null;
 	/** The latest created mapping of the z-format to the cellular automaton. */
-	private static ZToCAMapping lastMapping = null;
+	private ZToCAMapping lastMapping = null;
 	/** The latest created container of rastered elements. */
-	private static ZToCARasterContainer lastContainer = null;
+	private ZToCARasterContainer lastContainer = null;
 	/** A list of all exit cells in the cellular automaton. */
-	private static ArrayList<ExitCell> exitCells = null;
+	private ArrayList<ExitCell> exitCells = null;
 	/** The latest created cellular automaton. */
-	private static EvacuationCellularAutomaton lastCA = null;
+	private EvacuationCellularAutomaton lastCA = null;
 	/** A map that maps rastered rooms to rooms in the cellular automaton. */
-	private static HashMap<ZToCARoomRaster, ds.ca.evac.Room> roomRasterRoomMapping = null;
+	private HashMap<ZToCARoomRaster, ds.ca.evac.Room> roomRasterRoomMapping = null;
 
 	@Override
 	protected ConvertedCellularAutomaton runAlgorithm( BuildingPlan problem ) {
@@ -78,7 +77,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		/**
 		 * Creates a new default instance of
 		 * {@code ConversionNotSupportedException}.
-		 * 
+		 *
 		 */
 		public ConversionNotSupportedException() {
 			super( ZETLocalization2.loc.getString( "converter.ZConversionException" ) );
@@ -98,9 +97,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	/**
 	 * Creates a new instance of this singleton class.
 	 */
-	public ZToCAConverter() {
-		//lastMapping = new ZToCAMapping();
-	}
+	public ZToCAConverter() { }
 
 	public ZToCAConverter( Project project ) {
 		setProblem( project.getBuildingPlan() );
@@ -108,13 +105,13 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 	/**
 	 * Call this method to convert the rastered rooms of a z-project to
-	 * a cellular automaton. The returned automaton is structure-only, i.e. 
+	 * a cellular automaton. The returned automaton is structure-only, i.e.
 	 * there are no individuals in the automaton. However, all cell types
 	 * are being set correctly, the doors are being linked and obstacles
-	 * are being set as well.  
+	 * are being set as well.
 	 * @param buildingPlan the building plan of a Z-project
 	 * @return A cellular automaton corresponding to the rastered rooms.
-	 * @throws converter.ZToCAConverter.ConversionNotSupportedException 
+	 * @throws converter.ZToCAConverter.ConversionNotSupportedException
 	 */
 	private EvacuationCellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
 		//AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
@@ -149,7 +146,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		lastCA = convertedCA;
 		return convertedCA;
 	}
-	
+
 	/**
 	 * Private method that calculates the static potentials for a
 	 * converted ca and adds them to a (new) potential controller for the ca.
@@ -207,22 +204,11 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Resets the converter. This is used if new project is loaded and the old
-	 * one is invalidated.
-	 */
-	public void clear() {
-		lastMapping = null;
-		lastContainer = null;
-		exitCells = null;
-		lastCA = null;
-	}
-
-	/**
 	 * When a {@link ZToCARasterContainer} is converted, a mapping between
 	 * the squares in the raster and the cells of the cellular automaton
 	 * is stored. Each time you call {@link #convertRoom( ZToCARoomRaster, Floor, int)}, the stored mapping
-	 * is overwritten. This method retrieves the mapping from the last 
-	 * convert-operation. 
+	 * is overwritten. This method retrieves the mapping from the last
+	 * convert-operation.
 	 * @return The mapping that was created during the last conversion.
 	 */
 	public ZToCAMapping getMapping() {
@@ -231,7 +217,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		return lastMapping;
 	}
-	
+
 	/**
 	 * This method returns the data needed from thes ca converter
 	 * to create a {@code BidirectionalNodeCellMapping}.
@@ -298,7 +284,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		return convertedRoom;
 	}
-	
+
 	/**
 	 * <p>Creates all rooms for a given floor. The rooms have to be submitted as a
 	 * collection, also the {@code Floor} and the corresponding id in the
@@ -308,7 +294,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param rooms a collection of rooms on the floor. This is not checked!
 	 * @param floorID the id of the floor
 	 */
-	protected static void createAllRooms( Floor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
+	protected void createAllRooms( Floor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
 		if( rooms != null ) {
 			for( ZToCARoomRaster rasteredRoom : rooms ) {
 				final int width = rasteredRoom.getColumnCount();
@@ -316,7 +302,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 				ds.ca.evac.Room room = new ds.ca.evac.Room( width, height, onFloor.getName(), floorID );
 				roomRasterRoomMapping.put( rasteredRoom, room );
 			}
-		}	
+		}
 	}
 
 	/**
@@ -342,7 +328,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 //        if(square.isExit() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in exit areas are currently not supported.");
 //        }
-//        
+//
 //        if(square.isSave() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in save areas are currently not supported.");
 //        }

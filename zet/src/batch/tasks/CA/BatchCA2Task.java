@@ -32,7 +32,7 @@ import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import exitdistributions.ExitDistributionBasedCAFactory;
+import exitdistributions.ExitDistributionZToCAConverter;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
@@ -91,7 +91,7 @@ public class BatchCA2Task implements Runnable {
 	public void run() {
 		EvacuationCellularAutomaton ca2;
 		try {
-			ca2 = ExitDistributionBasedCAFactory.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
+			ca2 = ExitDistributionZToCAConverter.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
 			res.setCellularAutomaton(runNumber, ca2 );
 		} catch( ConversionNotSupportedException ex ) {
 			System.err.println( "ConversionNotSupportedException ist aufgetreten. Dies sollte eigentlich nicht passieren..." );

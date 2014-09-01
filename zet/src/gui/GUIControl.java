@@ -63,6 +63,7 @@ import de.tu_berlin.math.coga.batch.input.InputDirectory;
 import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
+import de.tu_berlin.math.coga.batch.operations.ExitAssignment;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import io.visualization.CAVisualizationResults;
@@ -199,6 +200,7 @@ public class GUIControl implements AlgorithmListener {
 
     batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
     batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
+    batchView.registerOperationAction( new ExitAssignment(), "Exit Assignment" );
     batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
 
     batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );
