@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
  * input to an output via steps in between.
  * @author Jan-Philipp Kappmeier
  */
-public interface Operation extends Runnable {
+public interface Operation<Consume,Produce> extends Runnable {
 
 	public Iterable<AtomicOperation<?, ?>> getAtomicOperations();
 
@@ -21,4 +21,11 @@ public interface Operation extends Runnable {
 	 */
 	public boolean consume( InputFileReader<?> o );
 
+  /**
+   * Returns the type of object that is generated
+   * @return
+   */
+	public Class<Produce> produces();
+
+  public Produce getProduced();
 }

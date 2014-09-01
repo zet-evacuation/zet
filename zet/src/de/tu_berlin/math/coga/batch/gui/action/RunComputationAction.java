@@ -8,7 +8,9 @@ import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
 import de.tu_berlin.math.coga.batch.operations.Operation;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
+import de.tu_berlin.math.coga.batch.output.Output;
 import java.awt.event.ActionEvent;
+import java.util.LinkedList;
 
 /**
  *
@@ -35,6 +37,7 @@ public class RunComputationAction extends BatchAction {
 				return; // keine operation zu tun
 
 			// prüfen, ob input für die operation geeignet ist
+      LinkedList<Object> products = new LinkedList<>();
 			for( InputFile i : ilist ) {
 				System.out.println( "Checking input '" + i + "'" );
 				for( Operation o : oList ) {
@@ -45,12 +48,25 @@ public class RunComputationAction extends BatchAction {
 						// we actually start an operation
 						o.run();
 
+            products.add( o.getProduced() );
 
 					} else {
 						System.out.println( "        Skip input" + i + "!" );
 					}
 				}
 			}
+
+      // Check outputs
+      System.out.println( "Outputting results." );
+      for( Output o : c.getOutputs() ) {
+        for( Object prod : products ) {
+          if( o.consumes( prod.getClass() ) ) {
+            System.out.println( o + " consumes " + prod );
+            o.consume( prod );
+          }
+        }
+      }
+
 		}
 	}
 

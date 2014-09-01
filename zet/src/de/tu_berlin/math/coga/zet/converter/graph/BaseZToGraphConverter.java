@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.common.util.Filter;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
@@ -22,7 +18,6 @@ import java.util.logging.Level;
  * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, NetworkFlowModel> {
-	//protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 	protected ZToGraphMapping mapping;
 	protected NetworkFlowModel model;
 	protected ZToGraphRasterContainer raster;

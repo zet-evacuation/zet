@@ -64,6 +64,7 @@ import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
+import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -195,13 +196,15 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerInputAction( new ProjectInput( this ), "Add current project", new ImageIcon("./icons/box_24.png" ) );
     batchView.registerInputAction( new InputFiles( batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
     batchView.registerInputAction( new InputDirectory( batchView ), "Add input directory", new ImageIcon("./icons/folder_add_24.png" ) );
-    
+
     batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
     batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
     batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
-    
-    
-    
+
+    batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );
+
+
+
 		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
 		JComponent caStatisticView = new JStatisticPanel();
 		JComponent graphStatisticView = new JGraphStatisticPanel();
@@ -726,7 +729,7 @@ public class GUIControl implements AlgorithmListener {
 			zcontrol.loadProject( f );
 		loadProjectInternal();
 	}
-	
+
 	/**
 	 * Loads the project that is currently stored in zcontrol.
 	 */
@@ -1230,6 +1233,10 @@ public class GUIControl implements AlgorithmListener {
 				return true;
 		return false;
 	}
+
+  public void addVisualization( GraphVisualizationResults gvr ) {
+    visualization.getControl().setGraphControl( gvr );
+  }
 
 	public void createCellularAutomaton() {
 		algorithmControl.convertCellularAutomaton( new PropertyChangeListener() {

@@ -59,7 +59,7 @@ public class JBatch extends JPanel {
 	private final JTaskPaneGroup inputPane = new JTaskPaneGroup();
   private final JTaskPaneGroup activityPane = new JTaskPaneGroup();
   private final JTaskPaneGroup outputPane = new JTaskPaneGroup();
-  
+
   private final ArrayList<BatchAction> actions = new ArrayList<>();
 
   public JBatch() {
@@ -86,7 +86,7 @@ public class JBatch extends JPanel {
 		taskPaneContainer.add( inputPane );
 		taskPaneContainer.add( activityPane );
 		taskPaneContainer.add( outputPane );
-		
+
     add( new JScrollPane( taskPaneContainer ), BorderLayout.WEST );
 
 		table = new JInputView();
@@ -165,7 +165,7 @@ public class JBatch extends JPanel {
     actions.add( action );
     activityPane.add( action );
   }
-  
+
   public final void registerOutputAction( Output output, String title, Icon icon ) {
     OutputAction action = new OutputAction( this, output, title, icon );
     actions.add( action );
@@ -182,9 +182,9 @@ public class JBatch extends JPanel {
 				}
 			}
 		}
-		updateTreeTable();    
+		updateTreeTable();
   }
-  
+
 	public void addOperation( Operation operation ) {
 		for( Computation computation : selectionListener.getSelectedComputations() ) {
 			OperationList operations = computation.getOperations();
@@ -194,7 +194,10 @@ public class JBatch extends JPanel {
 	}
 
   public void addOutput( Output output ) {
-
+		for( Computation computation : selectionListener.getSelectedComputations() ) {
+      LinkedList<Output> outputs = computation.getOutputs();
+			outputs.add( output );
+		}
     updateTreeTable();
   }
 
@@ -202,7 +205,7 @@ public class JBatch extends JPanel {
 		computationList.add( computation );
 		updateTreeTable();
 	}
-  
+
 	public ComputationList getComputationList() {
 		return computationList;
 	}
