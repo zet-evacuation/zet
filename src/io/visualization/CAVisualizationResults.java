@@ -55,19 +55,23 @@ public class CAVisualizationResults implements VisualizationResult {
 
 	//TODO correct
 	public CAStatistic statistic;
+  private EvacuationCellularAutomaton evacuationCellularAutomaton;
 
 	/**
 	 * Creates the visualization results. Takes a ca data structure, a
 	 * visual recording object, a ZToCAMapping and creates all necessary objects.
 	 * @param visRecording
 	 * @param caMapping
+   * @param ca 
 	 */
-	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.evac.EvacCell, Vector3>();
-		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
-		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
+	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping, EvacuationCellularAutomaton ca ) {
+		caCellToZOffsetMapping = new HashMap<>();
+		caRoomToZOffsetMapping = new HashMap<>();
+		caFloorToZOffsetMapping = new HashMap<>();
+    
 
 		this.visRecording = visRecording;
+    this.evacuationCellularAutomaton = ca;
 
 		caMapping = caMapping.adoptToCA( new EvacuationCellularAutomaton( visRecording.getInitialConfig() ) );
 		pm = visRecording.getInitialConfig().getPotentialManager();
@@ -75,13 +79,14 @@ public class CAVisualizationResults implements VisualizationResult {
 		convertMapping( caMapping );
 	}
 
-	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.evac.EvacCell, Vector3>();
-		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
-		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
+	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm, EvacuationCellularAutomaton ca ) {
+		caCellToZOffsetMapping = new HashMap<>();
+		caRoomToZOffsetMapping = new HashMap<>();
+		caFloorToZOffsetMapping = new HashMap<>();
 		convertMapping( caMapping );
 		this.pm = pm;
-	}
+    this.evacuationCellularAutomaton = ca;
+  }
 
 	private void convertMapping( ZToCAMapping caMapping ) {
 		for( Integer floorID : caMapping.getCAFloors() ) {
@@ -136,4 +141,8 @@ public class CAVisualizationResults implements VisualizationResult {
 	public PotentialManager getPotentialManager() {
 		return pm;
 	}
+
+  public EvacuationCellularAutomaton getCa() {
+    return evacuationCellularAutomaton;
+  }
 }

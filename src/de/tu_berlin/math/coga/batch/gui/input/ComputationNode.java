@@ -11,7 +11,7 @@ public class ComputationNode extends BatchTreeTableNode<Computation> {
 
     public ComputationNode(Computation computation) {
         super(computation, new String[0], new ImageIcon("./icons/cube_24.png"));
-        add(new InputListNode(computation.getInput()));
+        add(new InputListNode(computation.getInputs()));
 				add(new OperationListNode(computation.getOperations()));
         add( new OutputListNode(computation.getOutputs()));
     }

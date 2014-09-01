@@ -174,7 +174,7 @@ public class JBatch extends JPanel {
 
   public void addInput( Input input ) {
     for( Computation computation : selectionListener.getSelectedComputations() ) {
-			final InputList inputList = computation.getInput();
+			final InputList inputList = computation.getInputs();
 			for( File file : input ) {
 				final InputFile inputFile = new InputFile( file );
 				if( !inputList.contains( inputFile ) ) {

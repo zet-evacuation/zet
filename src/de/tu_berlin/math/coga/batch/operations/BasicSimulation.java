@@ -5,6 +5,7 @@ import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
@@ -18,6 +19,8 @@ import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import io.visualization.CAVisualizationResults;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -25,6 +28,7 @@ import io.visualization.CAVisualizationResults;
  */
 public class BasicSimulation extends AbstractOperation<Project, CAVisualizationResults> {
   InputFileReader<Project> input;
+  Project project;
 
   AtomicOperation<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgorithm;
   CAVisualizationResults visResults;
@@ -59,13 +63,28 @@ public class BasicSimulation extends AbstractOperation<Project, CAVisualizationR
   }
 
   @Override
+  public List<Class<?>> getProducts() {
+    return Arrays.asList( new Class<?>[] {produces(), BuildingPlan.class} );
+  }
+
+  @Override
+  public Object getProduct( Class<?> productType ) {
+    if( productType == BuildingPlan.class ) {
+      return project.getBuildingPlan();
+    } else {
+      return super.getProduct( productType );
+    }
+  }
+  
+  
+  @Override
   public CAVisualizationResults getProduced() {
     return visResults;
   }
 
   @Override
   public void run() {
-    Project project = input.getSolution();
+    project = input.getSolution();
 
     System.out.println( project );
 
@@ -110,7 +129,7 @@ public class BasicSimulation extends AbstractOperation<Project, CAVisualizationR
 
     System.out.println( "Recording stopped." );
 
-    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
+    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
   }
 
   @Override

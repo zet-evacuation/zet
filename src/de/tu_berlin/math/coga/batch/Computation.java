@@ -54,7 +54,7 @@ public class Computation {
     return algorithms;
   }
 
-  public InputList getInput() {
+  public InputList getInputs() {
     return input;
   }
 

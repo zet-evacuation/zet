@@ -55,7 +55,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	ArrayList<GLIndividual> glIndividuals;
 	ArrayList<GLIndividualControl> individuals;
 	CAVisualizationResults visResults;
-	private EvacuationCellularAutomaton ca;
+	//private EvacuationCellularAutomaton ca;
 	// timing stuff
 	private double realStep;
 	private double secondsPerStep;
@@ -76,16 +76,15 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 	private CAVisualizationResults caVisResults;
 	
-	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, EvacuationCellularAutomaton ca ) {
+	public GLCellularAutomatonControl( CAVisualizationResults caVisResults ) {
 		super();
 		this.caVisResults = caVisResults;
-		this.ca = ca;
 	}
 	
 	public void build() {
 		containsRecording = caVisResults.getRecording() != null;
 		mainControl = this;
-		cellCount = ca.getCellCount();
+		cellCount = caVisResults.getCa().getCellCount();
 		cellsDone = 0;
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
@@ -96,9 +95,9 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		glIndividuals = new ArrayList<>();
 		this.visResults = caVisResults;
 
-		List<String> floors = ca.getFloors();
+		List<String> floors = caVisResults.getCa().getFloors();
 		for( int i = 0; i < floors.size(); ++i )
-			add( new GLCAFloorControl( caVisResults, ca.getRoomsOnFloor( i ), i, mainControl ) );
+			add( new GLCAFloorControl( caVisResults, caVisResults.getCa().getRoomsOnFloor( i ), i, mainControl ) );
 
 		this.setView( new GLCA( this ) );
 		for( GLCAFloorControl floor : this )
@@ -107,7 +106,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		showAllFloors();
 
 		// Set up timing:
-		secondsPerStep = ca.getSecondsPerStep();
+		secondsPerStep = caVisResults.getCa().getSecondsPerStep();
 		nanoSecondsPerStep = Math.round( secondsPerStep * Conversion.secToNanoSeconds );
 		step = 0;
 		if( containsRecording ) {
@@ -371,7 +370,8 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 			//floor.delete();
 		}
 		view.delete();
-		ca = null;
+		//ca = null;
+    caVisResults = null;
 	}
 
 	public void setScaling( double scaling ) {

@@ -5,9 +5,7 @@ import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputList;
 import de.tu_berlin.math.coga.batch.operations.Operation;
-import de.tu_berlin.math.coga.batch.operations.OperationList;
 import de.tu_berlin.math.coga.batch.output.Output;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
@@ -15,6 +13,7 @@ import java.util.LinkedList;
 /**
  *
  * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class RunComputationAction extends BatchAction {
 
@@ -26,29 +25,19 @@ public class RunComputationAction extends BatchAction {
 	public void actionPerformed( ActionEvent ae ) {
 		ComputationList clist = batch.getComputationList();
 
-		for( Computation c : clist ) {
-			System.out.println( c );
-			InputList ilist = c.getInput();
-			if( ilist.size() == 0 )
-				return; // keine operationen zu tun
-
-			OperationList oList = c.getOperations();
-			if( oList.size() == 0 )
-				return; // keine operation zu tun
-
-			// prüfen, ob input für die operation geeignet ist
-      LinkedList<Object> products = new LinkedList<>();
-			for( InputFile i : ilist ) {
+		for( Computation computation : clist ) {
+			// check if the input is valid for the operation
+      LinkedList<Operation<?,?>> executedOperations = new LinkedList<>();
+			for( InputFile i : computation.getInputs() ) {
 				System.out.println( "Checking input '" + i + "'" );
-				for( Operation o : oList ) {
+				for( Operation<?,?> o : computation.getOperations() ) {
 					System.out.println( "    Operation: " + o );
 					if( o.consume( i.getReader() ) ) {
 						System.out.println( "        Run " + o + " on input " + i );
 
-						// we actually start an operation
+						// we actually start an operation. execute and store the operation
 						o.run();
-
-            products.add( o.getProduced() );
+            executedOperations.add( o );
 
 					} else {
 						System.out.println( "        Skip input" + i + "!" );
@@ -58,16 +47,16 @@ public class RunComputationAction extends BatchAction {
 
       // Check outputs
       System.out.println( "Outputting results." );
-      for( Output o : c.getOutputs() ) {
-        for( Object prod : products ) {
-          if( o.consumes( prod.getClass() ) ) {
-            System.out.println( o + " consumes " + prod );
-            o.consume( prod );
+      for( Output o : computation.getOutputs() ) { // iterate over all output tasks
+        for( Operation<?,?> op : executedOperations ) { // iterate over all operations that are executed
+          for( Class<?> type : op.getProducts() ) { // iterate over all products that have been created by the operation
+            if( o.consumes( type ) ) { // check, if the output can handle them somehow
+              System.out.println( o + " consumes " + type );
+              o.consume( op.getProduct( type ) );
+            }
           }
         }
       }
-
 		}
 	}
-
 }

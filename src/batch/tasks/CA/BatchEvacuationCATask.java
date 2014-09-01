@@ -154,7 +154,7 @@ public class BatchEvacuationCATask implements Runnable {
 		// Get the results
 //		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().			getStoredCAStatisticResults ()));
 		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (VisualResultsRecorder.getInstance ().
-				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping ()));
+				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping (), ca));
 
 		// Gather median information
 		median.put (new Integer (ca.getTimeStep ()), runNumber);

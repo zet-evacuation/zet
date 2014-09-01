@@ -190,7 +190,7 @@ public class ZETGLControl implements DrawableControlable {
 		if( caVisResults != null ) {
 			hasCellularAutomaton = true;
 			ca = new EvacuationCellularAutomaton( caVisResults.getRecording().getInitialConfig() );
-			caControl = new GLCellularAutomatonControl( caVisResults, ca );
+			caControl = new GLCellularAutomatonControl( caVisResults );
 			caControl.setScaling( sizeMultiplicator );
 			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
 						caControl.build();
@@ -246,12 +246,12 @@ public class ZETGLControl implements DrawableControlable {
 	 * @param caVis
 	 * @param ca
 	 */
-	public void setCellularAutomatonControl( CAVisualizationResults caVis, EvacuationCellularAutomaton ca ) {
+	public void setCellularAutomatonControl( CAVisualizationResults caVis ) {
 		if( caControl != null )
 			caControl.delete();
 		hasCellularAutomaton = true;
 		this.ca = ca;
-		caControl = new GLCellularAutomatonControl( caVis, ca );
+		caControl = new GLCellularAutomatonControl( caVis );
 			caControl.setScaling( sizeMultiplicator );
 			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
 			caControl.build();

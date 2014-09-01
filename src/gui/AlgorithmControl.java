@@ -304,7 +304,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		// create results
 		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
 		// TODO visualResultsRecorder normal class, no singleton.
-		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
+		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
 
 						EvacuationCellularAutomaton cellularAutomaton = ca;
 						//mapping = mapping;
