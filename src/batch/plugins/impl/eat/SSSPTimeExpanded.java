@@ -40,16 +40,21 @@ public class SSSPTimeExpanded implements AlgorithmicPlugin<EarliestArrivalFlowPr
       @Override
       protected PathBasedFlowOverTime runAlgorithm( EarliestArrivalFlowProblem problem ) {
         EATransshipmentWithTHSSSP eat = new EATransshipmentWithTHSSSP();
-        //problem.setTimeHorizon( getFeasibleTimeHorizon() );
-        problem.setTimeHorizon( 18 );
-
+        problem.setTimeHorizon( 27 );
         eat.setProblem( problem );
         eat.run();
+
+        PathBasedFlowOverTime df = eat.getSolution().getPathBased();
+        //String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.",
+        //        eat.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
+        //System.out.println( result );
+        //System.out.println( "Total cost: " + algo.getSolution() .getTotalCost() );
+        //AlgorithmTask.getInstance().publish(100, result, "");
+        System.out.println( "Sending the flow units required " + eat.getRuntime() );
+
         return eat.getSolution().getPathBased();
       }
     };
     return algo;
-
 	}
-
 }

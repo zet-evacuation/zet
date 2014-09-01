@@ -1,18 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.tu_berlin.math.coga.batch.input;
 
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
+import de.tu_berlin.math.coga.batch.output.TreeListItem;
 import java.io.File;
 import java.util.Objects;
+import javax.swing.Icon;
 
 /**
  *
  * @author Martin Groß
  */
-public class InputFile {
+public class InputFile implements TreeListItem {
 
     private File file;
     private FileFormat format;
@@ -78,12 +77,23 @@ public class InputFile {
         return reader;
     }
 
-    public String getTooltip() {
-        return file.getPath();
-    }
-
     @Override
     public String toString() {
         return file.getName();
     }
+
+  @Override
+  public String getDescription() {
+    return file.getPath();
+  }
+
+  @Override
+  public String getTitle() {
+    return toString();
+  }
+
+  @Override
+  public Icon getIcon() {
+    return format.getIcon();
+  }
 }

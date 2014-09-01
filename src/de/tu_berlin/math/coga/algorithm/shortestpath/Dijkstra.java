@@ -35,6 +35,7 @@ public class Dijkstra {
   private final IdentifiableIntegerMapping<Edge> costs;
   private DirectedGraph graph;
   private Node source;
+  private Node sink;
   private final boolean reverse;
   private IdentifiableIntegerMapping<Node> distances;
   private IdentifiableObjectMapping<Node, Edge> edges;
@@ -44,10 +45,22 @@ public class Dijkstra {
     this( graph, costs, source, false );
   }
 
+  public Dijkstra( DirectedGraph graph, IdentifiableIntegerMapping<Edge> costs, Node source, Node sink ) {
+    this( graph, costs, source, sink, false );
+  }
+
   public Dijkstra( DirectedGraph graph, IdentifiableIntegerMapping<Edge> costs, Node source, boolean reverse ) {
     this.costs = costs;
     this.graph = graph;
     this.source = source;
+    this.reverse = reverse;
+  }
+
+  public Dijkstra( DirectedGraph graph, IdentifiableIntegerMapping<Edge> costs, Node source, Node sink, boolean reverse ) {
+    this.costs = costs;
+    this.graph = graph;
+    this.source = source;
+    this.sink = sink;
     this.reverse = reverse;
   }
 
@@ -139,6 +152,9 @@ public class Dijkstra {
           queue.decreasePriority( w, pv + costs.get( edge ) );
           edges.set( w, edge );
           nodes.set( w, v );
+          if( w.equals( sink ) ) {
+            return;
+          }
         }
       }
     }

@@ -3,26 +3,24 @@ package de.tu_berlin.math.coga.batch.operations;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.problem.RawMaximumFlowProblem;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class MaximumFlowComputation extends AbstractOperation implements Operation {
+public class MaximumFlowComputation extends AbstractOperation<RawMaximumFlowProblem,MaximumFlow> {
 	InputFileReader<RawMaximumFlowProblem> input;
 	AtomicOperation<RawMaximumFlowProblem, MaximumFlow> maxFlowAlgorithm;
+  MaximumFlow mf;
 
   public MaximumFlowComputation() {
 		// First, we go from zet to network flow model
 		maxFlowAlgorithm = new AtomicOperation<>( "Max Flow Computation", RawMaximumFlowProblem.class, MaximumFlow.class );
 		this.addOperation( maxFlowAlgorithm );
   }
-  
+
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public boolean consume( InputFileReader<?> o ) {
@@ -33,6 +31,16 @@ public class MaximumFlowComputation extends AbstractOperation implements Operati
 		}
 		return false;
 	}
+
+  @Override
+  public Class<MaximumFlow> produces() {
+    return MaximumFlow.class;
+  }
+
+  @Override
+  public MaximumFlow getProduced() {
+    return this.mf;
+  }
 
 	@Override
 	public String toString() {
@@ -52,13 +60,13 @@ public class MaximumFlowComputation extends AbstractOperation implements Operati
 			return;
 		}
 		System.out.println( "Selected algorithm: " + maxFlowAlgorithm.getSelectedAlgorithm() );
-    
+
 		final Algorithm<RawMaximumFlowProblem,MaximumFlow> maxFlowAlgo = maxFlowAlgorithm.getSelectedAlgorithm();
 		maxFlowAlgo.setProblem( flowInstance );
 		maxFlowAlgo.run();
-    
-    MaximumFlow mf = maxFlowAlgo.getSolution();
-    
-    
-  } 
+
+    mf = maxFlowAlgo.getSolution();
+  }
+
+
 }

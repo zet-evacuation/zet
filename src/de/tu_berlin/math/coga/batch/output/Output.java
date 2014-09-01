@@ -5,6 +5,8 @@ package de.tu_berlin.math.coga.batch.output;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class Output {
-  
+public interface Output extends TreeListItem {
+  boolean consumes( Class<?> c );
+
+  void consume( Object o );
 }
