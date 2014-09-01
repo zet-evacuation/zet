@@ -21,6 +21,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
+import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
 public class ExitDistributionZToCAConverter extends ZToCAConverter {
 //public class ExitDistributionZToCAConverter extends ZToCAConverter {
@@ -34,7 +36,24 @@ public class ExitDistributionZToCAConverter extends ZToCAConverter {
   /**
    * An empty constructor.
    */
-  protected ExitDistributionZToCAConverter() {
+  public ExitDistributionZToCAConverter() {
+  }
+  
+  ConcreteAssignment concreteAssignment;
+  @Override
+	protected ConvertedCellularAutomaton runAlgorithm( BuildingPlan problem ) {
+    
+    ConvertedCellularAutomaton cca = super.runAlgorithm( problem );
+    
+		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
+//		applyConcreteAssignment(concreteAssignment);
+//		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
+//		graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment);
+//		graphBasedIndividualToExitMaping.calculate();
+//		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
+    
+    
+    return cca;
   }
 
   /**
@@ -48,7 +67,7 @@ public class ExitDistributionZToCAConverter extends ZToCAConverter {
    * @throws converter.ZToCAConverter.ConversionNotSupportedException
    */
   public EvacuationCellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, ExitAssignment exitAssignment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
-//		EvacuationCellularAutomaton ca = super.convert(buildingPlan);
+		//EvacuationCellularAutomaton ca = super.convert(buildingPlan);
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		applyConcreteAssignment(concreteAssignment);
 //		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
