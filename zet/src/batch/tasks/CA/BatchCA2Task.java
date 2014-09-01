@@ -89,14 +89,14 @@ public class BatchCA2Task implements Runnable {
 	 * assignment assigned and the cellular automaton is executed.
 	 */
 	public void run() {
-		EvacuationCellularAutomaton ca2;
-		try {
-			ca2 = ExitDistributionZToCAConverter.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
-			res.setCellularAutomaton(runNumber, ca2 );
-		} catch( ConversionNotSupportedException ex ) {
+		EvacuationCellularAutomaton ca2 = null;
+		//try {
+			//ca2 = ExitDistributionZToCAConverter.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
+		//	res.setCellularAutomaton(runNumber, ca2 );
+		//} catch( ConversionNotSupportedException ex ) {
 			System.err.println( "ConversionNotSupportedException ist aufgetreten. Dies sollte eigentlich nicht passieren..." );
-			return;
-		}
+		//	return;
+		//}
 
 
 		for (AssignmentType at : assignment.getAssignmentTypes ()) {

@@ -1,6 +1,10 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.ca.algorithm.evac.EvacuationSimulationResult;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
@@ -20,7 +24,12 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.results.VisualResultsRecorder;
+import evacuationplan.BidirectionalNodeCellMapping;
+import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.CAVisualizationResults;
 
 /**
@@ -90,7 +99,11 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
 
     System.out.println( exitAssignment.getExitAssignment() );
 
-    // step 2: simulate
+
+
+    
+    
+// step 2: put the exit assingment into a cellular automaton
 
     // We now have to create a cellular automaton, assign the concrete assignment and have to map the exits to the
     // chosen exits in our above exit computation
@@ -99,6 +112,7 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
     ZToCARasterContainer container;
 
     final ZToCAConverter caConv = new ZToCAConverter();
+    //final ExitDistributionZToCAConverter caConv2 = new ExitDistributionZToCAConverter();
     caConv.setProblem( project.getBuildingPlan() );
     caConv.run();
 
@@ -108,7 +122,7 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
 
     mapping = caConv.getMapping();
     container = caConv.getContainer();
-    final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
+    ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
 
     // here we have to assign the concrete assignment
     // create and convert concrete assignment
@@ -121,7 +135,40 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
     cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
     cac.run();
 
+    
+    ZToGraphRasterContainer graphRaster = networkFlowModel.getZToGraphMapping().getRaster();
+    
+    cca = cac.getSolution();
+    
+		BidirectionalNodeCellMapping.CAPartOfMapping caPartOfMapping = caConv.getLatestCAPartOfNodeCellMapping();
+    
+    
+		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
+		GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
+    graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment.getExitAssignment() );
+		graphBasedIndividualToExitMaping.calculate();
+		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
+    
+    
+    // step 3: simulate
+    //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
+    Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
+    //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
+    //selected = cellularAutomatonAlgorithm;
 
+    caAlgo.setProblem( new EvacuationSimulationProblem( (ca) ) );
+    if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {
+      double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+      ((EvacuationCellularAutomatonAlgorithm)caAlgo).setMaxTimeInSeconds( caMaxTime );
+    }
+    ca.startRecording();
+
+    caAlgo.run();
+    ca.stopRecording();
+
+    System.out.println( "Recording stopped." );
+
+    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );    
   }
 
   @Override
