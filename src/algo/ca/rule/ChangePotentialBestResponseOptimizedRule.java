@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -24,7 +24,8 @@ import evacuationplan.BestResponseDynamics;
 
 /**
  *
- * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
+ * @author Joscha Kulbatzki
  */
 public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialChangeRule {
 
@@ -33,7 +34,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
 
 	/**
-	 * 
+	 *
 	 * @param cell
 	 * @return true if the potential change rule can be used
 	 */
@@ -48,7 +49,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 
 		// Constants
 		Individual ind = cell.getIndividual();
-		double speed = ind.getCurrentSpeed();
+		double speed = ind.getRelativeSpeed();
 
 		// Exit dependant values
 		double distance = Double.MAX_VALUE;
@@ -90,7 +91,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	}
 
 	/**
-	 * 
+	 *
 	 * @param cell
 	 */
 	@Override

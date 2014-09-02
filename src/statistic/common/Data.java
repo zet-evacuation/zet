@@ -20,7 +20,7 @@
 package statistic.common;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 public class Data {

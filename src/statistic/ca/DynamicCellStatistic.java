@@ -21,7 +21,7 @@ import statistic.graph.Statistics;
 import ds.ca.evac.EvacCell;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 public enum DynamicCellStatistic implements Statistic<EvacCell, IntegerDoubleMapping, CAData> {

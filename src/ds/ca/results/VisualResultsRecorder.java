@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -55,7 +55,7 @@ import java.util.LinkedList;
  * To replay the simulation, call {@code getRecording()} to get all 
  * recorded actions nicely packed in a {@code VisualResultsRecording}.
  * 
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 @XStreamAlias( "visual_results" )

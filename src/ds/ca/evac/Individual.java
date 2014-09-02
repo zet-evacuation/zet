@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Freswe Software Foundation; either version 2
@@ -22,8 +22,8 @@ import java.util.UUID;
 
 /**
  * A Individual represets a Person in the evacuationtool with the following
- * characteristics: familiarity, panic, slackness, maxSpeed. Also an
- * exhaustion factor exists, which simulates exhaustion after walking a long
+ characteristics: familiarity, panic,
+ * slackness, relativeMaxSpeed. Also an * exhaustion factor exists, which simulates exhaustion after walking a long
  * way. An Individual is located in a {@link EvacCell} of the building and each
  * {@code Individual} has a {@link StaticPotential}, which guides the
  * person to an exit.
@@ -36,8 +36,8 @@ public class Individual implements Identifiable {
 	private double slackness;
 	private double exhaustion = 0;
 	private double exhaustionFactor;
-	private double currentSpeed;
-	private double maxSpeed;
+  private double relativeSpeed;
+  private double relativeMaxSpeed;
 	private double absoluteMaxSpeed;
 	private boolean alarmed;
 	private double reactionTime;
@@ -71,14 +71,14 @@ public class Individual implements Identifiable {
 	public Individual() {
 	}
 
-	public Individual( int age, double familiarity, double panicFactor, double slackness, double exhaustionFactor, double maxSpeed, double reactiontime, UUID uid ) {
+  public Individual( int age, double familiarity, double panicFactor, double slackness, double exhaustionFactor, double relativeMaxSpeed, double reactiontime, UUID uid ) {
 		this.age = age;
 		this.familiarity = familiarity;
 		this.panicFactor = panicFactor;
 		this.slackness = slackness;
 		this.exhaustionFactor = exhaustionFactor;
-		this.maxSpeed = maxSpeed;
-		this.currentSpeed = maxSpeed;
+    this.relativeMaxSpeed = relativeMaxSpeed;
+    this.relativeSpeed = relativeMaxSpeed;
 		this.alarmed = false;
 		this.cell = null;
 		this.staticPotential = null;
@@ -93,7 +93,7 @@ public class Individual implements Identifiable {
 		 * Calibratingfactor -
 		 * The bigger {@code cellCountToChange}, the longer an individual moves before a possible potential change
 		 */
-		cellCountToChange = (int) Math.round( currentSpeed * 15 / 0.4 );
+    cellCountToChange = (int)Math.round( relativeSpeed * 15 / 0.4 );
 		potentialMemoryStart = new PotentialValueTuple( -1, null );
 		potentialMemoryEnd = new PotentialValueTuple( -1, null );
 		memoryIndex = 0;
@@ -152,16 +152,16 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Returns true, if the person is evacuated, false elsewise
-	 * @return the evacuation status
+	 * Returns true, if the person is evacuated, false elsewise.
+ 	 * @return the evacuation status
 	 */
 	public boolean isEvacuated() {
 		return this.isEvacuated;
 	}
 
 	/**
-	 * Sets this {@code Individual} evacuated
-	 */
+	 * Sets this {@code Individual} evacuated.
+ 	 */
 	public void setEvacuated() {
 		isEvacuated = true;
 	}
@@ -191,47 +191,35 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Get the age of the Individual
-	 * @return The age
+	 * Get the age of the individual.
+ 	 * @return The age
 	 */
 	public int getAge() {
 		return age;
 	}
 
 	/**
-	 * Returns, if the individual is already safe; that means: on save- oder exitcells
-	 * @return if the individual is already safe
+	 * Returns, if the individual is already safe; that means: on save- oder exit cells.
+ 	 * @return if the individual is already safe
 	 */
 	public boolean isSafe() {
 		return safe;
 	}
 
 	/**
-	 * Sets the safe-status of the individual
-	 * @param saveStatus indicates wheather the individual is save or not
+	 * Sets the safe-status of the individual.
+ 	 * @param saveStatus indicates wheather the individual is save or not
 	 */
 	public void setSafe( boolean saveStatus ) {
 		safe = saveStatus;
 	}
 
 	/**
-	 * Get the left reaction time of the Individual
-	 * @return the left reaction time
+	 * Get the left reaction time of the individual.
+ 	 * @return the left reaction time
 	 */
 	public double getReactionTime() {
 		return reactionTime;
-	}
-
-	/**
-	 * Sets a new reaction time. If the time is smaller or equal to zero, the
-	 * individual is alarmed.
-	 * @param reactionTime the reaction time.
-	 * @throws IllegalArgumentException if {@code reactionTime} is negative.
-	 */
-	public void setReactionTime( double reactionTime ) throws IllegalArgumentException {
-		if( reactionTime < 0 )
-			setAlarmed( true );
-		this.reactionTime = reactionTime;
 	}
 
 	/**
@@ -240,61 +228,60 @@ public class Individual implements Identifiable {
 	 */
 	public void setAlarmed( boolean alarmed ) {
 		this.alarmed = alarmed;
-		//this.getCell().getRoom().setAlarmstatus( true );	// todo: test ;)
 	}
 
 	/**
-	 * Get the setAlarmed status of the Individual
-	 * @return true if the individual is alarmed, false otherwise
+	 * Get the setAlarmed status of the individual.
+ 	 * @return true if the individual is alarmed, false otherwise
 	 */
 	public boolean isAlarmed() {
 		return alarmed;
 	}
 
 	/**
-	 * Get the exhaustion of the Individual
-	 * @return The exhaustion
+	 * Get the exhaustion of the individual.
+ 	 * @return The exhaustion
 	 */
 	public double getExhaustion() {
 		return exhaustion;
 	}
 
 	/**
-	 * Set the exhaustion of the Individual to a specified value
-	 * @param val the exhaustion
+	 * Set the exhaustion of the Individual to a specified value.
+ 	 * @param val the exhaustion
 	 */
 	public void setExhaustion( double val ) {
 		this.exhaustion = val;
 	}
 
 	/**
-	 * Returns the exchaustion factor of the {@code Individual}
-	 * @return the exhaustion factor
+	 * Returns the exchaustion factor of the {@code Individual}.
+ 	 * @return the exhaustion factor
 	 */
 	public double getExhaustionFactor() {
 		return this.exhaustionFactor;
 	}
 
 	/**
-	 * Sets the exhaustion factor of the {@code Individual} to a specified value
-	 * @param val the exhaustion factor
+	 * Sets the exhaustion factor of the {@code Individual} to a specified value.
+ 	 * @param val the exhaustion factor
 	 */
 	public void setExhaustionFactor( double val ) {
 		this.exhaustionFactor = val;
 	}
 
 	/**
-	 * Get the familiarity of the Individual
-	 * @return The familiarity
+	 * Get the familiarity of the individual.
+ 	 * @return The familiarity
 	 */
 	public double getFamiliarity() {
 		return familiarity;
 	}
 
 	/**
-	 * Set the familiarity of the Individual
-	 * @param val
-	 */
+	 * Set the familiarity of the individual.
+ 	 * @param val the familiarity value
+ 	 */
 	public void setFamiliarity( double val ) {
 		this.familiarity = val;
 	}
@@ -333,8 +320,8 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Get the panic of the Individual
-	 * @return The panic
+	 * Get the panic of the individual.
+ 	 * @return The panic
 	 */
 	public double getPanic() {
 		return panic;
@@ -349,59 +336,59 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Set the panic-factor of the Individual
-	 * @param val
+	 * Set the panic-factor of the individual.
+ 	 * @param val
 	 */
 	public void setPanicFactor( double val ) {
 		this.panicFactor = val;
 	}
 
 	/**
-	 * Get the slackness of the Individual
-	 * @return The slackness
+	 * Get the slackness of the individual.
+ 	 * @return The slackness
 	 */
 	public double getSlackness() {
 		return slackness;
 	}
 
 	/**
-	 * Set the slackness of the Individual
-	 * @param val
+	 * Set the slackness of the individual.
+ 	 * @param val
 	 */
 	public void setSlackness( double val ) {
 		this.slackness = val;
 	}
 
 	/**
-	 * Set the maxSpeed of the Individual
-	 * @param maxSpeed the maximal speed
+	 * Set the relativeMaxSpeed of the individual.
+ 	 * @param maxSpeed the maximal speed
 	 */
 	public void setMaxSpeed( double maxSpeed ) {
-		this.maxSpeed = maxSpeed;
+    this.relativeMaxSpeed = maxSpeed;
 	}
 
 	/**
-	 * Get the maxSpeed of the Individual
-	 * @return The maxSpeed
-	 */
+	 * Returns the relativeMaxSpeed of the individual.
+   * @return The relativeMaxSpeed
+ 	 */
 	public double getMaxSpeed() {
-		return maxSpeed;
+    return relativeMaxSpeed;
 	}
 
 	/**
-	 * Set the currentSpeed of the Individual
-	 * @param currentSpeed
-	 */
-	public void setCurrentSpeed( double currentSpeed ) {
-		this.currentSpeed = currentSpeed;
+	 * Set the current relative speed of the individual. The relative speed is a percentage of the maximum speed .
+   * @param relativeSpeed the new speed
+ 	 */
+  public void setRelativeSpeed( double relativeSpeed ) {
+    this.relativeSpeed = relativeSpeed;
 	}
 
 	/**
-	 * Get the currentSpeed of the Individual
-	 * @return The currentSpeed
-	 */
-	public double getCurrentSpeed() {
-		return currentSpeed;
+	 * Returns the current relative speed of the individual. The relativity is with respect to the individuals max speed.
+ 	 * @return the current speed
+ 	 */
+  public double getRelativeSpeed() {
+    return relativeSpeed;
 	}
 
 	/**
@@ -421,32 +408,32 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Set the dynamicPotential of the Individual
-	 * @param dp
+	 * Set the dynamicPotential of the individual.
+ 	 * @param dp
 	 */
 	public void setDynamicPotential( DynamicPotential dp ) {
 		this.dynamicPotential = dp;
 	}
 
 	/**
-	 * Get the dynamicPotential of the Individual
-	 * @return The dynamicPotential
+	 * Get the dynamicPotential of the individual.
+ 	 * @return The dynamicPotential
 	 */
 	public DynamicPotential getDynamicPotential() {
 		return dynamicPotential;
 	}
 
 	/**
-	 * Set the staticPotential of the Individual
-	 * @param sp
+	 * Set the staticPotential of the individual.
+ 	 * @param sp
 	 */
 	public void setStaticPotential( StaticPotential sp ) {
 		this.staticPotential = sp;
 	}
 
 	/**
-	 * Get the staticPotential of the Individual
-	 * @return The staticPotential
+	 * Get the staticPotential of the individual.
+ 	 * @return The staticPotential
 	 */
 	public StaticPotential getStaticPotential() {
 		return staticPotential;
@@ -470,7 +457,7 @@ public class Individual implements Identifiable {
 		aClone.absoluteMaxSpeed = this.absoluteMaxSpeed;
 		aClone.age = this.age;
 		aClone.cell = this.cell;
-		aClone.currentSpeed = this.currentSpeed;
+    aClone.relativeSpeed = this.relativeSpeed;
 		aClone.deathCause = this.deathCause;
 		aClone.dynamicPotential = this.dynamicPotential;
 		aClone.exhaustion = this.exhaustion;
@@ -480,7 +467,7 @@ public class Individual implements Identifiable {
 		aClone.alarmed = this.alarmed;
 		aClone.isEvacuated = this.isEvacuated;
 		aClone.safe = this.safe;
-		aClone.maxSpeed = this.maxSpeed;
+    aClone.relativeMaxSpeed = this.relativeMaxSpeed;
 		aClone.panic = this.panic;
 		aClone.panicFactor = this.panicFactor;
 		aClone.reactionTime = this.reactionTime;
@@ -514,8 +501,8 @@ public class Individual implements Identifiable {
 						"Slackness: " + slackness + "\n" +
 						"Exhaustion: " + exhaustion + "\n" +
 						"Exhaustion factor: " + exhaustionFactor + "\n" +
-						"MaxSpeed: " + maxSpeed + "\n" +
-						"Absolute max speed: " + absoluteMaxSpeed;
+ "MaxSpeed: " + relativeMaxSpeed + "\n"
+            +						"Absolute max speed: " + absoluteMaxSpeed;
 	}
 
 	/**

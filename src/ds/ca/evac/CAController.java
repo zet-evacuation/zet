@@ -1,4 +1,4 @@
-///* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+///* zet evacuation tool copyright (c) 2007-14 zet evacuation team
 // *
 // * This program is free software; you can redistribute it and/or
 // * as published by the Free Software Foundation; either version 2
@@ -29,7 +29,7 @@
 // * pattern. It allows to access the cellular automaton and all the
 // * datastructures connected with it to do both, run an ca algorithm and get
 // * information for the visualization.</p>
-// * @author Daniel Pluempe, Jan-Philipp Kappmeier
+// * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
 // */
 //public class CAController {
 //

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -12,11 +12,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-
-/**
- * InitializeReactionTimeRule.java
- * Created: Nov 20, 2009,2:55:37 PM
  */
 
 package algo.ca.rule;
@@ -34,7 +29,10 @@ public class InitializeReactionTimeRule extends AbstractInitialRule {
 
 	@Override
 	protected void onExecute( EvacCell cell ) {
-		Individual i = cell.getIndividual();
-		i.setReactionTime( (int) esp.parameterSet.getReactionTime());
+    if( true ) {
+      throw new IllegalStateException( "Übeflüssige Regel!" );
+    }
+    //Individual i = cell.getIndividual();
+    //i.setReactionTime( (int) esp.parameterSet.getReactionTime());
 	}
 }

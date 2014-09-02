@@ -1,13 +1,25 @@
-/**
- * EvacuationSimulationProblem.java
- * Created: 10.02.2012, 17:33:02
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca.algorithm.evac;
 
 import algo.ca.PotentialController;
 import algo.ca.RuleSet;
 import algo.ca.SPPotentialController;
-import algo.ca.parameter.AbstractDefaultParameterSet;
+import algo.ca.parameter.AbstractParameterSet;
 import algo.ca.parameter.ParameterSet;
 import algo.ca.rule.Rule;
 import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationProblem;
@@ -40,7 +52,7 @@ public class EvacuationSimulationProblem extends CellularAutomatonSimulationProb
 			rule.setEvacuationSimulationProblem( this );
 		}
 
-		parameterSet = AbstractDefaultParameterSet.createParameterSet( props.getAsString( "algo.ca.parameterSet" ) );
+		parameterSet = AbstractParameterSet.createParameterSet( props.getAsString( "algo.ca.parameterSet" ) );
 
 		potentialController = new SPPotentialController( ca );
 		caStatisticWriter = new CAStatisticWriter();

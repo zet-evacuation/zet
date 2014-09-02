@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,17 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Created on 04.06.2008
- *
- */
+
 package ds.ca.results;
 
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  */
 public class IndividualStateChangeAction extends Action {
 
@@ -37,8 +34,8 @@ public class IndividualStateChangeAction extends Action {
 		this( individual,
 						individual.getPanic(),
 						individual.getExhaustion(),
-						individual.getCurrentSpeed(),
-						individual.isAlarmed() );
+            individual.getRelativeSpeed(),
+      						individual.isAlarmed() );
 	}
 
 	protected IndividualStateChangeAction( Individual individual, double panic, double exhaustion, double currentSpeed, boolean isAlarmed ) {
@@ -63,15 +60,15 @@ public class IndividualStateChangeAction extends Action {
 
 	/**
 	 * {@inheritDoc }
-	 * @param onCA 
-	 * @throws InconsistentPlaybackStateException 
+	 * @param onCA
+	 * @throws InconsistentPlaybackStateException
 	 * @see ds.ca.results.Action#execute(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
 	public void execute( EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		individual.setPanic( panic );
 		individual.setExhaustion( exhaustion );
-		individual.setCurrentSpeed( currentSpeed );
+    individual.setRelativeSpeed( currentSpeed );
 		if( isAlarmed && !individual.isAlarmed() )
 			individual.setAlarmed( true );
 	}

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * TestEvacuationParameterSet.java
- * Created: Oct 29, 2009,12:56:41 PM
- */
 package algo.ca.parameter;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -50,7 +46,7 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 	@Override
 	public double getReactionTime() {
 		// At a first step use normal distributed values
-		
+
 		NormalDistribution normal = new NormalDistribution( 60, 30, 0, 180 );
 		double randReactionTime = normal.getNextRandom();
 		if( true )
@@ -130,7 +126,7 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 
 		return randSpeed;
 	}
-	
+
 	@Override
 	protected double exhaustionWeightOnSpeed() {
 //		return super.exhaustionWeightOnSpeed();

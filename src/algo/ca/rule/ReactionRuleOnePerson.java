@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class ReactionRuleOnePerson
- * Erstellt 13.10.2008, 23:39:45
- */
 package algo.ca.rule;
 
 import ds.ca.evac.Individual;
@@ -42,10 +38,9 @@ public class ReactionRuleOnePerson extends AbstractReactionRule {
 	 */
 	@Override
 	protected void onExecute( ds.ca.evac.EvacCell cell ) {
-		Individual i = cell.getIndividual();
-		if( i.getReactionTime()-1 <= 0 )
-			i.setAlarmed( true );
-		else
-			i.setReactionTime( i.getReactionTime() - 1 );
+    Individual i = cell.getIndividual();
+    if( !i.isAlarmed() && esp.eca.getTimeStep() >= i.getReactionTime() * esp.eca.getSecondsPerStep() ) {
+      i.setAlarmed( true );
+    }
 	}
 }

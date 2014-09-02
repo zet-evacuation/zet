@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class EvacuationPlanCellularAutomatonInOrder
- * Erstellt 07.07.2008, 01:15:06
- */
-
 package algo.ca;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
@@ -32,11 +27,11 @@ import evacuationplan.CAPathPassabilityChecker;
  */
 public class EvacuationPlanCellularAutomatonInOrder extends EvacuationCellularAutomatonInOrder {
 	CAPathPassabilityChecker checker;
-					
+
 	public EvacuationPlanCellularAutomatonInOrder( CAPathPassabilityChecker checker ) {
 		this.checker = checker;
 	}
-	
+
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -46,7 +41,7 @@ public class EvacuationPlanCellularAutomatonInOrder extends EvacuationCellularAu
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "EvacuationCellularAutomatonInOrder";

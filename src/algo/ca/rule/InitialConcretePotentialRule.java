@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -59,8 +59,8 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	@Override
 	protected void onExecute( EvacCell cell ) {
 		Individual individual = cell.getIndividual();
-		ArrayList<PotentialValueTuple> potentialToLengthOfWayMapper = new ArrayList<PotentialValueTuple>();
-		ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
+		ArrayList<PotentialValueTuple> potentialToLengthOfWayMapper = new ArrayList<>();
+		ArrayList<StaticPotential> staticPotentials = new ArrayList<>();
 		staticPotentials.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 		double minDistanceToEvacArea = Double.MAX_VALUE;
 		double distanceToEvacArea;

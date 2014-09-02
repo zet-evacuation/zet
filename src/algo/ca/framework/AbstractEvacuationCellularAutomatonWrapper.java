@@ -1,6 +1,4 @@
-/**
- * AbstractEvacuationCellularAutomatonWrapper.java Created: 31.10.2012, 14:45:43
- */
+
 package algo.ca.framework;
 
 import algo.ca.algorithm.evac.EvacuationSimulationResult;

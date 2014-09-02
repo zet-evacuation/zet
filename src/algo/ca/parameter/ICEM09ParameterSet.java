@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -25,10 +25,9 @@ import java.util.Collection;
 
 /**
  * @author Sylvie Temme
- *
  */
-public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
-	/* im AbstractDefaultParameterSet: 
+public class ICEM09ParameterSet extends AbstractParameterSet {
+	/* im AbstractParameterSet:
 	final protected double DYNAMIC_POTENTIAL_WEIGHT;
 	final protected double STATIC_POTENTIAL_WEIGHT;
 	final protected double PROB_DYNAMIC_POTENTIAL_INCREASE;
@@ -50,7 +49,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	 * Initializes the default parameter set and loads some constants from the property container.
 	 */
 	public ICEM09ParameterSet() {
-		/* im AbstractDefaultParameterSet:
+		/* im AbstractParameterSet:
 		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
 		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
 		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
@@ -69,7 +68,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	////* Some constants*////
-	/* im AbstractDefaultParameterSet:
+	/* im AbstractParameterSet:
 	@Override
 	public double dynamicPotentialWeight(){
 	return DYNAMIC_POTENTIAL_WEIGHT;

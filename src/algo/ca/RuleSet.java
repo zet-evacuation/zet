@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,9 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Created on 23.01.2008
- */
+
 package algo.ca;
 
 import java.util.Iterator;
@@ -57,7 +55,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 		loopRules = new ArrayList<>();
 		selfInit();
 	}
-	
+
 	/**
 	 * Returns an {@code Iterator} that iterates through all known rules. All
 	 * rules are only contained once.
@@ -67,14 +65,14 @@ public abstract class RuleSet implements Iterable<Rule> {
 	public Iterator<Rule> iterator() {
 		return allRules.iterator();
 	}
-	
+
 	/**
 	 * Adds a new {@link Rule} to both, the initialization list and the loop list.
 	 * @param rule the rule
 	 */
 	public void add( Rule rule ) {
 		if( !allRules.add( rule ) )
-			allRules.add( rule );		
+			allRules.add( rule );
 		primaryRules.add( rule );
 		loopRules.add( rule );
 	}
@@ -95,7 +93,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 		if( useInLoopSet ) //&& !(rule instanceof MovementRule) )
 			loopRules.add( rule );
 	}
-	
+
 	/**
 	 * Creates a new instance of the {@link Rule} interface. The object has the
 	 * specified type and is created using the default constructor, thus the
@@ -155,7 +153,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 		}
 		return ruleSet;
 	}
-	
+
 	/**
 	 * Returns an {@code Iterator} that iterates through the initialization
 	 * rules. These rules can be added twice or more often.
@@ -164,7 +162,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	public Iterator<Rule> loopIterator() {
 		return loopRules.iterator();
 	}
-	
+
 	/**
 	 * Returns an {@code Iterator} that iterates through the loop rules.
 	 * These rules can be added twice or more often.
@@ -173,7 +171,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	public Iterator<Rule> primaryIterator() {
 		return primaryRules.iterator();
 	}
-	
+
 	/**
 	 * Performs the initialization. This method is called by the constructor and
 	 * is supposed to load the rules contained in the {@code RuleSet}

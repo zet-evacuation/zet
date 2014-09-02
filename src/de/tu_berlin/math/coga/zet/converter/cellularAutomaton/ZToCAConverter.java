@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.
- * @author Daniel Plümpe
+ * @author Daniel R. Schmidt
  * @author Jan-Philipp Kappmeier
  *
  */

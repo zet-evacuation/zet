@@ -18,7 +18,7 @@ package statistic.ca;
 import statistic.common.Data;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 public class CAData extends Data {

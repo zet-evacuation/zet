@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,16 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca;
 
 import ds.ca.evac.EvacCell;
 
 /**
- * The data structure used by the algorithm for calculating the static potentials
+ * The data structure used by the algorithm for calculating the static potentials.
  * @author Matthias Woste
  *
  */
-public class SmoothingTupel {
+public class SmoothingTuple {
 	/** Reference to the cell. */
 	EvacCell cell;
 	/** potential value. */
@@ -33,24 +34,25 @@ public class SmoothingTupel {
 	int numberOfParents;
 	/** Sum of the potentials of the parent cells. */
 	double sumOfValuesOfParents;
-	
+
 	/**
-	 * Constructs a new SmoothingTupel for a cell
+	 * Constructs a new SmoothingTuple for a cell.
 	 * @param c the cell
 	 * @param v the initial potential: the distance (diagonal: 14, horizontal or vertical: 10)
+   * @param d
 	 * @param n initial 1
 	 * @param s initial the potential of the first parent cell
 	 */
-	public SmoothingTupel(EvacCell c, double v, double d, int n, double s){
+	public SmoothingTuple( EvacCell c, double v, double d, int n, double s) {
 		cell = c;
 		value = v;
 		distanceValue = d;
 		numberOfParents = n;
 		sumOfValuesOfParents = s;
 	}
-	
+
 	/**
-	 * Updates the values of this tupel
+	 * Updates the values of this tuple.
 	 * @param valueOfParent potential of the parent
 	 * @param distance distance between this cell and its parent (diagonal: 14, horizontal or vertical: 10)
 	 */
@@ -59,40 +61,40 @@ public class SmoothingTupel {
 		numberOfParents++;
 		sumOfValuesOfParents += valueOfParent;
 	}
-	
-	public void addDistanceParent(double valueOfParent, double distance){
+
+	public void addDistanceParent(double valueOfParent, double distance) {
 		distanceValue = Math.min(distanceValue, valueOfParent + distance);
 	}
-	
+
 	/**
-	 * Returns the EvacCell of the SmoothingTupel
+	 * Returns the EvacCell of the SmoothingTuple.
 	 * @return the EvacCell
 	 */
-	public EvacCell getCell(){
+	public EvacCell getCell() {
 		return cell;
 	}
-	
+
 	/**
-	 * Returns the Potential of the EvacCell specified by this SmoothingTupel
+	 * Returns the Potential of the EvacCell specified by this SmoothingTuple.
 	 * @return the potential
 	 */
-	public double getValue(){
+	public double getValue() {
 		return value;
 	}
-	
+
 	/**
-	 * Returns the distance of the EvacCell specified by this SmoothingTupel
+	 * Returns the distance of the EvacCell specified by this SmoothingTuple.
 	 * @return the distance
 	 */
-	public double getDistanceValue(){
+	public double getDistanceValue() {
 		return distanceValue;
 	}
-	
+
 	/**
-	 * Applies the smoothing-algorithm to this tupel. It's based on the formula:
+	 * Applies the smoothing-algorithm to this tuple. It's based on the formula:
 	 * potential = Math.round((3*value+sumOfValuesOfParents)/(3+numberOfParents))
 	 */
-	public void applySmoothing(){
+	public void applySmoothing() {
 		value = (3*value+sumOfValuesOfParents)/(3+numberOfParents);
 	}
 }
