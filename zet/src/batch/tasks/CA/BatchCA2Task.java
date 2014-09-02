@@ -33,7 +33,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import exitdistributions.ExitDistributionZToCAConverter;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
 import zet.tasks.CellularAutomatonAlgorithms;
@@ -122,12 +122,10 @@ public class BatchCA2Task implements Runnable {
 		// Get the results
 		CAStatistic statistic = null;//new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().getStoredCAStatisticResults ());
 		res.setCellularAutomatonStatistic (runNumber, statistic);
-		// TODO RASTER
-		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), null, ca2);
-//		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), ZToCAConverter.getInstance ().getLatestMapping ());
-   	visres.statistic = statistic;
+    // TODO RASTEvacuationSimulationResultssults visEvacuationSimulationResultsionResults ( VisualResultsRecorder.getInstance ().getRecording (), nEvacuationSimulationResultslizationREvacuationSimulationResultsVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), ZToCAConverter.getInstance ().getLatestMapping ());
+   	//visres.statistic = statistic;
 
-		res.setCellularAutomatonVisualization (runNumber, visres );
+		//res.setCellularAutomatonVisualization (runNumber, visres );
 
 		// Gather median information
 		//median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);

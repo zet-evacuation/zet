@@ -19,14 +19,14 @@ import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> {
+public class CellularAutomatonTask extends Algorithm<Project, EvacuationSimulationResults> {
 	EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
 	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;
@@ -41,7 +41,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 	}
 
 	@Override
-	protected CAVisualizationResults runAlgorithm( Project project ) {
+	protected EvacuationSimulationResults runAlgorithm( Project project ) {
 		// convert cellular automaton
 		final ZToCAConverter conv = new ZToCAConverter();
 		conv.setProblem( project.getBuildingPlan() );
@@ -69,7 +69,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		caAlgo.run();
 		ca.stopRecording();
     
-		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
+		EvacuationSimulationResults visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
 		return visResults;
 	}
 

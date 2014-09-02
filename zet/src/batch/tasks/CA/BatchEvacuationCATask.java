@@ -19,7 +19,7 @@
  */
 package batch.tasks.CA;
 
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 
 import java.util.TreeMap;
 
@@ -153,7 +153,7 @@ public class BatchEvacuationCATask implements Runnable {
 
 		// Get the results
 //		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().			getStoredCAStatisticResults ()));
-		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (VisualResultsRecorder.getInstance ().
+		res.setCellularAutomatonVisualization (runNumber, new EvacuationSimulationResults (VisualResultsRecorder.getInstance ().
 				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping (), ca));
 
 		// Gather median information

@@ -15,7 +15,7 @@ import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import de.tu_berlin.coga.zet.model.Project;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.concurrent.RunnableFuture;
@@ -283,8 +283,8 @@ public class AlgorithmControlTest {
 	public void testGetCaVisResults() {
 		System.out.println( "getCaVisResults" );
 		AlgorithmControl instance = null;
-		CAVisualizationResults expResult = null;
-		CAVisualizationResults result = instance.getCaVisResults();
+		EvacuationSimulationResults expResult = null;
+		EvacuationSimulationResults result = instance.getCaVisResults();
 		assertEquals( expResult, result );
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );

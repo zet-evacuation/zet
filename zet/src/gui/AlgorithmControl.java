@@ -35,7 +35,7 @@ import evacuationplan.BidirectionalNodeCellMapping;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.concurrent.RunnableFuture;
@@ -255,7 +255,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		conv.run();
 		EvacuationCellularAutomaton ca = conv.getCellularAutomaton();
 						ZToCARasterContainer container;
-						CAVisualizationResults caVisResults;
+						EvacuationSimulationResults caVisResults;
 						ZToCAMapping mapping;
 		mapping = conv.getMapping();
 		container = conv.getContainer();
@@ -302,9 +302,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		ca.stopRecording();
 
 		// create results
-		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
+		//CAVisualizationResults visResults = new EvacuationSimulationResults( mapping, ca.getPotentialManager() );
 		// TODO visualResultsRecorder normal class, no singleton.
-		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
+		EvacuationSimulationResults visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
 
 						EvacuationCellularAutomaton cellularAutomaton = ca;
 						//mapping = mapping;
@@ -398,7 +398,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		caControl.convertCellularAutomaton( project.getBuildingPlan(), propertyChangeListener );
 	}
 
-	CAVisualizationResults getCaVisResults() {
+	EvacuationSimulationResults getCaVisResults() {
 		return caControl.getCaVisResults();
 	}
 

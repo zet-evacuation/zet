@@ -34,10 +34,10 @@ import ds.ca.evac.SaveCell;
 import ds.ca.evac.StairCell;
 import ds.ca.results.ExitAction;
 import ds.ca.results.MoveAction;
-import ds.ca.results.VisualResultsRecording;
+import ds.ca.results.EvacuationRecording;
 
 /**
- * This class serializes and deserializes {@code VisualResultsRecording}
+ * This class serializes and deserializes {@code EvacuationRecording}
  * objects to XML files. Use this class to store simulation results to disc.
  * 
  * The (de-)serializing is done via the XStream-library. 
@@ -61,7 +61,7 @@ public class CAVisualResultsParser {
 
         xstream.setMode(XStream.ID_REFERENCES);
         
-        xstream.alias("Visual Results", VisualResultsRecording.class);
+        xstream.alias("Visual Results", EvacuationRecording.class);
         xstream.alias("Initial Configuration", InitialConfiguration.class);
         xstream.alias("Room", Room.class);
         xstream.alias("Room Cell", RoomCell.class);
@@ -82,7 +82,7 @@ public class CAVisualResultsParser {
         xstream.useAttributeFor(EvacCell.class, "y");
         xstream.useAttributeFor(EvacCell.class, "room");
         
-        xstream.omitField(VisualResultsRecording.class, "curTime");
+        xstream.omitField(EvacuationRecording.class, "curTime");
     }
     
     /**
@@ -94,34 +94,34 @@ public class CAVisualResultsParser {
      * @throws IOException Throws an exception if the file cannot be
      *  written or if it already exists.
      */
-    public void writeToFile(VisualResultsRecording recording, File file) throws IOException{
+    public void writeToFile(EvacuationRecording recording, File file) throws IOException{
         String xmlString = recordingToXML(recording);
         System.out.println(xmlString);
         writeString(xmlString, file);
     }
     
     /**
-     * Reads a serialized VisualResultsRecording from an XML file and 
-     * deserializes it.
+     * Reads a serialized EvacuationRecording from an XML file and 
+ deserializes it.
      * @param file  The XML file with the serialized object
      * @return The deserializes object
      * @throws IOException Throws an exception if the file cannot be found or
      * cannot be read.
      */
-    public VisualResultsRecording readFromFile(File file) throws IOException{
+    public EvacuationRecording readFromFile(File file) throws IOException{
         String xmlString = readString(file);
         return xmlToRecording(xmlString);
     }
     
     /**
-     * Re-builds a {@code VisualResultsRecording} from an XML string
+     * Re-builds a {@code EvacuationRecording} from an XML string
      * @param xmlStr An XML string with a serialized 
-     * {@code VisualResultsRecording} object
+     * {@code EvacuationRecording} object
      * 
      * @return The deserialized object.
      */
-    private VisualResultsRecording xmlToRecording(String xmlStr){
-        return (VisualResultsRecording)xstream.fromXML(xmlStr); 
+    private EvacuationRecording xmlToRecording(String xmlStr){
+        return (EvacuationRecording)xstream.fromXML(xmlStr); 
     }
     
     /**
@@ -147,12 +147,12 @@ public class CAVisualResultsParser {
     
     
     /**
-     * Serializes a {@code VisualResultsRecording} object to an
+     * Serializes a {@code EvacuationRecording} object to an
      * XML string via XStream.
      * @param recording The object you want to serialize
      * @return The serialized object
      */
-    private String recordingToXML(VisualResultsRecording recording){
+    private String recordingToXML(EvacuationRecording recording){
             return xstream.toXML(recording);
     }
     

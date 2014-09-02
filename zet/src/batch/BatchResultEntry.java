@@ -22,7 +22,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -54,7 +54,7 @@ public class BatchResultEntry {
 	protected PathBasedFlowOverTime flow;
 	protected CAStatistic[] caStatistics;
 	protected MultipleCycleCAStatistic mccaStatistic;
-	protected CAVisualizationResults[] caVis;
+	protected EvacuationSimulationResults[] caVis;
 	protected GraphVisualizationResults graphVis;
         protected CompareVisualizationResults compVisRes;
 	private double averageCAStepsPerSecond;
@@ -75,7 +75,7 @@ public class BatchResultEntry {
 
 	public PathBasedFlowOverTime getFlow () { return flow; }
 	public MultipleCycleCAStatistic getMultipleCycleCAStatistics () { return mccaStatistic; }
-	public CAVisualizationResults[] getCaVis () { return caVis; }
+	public EvacuationSimulationResults[] getCaVis () { return caVis; }
 	public CAStatistic[] getCaStatistics() { return caStatistics; }
 	public GraphVisualizationResults getGraphVis () { return graphVis; }
         public CompareVisualizationResults getCompRes() {return compVisRes; }
@@ -102,7 +102,7 @@ public class BatchResultEntry {
 	 * @param runNumber the cycle number
 	 * @param visResults the statistic
 	 */
-	public void setCellularAutomatonVisualization( int runNumber, CAVisualizationResults visResults ) {
+	public void setCellularAutomatonVisualization( int runNumber, EvacuationSimulationResults visResults ) {
 		caVis[runNumber] = visResults;
 	}
 	

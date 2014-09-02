@@ -20,7 +20,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.PotentialManager;
-import ds.ca.results.VisualResultsRecording;
+import ds.ca.results.EvacuationRecording;
 import java.util.HashMap;
 import opengl.framework.abs.VisualizationResult;
 import statistic.ca.CAStatistic;
@@ -31,10 +31,10 @@ import statistic.ca.CAStatistic;
  * visual recorder.
  * @author Jan-Philipp Kappmeier
  */
-public class CAVisualizationResults implements VisualizationResult {
+public class EvacuationSimulationResults implements VisualizationResult {
 
 	/** The recording of a simulation. */
-	private VisualResultsRecording visRecording;
+	private EvacuationRecording visRecording;
 	/**
 	 * A mapping from a cell to its offset relative to the room containing it.
 	 * (The offset of the room is NOT included!).
@@ -64,7 +64,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * @param caMapping
    * @param ca 
 	 */
-	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping, EvacuationCellularAutomaton ca ) {
+	public EvacuationSimulationResults( EvacuationRecording visRecording, ZToCAMapping caMapping, EvacuationCellularAutomaton ca ) {
 		caCellToZOffsetMapping = new HashMap<>();
 		caRoomToZOffsetMapping = new HashMap<>();
 		caFloorToZOffsetMapping = new HashMap<>();
@@ -79,7 +79,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		convertMapping( caMapping );
 	}
 
-	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm, EvacuationCellularAutomaton ca ) {
+	public EvacuationSimulationResults( ZToCAMapping caMapping, PotentialManager pm, EvacuationCellularAutomaton ca ) {
 		caCellToZOffsetMapping = new HashMap<>();
 		caRoomToZOffsetMapping = new HashMap<>();
 		caFloorToZOffsetMapping = new HashMap<>();
@@ -134,7 +134,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		return caFloorToZOffsetMapping.get( floorID );
 	}
 
-	public VisualResultsRecording getRecording() {
+	public EvacuationRecording getRecording() {
 		return this.visRecording;
 	}
 

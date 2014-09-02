@@ -88,8 +88,8 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 			}
 		}
 		ZToExitMapping mapping = new ZToExitMapping( individualExitMapping );
-		cca.getCellularAutomaton().setIndividualToExitMapping( mapping );
-	}
+    cca.getCellularAutomaton().setIndividualToExitMapping( mapping );
+  }
 
 	/**
 	 * This method returns an individual whose attributes are based upon die assignment specified by the Z-Assignment group.<br>

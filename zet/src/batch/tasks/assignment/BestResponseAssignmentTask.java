@@ -30,7 +30,7 @@ import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import evacuationplan.BestResponseDynamics;
 import exitdistributions.ExitCapacityBasedCAFactory;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
 import zet.tasks.CellularAutomatonAlgorithms;
@@ -118,8 +118,8 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.g .caStatisticWriter.getStoredCAStatisticResults() ) );
 		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( null ) );
 		// TODO RASTER
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca2 ) );
-		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
+		res.setCellularAutomatonVisualization( runNumber, new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca2 ) );
+		//res.setCellularAutomatonVisualization( runNumber, new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 		// Gather median information
 		//median.put( new Integer( caAlgo. .getCellularAutomaton().getTimeStep() ), runNumber );

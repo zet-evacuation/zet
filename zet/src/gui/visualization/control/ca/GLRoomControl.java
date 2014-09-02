@@ -20,7 +20,7 @@ import ds.ca.evac.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.HashMap;
 
 public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
@@ -30,7 +30,7 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 	private double yPosition;
 	Room controlled;
 
-	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
+	public GLRoomControl( EvacuationSimulationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		System.out.println( "Create room " + room.getIdentificationForStatistic() );
 		controlled = room;

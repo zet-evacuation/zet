@@ -25,7 +25,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
@@ -47,7 +47,7 @@ public class AlgorithmControlCellularAutomaton {
 	private CellularAutomatonAlgorithms simulationAlgorithm = CellularAutomatonAlgorithms.RandomOrder;
 	private ZToCAMapping mapping;
 	private ZToCARasterContainer container;
-	private CAVisualizationResults caVisResults;
+	private EvacuationSimulationResults caVisResults;
 	private EvacuationCellularAutomaton cellularAutomaton;
 	private CellularAutomatonTask cat = new CellularAutomatonTask();
 	private ConcreteAssignment concreteAssignment;
@@ -140,7 +140,7 @@ public class AlgorithmControlCellularAutomaton {
 		initStepByStep( project, listener, false );
 	}
 
-	public CAVisualizationResults getCaVisResults() {
+	public EvacuationSimulationResults getCaVisResults() {
 		return caVisResults;
 	}
 
@@ -232,7 +232,7 @@ public class AlgorithmControlCellularAutomaton {
 		}
 	}
 	
-	void tempSetParametersFromEx( CAVisualizationResults caVis, EvacuationCellularAutomaton ca ) {
+	void tempSetParametersFromEx( EvacuationSimulationResults caVis, EvacuationCellularAutomaton ca ) {
 		this.caVisResults = caVis;
 		this.cellularAutomaton = ca;
 	}

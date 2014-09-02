@@ -58,7 +58,6 @@ public interface ParameterSet {
 	/* Conversion parameters */
 	public double getAbsoluteMaxSpeed();
 
-  // Conversion parameters
 	public double getSpeedFromAge( double pAge );
 
 	public double getSlacknessFromDecisiveness( double pDecisiveness );

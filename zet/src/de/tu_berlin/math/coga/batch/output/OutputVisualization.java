@@ -5,7 +5,7 @@ import de.tu_berlin.coga.zet.model.BuildingPlan;
 import ds.GraphVisualizationResults;
 import gui.GUIControl;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -24,20 +24,20 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
 
   @Override
   public boolean consumes( Class<?> c ) {
-    return( c.equals( GraphVisualizationResults.class ) || c.equals( CAVisualizationResults.class ) || c.equals( BuildingPlan.class ) );
+    return( c.equals( GraphVisualizationResults.class ) || c.equals( EvacuationSimulationResults.class ) || c.equals( BuildingPlan.class ) );
   }
 
   @Override
   public void consume( Object o ) {
     if( o instanceof GraphVisualizationResults ) {
       showGraphResults( (GraphVisualizationResults) o );
-    } else if( o instanceof CAVisualizationResults ) {
-      showCellularAutomatonResults( (CAVisualizationResults) o );
+    } else if( o instanceof EvacuationSimulationResults ) {
+      showCellularAutomatonResults( (EvacuationSimulationResults) o );
     } else if( o instanceof BuildingPlan ) {
       showBuildingPlan( (BuildingPlan)o );
     } else {
       throw new IllegalArgumentException( "Type " + o.getClass() + " is not supported! Only "
-              + GraphVisualizationResults.class + " and " + CAVisualizationResults.class + " are possible." );
+              + GraphVisualizationResults.class + " and " + EvacuationSimulationResults.class + " are possible." );
     }
   }
 
@@ -60,7 +60,7 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
    * Sends results from a simulation run to a zet visualization panel.
    * @param cav
    */
-  private void showCellularAutomatonResults( CAVisualizationResults cav ) {
+  private void showCellularAutomatonResults( EvacuationSimulationResults cav ) {
     control.addVisualization( cav );
     
   }

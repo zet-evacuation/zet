@@ -25,7 +25,7 @@ import ds.ca.evac.RoomCell;
 import ds.ca.evac.SaveCell;
 import ds.ca.evac.StairCell;
 import ds.ca.evac.StaticPotential;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.draw.ca.GLCell;
@@ -61,7 +61,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
 	CAStatistic statistic;
 
-	public GLCellControl( CAVisualizationResults caVisResults, EvacCell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
+	public GLCellControl( EvacuationSimulationResults caVisResults, EvacCell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		this.statistic = caVisResults.statistic;
 		this.controlled = cell;
