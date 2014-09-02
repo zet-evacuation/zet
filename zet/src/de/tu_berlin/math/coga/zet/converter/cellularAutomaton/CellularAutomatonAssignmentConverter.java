@@ -1,10 +1,7 @@
-/**
- * CellularAutomatonAssignmentConverter.java
- * Created: Jul 28, 2010,5:15:56 PM
- */
+
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import algo.ca.parameter.AbstractDefaultParameterSet;
+import algo.ca.parameter.AbstractParameterSet;
 import algo.ca.parameter.ParameterSet;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
@@ -50,7 +47,10 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 	 * @throws java.lang.IllegalArgumentException if the calculated cell is not in the room of the cellular automaton
 	 */
 	private static void applyConcreteAssignment( ConcreteAssignment concreteAssignment, ConvertedCellularAutomaton cca ) throws IllegalArgumentException, ConversionNotSupportedException {
-		ZToCARoomRaster room;
+
+    System.out.println( "STeps per second: " + cca.getCellularAutomaton().getStepsPerSecond() );
+
+    ZToCARoomRaster room;
 		// Create ZToExitMapping
 		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<>();
 		EvacCell c;
@@ -100,8 +100,8 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 	 */
 	private static Individual generateIndividual( Person p ) {
 		String parameterName = PropertyContainer.getInstance().getAsString( "algo.ca.parameterSet" );
-		AbstractDefaultParameterSet.createParameterSet( "DefaultParameterSet" );
-		ParameterSet ps = AbstractDefaultParameterSet.createParameterSet( parameterName );
+		AbstractParameterSet.createParameterSet( "DefaultParameterSet" );
+		ParameterSet ps = AbstractParameterSet.createParameterSet( parameterName );
 
 		double pDecisiveness = p.getDecisiveness();
 		double pFamiliarity = p.getFamiliarity();
@@ -114,13 +114,12 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 		double slackness = ps.getSlacknessFromDecisiveness( pDecisiveness );
 		double exhaustionFactor = ps.getExhaustionFromAge( pAge );
 		double maxSpeed = ps.getSpeedFromAge( pAge );
+    double reactiontime = p.getReaction();
 
 		// Collect statistic
 		Statistic.instance.collectAgeSpeed( pAge, maxSpeed );
 
-		// Reaction time is now (since 1.1) computed directly from the correct
-		// individual assignment parameter.
-		double reactiontime = p.getReaction();
-		return new Individual( (int) pAge, familiarity, panicFactor, slackness, exhaustionFactor, maxSpeed, reactiontime, p.getUid() );
+    double relativeMaxSpeed = maxSpeed / ps.getAbsoluteMaxSpeed();
+    return new Individual( (int)pAge, familiarity, panicFactor, slackness, exhaustionFactor, relativeMaxSpeed, reactiontime, p.getUid() );
 	}
 }

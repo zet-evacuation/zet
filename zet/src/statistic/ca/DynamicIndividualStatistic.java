@@ -25,7 +25,7 @@ import statistic.graph.Statistics;
 import ds.ca.evac.Individual;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 public enum DynamicIndividualStatistic implements Statistic<Individual, IntegerDoubleMapping, CAData>{

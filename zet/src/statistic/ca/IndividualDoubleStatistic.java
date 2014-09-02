@@ -26,7 +26,7 @@ import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 public enum IndividualDoubleStatistic implements Statistic<Individual, Double, CAData>{

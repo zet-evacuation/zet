@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Created on 23.01.2008
- *
- */
+
 package algo.ca.parameter;
 
 import java.util.Collection;
@@ -27,21 +24,21 @@ import ds.ca.evac.Individual;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
-public abstract class AbstractDefaultParameterSet implements ParameterSet {
-	final protected double DYNAMIC_POTENTIAL_WEIGHT;
-	final protected double STATIC_POTENTIAL_WEIGHT;
-	final protected double PROB_DYNAMIC_POTENTIAL_INCREASE;
-	final protected double PROB_DYNAMIC_POTENTIAL_DECREASE;
-	final protected double PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT;
+public abstract class AbstractParameterSet implements ParameterSet {
+  final private double DYNAMIC_POTENTIAL_WEIGHT;
+  final private double STATIC_POTENTIAL_WEIGHT;
+  final private double PROB_DYNAMIC_POTENTIAL_INCREASE;
+  final private double PROB_DYNAMIC_POTENTIAL_DECREASE;
+  final private double PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT;
 	final protected double ABSOLUTE_MAX_SPEED;
 
 	/**
 	 * Initializes the default parameter set and loads some constants from the property container.
 	 */
-	public AbstractDefaultParameterSet() {
+	public AbstractParameterSet() {
 		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
 		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
 		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
@@ -115,31 +112,31 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 	 * @param parameterSetName the subclass
 	 * @return the object of the subclass type.
 	 */
-	public static AbstractDefaultParameterSet createParameterSet( String parameterSetName ) {
+	public static AbstractParameterSet createParameterSet( String parameterSetName ) {
 		Class<?> parameterSetClass = null;
-		AbstractDefaultParameterSet parameterSet = null;
+		AbstractParameterSet parameterSet = null;
 		try {
 			parameterSetClass = Class.forName( "algo.ca.parameter." + parameterSetName );
-			parameterSet = (AbstractDefaultParameterSet) parameterSetClass.getConstructor().newInstance();
+			parameterSet = (AbstractParameterSet) parameterSetClass.getConstructor().newInstance();
 		} catch( ClassNotFoundException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		} catch( NoSuchMethodException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		} catch( InstantiationException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		} catch( IllegalAccessException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		} catch( IllegalArgumentException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		} catch( InvocationTargetException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 		}
 		return parameterSet;
 	}
 
 	/**
-	 * Returns the absolute
-	 * @return
+	 * Returns the absolute maximum speed of any evacuee.
+	 * @return the absolute maximum speed of any evacuee
 	 */
 	@Override
 	public double getAbsoluteMaxSpeed() {

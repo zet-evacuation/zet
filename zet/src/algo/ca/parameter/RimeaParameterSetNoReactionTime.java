@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class RimeaParameterSet
- * Erstellt 13.10.2008, 21:28:10
- */
 
 package algo.ca.parameter;
 
@@ -28,9 +24,9 @@ import ds.ca.evac.Individual;
  * @author Melanie Schmidt
  */
 public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
-	
+
 	/**
-	 * 
+	 *
 	 * @param age
 	 * @return 0.0
 	 */
@@ -38,9 +34,9 @@ public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
 	public double getReactionTimeFromAge( double age ) {
 		return 0.0;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param individual
 	 * @return 0.0
 	 */
@@ -48,7 +44,7 @@ public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
 	public double idleThreshold(Individual individual){
 		return 0.0;
 	}
-	
+
 	@Override
 	public double getSpeedFromAge( double pAge ) {
 		return 0.595;

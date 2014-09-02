@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -41,7 +41,7 @@ import ds.ca.results.VisualResultsRecording;
  * objects to XML files. Use this class to store simulation results to disc.
  * 
  * The (de-)serializing is done via the XStream-library. 
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  *
  */
 

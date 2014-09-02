@@ -1,6 +1,4 @@
-/**
- * StepByStepAlgorithm.java Created: 31.10.2012, 14:51:32
- */
+
 package algo.ca.framework;
 
 /**

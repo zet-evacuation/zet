@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -19,14 +19,14 @@ import ds.ca.evac.EvacCell;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
 /**
- * This rule combines the to concrete rules "ChangePotentialFamiliarityRule" and 
+ * This rule combines the to concrete rules "ChangePotentialFamiliarityRule" and
  * "ChangePotentialAttractivityOfExitRule". With the probability defined in
  * "probFamiliarity" the first rule, which chooses the new StaticPotential according
- * to the Individual's familiarity value, is chosen, and with the complementary 
- * probability the second rule, which chooses the Individual's new StaticPotential 
- * according to the attractivity of the ExitCells belonging to the StaticPotentials, 
+ * to the Individual's familiarity value, is chosen, and with the complementary
+ * probability the second rule, which chooses the Individual's new StaticPotential
+ * according to the attractivity of the ExitCells belonging to the StaticPotentials,
  * is chosen.
- * @author marcel
+ * @author Marcel Preuß
  *
  */
 public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends AbstractPotentialChangeRule {
@@ -35,7 +35,7 @@ public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends Abstract
 	 * Checks whether the rule is executable or not.
 	 * @param cell the cell on which the rule shall be executed
 	 * @return Returns "false" if "cell" is not occupied by an Individual.
-	 * Returns "true" if "cell" is occupied by an Individual and if this Individual 
+	 * Returns "true" if "cell" is occupied by an Individual and if this Individual
 	 * whishes to change its StaticPotential according to the probability of changing
 	 * its StaticPotential.
 	 */

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -28,19 +28,20 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author Daniel Plümpe, Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt
+ * @author Jan-Philipp Kappmeier
  */
-public class DefaultParameterSet extends AbstractDefaultParameterSet {
-	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
-	final protected double SLACKNESS_TO_IDLE_RATIO;
-	final protected double PANIC_DECREASE;
-	final protected double PANIC_INCREASE;
-	final protected double PANIC_WEIGHT_ON_SPEED;
-	final protected double PANIC_WEIGHT_ON_POTENTIALS;
-	final protected double EXHAUSTION_WEIGHT_ON_SPEED;
-	final protected double PANIC_THRESHOLD;
-	final protected double MINIMUM_PANIC = 0.0d;
-	final protected double MAXIMUM_PANIC = 1.0d;
+public class DefaultParameterSet extends AbstractParameterSet {
+  private final double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
+  final private double SLACKNESS_TO_IDLE_RATIO;
+  final private double PANIC_DECREASE;
+  final private double PANIC_INCREASE;
+  final private double PANIC_WEIGHT_ON_SPEED;
+  final private double PANIC_WEIGHT_ON_POTENTIALS;
+  final private double EXHAUSTION_WEIGHT_ON_SPEED;
+  final private double PANIC_THRESHOLD;
+  final private double MINIMUM_PANIC = 0.0d;
+  final private double MAXIMUM_PANIC = 1.0d;
 
 	/**
 	 * Creates a new instance with some static values stored in the {@code PropertyContainer}.
@@ -71,13 +72,13 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/**
 	 * <p>Given a cell {@code referenceCell} that is occupied by an
-	 * individual I, this method calculates the potential of a cell with respect 
+	 * individual I, this method calculates the potential of a cell with respect
 	 * to I's panic and both the static and the dynamic potential. One can
 	 * think of the resulting potential as an "average" of the static and the
 	 * dynamic potential. However, the influence of the static and the
-	 * dynamic potential on the average is determined by two constants 
-	 * and I's panic. The higher the panic, the more important the 
-	 * dynamic potential will become while the influence of the static 
+	 * dynamic potential on the average is determined by two constants
+	 * and I's panic. The higher the panic, the more important the
+	 * dynamic potential will become while the influence of the static
 	 * potential lessens.</p>
 	 * @param referenceCell A cell with an individual
 	 * @param targetCell A neighbour of {@code cell}
@@ -106,7 +107,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#idleThreshold(ds.ca.Individual)
+	 * @see algo.ca.parameter.AbstractParameterSet#idleThreshold(ds.ca.Individual)
 	 */
 	@Override
 	public double idleThreshold( Individual i ) {
@@ -115,22 +116,22 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#movementThreshold( ds.ca.Individual )
+	 * @see algo.ca.parameter.AbstractParameterSet#movementThreshold( ds.ca.Individual )
 	 */
 	// wird nur benutzt wenn die Geschwindigkeit der Individuen mit Wahrscheinlichkeiten simuliert wird
 	// das ist in der NonWaitingMovementRule nicht der Fall
 	@Override
 	public double movementThreshold( Individual i ) {
-		double individualSpeed = i.getCurrentSpeed();
+		double individualSpeed = i.getRelativeSpeed();
 		double cellSpeed = i.getCell().getSpeedFactor();
-		// double exhaustion = i.getExhaustion();  brauchen wir nur wenn wir in 
+		// double exhaustion = i.getExhaustion();  brauchen wir nur wenn wir in
 		//currentspeed exhaustion nicht einrechenen
 		return individualSpeed * cellSpeed;
 	}
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateExhaustion(ds.ca.Individual)
+	 * @see algo.ca.parameter.AbstractParameterSet#updateExhaustion(ds.ca.Individual)
 	 */
 	@Override
 	public double updateExhaustion( Individual individual, EvacCell targetCell ) {
@@ -149,7 +150,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 							(0 / individual.getMaxSpeed() - 0.5) * individual.getExhaustionFactor() + individual.getExhaustion();
 		} else {
 			newExhaustion =
-							(individual.getCurrentSpeed() / individual.getMaxSpeed() - 0.5) * individual.getExhaustionFactor() + individual.getExhaustion();
+							(individual.getRelativeSpeed() / individual.getMaxSpeed() - 0.5) * individual.getExhaustionFactor() + individual.getExhaustion();
 		}
 
 
@@ -199,13 +200,13 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	/* alter Code */
 //		    // update panic only if the individual is not standing on a savecell or an exitcell
 //	        if (! ( (individual.getCell() instanceof ds.ca.SaveCell) || (individual.getCell() instanceof ds.ca.ExitCell) )) {
-//	        	
+//
 //	            double panic = individual.getPanic();
-//	            
+//
 //	            //person will gar nicht laufen (slack usw.)
 //				if( preferedCells.size() == 0 )
 //					return panic;
-//			
+//
 //				Iterator<Cell> it = preferedCells.iterator();
 //				EvacCell neighbour = it.next();
 //				double panicFactor = individual.getPanicFactor();
@@ -213,7 +214,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 //					individual.setPanic(Math.max(panic - getPanicDecrease()*0.17, MINIMUM_PANIC));
 //					return individual.getPanic();
 //				}
-//				
+//
 //				int skippedCells = 0;
 //				while( it.hasNext() && neighbour != targetCell ) {
 //					if( neighbour.getIndividual() != null ) {
@@ -222,7 +223,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 //					}
 //					neighbour = it.next();
 //				}
-//						
+//
 //				individual.setPanic( Math.min(panic, MAXIMUM_PANIC));
 //			    }
 //				return individual.getPanic();
@@ -231,20 +232,20 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateSpeed(ds.ca.Individual)
+	 * @see algo.ca.parameter.AbstractParameterSet#updateSpeed(ds.ca.Individual)
 	 */
 	@Override
 	public double updatePreferredSpeed( Individual i ) {
-		//double oldSpeed = i.getCurrentSpeed();
+		//double oldSpeed = i.getRelativeSpeed();
 		double maxSpeed = i.getMaxSpeed();
 		double newSpeed = maxSpeed + ((i.getPanic() * panicWeightOnSpeed()) - (i.getExhaustion() * exhaustionWeightOnSpeed()));
-		i.setCurrentSpeed( Math.max( 0.0001, Math.min( maxSpeed, newSpeed ) ) );
+		i.setRelativeSpeed( Math.max( 0.0001, Math.min( maxSpeed, newSpeed ) ) );
 
 		//		if( i.getMaxSpeed() < newSpeed )
-//			i.setCurrentSpeed( i.getMaxSpeed() );
+//			i.setRelativeSpeed( i.getMaxSpeed() );
 //		else
-//			i.setCurrentSpeed( newSpeed );
-		return i.getCurrentSpeed();
+//			i.setRelativeSpeed( newSpeed );
+		return i.getRelativeSpeed();
 	}
 
 	protected double slacknessToIdleRatio() {
@@ -270,10 +271,10 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	protected double exhaustionWeightOnSpeed() {
 		return EXHAUSTION_WEIGHT_ON_SPEED;
 	}
-	
+
 	public double getExhaustionFromAge( double age ) {
 		//minum Exhaustion: individual is fully exhausted
-		//after about 450 meter        
+		//after about 450 meter
 		final double MIN_EXHAUSTION = 0.0018d;
 
 		//minum Exhaustion: individual is fully exhausted

@@ -1,7 +1,3 @@
-/**
- * EvacuationCellState.java
- * Created: 25.10.2012, 15:01:36
- */
 package algo.ca.framework;
 
 import ds.ca.evac.Individual;

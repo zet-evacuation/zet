@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca.rule;
 
 import de.tu_berlin.coga.common.util.Direction8;
@@ -44,8 +45,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * To avoid problems of individuals moving forever, the movement rule
 	 * should only be applied if an individual is not already standing on
 	 * an evacuation cell.
-	 * @param cell
-	 * @return true if the rule can be executed
+	 * @param cell the cell
+ 	 * @return true if the rule can be executed
 	 */
 	@Override
 	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
@@ -79,12 +80,16 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	@Override
 	public void move( EvacCell targetCell ) {
 		if( ind.getCell().equals( targetCell ) ) {
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
+      esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals()
+              .addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
+      esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells()
+              .addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
+      esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells()
+              .addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
 			noMove();
 		} else {
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
+      esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells()
+              .addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
 			initializeMove( targetCell );
 			performMove( targetCell );
 			setMoveRuleCompleted( false );
@@ -151,8 +156,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		this.esp.potentialController.increaseDynamicPotential( targetCell );
 
 		if( ind.getCell() instanceof DoorCell && targetCell instanceof DoorCell ) {
-			if( esp.eca.absoluteSpeed( ind.getCurrentSpeed() ) >= 0.0001 ) { // if individual moves, update times
-				speed = esp.eca.absoluteSpeed( ind.getCurrentSpeed() );
+      if( esp.eca.absoluteSpeed( ind.getRelativeSpeed() ) >= 0.0001 ) { // if individual moves, update times
+        speed = esp.eca.absoluteSpeed( ind.getRelativeSpeed() );
 				speed *= targetCell.getSpeedFactor() * 1;
 				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + 0 );
@@ -167,8 +172,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 			dist = direction.distance() * 0.4; // calculate distance
 			double add = getSwayDelay( ind, direction ); // add a delay if the person is changing direction
 
-			if( esp.eca.absoluteSpeed( ind.getCurrentSpeed() ) >= 0.0001 ) { // if individual moves, update times
-				speed = esp.eca.absoluteSpeed( ind.getCurrentSpeed() );
+      if( esp.eca.absoluteSpeed( ind.getRelativeSpeed() ) >= 0.0001 ) { // if individual moves, update times
+        speed = esp.eca.absoluteSpeed( ind.getRelativeSpeed() );
 				speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
 				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );

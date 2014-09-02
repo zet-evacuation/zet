@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -26,7 +26,7 @@ import ds.ca.results.Action.CADoesNotMatchException;
  * action starts and ends on the same cell. The performing individual is the
  * individual that occupies the exit cell.
  * 
- * @author Daniel Pluempe
+ * @author Daniel R. Schmidt
  */
 public class ExitAction extends Action {
 

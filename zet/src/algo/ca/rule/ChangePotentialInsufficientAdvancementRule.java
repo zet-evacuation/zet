@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -22,14 +22,14 @@ import ds.ca.evac.StaticPotential;
 
 /**
  *
- * @author Joscha
+ * @author Joscha Kulbatzki
  */
 public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentialChangeRule {
 
 	private static final int CHANGE_THRESHOLD = 3;
 
 	/**
-	 * 
+	 *
 	 * @param cell
 	 * @return true, if the cange potential rule can be used
 	 */
@@ -42,7 +42,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 	}
 
 	/**
-	 * 
+	 *
 	 * @param cell
 	 */
 	@Override
@@ -55,7 +55,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 		int cellCountToChange = individual.getCellCountToChange();
 		int memoryIndex = individual.getMemoryIndex();
 
-		// Update the {@code potentialMemory}        
+		// Update the {@code potentialMemory}
 		if( memoryIndex == 0 )
 			individual.setPotentialMemoryStart( new PotentialValueTuple( cellPotential, sp ) );
 
@@ -63,7 +63,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 		if( memoryIndex == cellCountToChange - 1 ) {
 
 			/**
-			 * Calibratingfactor - 
+			 * Calibratingfactor -
 			 * The smaller {@code epsilon}, the lower the probability of a potential-change
 			 */
 			int epsilon = 10;

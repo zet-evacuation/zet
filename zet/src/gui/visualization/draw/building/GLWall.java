@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -35,7 +35,7 @@ import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * @author Daniel Pluempe, Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
  *
  */
 public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {

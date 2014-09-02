@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,9 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Created on 23.01.2008
- */
+
 package algo.ca.rule;
 
 import de.tu_berlin.coga.common.util.Direction8;
@@ -38,12 +36,12 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	private boolean directExecute;
 	private boolean moveCompleted;
 	private ArrayList<EvacCell> possibleTargets;
-	
+
 	public AbstractMovementRule() {
 		directExecute = true;
 		moveCompleted = false;
 	}
-	
+
 	public boolean isDirectExecute() {
 		return directExecute;
 	}
@@ -65,18 +63,18 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * can be retrieved using {@link #getPossibleTargets() }.
 	 * @param fromCell
 	 * @param onlyFreeNeighbours
-	 * @return 
+	 * @return
 	 */
 	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
 		possibleTargets = new ArrayList<>();
 		ArrayList<EvacCell> neighbors = onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
-		
+
 		Direction8 dir = fromCell.getIndividual().getDirection();
-		
+
 		for( EvacCell c : neighbors ) {
 			if( ind.isSafe() && !((c instanceof ds.ca.evac.SaveCell) || (c instanceof ds.ca.evac.ExitCell)) )
 				continue; // ignore all moves that would mean walking out of safe areas
-			
+
 			if( fromCell instanceof DoorCell && c instanceof DoorCell ) {
 				possibleTargets.add( c );
 				continue;
@@ -92,14 +90,14 @@ public abstract class AbstractMovementRule extends AbstractRule {
 				possibleTargets.add( c );
 			else if( dir == rel.getCounterClockwise().getCounterClockwise() )
 				possibleTargets.add( c );
-		}		
+		}
 		return possibleTargets;
 	}
 
 	protected void setPossibleTargets( ArrayList<EvacCell> possibleTargets ) {
 		this.possibleTargets = possibleTargets;
 	}
-	
+
 	/**
 	 * Returns the possible targets already sorted by priority. The possible
 	 * targets either have been set before using {@link #setPossibleTargets(java.util.ArrayList) }
@@ -109,7 +107,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	public List<EvacCell> getPossibleTargets() {
 		return possibleTargets;
 	}
-	
+
 	/**
 	 * In this simple implementation always the first possible cell is returned.
 	 * As this method should be overridden, a warning is printed to the err log
@@ -122,14 +120,14 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		System.err.println( "WARNUNG nicht überschriebene target cell selection wird ausgeführt" );
 		return targets.get( 0 );
 	}
-	
+
 	protected Direction8 getMovementDirection( EvacCell start, EvacCell target ) {
 		Direction8 d = start.getRelative( target );
 		return d;
 	}
 
 			// Calculate a factor that is later multiplied with the speed,
-		// this factor is only != 1 for stair cells to 
+		// this factor is only != 1 for stair cells to
 		// give different velocities for going a stair up or down.
 	protected double getStairSpeedFactor( Direction8 direction, StairCell stairCell ) {
 		double stairSpeedFactor = 1;
@@ -164,6 +162,6 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	}
 
 	public abstract void move( EvacCell target );
-	
+
 	public abstract void swap( EvacCell cell1, EvacCell cell2 );
 }

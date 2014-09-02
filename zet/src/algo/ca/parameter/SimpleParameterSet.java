@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * SimpleParameterSet.java
- * Created on 26.01.2008, 15:20:20
- */
-
 package algo.ca.parameter;
 
 import ds.ca.evac.EvacCell;
@@ -29,7 +24,7 @@ import java.util.Collection;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class SimpleParameterSet extends AbstractDefaultParameterSet {
+public class SimpleParameterSet extends AbstractParameterSet {
 
 	@Override
 	public double changePotentialThreshold( Individual individual ) {
@@ -37,7 +32,7 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param referenceCell
 	 * @param targetCell
 	 * @return the potential difference between the two cells
@@ -56,7 +51,7 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 
 	@Override
 	public double movementThreshold( Individual i ) {
-		double individualSpeed = i.getCurrentSpeed();
+		double individualSpeed = i.getRelativeSpeed();
 		double cellSpeed = i.getCell().getSpeedFactor();
 		return individualSpeed * cellSpeed;
 	}

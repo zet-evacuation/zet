@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class RimeaParameterSet
- * Erstellt 13.10.2008, 21:28:10
- */
-
 package algo.ca.parameter;
 
 import ds.ca.evac.EvacCell;
@@ -31,7 +26,7 @@ import java.util.Collection;
  * @author Jan-Philipp Kappmeier
  */
 public class RimeaParameterSet extends DefaultParameterSet {
-	
+
 	public RimeaParameterSet() {
 		super();
 	}
@@ -68,10 +63,10 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	 */
 	@Override
 	public double updatePreferredSpeed( Individual i ) {
-		i.setCurrentSpeed( i.getMaxSpeed() );
+		i.setRelativeSpeed( i.getMaxSpeed() );
 		return i.getMaxSpeed();
 	}
-	
+
 	/**
 	 * Sets the reaction time depending from age. This is disabled in rimea
 	 * profile, the reaction time is set by the default individual reaction time

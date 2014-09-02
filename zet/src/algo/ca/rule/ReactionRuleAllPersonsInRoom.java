@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * ReactionRuleAllPersonsInRoom.java
- * Created: Nov 26, 2009,11:08:35 AM
- */
 package algo.ca.rule;
 
 import ds.ca.evac.EvacCell;
@@ -32,9 +28,8 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 
 	@Override
 	public boolean executableOn( EvacCell cell ) {
-		return cell.getIndividual() == null ? false : cell.getIndividual().getReactionTime() >= 0;
+    return cell.getIndividual() == null ? false : !cell.getIndividual().isAlarmed();
 	}
-
 
 	/**
 	 * Executes the rule. The alarm time for the individual on the cell is reduced
@@ -47,19 +42,17 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 	 */
 	@Override
 	protected void onExecute( ds.ca.evac.EvacCell cell ) {
-		// Reduce reaction time by one
-		Individual i = cell.getIndividual();
-		i.setReactionTime( i.getReactionTime() - 1 );
-
-		// If reaction time is small enough (less than 1 step), check if all individuals
-		// in the same room are in the same status. If that is the case, alarm all
-		if( i.getReactionTime() < 1 ) {
-			boolean allIndividualsAlarmed = true;
-			for( Individual j : i.getCell().getRoom().getIndividuals() )
-				allIndividualsAlarmed &= (j.getReactionTime() < 1);
-			if( allIndividualsAlarmed )
-				for( Individual j : i.getCell().getRoom().getIndividuals() )
-					j.setAlarmed( true );
-		}
+    boolean allIndividualsReady = true;
+    for( Individual individual : cell.getRoom().getIndividuals() ) {
+      if( esp.eca.getTimeStep() < individual.getReactionTime() * esp.eca.getSecondsPerStep() ) {
+        allIndividualsReady = false;
+        break;
+      }
+    }
+    if( allIndividualsReady ) {
+      for( Individual individual : cell.getRoom().getIndividuals() ) {
+        individual.setAlarmed( true );
+      }
+    }
 	}
 }

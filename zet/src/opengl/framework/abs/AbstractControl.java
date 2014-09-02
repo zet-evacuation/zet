@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -23,7 +23,7 @@ import javax.media.opengl.GL;
 
 /**
  * 
- * @author Daniel Plümpe, Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
  *
  * @param <T> The type of the graphic object that is view by this class
  * @param <U> The type of the object in the data structure (the model) that is view by this class

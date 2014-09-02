@@ -70,7 +70,7 @@ public class BestResponseDynamics {
 
 		// Constants
 		Individual ind = cell.getIndividual();
-		double speed = ind.getCurrentSpeed();
+		double speed = ind.getRelativeSpeed();
 
 		// Exit dependant values
 		double distance = Double.MAX_VALUE;
