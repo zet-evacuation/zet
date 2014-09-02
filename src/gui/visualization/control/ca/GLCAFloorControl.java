@@ -19,7 +19,7 @@ import ds.ca.evac.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCAFloor;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	
 	private int floorNumber = 0;
 	
-	public GLCAFloorControl( CAVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLCellularAutomatonControl glControl ) {
+	public GLCAFloorControl( EvacuationSimulationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		
 		xPosition = caVisResults.get(floorID).x;

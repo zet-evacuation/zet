@@ -18,14 +18,13 @@ package ds.ca.results;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
-import ds.ca.evac.Individual;
 import ds.ca.results.Action.CADoesNotMatchException;
 
 /**
  * Represents the fact that an individual leaves the simulation. Note that this
  * action starts and ends on the same cell. The performing individual is the
  * individual that occupies the exit cell.
- * 
+ *
  * @author Daniel R. Schmidt
  */
 public class ExitAction extends Action {
@@ -34,7 +33,7 @@ public class ExitAction extends Action {
 	protected ExitCell exit;
 
 	/**
-	 * Creates a new Exit action. 
+	 * Creates a new Exit action.
 	 * @param exit The cell from where the individual leaves
 	 * the system.
 	 */

@@ -42,7 +42,7 @@ import ds.ca.evac.InitialConfiguration;
  * @author Daniel R. Schmidt
  *
  */
-public class VisualResultsRecording {
+public class EvacuationRecording {
 	/**
 	 * The initial configuration of a cellular automaton
 	 */
@@ -63,7 +63,7 @@ public class VisualResultsRecording {
 	 * @param actions A vector which contains a vector of actions for every
 	 * time step. 
 	 */
-	public VisualResultsRecording( InitialConfiguration initialConfig, Vector<Vector<Action>> actions ) {
+	public EvacuationRecording( InitialConfiguration initialConfig, Vector<Vector<Action>> actions ) {
 		this.initialConfig = initialConfig;
 		this.actions = actions;
 		this.curTime = -1;

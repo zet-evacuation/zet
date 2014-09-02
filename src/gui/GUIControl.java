@@ -65,9 +65,10 @@ import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.ExitAssignment;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
+import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -205,6 +206,7 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
 
     batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );
+    batchView.registerOutputAction( new OutputText(), "Commandline Output", new ImageIcon( "./icons/document-24.png" ) );
 
 
 
@@ -316,6 +318,7 @@ public class GUIControl implements AlgorithmListener {
 //		}
 		//editor.updateAreaVisiblity();
 	}
+
 	/**
 	 * Exits the program.
 	 */
@@ -554,8 +557,8 @@ public class GUIControl implements AlgorithmListener {
 		visualization.repaint();
 	}
 
-	public void buildVisualizationDataStructure( BatchResultEntry e, int nrOfCycle ) {
-		CAVisualizationResults caRes = e.getCaVis() != null ? e.getCaVis()[nrOfCycle] : null;
+  public void buildVisualizationDataStructure( BatchResultEntry e, int nrOfCycle ) {
+    EvacuationSimulationResults caRes = e.getCaVis() != null ? e.getCaVis()[nrOfCycle] : null;
 		CAStatistic caStatistic = e.getCaStatistics() != null ? e.getCaStatistics()[nrOfCycle] : null;
 		caRes.statistic = caStatistic;
 
@@ -1246,7 +1249,7 @@ public class GUIControl implements AlgorithmListener {
     visualization.getControl().setGraphControl( gvr );
   }
 
-  public void addVisualization( CAVisualizationResults cav ) {
+  public void addVisualization( EvacuationSimulationResults cav ) {
     visualization.getControl().setCellularAutomatonControl( cav );
   }
 
@@ -1280,8 +1283,7 @@ public class GUIControl implements AlgorithmListener {
 									throw new IllegalStateException( "A selection that is not supported has been made." );
 							}
 						}
-					} else {
-						CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager(), algorithmControl.getCellularAutomaton() );
+            EvacuationSimulationResults caVis = new EvacuationSimulationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager(), algorithmControl.getCellularAutomaton() );
 
 						visualization.getControl().setCellularAutomatonControl( caVis );
 						visualizationView.updatePotentialSelector();

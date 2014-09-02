@@ -33,7 +33,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.TreeMap;
 
 /**
@@ -131,14 +131,14 @@ public class BatchCATask implements Runnable {
 		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
 
 		// TODO raster
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca ) );
-		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
+		res.setCellularAutomatonVisualization( runNumber, new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), null, ca ) );
+		//res.setCellularAutomatonVisualization( runNumber, new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 //// Get the results
 //		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
 //				getStoredCAStatisticResults ());
 //		res.setCellularAutomatonStatistic (runNumber, statistic);
-//		CAVisualizationResults visres = new CAVisualizationResults (
+//		EvacuationSimulationResults visres = new EvacuationSimulationResults (
 //				VisualResultsRecorder.getInstance ().getRecording (),
 //				ZToCAConverter.getInstance ().getLatestMapping ());
 //   	visres.statistic = statistic;

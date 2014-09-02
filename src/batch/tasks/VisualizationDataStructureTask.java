@@ -24,7 +24,7 @@ import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import gui.visualization.control.ZETGLControl;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import statistic.ca.CAStatistic;
 
 /**
@@ -33,7 +33,7 @@ import statistic.ca.CAStatistic;
  * @author Jan-Philipp Kappmeier
  */
 public class VisualizationDataStructureTask implements Runnable {
-	private CAVisualizationResults caRes;
+	private EvacuationSimulationResults caRes;
 	private GraphVisualizationResults graphRes;
 	private BuildingResults buildingRes;
 	private ZETGLControl control;
@@ -47,7 +47,7 @@ public class VisualizationDataStructureTask implements Runnable {
 	 * @param buildingResults the structure of the building
 	 * @param caStatistic the statistic for the current run
 	 */
-	public VisualizationDataStructureTask( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic ) {
+	public VisualizationDataStructureTask( EvacuationSimulationResults caVisResults, GraphVisualizationResults graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic ) {
 		//if( caVisResults == null )
 		//	throw new java.lang.IllegalArgumentException( "Cellular Automaton results are null." );
 		//if( graphVisResults == null )

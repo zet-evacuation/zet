@@ -20,7 +20,7 @@
 
 package gui.statistic;
 
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
@@ -54,7 +54,7 @@ public class JStatisticPanel extends JPanel {
 		jcasp.setMultipleCycleCAStatistic(mccas);
 	}
 	
-	public void setCA(CAVisualizationResults cavr){
+	public void setCA(EvacuationSimulationResults cavr){
 		jcasp.setCA(cavr);
 	}
 	

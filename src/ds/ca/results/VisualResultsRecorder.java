@@ -37,7 +37,7 @@ import java.util.LinkedList;
 /**
  * This class helps you to store all the parts of a simulation that are
  * needed to visualize the simulation at a later point. This is done by
- * recording {@code Action}s to a {@code VisualResultsRecording}-Object.
+ * recording {@code Action}s to a {@code EvacuationRecording}-Object.
  * The actions are stored together with a full deep clone of the initial configuration 
  * of your cellular automaton. The cloning is done in the constructor of this 
  * class, so the automaton is saved in the state that it has when you <b>create</b> 
@@ -53,7 +53,7 @@ import java.util.LinkedList;
  * All actions are stored in the order of their recording.
  * 
  * To replay the simulation, call {@code getRecording()} to get all 
- * recorded actions nicely packed in a {@code VisualResultsRecording}.
+ * recorded actions nicely packed in a {@code EvacuationRecording}.
  * 
  * @author Daniel R. Schmidt
  *
@@ -191,11 +191,11 @@ public class VisualResultsRecorder {
 	 * individuals in the returned actions refer to objects in the 
 	 * cloned configuration. A new recording is constructed each time
 	 * you call this method.
-	 * @return A new {@code VisualResultsRecording} containing all 
+	 * @return A new {@code EvacuationRecording} containing all 
 	 * recorded actions and the corresponding configuration. 
 	 */
-	public VisualResultsRecording getRecording() {
-		return new VisualResultsRecording( clonedInitialConfig, actions );
+	public EvacuationRecording getRecording() {
+		return new EvacuationRecording( clonedInitialConfig, actions );
 	}
 
 	public static VisualResultsRecorder getInstance() {

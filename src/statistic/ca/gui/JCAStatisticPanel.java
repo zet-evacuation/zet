@@ -15,7 +15,7 @@
  */
 package statistic.ca.gui;
 
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -131,7 +131,7 @@ public class JCAStatisticPanel extends JPanel {
 	private ArrayList<Double> categoryDatasetValues;
 	private ArrayList<String> categoryDatasetAssignments;
 	private ChartData chartData;
-	private CAVisualizationResults cavr;
+	private EvacuationSimulationResults cavr;
 	private GraphVisualizationResults gvr;
 	private MultipleCycleCAStatistic mccas;
 	private BatchResultEntry selectedBatchResultEntry;
@@ -163,7 +163,7 @@ public class JCAStatisticPanel extends JPanel {
 		this.mccas = mccas;
 	}
 
-	public void setCA( CAVisualizationResults cavr ) {
+	public void setCA( EvacuationSimulationResults cavr ) {
 		this.cavr = cavr;
 	}
 

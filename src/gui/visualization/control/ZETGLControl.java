@@ -38,7 +38,7 @@ import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.ca.GLCA;
 import gui.visualization.draw.graph.GLGraph;
 import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import io.visualization.BuildingResults.Floor;
 import java.util.List;
 import java.util.Collection;
@@ -182,7 +182,7 @@ public class ZETGLControl implements DrawableControlable {
 	 * @param caStatistic the calculated statistic for cellular automaton
          * @param compvisres the visual information to compare 2 different networks
 	 */
-	public ZETGLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
+	public ZETGLControl( EvacuationSimulationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
 		this.caStatistic = caStatistic;
 		this.buildingResults = buildingResults;
 		
@@ -246,7 +246,7 @@ public class ZETGLControl implements DrawableControlable {
 	 * @param caVis
 	 * @param ca
 	 */
-	public void setCellularAutomatonControl( CAVisualizationResults caVis ) {
+	public void setCellularAutomatonControl( EvacuationSimulationResults caVis ) {
 		if( caControl != null )
 			caControl.delete();
 		hasCellularAutomaton = true;

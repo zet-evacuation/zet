@@ -6,6 +6,8 @@ import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
+import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
+import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
@@ -30,15 +32,15 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import evacuationplan.BidirectionalNodeCellMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ExitAssignment extends AbstractOperation<Project,CAVisualizationResults> {
+public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulationResults> {
 	InputFileReader<Project> input;
-  CAVisualizationResults visResults;
+  EvacuationSimulationResults visResults;
 
   // Currently unused, we use default converter and algorithms
   AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
@@ -54,12 +56,12 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
   }
 
   @Override
-  public Class<CAVisualizationResults> produces() {
-    return CAVisualizationResults.class;
+  public Class<EvacuationSimulationResults> produces() {
+    return EvacuationSimulationResults.class;
   }
 
   @Override
-  public CAVisualizationResults getProduced() {
+  public EvacuationSimulationResults getProduced() {
     return visResults;
   }
 
@@ -69,8 +71,6 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
     //todo
     // step 1: compute an exit assignment
     // here we use plugins to select type of exit assignment
-
-
 		ShortestPathExitAssignment spExitAssignment = new ShortestPathExitAssignment ();
 
 		final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
@@ -95,15 +95,29 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
 		spExitAssignment.run();
 		Assignable exitAssignment = spExitAssignment;
 
+    EarliestArrivalTransshipmentExitAssignment eatAssignment;
+    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
+    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+    eatAssignment.setProblem( networkFlowModel );
+    eatAssignment.run();
+    exitAssignment = eatAssignment;
+
+    MinimumCostTransshipmentExitAssignment mcExitAssignment;
+    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
+    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+    mcExitAssignment.setProblem( networkFlowModel );
+    mcExitAssignment.run();
+    exitAssignment = mcExitAssignment;
+
     System.out.println( "Exit Assignment: " );
 
     System.out.println( exitAssignment.getExitAssignment() );
 
 
 
-    
-    
-// step 2: put the exit assingment into a cellular automaton
+
+
+    // step 2: put the exit assingment into a cellular automaton
 
     // We now have to create a cellular automaton, assign the concrete assignment and have to map the exits to the
     // chosen exits in our above exit computation
@@ -135,21 +149,21 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
     cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
     cac.run();
 
-    
+
     ZToGraphRasterContainer graphRaster = networkFlowModel.getZToGraphMapping().getRaster();
-    
+
     cca = cac.getSolution();
-    
+
 		BidirectionalNodeCellMapping.CAPartOfMapping caPartOfMapping = caConv.getLatestCAPartOfNodeCellMapping();
-    
-    
+
+
 		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
 		GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
     graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment.getExitAssignment() );
 		graphBasedIndividualToExitMaping.calculate();
 		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
-    
-    
+
+
     // step 3: simulate
     //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
     Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
@@ -168,7 +182,7 @@ public class ExitAssignment extends AbstractOperation<Project,CAVisualizationRes
 
     System.out.println( "Recording stopped." );
 
-    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );    
+    visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
   }
 
   @Override

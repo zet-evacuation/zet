@@ -27,13 +27,13 @@ import ds.ca.evac.Individual;
 import ds.ca.results.DieAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
-import ds.ca.results.VisualResultsRecording;
+import ds.ca.results.EvacuationRecording;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.ca.GLCA;
 import static gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLIndividual;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
 	ArrayList<GLIndividual> glIndividuals;
 	ArrayList<GLIndividualControl> individuals;
-	CAVisualizationResults visResults;
+	EvacuationSimulationResults visResults;
 	//private EvacuationCellularAutomaton ca;
 	// timing stuff
 	private double realStep;
@@ -74,9 +74,9 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	double scaling = 1;
 	double defaultFloorHeight = 10;
 
-	private CAVisualizationResults caVisResults;
+	private EvacuationSimulationResults caVisResults;
 	
-	public GLCellularAutomatonControl( CAVisualizationResults caVisResults ) {
+	public GLCellularAutomatonControl( EvacuationSimulationResults caVisResults ) {
 		super();
 		this.caVisResults = caVisResults;
 	}
@@ -186,7 +186,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	}
 
 	private void convertIndividualMovements() {
-		VisualResultsRecording recording = visResults.getRecording();
+		EvacuationRecording recording = visResults.getRecording();
 		EvacuationCellularAutomaton ca = new EvacuationCellularAutomaton( recording.getInitialConfig() );
 		individuals = new ArrayList<GLIndividualControl>( ca.getIndividuals().size() );
 		for( int k = 0; k < ca.getIndividuals().size(); k++ )

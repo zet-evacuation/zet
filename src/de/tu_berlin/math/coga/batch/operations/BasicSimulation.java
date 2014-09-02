@@ -18,7 +18,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import io.visualization.CAVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,12 +26,12 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BasicSimulation extends AbstractOperation<Project, CAVisualizationResults> {
+public class BasicSimulation extends AbstractOperation<Project, EvacuationSimulationResults> {
   InputFileReader<Project> input;
   Project project;
 
   AtomicOperation<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgorithm;
-  CAVisualizationResults visResults;
+  EvacuationSimulationResults visResults;
 
   //EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
   EvacuationCellularAutomaton ca;
@@ -58,8 +58,8 @@ public class BasicSimulation extends AbstractOperation<Project, CAVisualizationR
   }
 
   @Override
-  public Class<CAVisualizationResults> produces() {
-    return CAVisualizationResults.class;
+  public Class<EvacuationSimulationResults> produces() {
+    return EvacuationSimulationResults.class;
   }
 
   @Override
@@ -78,7 +78,7 @@ public class BasicSimulation extends AbstractOperation<Project, CAVisualizationR
   
   
   @Override
-  public CAVisualizationResults getProduced() {
+  public EvacuationSimulationResults getProduced() {
     return visResults;
   }
 
@@ -129,7 +129,7 @@ public class BasicSimulation extends AbstractOperation<Project, CAVisualizationR
 
     System.out.println( "Recording stopped." );
 
-    visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
+    visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
   }
 
   @Override
