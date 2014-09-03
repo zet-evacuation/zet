@@ -95,19 +95,31 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 		spExitAssignment.run();
 		Assignable exitAssignment = spExitAssignment;
 
-    EarliestArrivalTransshipmentExitAssignment eatAssignment;
-    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
-    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-    eatAssignment.setProblem( networkFlowModel );
-    eatAssignment.run();
-    exitAssignment = eatAssignment;
+    
+    
+    
+    
+    
+    
+    
+//    EarliestArrivalTransshipmentExitAssignment eatAssignment;
+//    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
+//    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+//    eatAssignment.setProblem( networkFlowModel );
+//    eatAssignment.run();
+//    exitAssignment = eatAssignment;
 
-    MinimumCostTransshipmentExitAssignment mcExitAssignment;
-    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
-    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-    mcExitAssignment.setProblem( networkFlowModel );
-    mcExitAssignment.run();
-    exitAssignment = mcExitAssignment;
+
+    
+    
+    
+    
+//    MinimumCostTransshipmentExitAssignment mcExitAssignment;
+//    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
+//    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+//    mcExitAssignment.setProblem( networkFlowModel );
+//    mcExitAssignment.run();
+//    exitAssignment = mcExitAssignment;
 
     System.out.println( "Exit Assignment: " );
 
