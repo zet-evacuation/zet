@@ -6,6 +6,7 @@ import de.tu_berlin.math.coga.batch.input.ProblemType;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
 import de.tu_berlin.math.coga.batch.output.Output;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -62,7 +63,7 @@ public class Computation {
     return operations;
   }
 
-  public LinkedList<Output> getOutputs() {
+  public List<Output> getOutputs() {
     return outputs;
   }
 

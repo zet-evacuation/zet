@@ -1,12 +1,15 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
+import algo.ca.EvacuationPlanSwapCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
+import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
+import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
@@ -23,6 +26,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.GridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
@@ -72,8 +76,9 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
     // here we use plugins to select type of exit assignment
 		ShortestPathExitAssignment spExitAssignment = new ShortestPathExitAssignment ();
 
-		final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
-		conv.setProblem( project.getBuildingPlan() );
+    //final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
+    final Algorithm<BuildingPlan, NetworkFlowModel> conv = new GridGraphConverter();
+    conv.setProblem( project.getBuildingPlan() );
 		conv.run();
     //conv.setProblem( project.getBuildingPlan() );
     //conv.run();
@@ -113,17 +118,16 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 
 
 
-//    MinimumCostTransshipmentExitAssignment mcExitAssignment;
-//    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
-//    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-//    mcExitAssignment.setProblem( networkFlowModel );
-//    mcExitAssignment.run();
-//    exitAssignment = mcExitAssignment;
+    MinimumCostTransshipmentExitAssignment mcExitAssignment;
+    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
+    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+    mcExitAssignment.setProblem( networkFlowModel );
+    mcExitAssignment.run();
+    exitAssignment = mcExitAssignment;
 
     System.out.println( "Exit Assignment: " );
 
     System.out.println( exitAssignment.getExitAssignment() );
-
 
 
 
@@ -169,7 +173,8 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 
 
 		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
-		GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
+
+    GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
     graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(
             ca, nodeCellMapping, exitAssignment.getExitAssignment() );
     graphBasedIndividualToExitMaping.calculate();
@@ -183,6 +188,10 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
     Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
     //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
     //selected = cellularAutomatonAlgorithm;
+
+    SwapCellularAutomaton swapAlgo = new SwapCellularAutomaton();
+
+    caAlgo = swapAlgo;
 
     caAlgo.setProblem( new EvacuationSimulationProblem( (ca) ) );
     if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {

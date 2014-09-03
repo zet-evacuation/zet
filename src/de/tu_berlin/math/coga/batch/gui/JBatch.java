@@ -195,7 +195,7 @@ public class JBatch extends JPanel {
 
   public void addOutput( Output output ) {
 		for( Computation computation : selectionListener.getSelectedComputations() ) {
-      LinkedList<Output> outputs = computation.getOutputs();
+      List<Output> outputs = computation.getOutputs();
 			outputs.add( output );
 		}
     updateTreeTable();

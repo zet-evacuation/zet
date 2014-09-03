@@ -28,7 +28,7 @@ import evacuationplan.CAPathPassabilityChecker;
 public class EvacuationPlanSwapCellularAutomatonInOrder extends SwapCellularAutomaton {
 	CAPathPassabilityChecker checker;
 
-	public EvacuationPlanSwapCellularAutomatonInOrder( CAPathPassabilityChecker checker ) {
+  public EvacuationPlanSwapCellularAutomatonInOrder( CAPathPassabilityChecker checker ) {
 		this.checker = checker;
 	}
 
