@@ -1,19 +1,13 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
-import algo.ca.EvacuationPlanSwapCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import algo.graph.exitassignment.Assignable;
-import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
-import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
-import algo.graph.exitassignment.ShortestPathExitAssignment;
+import algo.graph.exitassignment.ExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
@@ -26,7 +20,6 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.GridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
@@ -41,14 +34,19 @@ import io.visualization.EvacuationSimulationResults;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulationResults> {
+public class ExitAssignmentOperation extends AbstractOperation<Project, EvacuationSimulationResults> {
 	InputFileReader<Project> input;
   EvacuationSimulationResults visResults;
 
   // Currently unused, we use default converter and algorithms
-  AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
-	AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
+	AtomicOperation<NetworkFlowModel, ExitAssignment> assignmentOperation;
 
+  public ExitAssignmentOperation() {
+  	assignmentOperation = new AtomicOperation<>( "Assignment computation", NetworkFlowModel.class, ExitAssignment.class );
+		this.addOperation( assignmentOperation );
+}
+
+  
   @Override
   public boolean consume( InputFileReader<?> o ) {
 		if( o.getTypeClass() == Project.class ) {
@@ -74,63 +72,34 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
     //todo
     // step 1: compute an exit assignment
     // here we use plugins to select type of exit assignment
-		ShortestPathExitAssignment spExitAssignment = new ShortestPathExitAssignment ();
 
-    //final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
-    final Algorithm<BuildingPlan, NetworkFlowModel> conv = new GridGraphConverter();
+    final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
     conv.setProblem( project.getBuildingPlan() );
 		conv.run();
-    //conv.setProblem( project.getBuildingPlan() );
-    //conv.run();
     NetworkFlowModel networkFlowModel = conv.getSolution();
 
 		// convert and create the concrete assignment
 		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
+		
+    GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 		cav.setProblem( concreteAssignment );
 		cav.run();
 		networkFlowModel = cav.getSolution();
 
+    
+    if( assignmentOperation.getSelectedAlgorithm() == null ) {
+			System.out.println( "No algorithm selected!");
+			return;
+		}
+    final Algorithm<NetworkFlowModel,ExitAssignment> assignmentAlgorithm = assignmentOperation.getSelectedAlgorithm();
+    System.out.println( "Selected algorithm: " + assignmentAlgorithm );
 
-
-
-		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-		spExitAssignment.setProblem( networkFlowModel );
-		spExitAssignment.run();
-		Assignable exitAssignment = spExitAssignment;
-
-
-
-
-
-
-
-
-    EarliestArrivalTransshipmentExitAssignment eatAssignment;
-    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
-    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-    eatAssignment.setProblem( networkFlowModel );
-    eatAssignment.run();
-    exitAssignment = eatAssignment;
-
-
-
-
-
-
-    MinimumCostTransshipmentExitAssignment mcExitAssignment;
-    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
-    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-    mcExitAssignment.setProblem( networkFlowModel );
-    mcExitAssignment.run();
-    exitAssignment = mcExitAssignment;
+    assignmentAlgorithm.setProblem( networkFlowModel );
+    assignmentAlgorithm.run();
+    ExitAssignment exitAssignment = assignmentAlgorithm.getSolution();
 
     System.out.println( "Exit Assignment: " );
-
-    System.out.println( exitAssignment.getExitAssignment() );
-
-
-
+    System.out.println( exitAssignment );
 
     // step 2: put the exit assingment into a cellular automaton
 
@@ -176,7 +145,7 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 
     GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
     graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(
-            ca, nodeCellMapping, exitAssignment.getExitAssignment() );
+            ca, nodeCellMapping, exitAssignment );
     graphBasedIndividualToExitMaping.calculate();
     System.out.println( "Graph based individual to exit mapping:" );
     System.out.println( graphBasedIndividualToExitMaping );
@@ -212,5 +181,4 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
   public String toString() {
     return "Exit Assignment";
   }
-
 }

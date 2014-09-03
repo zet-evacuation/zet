@@ -90,9 +90,6 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 		}
 		System.out.println( "Selected algorithm: " + transformationOperation.getSelectedAlgorithm() );
 
-		//if( true ) return;
-
-
 		// Convert
 		//GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
 		final Algorithm<BuildingPlan,NetworkFlowModel> conv = transformationOperation.getSelectedAlgorithm();
