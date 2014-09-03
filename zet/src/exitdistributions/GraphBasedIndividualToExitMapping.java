@@ -13,28 +13,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package exitdistributions;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
 import algo.graph.exitassignment.ExitAssignment;
-
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
 import ds.ca.evac.DeathCause;
 import de.tu_berlin.coga.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The mapping is calculated in the following way:
@@ -105,15 +102,17 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	 * @param nodeCellMapping A bidirectional mapping between nodes and cells.
 	 * @param exitAssignment An exit assignment that tells how many people shall go to which exit (for each source node).
 	 */
-	public GraphBasedIndividualToExitMapping(EvacuationCellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, ExitAssignment exitAssignment){
+  public GraphBasedIndividualToExitMapping( EvacuationCellularAutomaton ca,
+          BidirectionalNodeCellMapping nodeCellMapping, ExitAssignment exitAssignment ) {
 		this.isInitialised = false;
-		this.individualToExitMapping = new HashMap<Individual, TargetCell>();
+		this.individualToExitMapping = new HashMap<>();
 
 		this.ca = ca;
 		this.nodeCellMapping = nodeCellMapping;
 		this.exitAssignment = exitAssignment;
 
-		System.out.println(this);
+    System.out.println( "this" );
+    System.out.println( this );
 	}
 
 	/**
@@ -123,6 +122,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	 * @return The corresponding target cell for this individual, representing the static potential leading to this target cell
 	 * (and those target cells belonging to the same exit).
 	 */
+  @Override
 	public TargetCell getExit(Individual individual){
 		if(!isInitialised){
 			initialise();
@@ -135,58 +135,61 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 		initialise();
 	}
 
+  @Override
 	public String toString(){
 		String output = "";
 		DecimalFormat pformat = new DecimalFormat("###.#");
 		DecimalFormat cformat = new DecimalFormat("####.#");
 
 		int[] sinkCount = new int[exitAssignment.getDomainSize()];
-		HashMap<String, Integer> exitCount = new HashMap<String, Integer>();
-		for(int i=0; i < exitAssignment.getDomainSize(); i++){
-			if(exitAssignment.isDefinedFor(new Node(i))){
-				for(Node v : exitAssignment.get(new Node(i))){
-					sinkCount[v.id()]++;
+		HashMap<String, Integer> exitCount = new HashMap<>();
+    for( int i = 0; i < exitAssignment.getDomainSize(); i++ ) {
+      if( exitAssignment.isDefinedFor( new Node( i ) ) ) {
+        for( Node v : exitAssignment.get( new Node( i ) ) ) {
+          sinkCount[v.id()]++;
 
-					TargetCell target = findATargetCell(nodeCellMapping.getCells(v));
-					String targetName = "<Ohne Namen>";
-					if(target != null && target.getName() != null){
-						targetName = target.getName();
-					}
+          TargetCell target = findATargetCell( nodeCellMapping.getCells( v ) );
+          String targetName = "<Ohne Namen>";
+          if( target != null && target.getName() != null ) {
+            targetName = target.getName();
+          }
 
-					int n = 0;
-					if(exitCount.get(targetName) != null){
-						n = exitCount.get(targetName);
-					}
+          int n = 0;
+          if( exitCount.get( targetName ) != null ) {
+            n = exitCount.get( targetName );
+          }
 
-					n++;
-					exitCount.put(targetName, n);
-				}
-			}
-		}
+          n++;
+          exitCount.put( targetName, n );
+        }
+      }
+    }
 
-		int sum = 0;
-		for(int i=0; i < sinkCount.length; i++){
-			sum += sinkCount[i];
-		}
+    int sum = 0;
+    for( int i = 0; i < sinkCount.length; i++ ) {
+      sum += sinkCount[i];
+    }
 
-		output += "---------------------------------\n";
-		for(int i=0; i < sinkCount.length; i++){
-			if(sinkCount[i] > 0){
-					output += "Node " + cformat.format(i) + ": " + cformat.format(sinkCount[i]) + " (" + pformat.format(100*sinkCount[i]/(double)sum) + "%)\n";
-			}
-		}
+    output += "---------------------------------\n";
+    for( int i = 0; i < sinkCount.length; i++ ) {
+      if( sinkCount[i] > 0 ) {
+        output += "Node " + cformat.format( i ) + ": " + cformat.format( sinkCount[i] )
+                + " (" + pformat.format( 100 * sinkCount[i] / (double)sum ) + "%)\n";
+      }
+    }
 
-		output += "---------------------------------\n";
-		ArrayList<String> exitNames = new ArrayList<String>(exitCount.keySet());
-		Collections.sort(exitNames);
-		for(String exitName : exitNames){
-			output += exitName + ": " + exitCount.get(exitName) + " (" + pformat.format(100*exitCount.get(exitName)/(double)sum) + "%)\n";
-		}
-		output += "---------------------------------\n";
-		output += "Insg.: " + sum + "\n";
-		output += "---------------------------------\n";
-		return output;
-	}
+    output += "---------------------------------\n";
+    ArrayList<String> exitNames = new ArrayList<>( exitCount.keySet() );
+    Collections.sort( exitNames );
+    for( String exitName : exitNames ) {
+      output += exitName + ": " + exitCount.get( exitName )
+              + " (" + pformat.format( 100 * exitCount.get( exitName ) / (double)sum ) + "%)\n";
+    }
+    output += "---------------------------------\n";
+    output += "Insg.: " + sum + "\n";
+    output += "---------------------------------\n";
+    return output;
+  }
 
 	/**
 	 * Calculates the main mapping. This has to be done once before the mapping can be used.
@@ -201,11 +204,11 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	 */
 	private void calculateIndividualExitMapping(){
 		// 1. Get individuals from the cellular automaton.
-		List<Individual> individualList = new ArrayList<Individual>(ca.getIndividuals());
+		List<Individual> individualList = new ArrayList<>(ca.getIndividuals());
 		// 2. Store the individuals according to their start node.
 		HashMap<Node,ArrayList<Individual>> sourcesIndividualMapping;
-		sourcesIndividualMapping = new HashMap<Node,ArrayList<Individual>>();
-		HashSet<Node> sources = new HashSet<Node>();
+		sourcesIndividualMapping = new HashMap<>();
+		HashSet<Node> sources = new HashSet<>();
 		// iterate through all individuals and insert them into the list of their start node.
 		for (Individual ind: individualList){
 			Node node = nodeCellMapping.getNode(ind.getCell());
@@ -216,7 +219,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 			if (sourcesIndividualMapping.containsKey(node)){
 				individualsOfThisNode=sourcesIndividualMapping.get(node);
 			} else {
-				individualsOfThisNode = new ArrayList<Individual>();
+				individualsOfThisNode = new ArrayList<>();
 				sourcesIndividualMapping.put(node, individualsOfThisNode);
 			}
 			individualsOfThisNode.add(ind);
@@ -236,7 +239,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 							   // If they have one nonetheless, then something is
 							   // very wrong.
 
-				ArrayList<Individual> doomedIndividuals = new ArrayList<Individual>();
+				ArrayList<Individual> doomedIndividuals = new ArrayList<>();
 				for(Individual individual : individualsOfThisNode){
 					boolean hasPotential = false;
 					for(StaticPotential pot : ca.getPotentialManager().getStaticPotentials()){
@@ -259,8 +262,9 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 
 			} else {
 				if (individualsOfThisNode.size() != exits.size()){
-					throw new ConversionException("The number of individuals in the node "+source+" is "+individualsOfThisNode.size()+" but the number of assigned exits is "+exits.size()
-							+ ". Exitlist:" + exits + " Individuals: " + individualsOfThisNode);
+          throw new ConversionException( "The number of individuals in the node " + source + " is "
+                  + individualsOfThisNode.size() + " but the number of assigned exits is " + exits.size()
+           				+ ". Exitlist:" + exits + " Individuals: " + individualsOfThisNode);
 				}
 				// Assign individuals to target cells by taking the next exit node and looking up its cells
 				// (the first cell is chosen as a representative).
@@ -269,9 +273,9 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 					TargetCell targetCell = findATargetCell(nodeCellMapping.getCells(exit));
 
 					if(targetCell == null){
-						throw new ConversionException("The node<->cell-mapping yielded a sink that is only mapped to non-exitcells. " +
-								"This may happen, if all of your ExitCells are also DoorCells (which is not supported)" +
-								"Sink id: " + exit.id());
+            throw new ConversionException( "The node<->cell-mapping yielded a sink that is only mapped to"
+                    + " non-exitcells. This may happen, if all of your ExitCells are also DoorCells"
+                    + " (which is not supported) Sink id: " + exit.id() );
 					}
 
 					individualToExitMapping.put(individual, targetCell);
@@ -280,7 +284,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 		}
 	}
 
-	private TargetCell findATargetCell(Iterable<EvacCell> cellList){
+  private TargetCell findATargetCell( Iterable<EvacCell> cellList ) {
 		EvacCell targetCell = null;
 		boolean targetCellFound = false;
 		Iterator<EvacCell> it = cellList.iterator();

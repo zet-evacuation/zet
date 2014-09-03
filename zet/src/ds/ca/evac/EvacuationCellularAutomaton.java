@@ -42,7 +42,8 @@ import util.DebugFlags;
  * This class represents the structure of the cellular automaton. It holds the individuals, the rooms and the floor fields which are
  * important for the behavior of individuals. It also contains an object of the IndividualCreator which is responsible for
  * creating individuals with random attributes based upon the choices made by the user.
- * @author Matthias Woste, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
+ * @author Matthias Woste
  */
 public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCell,EvacuationCellState> implements Iterable<Individual> {
 
@@ -319,8 +320,8 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 	}
 
 	/**
-	 * Sets a mapping between individuals and exit cells
-	 * @param individualToExitMapping the mapping
+	 * Sets a mapping between individuals and exit cells.
+ 	 * @param individualToExitMapping the mapping
 	 */
 	public void setIndividualToExitMapping( IndividualToExitMapping individualToExitMapping ) {
 		this.individualToExitMapping = individualToExitMapping;

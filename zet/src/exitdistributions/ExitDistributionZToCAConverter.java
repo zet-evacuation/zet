@@ -38,21 +38,23 @@ public class ExitDistributionZToCAConverter extends ZToCAConverter {
    */
   public ExitDistributionZToCAConverter() {
   }
-  
+
   ConcreteAssignment concreteAssignment;
   @Override
 	protected ConvertedCellularAutomaton runAlgorithm( BuildingPlan problem ) {
-    
+
+    System.out.println( "Convert Cellular automaton" );
+
     ConvertedCellularAutomaton cca = super.runAlgorithm( problem );
-    
+
 		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		applyConcreteAssignment(concreteAssignment);
 //		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
 //		graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment);
 //		graphBasedIndividualToExitMaping.calculate();
 //		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
-    
-    
+
+
     return cca;
   }
 

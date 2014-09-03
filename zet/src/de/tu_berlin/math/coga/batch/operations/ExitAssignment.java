@@ -7,7 +7,6 @@ import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
-import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
@@ -95,25 +94,25 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 		spExitAssignment.run();
 		Assignable exitAssignment = spExitAssignment;
 
-    
-    
-    
-    
-    
-    
-    
-//    EarliestArrivalTransshipmentExitAssignment eatAssignment;
-//    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
-//    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-//    eatAssignment.setProblem( networkFlowModel );
-//    eatAssignment.run();
-//    exitAssignment = eatAssignment;
 
 
-    
-    
-    
-    
+
+
+
+
+
+    EarliestArrivalTransshipmentExitAssignment eatAssignment;
+    eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
+    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+    eatAssignment.setProblem( networkFlowModel );
+    eatAssignment.run();
+    exitAssignment = eatAssignment;
+
+
+
+
+
+
 //    MinimumCostTransshipmentExitAssignment mcExitAssignment;
 //    mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
 //    //ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
@@ -138,7 +137,7 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
     ZToCARasterContainer container;
 
     final ZToCAConverter caConv = new ZToCAConverter();
-    //final ExitDistributionZToCAConverter caConv2 = new ExitDistributionZToCAConverter();
+    //final ExitDistributionZToCAConverter caConv = new ExitDistributionZToCAConverter();
     caConv.setProblem( project.getBuildingPlan() );
     caConv.run();
 
@@ -171,8 +170,11 @@ public class ExitAssignment extends AbstractOperation<Project, EvacuationSimulat
 
 		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
 		GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
-    graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment.getExitAssignment() );
-		graphBasedIndividualToExitMaping.calculate();
+    graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(
+            ca, nodeCellMapping, exitAssignment.getExitAssignment() );
+    graphBasedIndividualToExitMaping.calculate();
+    System.out.println( "Graph based individual to exit mapping:" );
+    System.out.println( graphBasedIndividualToExitMaping );
 		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
 
 
