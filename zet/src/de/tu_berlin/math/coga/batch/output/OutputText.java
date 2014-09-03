@@ -3,11 +3,13 @@ package de.tu_berlin.math.coga.batch.output;
 
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.results.Action;
 import ds.ca.results.EvacuationRecording;
 import ds.ca.results.ExitAction;
-import ds.ca.results.MoveAction;
 import io.visualization.EvacuationSimulationResults;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -18,6 +20,13 @@ import javax.swing.ImageIcon;
  */
 public class OutputText extends AbstractOutput implements TreeListItem {
   private final static Icon visIcon = new ImageIcon( "./icons/document-24.png" );
+
+  private PrintWriter output = new PrintWriter( System.out );
+  private String basePath = "/homes/combi/kappmeie/Dateien/Programme/zet/output/diss/icem/mcf/";
+
+  private boolean combinedOut = true;
+
+  private ArrayList<ArrayList<Integer>> arrivals = new ArrayList<>();
 
   public OutputText() {
   }
@@ -39,6 +48,79 @@ public class OutputText extends AbstractOutput implements TreeListItem {
     }
   }
 
+  private int maxValue = 0;
+
+  @Override
+  public void consume( Object o, int run ) {
+    if( combinedOut ) {
+      ArrayList<Integer> currentRun = new ArrayList<>();
+      arrivals.add( currentRun );
+
+      EvacuationSimulationResults cav = (EvacuationSimulationResults)o;
+
+      EvacuationRecording recording = cav.getRecording();
+      EvacuationCellularAutomaton ca = new EvacuationCellularAutomaton( recording.getInitialConfig() );
+
+      int safe = 0;
+      int time = 0;
+
+      //output.write( "Time,Safe\n" );
+      while( recording.hasNext() ) {
+        recording.nextActions();
+        Vector<ExitAction> exits = recording.filterActions( ExitAction.class );
+        safe += exits.size();
+        //output.write( (++time) + "," + safe + "\n" );
+        currentRun.add( safe );
+        maxValue = Math.max( maxValue, safe );
+      }
+
+      int runs = 49;
+      if( run == runs ) {
+        try {
+          output = new PrintWriter( new File( basePath, "combined.csv" ) );
+        } catch( FileNotFoundException ex ) {
+          System.err.println( "WTF!" );
+        }
+
+        // write csv-file
+        String s = "Zeit;";
+        for( int i = 1; i <= runs; ++i ) {
+          s += i + ";";
+        }
+        output.write( s + "\n" );
+        output.write( "\n" );
+        int maxTime = 0;
+        for( ArrayList<Integer> list : arrivals ) {
+          maxTime = Math.max( maxTime, list.size() );
+        }
+        for( int i = 0; i < maxTime; ++i ) {
+          s = "" + (i + 1) + ";";
+          for( int j = 0; j <= runs; ++j ) {
+            ArrayList<Integer> curve = arrivals.get( j );
+            int value = i < curve.size() ? curve.get( i ) : maxValue;
+            s += value + ";";
+          }
+          output.write( s + "\n" );
+        }
+        output.flush();
+        output.close();
+        output = new PrintWriter( System.out );
+      }
+
+
+    } else {
+      try {
+        output = new PrintWriter( new File( basePath, "eat-" + run + ".csv" ) );
+      } catch( FileNotFoundException ex ) {
+        System.err.println( "WTF!" );
+      }
+      consume( o );
+      output.close();
+      output = new PrintWriter( System.out );
+    }
+  }
+
+
   /**
    * Sends results from a graph visualization to a zet visualization panel.
    * @param gvr
@@ -58,14 +140,14 @@ public class OutputText extends AbstractOutput implements TreeListItem {
     int safe = 0;
     int time = 0;
 
-    System.out.println( "Time,Safe" );
+    output.write( "Time,Safe\n" );
     while( recording.hasNext() ) {
-      Vector<Action> actions = recording.nextActions();
+      recording.nextActions();
       Vector<ExitAction> exits = recording.filterActions( ExitAction.class );
       safe += exits.size();
-      System.out.println( (++time) + "," + safe );
+      output.write( (++time) + "," + safe + "\n" );
     }
-
+    output.flush();
   }
 
   @Override
