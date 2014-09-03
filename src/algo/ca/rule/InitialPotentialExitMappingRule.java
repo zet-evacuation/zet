@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class InitialPotentialExitMappingRule
- * Erstellt 03.12.2008, 23:02:42
- */
-
 package algo.ca.rule;
 
 import ds.ca.evac.EvacCell;
@@ -26,6 +21,7 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * This rule applies the exit mapping to the cellular automaton. It is explicitly
@@ -33,27 +29,29 @@ import java.util.HashMap;
  * @author Jan-Philipp Kappmeier
  */
 public class InitialPotentialExitMappingRule extends AbstractInitialRule {
-	boolean initialized = false;
+  /** Mapping of exit cells to their respective potentials. */
 	HashMap<TargetCell, StaticPotential> potentialMapping;
-	
+
+  /**
+   * Initializes the {@code potentialMapping}.
+   */
 	private void init() {
-		//private void applyMapping(CellularAutomaton ca, IndividualToExitMapping mapping){
-		potentialMapping = new HashMap<TargetCell, StaticPotential>();
+		potentialMapping = new HashMap<>();
 		for( StaticPotential potential : esp.eca.getPotentialManager().getStaticPotentials() ) {
 			for( TargetCell target : potential.getAssociatedExitCells() ) {
 				if( potentialMapping.put( target, potential ) != null ) {
-					throw new IllegalArgumentException( "There were two potentials leading to the same exit. This method can currently not deal with this." );
+          throw new UnsupportedOperationException( "There were two potentials leading to the same exit. "
+                  + "This method can currently not deal with this." );
 				}
 			}
 		}
-		initialized = true;
 	}
-	
+
 	/**
 	 * Checks, whether the rule is executable or not.
 	 * @param cell the cell on which the rule should be executed
 	 * @return Returns true, if an Individual is standing
-	 * on this cell, and moreover this Individual does 
+	 * on this cell, and moreover this Individual does
 	 * not already have a StaticPotential.
 	 */
 	@Override
@@ -67,25 +65,24 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 	 */
 	@Override
 	protected void onExecute( EvacCell cell ) {
-		if( !initialized )
-			init();
+    if( potentialMapping == null ) {
+      init();
+    }
 
-		//for( Individual individual : getIndividuals() ) {
 		Individual individual = cell.getIndividual();
 		TargetCell target = esp.eca.getIndividualToExitMapping().getExit( individual );
-		if( target == null )
-			// TODO set output for some debug level
-			//if( !individual.isDead() )
-			//	System.out.println( "Individual " + individual.getNumber() + " has no manual exit assigned." );
+    if( target == null ) {
+      Logger.getGlobal().warning( "No target for Individual specified. Probably wrong rule selection for setting?" );
 			InitialPotentialShortestPathRule.assignShortestPathPotential( cell, this.esp );
-		else {
+    } else {
 			StaticPotential potential = potentialMapping.get( target );
-			if( potential == null )
-				throw new IllegalArgumentException( "The target cell (room id, x, y) " + target.getRoom().getID() + ", " + target.getX() + ", " + target.getY() + " does not correspond to a static potential." );
+      if( potential == null ) {
+        throw new IllegalArgumentException( "The target cell (room id, x, y) " + target.getRoom().getID() + ", "
+                + target.getX() + ", " + target.getY() + " does not correspond to a static potential." );
+
+      }
 			individual.setStaticPotential( potential );
 		}
-		//}
 		// TODO statistic for this rule
 	}
-
 }
