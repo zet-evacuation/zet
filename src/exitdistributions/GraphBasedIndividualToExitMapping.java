@@ -28,10 +28,12 @@ import evacuationplan.BidirectionalNodeCellMapping;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * The mapping is calculated in the following way:
@@ -199,90 +201,176 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 		isInitialised = true;
 	}
 
-	/**
-	 * Private method to assign a target cell to each individual.
-	 */
-	private void calculateIndividualExitMapping(){
-		// 1. Get individuals from the cellular automaton.
-		List<Individual> individualList = new ArrayList<>(ca.getIndividuals());
-		// 2. Store the individuals according to their start node.
-		HashMap<Node,ArrayList<Individual>> sourcesIndividualMapping;
-		sourcesIndividualMapping = new HashMap<>();
-		HashSet<Node> sources = new HashSet<>();
-		// iterate through all individuals and insert them into the list of their start node.
-		for (Individual ind: individualList){
-			Node node = nodeCellMapping.getNode(ind.getCell());
-			if (!sources.contains(node)){
-				sources.add(node);
-			}
-			ArrayList<Individual> individualsOfThisNode;
-			if (sourcesIndividualMapping.containsKey(node)){
-				individualsOfThisNode=sourcesIndividualMapping.get(node);
-			} else {
-				individualsOfThisNode = new ArrayList<>();
-				sourcesIndividualMapping.put(node, individualsOfThisNode);
-			}
-			individualsOfThisNode.add(ind);
-		}
+  /**
+   * Private method to assign a target cell to each individual.
+   */
+  private void calculateIndividualExitMapping() {
+    // 1. Get individuals from the cellular automaton.
+    List<Individual> individualList = new ArrayList<>( ca.getIndividuals() );
+
+    // 2. Store the individuals according to their start node.
+    HashMap<Node, ArrayList<Individual>> sourcesIndividualMapping = new HashMap<>();
+    HashSet<Node> sources = new HashSet<>();
+    // iterate through all individuals and insert them into the list of their start node.
+    for( Individual ind : individualList ) {
+      Node source = nodeCellMapping.getNode( ind.getCell() );
+      if( !sources.contains( source ) ) {
+        sources.add( source );
+      }
+      ArrayList<Individual> individualsOfThisNode;
+      if( sourcesIndividualMapping.containsKey( source ) ) {
+        individualsOfThisNode = sourcesIndividualMapping.get( source );
+      } else {
+        individualsOfThisNode = new ArrayList<>();
+        sourcesIndividualMapping.put( source, individualsOfThisNode );
+      }
+      individualsOfThisNode.add( ind );
+    }
+    
 		// 3. Iterate through all sources and assign target cells to the individuals starting
-		//    at each source node.
-		for (Node source : sources){
-			// Get the individuals and the exits they shall go to
-			ArrayList<Individual> individualsOfThisNode = sourcesIndividualMapping.get(source);
-			List<Node> exits = exitAssignment.get(source);
+    //    at each source node.
+    for( Node source : sources ) {
+      // Get the individuals and the exits they shall go to
+      ArrayList<Individual> individualsOfThisNode = sourcesIndividualMapping.get( source );
+      List<Node> exits = exitAssignment.get( source );
 
-			if(exits == null){ // This happens if the graph deleted an unreachable
-							   // source. In that case, all individuals on that
-							   // source are doomed to die, since they cannot
-							   // reach any exit.
-							   // This also means that they cannot have a potential.
-							   // If they have one nonetheless, then something is
-							   // very wrong.
+      if( exits == null ) { // This happens if the graph deleted an unreachable
+        // source. In that case, all individuals on that
+        // source are doomed to die, since they cannot
+        // reach any exit.
+        // This also means that they cannot have a potential.
+        // If they have one nonetheless, then something is
+        // very wrong.
 
-				ArrayList<Individual> doomedIndividuals = new ArrayList<>();
-				for(Individual individual : individualsOfThisNode){
-					boolean hasPotential = false;
-					for(StaticPotential pot : ca.getPotentialManager().getStaticPotentials()){
-						if(pot.hasValidPotential(individual.getCell())){
-							hasPotential = true;
-						}
-					}
+        ArrayList<Individual> doomedIndividuals = new ArrayList<>();
+        for( Individual individual : individualsOfThisNode ) {
+          boolean hasPotential = false;
+          for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
+            if( pot.hasValidPotential( individual.getCell() ) ) {
+              hasPotential = true;
+            }
+          }
 
-					if(!hasPotential){
-						doomedIndividuals.add(individual);
-					} else {
-						throw new RuntimeException("The individual " + individual+ " has a potential "
-								+ " (and thus can probably reach an exit) but was not found in the exit assignment.");
-					}
-				}
+          if( !hasPotential ) {
+            doomedIndividuals.add( individual );
+          } else {
+            throw new AssertionError( "The individual " + individual + " has a potential "
+                    + " (and thus can probably reach an exit) but was not found in the exit assignment." );
+          }
+        }
 
-				for(Individual individual : doomedIndividuals){
-					ca.setIndividualDead(individual, DeathCause.ExitUnreachable);
-				}
+        for( Individual individual : doomedIndividuals ) {
+          ca.setIndividualDead( individual, DeathCause.ExitUnreachable );
+        }
 
-			} else {
-				if (individualsOfThisNode.size() != exits.size()){
+      } else {
+//        HashMap<TargetCell, StaticPotential> potentialMapping;
+//        potentialMapping = new HashMap<>();
+//        for( StaticPotential potential : ca.getPotentialManager().getStaticPotentials() ) {
+//          for( TargetCell target : potential.getAssociatedExitCells() ) {
+//            if( potentialMapping.put( target, potential ) != null ) {
+//              throw new UnsupportedOperationException( "There were two potentials leading to the same exit. "
+//                      + "This method can currently not deal with this." );
+//            }
+//          }
+//        }
+
+  
+        if( individualsOfThisNode.size() != exits.size() ) {
           throw new ConversionException( "The number of individuals in the node " + source + " is "
                   + individualsOfThisNode.size() + " but the number of assigned exits is " + exits.size()
-           				+ ". Exitlist:" + exits + " Individuals: " + individualsOfThisNode);
-				}
-				// Assign individuals to target cells by taking the next exit node and looking up its cells
-				// (the first cell is chosen as a representative).
-				for (Individual individual : individualsOfThisNode){
-					Node exit = exits.remove(0);
-					TargetCell targetCell = findATargetCell(nodeCellMapping.getCells(exit));
+                  + ". Exitlist:" + exits + " Individuals: " + individualsOfThisNode );
+        }
+        
+        
+//        
+//        HashMap<Node,Integer> exitOccurences = new HashMap<>();
+//        
+//        for( Node exit : exits ) {
+//          if( exitOccurences.containsKey( exit ) ) {
+//            exitOccurences.put( exit, exitOccurences.get( exit ) + 1 );
+//          } else {
+//            exitOccurences.put( exit, 1 );
+//          }
+//        }
+//        
+//        Comparator<Individual> individualPotentialComparator = new Comparator<Individual>() {
+//
+//          @Override
+//          public int compare( Individual o1, Individual o2 ) {
+//            // compute min distance von o1
+//            int minPotential1 = Integer.MAX_VALUE;
+//            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
+//              if( pot.hasValidPotential( o1.getCell() ) ) {
+//                minPotential1 = Math.min( pot.getPotential( o1.getCell() ), minPotential1 );
+//              }
+//            }
+//            
+//            int minPotential2 = Integer.MAX_VALUE;
+//            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
+//              if( pot.hasValidPotential( o2.getCell() ) ) {
+//                minPotential2 = Math.min( pot.getPotential( o2.getCell() ), minPotential2 );
+//              }
+//            }
+//            
+//            return minPotential1-minPotential2;
+//            // compute min distance von o2
+//            
+//          }
+//          
+//        };
+//        
+//        while( !individualsOfThisNode.isEmpty() ) {
+//          PriorityQueue<Individual> individualRanking = new PriorityQueue<>( individualPotentialComparator );
+//          for( Individual i : individualsOfThisNode ) {
+//            individualRanking.add( i );
+//          }
+//          
+//          Individual i = individualRanking.poll();
+//          
+//          // Assign individual to the best exit
+//          Node currentExit = null;
+//          int currentPotential = Integer.MAX_VALUE;
+//          TargetCell currentTargetCell = null;
+//          
+//          for( Node exit : exitOccurences.keySet() ) {
+//            List<EvacCell> cells = nodeCellMapping.getCells( exit );
+//            TargetCell targetCell = findATargetCell( cells );
+//            StaticPotential pot = potentialMapping.get( targetCell );
+//            if( pot.getPotential( i.getCell() ) < currentPotential ) {
+//              currentExit = exit;
+//              currentPotential = pot.getPotential( i.getCell() );
+//              currentTargetCell = targetCell;
+//            }
+//          }
+//          individualToExitMapping.put( i, currentTargetCell );
+//          if( exitOccurences.get( currentExit ) > 1 ) {
+//            exitOccurences.put( currentExit, exitOccurences.get( currentExit ) - 1 );
+//          } else {
+//            exitOccurences.remove( currentExit );
+//          }
+//          individualsOfThisNode.remove( i );
+//        }
 
-					if(targetCell == null){
+        
+        
+				// Assign individuals to target cells by taking the next exit node and looking up its cells
+        // (the first cell is chosen as a representative).
+        for( Individual individual : individualsOfThisNode ) {
+          Node exit = exits.remove( 0 );
+          TargetCell targetCell = findATargetCell( nodeCellMapping.getCells( exit ) );
+
+          if( targetCell == null ) {
             throw new ConversionException( "The node<->cell-mapping yielded a sink that is only mapped to"
                     + " non-exitcells. This may happen, if all of your ExitCells are also DoorCells"
                     + " (which is not supported) Sink id: " + exit.id() );
-					}
+          }
 
-					individualToExitMapping.put(individual, targetCell);
-				}
-			}
-		}
-	}
+          individualToExitMapping.put( individual, targetCell );
+        }
+      }
+    }
+  }
 
   private TargetCell findATargetCell( Iterable<EvacCell> cellList ) {
 		EvacCell targetCell = null;

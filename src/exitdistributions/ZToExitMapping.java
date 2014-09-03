@@ -35,7 +35,7 @@ public class ZToExitMapping  extends IndividualToExitMapping {
 	 * an individual to the cell it should go to. The target cell represents 
 	 * the exit the individual shall go to.
 	 */
-	private HashMap<Individual, TargetCell> individualToExitMapping; 
+	private final HashMap<Individual, TargetCell> individualToExitMapping; 
 
 	public ZToExitMapping( HashMap<Individual, TargetCell> individualToExitMapping ) {
 		this.individualToExitMapping = individualToExitMapping;		
@@ -48,6 +48,7 @@ public class ZToExitMapping  extends IndividualToExitMapping {
 	 * @return The corresponding target cell for this individual, representing the static potential leading to this target cell 
 	 * (and those target cells belonging to the same exit).
 	 */
+  @Override
 	public TargetCell getExit(Individual individual){
 		return individualToExitMapping.get( individual );
 	}

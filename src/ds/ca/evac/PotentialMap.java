@@ -62,10 +62,9 @@ public abstract class PotentialMap {
 	}
 
 	/**
-	 * Get the potential of a specified EvacCell.
-	 * The method returns -1 if you
-	 * try to get the potential of a cell that does not exists.
-	 * @param cell A cell which potential you want to know.
+	 * Get the potential of a specified EvacCell. The method returns -1 if the method is called to retrieve the potential
+   * of a cell that does not exist.
+	 * @param cell the cell which potential should be returned
 	 * @return potential of the specified cell or -1 if the cell is not mapped by this potential
 	 */
 	public int getPotential( EvacCell cell ) {

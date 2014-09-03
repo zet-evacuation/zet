@@ -70,10 +70,14 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
       int sinkIndex = 0;
       for( Node sink : sinks ) {
         if( distances[source.id()][sink.id()] == 0 ) {
+          // No path between the source and sink pair in the given network.
           continue;
         }
         Edge edge = reducedNetwork.createAndSetEdge( reducedNetwork.getNode( index ), reducedNetwork.getNode( model.getSources().size() + sinkIndex ) );
         reducedTransitTimes.set( edge, distances[source.id()][sink.id()] );
+        
+        System.out.println( "From " + index + " to " + (model.getSources().size() + sinkIndex) +" with cost " + distances[source.id()][sink.id()] );
+        
         reducedCapacities.set( edge, Integer.MAX_VALUE );
         sinkIndex++;
       }
@@ -105,14 +109,18 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     for( Node sink : sinks ) {
       sinks2.add( sink );
     }
+    int costs = 0;
     for( StaticFlowPath path : pathDecomposition ) {
       Edge edge = path.firstEdge();
       Node source = model.getSources().get( edge.start().id() );
       Node sink = sinks2.get( edge.end().id() - model.getSources().size() );
       for( int i = 0; i < path.getAmount(); i++ ) {
         solution.assignIndividualToExit( source, sink );
+        System.out.println( "Assign from " + source + " to " + sink + " with cost " + distances[source.id()][sink.id()] );
+        costs += distances[source.id()][sink.id()];
       }
     }
+    System.out.println( "Costs of min cost assignment: " + costs );
     return solution;
   }
 
