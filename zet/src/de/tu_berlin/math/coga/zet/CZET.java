@@ -30,7 +30,7 @@ import de.tu_berlin.coga.graph.structure.StaticPath;
 import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.ExtendedNetwork;
+import de.tu_berlin.coga.netflow.ds.network.ExtendedGraph;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
@@ -943,7 +943,7 @@ public class CZET {
 
 		transitTimes = eafp.getTransitTimes();
 
-		ExtendedNetwork ex = new ExtendedNetwork( n, 1, eafp.getSources().size() );
+		ExtendedGraph ex = new ExtendedGraph( n, 1, eafp.getSources().size() );
 		Node superNode = ex.getFirstNewNode();
 
 		transitTimes.setDomainSize( ex.getEdgeCapacity() ); // reserve space
