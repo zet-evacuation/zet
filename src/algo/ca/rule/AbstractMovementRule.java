@@ -145,9 +145,14 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		else if( ind.getDirection() == direction.getClockwise() || ind.getDirection() == direction.getCounterClockwise() )
 			return 0.5;
 		else if( ind.getDirection() == direction.getClockwise().getClockwise() || ind.getDirection() == direction.getCounterClockwise().getCounterClockwise() )
-			return 1;
-		else
-			throw new IllegalStateException( "Change direction by more than 90 degrees." );
+      return 1;
+    else {
+      System.out.println( "SWAP: Direction changed by more than 90 degrees!" );
+      return 2;
+    }
+
+//		else
+//			throw new IllegalStateException( "Change direction by more than 90 degrees." );
 	}
 
 	/**
