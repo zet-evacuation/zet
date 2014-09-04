@@ -78,8 +78,9 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	}
 
 	@Override
-	public void move( EvacCell targetCell ) {
-		if( ind.getCell().equals( targetCell ) ) {
+  public void move( EvacCell from, EvacCell targetCell ) {
+//  public void move( EvacCell targetCell ) {
+    if( ind.getCell().equals( targetCell ) ) {
       esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals()
               .addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
       esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells()
@@ -90,8 +91,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		} else {
       esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells()
               .addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
-			initializeMove( targetCell );
-			performMove( targetCell );
+      initializeMove( from, targetCell );
+      performMove( from, targetCell );
 			setMoveRuleCompleted( false );
 		}
 	}
@@ -152,10 +153,14 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @param targetCell
 	 * @param performMove decides if the move is actually performed. If swapping is active, only values have to be updated.
 	 */
-	private void initializeMove( EvacCell targetCell  ) {
+  private void initializeMove( EvacCell from, EvacCell targetCell ) {
+    Individual ind = from.getIndividual();
+    if( ind == null ) {
+      throw new IllegalStateException( "No Individual on from cell " + from );
+    }
 		this.esp.potentialController.increaseDynamicPotential( targetCell );
 
-		if( ind.getCell() instanceof DoorCell && targetCell instanceof DoorCell ) {
+    if( from instanceof DoorCell && targetCell instanceof DoorCell ) {
       if( esp.eca.absoluteSpeed( ind.getRelativeSpeed() ) >= 0.0001 ) { // if individual moves, update times
         speed = esp.eca.absoluteSpeed( ind.getRelativeSpeed() );
 				speed *= targetCell.getSpeedFactor() * 1;
@@ -166,7 +171,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 				throw new IllegalStateException( "Individuum has no speed." );
 
 		} else {
-			Direction8 direction = getMovementDirection( ind.getCell(), targetCell );
+      Direction8 direction = getMovementDirection( from, targetCell );
 
 			double stairSpeedFactor = targetCell instanceof StairCell ? getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
 			dist = direction.distance() * 0.4; // calculate distance
@@ -175,7 +180,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
       if( esp.eca.absoluteSpeed( ind.getRelativeSpeed() ) >= 0.0001 ) { // if individual moves, update times
         speed = esp.eca.absoluteSpeed( ind.getRelativeSpeed() );
 				speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
-				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
+        ind.setStepStartTime( Math.max( from.getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
 				ind.setDirection( direction );
 			} else
@@ -188,9 +193,11 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * alredy been set by {@link #initializeMove(ds.ca.evac.Individual, ds.ca.evac.EvacCell) }
 	 * @param targetCell
 	 */
-	protected void performMove( EvacCell targetCell ) {
-		ind.getCell().setOccupiedUntil( ind.getStepEndTime()  );
-		esp.eca.moveIndividual( ind.getCell(), targetCell );
+  protected void performMove( EvacCell from, EvacCell targetCell ) {
+    Individual ind = from.getIndividual();
+
+    from.setOccupiedUntil( ind.getStepEndTime() );
+    esp.eca.moveIndividual( from, targetCell );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( ind, esp.eca.getTimeStep(), speed * esp.eca.getSecondsPerStep() );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( ind, (int) Math.ceil( ind.getStepEndTime() ), dist );
 	}
@@ -234,9 +241,9 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		if( cell1.equals( cell2 ) )
 			throw new IllegalArgumentException( "The cells are equal. Can't swap on equal cells." );
 		ind = cell1.getIndividual();
-		initializeMove( cell2 );
+    initializeMove( cell1, cell2 );
 		ind = cell2.getIndividual();
-		initializeMove( cell1 ); // do not actually move!
+    initializeMove( cell2, cell1 ); // do not actually move!
 		esp.eca.swapIndividuals( cell1, cell2 );
 	}
 

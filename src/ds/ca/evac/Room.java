@@ -337,13 +337,14 @@ public class Room implements CellMatrix<EvacCell> {
 		Individual c1i = cell1.getIndividual();
 		Individual c2i = cell2.getIndividual();
 		checkIndividual( c1i );
-		checkIndividual( c2i );
-		c1i.setCell( null );
-		c2i.setCell( null );
-		cell1.setIndividual( c2i );
-		cell2.setIndividual( c1i );
-		c1i.setCell( cell2 );
-		c2i.setCell( cell1 );
+    checkIndividual( c2i );
+    cell1.swapIndividuals( cell2 );
+//		c1i.setCell( null );
+//		c2i.setCell( null );
+//		cell1.setIndividual( c2i );
+//		cell2.setIndividual( c1i );
+//		c1i.setCell( cell2 );
+//		c2i.setCell( cell1 );
 	}
 
 	/**

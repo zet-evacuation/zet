@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * SimpleMovementRule.java
- * Created on 26.01.2008, 17:27:04
- */
-
 package algo.ca.rule;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -44,7 +39,7 @@ public class SimpleMovementRule extends AbstractMovementRule {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param cell
 	 */
 	@Override
@@ -57,8 +52,9 @@ public class SimpleMovementRule extends AbstractMovementRule {
 	}
 
 	@Override
-	public void move( EvacCell targetCell ) {
-		esp.eca.moveIndividual( ind.getCell(), targetCell );
+  public void move( EvacCell from, EvacCell targetCell ) {
+//	public void move( EvacCell targetCell ) {
+    esp.eca.moveIndividual( from, targetCell );
 	}
 
 	@Override

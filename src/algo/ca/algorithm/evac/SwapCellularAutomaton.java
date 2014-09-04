@@ -17,6 +17,7 @@ package algo.ca.algorithm.evac;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
+import de.tu_berlin.coga.common.util.Direction8;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;
@@ -37,8 +38,9 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 	/**
 	 *
 	 */
-	//@Override
-	protected void executeStep() {
+	@Override
+  protected void performStep() {
+//	protected void executeStep() {
 		//if( !isInitialized() ) {
 		//	throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
 		//}
@@ -55,7 +57,12 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 
 		for( Individual i : getIndividuals() ) {
 			Iterator<Rule> loop = getProblem().ruleSet.loopIterator();
-			while( loop.hasNext() ) {
+
+      if( i.id() == 114 && i.getCell().getAbsoluteX() == 2 ) {
+        System.out.println( "114" );
+      }
+
+      while( loop.hasNext() ) {
 				Rule r = loop.next();
 				r.execute( i.getCell() );
 				if( r instanceof AbstractMovementRule ) {
@@ -65,8 +72,25 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 			}
 
 			// hier ist movementrule die aktuelle movement rule.
-			if( movement.isMoveCompleted() ) {
-				unfinished.add( i );
+			if( movement.isMoveCompleted() && movement.executableOn( i.getCell() ) ) {
+        unfinished.add( i );
+
+        List<EvacCell> possibleTargets = movement.getPossibleTargets();
+
+        for( EvacCell c : possibleTargets ) {
+          try {
+            if( i.getCell() != c ) {
+              Direction8 dir = i.getCell().getRelative( c );
+
+            }
+          } catch( AssertionError e ) {
+            System.out.println( e );
+            EvacCell target2 = movement.selectTargetCell( i.getCell(), possibleTargets );
+            movement.getPossibleTargets();
+          }
+
+        }
+
 				individualPossibleMapping.put( i, movement.getPossibleTargets() );
 			//movement.move( i, movement.selectTargetCell( i.getCell(), movement.getPossibleTargets() ) );
 			} else {
@@ -90,10 +114,21 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 				continue;
 			}
 			List<EvacCell> possibleTargets = individualPossibleMapping.get( i );
-			EvacCell target = movement.selectTargetCell( i.getCell(), possibleTargets );
+      EvacCell target = movement.selectTargetCell( i.getCell(), possibleTargets );
+
+      try {
+        if( i.getCell() != target ) {
+          Direction8 dir = i.getCell().getRelative( target );
+
+        }
+      } catch( AssertionError e ) {
+        System.out.println( e );
+        EvacCell target2 = movement.selectTargetCell( i.getCell(), possibleTargets );
+      }
+
 			if( target.getIndividual() == null ) {
 				// Klappt alles
-				movement.move( target );
+				movement.move( i.getCell(), target );
 				//individualSwapped.add( i );
 				unfinished2.add( i );
 			} else {
@@ -114,7 +149,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 						} else {
 							EvacCell target2 = movement.selectTargetCell( i2.getCell(), possibleTargets2 );
 							if( i.getCell().equals( target2 ) && i2.getCell().equals( target ) ) {
-								if( util.DebugFlags.CA_SWAP )
+                //if( util.DebugFlags.CA_SWAP )
 									System.out.println( "SWAP Individual " + i.id() + " und Individual " + i2.id() );
 								movement.swap( i.getCell(), i2.getCell() );
 								individualSwapped.add( i2 );

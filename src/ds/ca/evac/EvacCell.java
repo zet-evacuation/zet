@@ -103,7 +103,37 @@ public abstract class EvacCell extends SquareCell<EvacCell,EvacuationCellState> 
 		//Cell old = individual.getCell();
 		}
 		getStatus().setIndividual( i );
-	}
+  }
+
+  /**
+   * Swaps individuals and ignores the already occupied-check.
+   * @param ce
+   */
+  void swapIndividuals( EvacCell ce ) {
+    EvacCell c1 = this;
+    EvacCell c2 = ce;
+
+    Individual c1i = c1.getIndividual();
+    Individual c2i = c2.getIndividual();
+    if( c1i == null ) {
+      throw new java.lang.NullPointerException( "Individual on cell " + c1 + " is null." );
+    }
+    if( c2i == null ) {
+      throw new java.lang.NullPointerException( "Individual on cell " + c2 + " is null." );
+    }
+    c1.getStatus().setIndividual( c2i );
+    c2.getStatus().setIndividual( c1i );
+    c1i.setCell( c2 );
+    c2i.setCell( c1 );
+//
+//		c1i.setCell( null );
+//		c2i.setCell( null );
+//		cell1.setIndividual( c2i );
+//		cell2.setIndividual( c1i );
+//		c1i.setCell( cell2 );
+//		c2i.setCell( cell1 );
+
+  }
 
 	void removeIndividual() {
 		getStatus().setIndividual( null );
@@ -487,7 +517,13 @@ public abstract class EvacCell extends SquareCell<EvacCell,EvacuationCellState> 
 	 * @param c a neighbor cell
 	 * @return  the direction in which {@code c} lies
 	 */
-	final public Direction8 getRelative( EvacCell c ) {
+  final public Direction8 getRelative( EvacCell c ) {
+    try {
+      Direction8.getDirection( c.getAbsoluteX() - getAbsoluteX(), c.getAbsoluteY() - getAbsoluteY() );
+    } catch( AssertionError e ) {
+      System.out.println( e );
+    }
+
 		return Direction8.getDirection( c.getAbsoluteX() - getAbsoluteX(), c.getAbsoluteY() - getAbsoluteY() );
 	}
 
