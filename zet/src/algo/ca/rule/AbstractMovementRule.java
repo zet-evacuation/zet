@@ -161,7 +161,11 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		esp.eca.setNeededTime( (int) Math.ceil( d ) );
 	}
 
-	public abstract void move( EvacCell target );
+  public final void move( EvacCell target ) {
+    move( ind.getCell(), target );
+  }
 
-	public abstract void swap( EvacCell cell1, EvacCell cell2 );
+  public abstract void move( EvacCell from, EvacCell target );
+
+  public abstract void swap( EvacCell cell1, EvacCell cell2 );
 }

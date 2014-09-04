@@ -39,7 +39,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	/**
-	 * Decides whether the rule can be applied to the current cell. 
+	 * Decides whether the rule can be applied to the current cell.
 	 * Returns {@code true} if the cell is occupied by an individual
 	 * or {@code false} otherwise.
 	 * @param cell
@@ -72,10 +72,12 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	@Override
-	public void move( EvacCell targetCell ) {
-		if( ind.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
+  public void move( EvacCell from, EvacCell targetCell ) {
+    Individual ind = from.getIndividual();
+    //public void move( EvacCell targetCell ) {
+    if( ind.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
 			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
-			targetCell = ind.getCell();
+			targetCell = from;
 		if( ind.getCell().equals( targetCell ) ) {
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
@@ -105,7 +107,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	private void doMoveWithDecision( Individual i, EvacCell targetCell, boolean performMove ) {
 		esp.potentialController.increaseDynamicPotential( targetCell );
 		// Calculate a factor that is later multiplied with the speed,
-		// this factor is only != 1 for stair cells to 
+		// this factor is only != 1 for stair cells to
 		// give different velocities for going a stair up or down.
 		double stairSpeedFactor = 1;
 		if( targetCell instanceof StairCell ) {
@@ -168,11 +170,11 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	/**
-	 * Given a starting cell, this method picks one 
-	 * of its reachable neighbours at random. The i-th neighbour is 
+	 * Given a starting cell, this method picks one
+	 * of its reachable neighbours at random. The i-th neighbour is
 	 * chosen with probability {@code p(i) := N * exp[mergePotentials(i, cell)]}
-	 * where N is a constant used for normalisation. 
-	 * 
+	 * where N is a constant used for normalisation.
+	 *
 	 * @param cell The starting cell
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
@@ -194,7 +196,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * Decides randomly if an individual moves. (falsch)
 	 * @param i An individual with a given parameters
 	 * @return {@code true} if the individual moves or
-	 * {@code false} otherwise. 
+	 * {@code false} otherwise.
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {

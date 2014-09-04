@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * Created on 30.01.2008
- *
- */
 package algo.ca.rule;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -60,7 +56,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 				// Individual can't move, it is already moving
 				setMoveRuleCompleted( false );
 			}
-		} else { // Individual is not alarmed, that means it remains standing on the cell			
+		} else { // Individual is not alarmed, that means it remains standing on the cell
 			setMoveRuleCompleted( true );
 			noMove();
 		}
@@ -68,10 +64,12 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	}
 
 	@Override
-	public void move( EvacCell targetCell ) {
-		updatePanic( ind, targetCell );
+  public void move( EvacCell from, EvacCell targetCell ) {
+//	public void move( EvacCell targetCell ) {
+    Individual ind = from.getIndividual();
+    updatePanic( ind, targetCell );
 		updateExhaustion( ind, targetCell );
-		super.move( targetCell );
+    super.move( from, targetCell );
 	}
 
 	protected void updatePanic( Individual i, EvacCell targetCell ) {
@@ -91,7 +89,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * most probable neighbour, the last element is the least probable neighbour.
 	 * @param cell The cell whose neighbours are to be sorted
 	 * @return A sorted list of the neighbour cells of {@code cell}, sorted
-	 * in an increasing fashion according to their potential computed by 
+	 * in an increasing fashion according to their potential computed by
 	 * {@code mergePotential}.
 	 */
 	protected ArrayList<EvacCell> neighboursByPriority( EvacCell cell ) {
@@ -122,11 +120,11 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	}
 
 	/**
-	 * Given a starting cell, this method picks one 
-	 * of its reachable neighbors at random. The i-th neighbor is 
+	 * Given a starting cell, this method picks one
+	 * of its reachable neighbors at random. The i-th neighbor is
 	 * chosen with probability {@code p(i) := N * exp[mergePotentials(i, cell)]}
-	 * where N is a constant used for normalization. 
-	 * 
+	 * where N is a constant used for normalization.
+	 *
 	 * @param cell The starting cell
 	 * @return A neighbor of {@code cell} chosen at random.
 	 */
@@ -148,7 +146,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 			}
 		}
 
-		// raising probablities only makes sense if the cell and all its neighbours are in the same room               
+		// raising probablities only makes sense if the cell and all its neighbours are in the same room
 		boolean inSameRoom = true;
 		for( int i = 0; i < targets.size(); i++ ) {
 			if( !(cell.getRoom().equals( targets.get( i ).getRoom() )) ) {
@@ -237,7 +235,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * Decides randomly if an individual idles.
 	 * @param i An individual with a given slackness
 	 * @return {@code true} with a probability of slackness or
-	 * {@code false} otherwise. 
+	 * {@code false} otherwise.
 	 */
 	protected boolean slack( Individual i ) {
 		double randomNumber = RandomUtils.getInstance().getRandomGenerator().nextDouble();
