@@ -23,12 +23,12 @@ public class OutputText extends AbstractOutput implements TreeListItem {
 
   private PrintWriter output = new PrintWriter( System.out );
   //private String basePath = "/homes/combi/kappmeie/Dateien/Programme/zet/output/diss/icem/mcf/";
-  private String basePath = "../../output/diss/icem/shared-bottleneck/eat/";
+  private String basePath = "../../output/diss/icem/shared-bottleneck/sp-sim/";
 
   private boolean combinedOut = true;
 
   private ArrayList<ArrayList<Integer>> arrivals = new ArrayList<>();
-  
+
 
   public OutputText() {
   }

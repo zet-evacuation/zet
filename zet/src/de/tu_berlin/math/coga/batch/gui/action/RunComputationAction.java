@@ -17,7 +17,7 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public class RunComputationAction extends BatchAction {
-  private int runs = 1;
+  private int runs = 50;
 
 	public RunComputationAction( JBatch batch ) {
 		super( batch, "Run computation", "play_24.png" );
