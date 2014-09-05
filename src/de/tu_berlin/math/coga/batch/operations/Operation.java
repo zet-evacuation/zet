@@ -22,14 +22,14 @@ public interface Operation<Consume,Produce> extends Runnable {
 	public boolean consume( InputFileReader<?> o );
 
   /**
-   * Returns the type of object that is generated
+   * Returns the type of object that is generated.
    * @return
    */
 	public Class<Produce> produces();
-  
+
   public List<Class<?>> getProducts();
 
   public Produce getProduced();
-  
+
   public Object getProduct( Class<?> productType );
 }

@@ -1,7 +1,4 @@
-/*
- * GUIControl.java
- * Created 16.07.2010, 12:18:41
- */
+
 package gui;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -63,6 +60,7 @@ import de.tu_berlin.math.coga.batch.input.InputDirectory;
 import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
+import de.tu_berlin.math.coga.batch.operations.BestResponseOperation;
 import de.tu_berlin.math.coga.batch.operations.ExitAssignmentOperation;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import de.tu_berlin.math.coga.batch.output.OutputText;
@@ -203,6 +201,7 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
     batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
     batchView.registerOperationAction( new ExitAssignmentOperation(), "Exit Assignment" );
+    batchView.registerOperationAction( new BestResponseOperation(), "Best Response" );
     batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
 
     batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );

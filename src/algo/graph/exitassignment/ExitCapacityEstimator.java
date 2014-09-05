@@ -25,6 +25,7 @@ import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.netflow.classic.maxflow.FordFulkerson;
 
 /**
  *
@@ -43,8 +44,9 @@ public class ExitCapacityEstimator {
 				//if (sinks.contains(edge.start())) {
 				newCapacities.set( edge, 0 );
 		MaximumFlowProblem problem = new MaximumFlowProblem( model.graph(), newCapacities, model.getSources(), sink );
-		Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
-		algorithm.setProblem( problem );
+    //Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
+    Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new FordFulkerson();
+    algorithm.setProblem( problem );
 		algorithm.run();
 		return algorithm.getSolution().getFlowValue();
 	}
