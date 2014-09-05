@@ -29,8 +29,6 @@ import evacuationplan.BestResponseDynamics;
  */
 public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialChangeRule {
 
-	private static final double QUEUEING_TIME_WEIGHT_FACTOR = 0.5;
-	private static final double MOVING_TIME_WEIGHT_FACTOR = 0.5;
 	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
 
 	/**
@@ -45,59 +43,14 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 
 	}
 
-	private double getResponse( EvacCell cell, StaticPotential pot ) {
-
-		// Constants
-		Individual ind = cell.getIndividual();
-		double speed = ind.getRelativeSpeed();
-
-		// Exit dependant values
-		double distance = Double.MAX_VALUE;
-		if( pot.getDistance( cell ) >= 0 )
-			distance = pot.getDistance( cell );
-		double movingTime = distance / speed;
-
-		double exitCapacity = esp.eca.getExitToCapacityMapping().get( pot ).doubleValue();
-		//System.out.println("Exit: " + pot.getID() + " : " + exitCapacity);
-
-		// calculate number of individuals that are heading to the same exit and closer to it
-		ArrayList<Individual> otherInds = new ArrayList<Individual>();
-		//cell.getRoom().getIndividuals();
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		rooms.addAll( esp.eca.getRooms() );
-		for( Room room : rooms )
-			for( Individual i : room.getIndividuals() )
-				otherInds.add( i );
-
-		int queueLength = 0;
-		if( otherInds != null )
-			for( Individual otherInd : otherInds )
-				if( !otherInd.equals( ind ) )
-					if( otherInd.getStaticPotential() == pot )
-						if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) >= 0 )
-							if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) < distance )
-								queueLength++;
-		//System.out.println("Potential = " + pot.getID());
-		//System.out.println("Queue / Kapa = " + queueLength + " / " + exitCapacity + " = " + (queueLength / exitCapacity));
-		//System.out.println("Dist / Speed = " + distance + " / " + speed + " = " + (distance / speed));
-
-		// calculateEstimatedEvacuationTime
-		return responseFunction1( queueLength, exitCapacity, movingTime );
-
-	}
-
-	private double responseFunction1( int queueLength, double exitCapacity, double movingTime ) {
-		return (QUEUEING_TIME_WEIGHT_FACTOR * (queueLength / exitCapacity)) + (MOVING_TIME_WEIGHT_FACTOR * movingTime);
-	}
-
-	/**
-	 *
+  /**
+ 	 *
 	 * @param cell
 	 */
 	@Override
 	protected void onExecute( EvacCell cell ) {
 		// perform initial best response dynamics exit selection
 		BestResponseDynamics brd = new BestResponseDynamics();
-		brd.computePotential( cell, esp.eca );
+    brd.computePotential( cell, esp.eca );
 	}
 }

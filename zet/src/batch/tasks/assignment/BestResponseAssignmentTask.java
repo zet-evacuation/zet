@@ -106,7 +106,8 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 
 		// perform initial best response dynamics exit selection
 		BestResponseDynamics brd = new BestResponseDynamics();
-		//brd.computeAssignmentBasedOnBestResponseDynamics( caAlgo.getCellularAutomaton(), caAlgo.getIndividuals() );
+
+    //brd.computeAssignmentBasedOnBestResponseDynamics( caAlgo.getCellularAutomaton(), caAlgo.getIndividuals() );
 
 
 		caAlgo.run();	// hier wird initialisiert

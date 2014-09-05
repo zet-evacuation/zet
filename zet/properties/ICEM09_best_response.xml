@@ -24,7 +24,7 @@
           <string>InitialPotentialRandomRule</string>
         </stringListNode>
         <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">          
-          <string>BestResponseMovementRule</string>
+          <string>ICEM09MovementRule</string>
           <string>ICEM09SaveIndividualsRule</string>
           <string>ICEM09EvacuateIndividualsRule</string>
           <string>ChangePotentialBestResponseOptimizedRule</string>

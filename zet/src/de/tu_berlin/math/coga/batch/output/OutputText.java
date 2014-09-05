@@ -23,7 +23,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
 
   private PrintWriter output = new PrintWriter( System.out );
   //private String basePath = "/homes/combi/kappmeie/Dateien/Programme/zet/output/diss/icem/mcf/";
-  private String basePath = "../../output/diss/icem/shared-bottleneck/sp-sim/";
+  private String basePath = "../../output/diss/icem/shared-bottleneck/brd/";
 
   private boolean combinedOut = true;
 
@@ -76,7 +76,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
         maxValue = Math.max( maxValue, safe );
       }
 
-      int runs = 49;
+      int runs = 199;
       if( run == runs ) {
         try {
           output = new PrintWriter( new File( basePath, "combined.csv" ) );
