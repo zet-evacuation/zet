@@ -96,7 +96,6 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 
 		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, sigmaSquared, ageArray[16], ABSOLUTE_MAX_SPEED );
 		double randSpeed = normal.getNextRandom();
-		//randSpeed = maxSpeedExpected;
 
 		// Change speeds for male and female individuals:
 		// + 5% for male, -5% for female

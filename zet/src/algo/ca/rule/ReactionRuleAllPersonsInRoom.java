@@ -44,7 +44,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 	protected void onExecute( ds.ca.evac.EvacCell cell ) {
     boolean allIndividualsReady = true;
     for( Individual individual : cell.getRoom().getIndividuals() ) {
-      if( esp.eca.getTimeStep() < individual.getReactionTime() * esp.eca.getSecondsPerStep() ) {
+      if( esp.eca.getTimeStep() < individual.getReactionTime() * esp.eca.getStepsPerSecond() ) {
         allIndividualsReady = false;
         break;
       }

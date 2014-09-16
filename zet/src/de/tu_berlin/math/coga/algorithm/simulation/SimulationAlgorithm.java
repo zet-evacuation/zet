@@ -25,6 +25,7 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
  * @author Jan-Philipp Kappmeier
  */
 public abstract class SimulationAlgorithm<S,T> extends Algorithm<S,T> {
+  /* Counter for the current simulation step. **/
   private int stepCount;
 
   /**
@@ -72,7 +73,8 @@ public abstract class SimulationAlgorithm<S,T> extends Algorithm<S,T> {
 
 	@Override
 	final protected T runAlgorithm( S problem ) {
-		initialize();
+		stepCount = 0;
+    initialize();
 		performSimulation();
 		return terminate();
 	}

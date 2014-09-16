@@ -173,15 +173,17 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		} else {
       Direction8 direction = getMovementDirection( from, targetCell );
 
-			double stairSpeedFactor = targetCell instanceof StairCell ? getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
+			double stairSpeedFactor = targetCell instanceof StairCell ? getStairSpeedFactor( direction, (StairCell) targetCell )*1.1 : 1;
 			dist = direction.distance() * 0.4; // calculate distance
 			double add = getSwayDelay( ind, direction ); // add a delay if the person is changing direction
 
       if( esp.eca.absoluteSpeed( ind.getRelativeSpeed() ) >= 0.0001 ) { // if individual moves, update times
         speed = esp.eca.absoluteSpeed( ind.getRelativeSpeed() );
-				speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
+        double factor = targetCell.getSpeedFactor() * stairSpeedFactor;
+        //System.out.println( "Speed factor: " + factor + " stairspeed: " + stairSpeedFactor );
+				speed *= factor;
         ind.setStepStartTime( Math.max( from.getOccupiedUntil(), ind.getStepEndTime() ) );
-				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
+				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add*esp.eca.getStepsPerSecond() );
 				ind.setDirection( direction );
 			} else
 				throw new IllegalStateException( "Individuum has no speed." );

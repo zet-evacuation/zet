@@ -125,7 +125,7 @@ public class VisualResultsRecorder {
 
 	public void reset() {
 		this.actions = new Vector<>();
-		this.actions.add( new Vector<Action>() );
+		this.actions.add( new Vector<>() );
 		this.timeStep = 0;
 		this.cellMap = new HashMap<>();
 		this.staticPotentialMap = new HashMap<>();
@@ -172,7 +172,7 @@ public class VisualResultsRecorder {
 	public void nextTimestep() {
 		if( doRecord ) {
 			timeStep++;
-			actions.add( new Vector<Action>() );
+			actions.add( new Vector<>() );
 		}
 	}
 
@@ -224,7 +224,7 @@ public class VisualResultsRecorder {
 					HashMap<EvacCell, EvacCell> cellMapping, HashMap<StaticPotential, StaticPotential> potentialMapping ) {
 
 		if( cellMapping == null ) {
-			cellMapping = new HashMap<EvacCell, EvacCell>();
+			cellMapping = new HashMap<>();
 		}
 
 		LinkedList<String> clonedFloors = new LinkedList<>();
@@ -348,7 +348,7 @@ public class VisualResultsRecorder {
 	 */
 	private static Room cloneRoom( Room room, HashMap<EvacCell, EvacCell> cellMapping ) {
 		if( cellMapping == null ) {
-			cellMapping = new HashMap<EvacCell, EvacCell>();
+			cellMapping = new HashMap<>();
 		}
 
 		Room rClone = room.clone();

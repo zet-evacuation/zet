@@ -35,6 +35,8 @@ import de.tu_berlin.coga.util.movies.MovieManager;
 import de.tu_berlin.coga.util.movies.ImageFormat;
 import de.tu_berlin.coga.util.movies.MovieFormat;
 import de.tu_berlin.coga.util.movies.MovieWriters;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -132,7 +134,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 			} );
 		}
-		visFlow.setControl( new GLFlowGraphControl( new GraphVisualizationResults( 3 ) ) );
+
+    NetworkFlowModel nfm = new NetworkFlowModel( (ZToGraphRasterContainer)null );
+		visFlow.setControl( new GLFlowGraphControl( new GraphVisualizationResults( nfm, nfm.getNodeCoordinates() ) ) );
 		//visNash.setControl( null ); currently automatically initialized
 
 		EventServer.getInstance().registerListener( this, MessageEvent.class );

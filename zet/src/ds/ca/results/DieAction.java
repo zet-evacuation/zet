@@ -13,9 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Created on 06.05.2008
- */
+
 package ds.ca.results;
 
 import ds.ca.evac.EvacCell;
@@ -30,11 +28,11 @@ import ds.ca.results.Action.CADoesNotMatchException;
 public class DieAction extends Action {
 
 	/** The cell on which the individual stood when it died. */
-	private EvacCell placeOfDeath;
+	private final EvacCell placeOfDeath;
 	/** The cause which caused the individuals dead */
-	private DeathCause cause;
+	private final DeathCause cause;
 	/** The number of the individual. Is needed for visualization. */
-	private int individualNumber;
+	private final int individualNumber;
 
 	/**
 	 * Creates a new instance of the DyingAction which represents the dead of
@@ -101,6 +99,7 @@ public class DieAction extends Action {
 
 	/**
 	 * {@inheritDoc}
+   * @return text description of the action
 	 * @see ds.ca.results.Action#toString()
 	 */
 	@Override

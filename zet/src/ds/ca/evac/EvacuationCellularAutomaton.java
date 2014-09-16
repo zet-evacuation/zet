@@ -17,7 +17,6 @@ package ds.ca.evac;
 
 import algo.ca.framework.EvacuationCellState;
 import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCellularAutomaton;
-import ds.ca.evac.DeathCause;
 import ds.ca.results.CAStateChangedAction;
 import ds.ca.results.DieAction;
 import ds.ca.results.ExitAction;
@@ -459,6 +458,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 	public void setIndividualEvacuated( Individual i ) throws IllegalArgumentException {
 		if( !individuals.remove( i ) )
 			throw new IllegalArgumentException( "Specified individual is not in list individuals." );
+    if( getTimeStep() == 0 ) {
+      throw new IllegalStateException(); 
+    }
 		VisualResultsRecorder.getInstance().recordAction( new ExitAction( (ExitCell) i.getCell() ) );
 		EvacCell evacCell = i.getCell();
 

@@ -65,7 +65,14 @@ public abstract class GUIOptionManager {
 		propertyContainer.define( "gui.optionManager.InaccessibleAreaVisibility", Boolean.class, true );
 		propertyContainer.define( "gui.optionManager.SaveAreaVisibility", Boolean.class, true );
 		propertyContainer.define( "gui.optionManager.SavePath", String.class, "" );
-		previousEditMode = EditModeOld.Selection;
+
+    // Added for FlowVisualizationTool
+    //propertyContainer.define( "options.visualization.appeareance.colors.backgroundColor", Color.class, Color.WHITE );
+    //propertyContainer.define( "options.visualization.appearance.floorDistance", Double.class, 100. );
+    
+    
+    
+    previousEditMode = EditModeOld.Selection;
 		editMode = EditModeOld.Selection;
 	}
 

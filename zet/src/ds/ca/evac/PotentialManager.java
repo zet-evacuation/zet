@@ -34,7 +34,7 @@ public class PotentialManager {
 	 * Creates a new PotentialManager.
 	 */
 	public PotentialManager() {
-		staticPotentials = new HashMap<Integer, StaticPotential>();
+		staticPotentials = new HashMap<>();
 		dynamicPotential = new DynamicPotential();
 		safePotential = new StaticPotential();
 	}
@@ -56,7 +56,7 @@ public class PotentialManager {
 	public void addStaticPotential( StaticPotential potential ) throws IllegalArgumentException {
 		if( staticPotentials.containsKey( potential.getID() ) )
 			throw new IllegalArgumentException( "The StaticPtential already exists!" );
-		Integer i = new Integer( potential.getID() );
+		Integer i = potential.getID();
 		staticPotentials.put( i, potential );
 	}
 
