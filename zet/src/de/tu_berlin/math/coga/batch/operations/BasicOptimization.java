@@ -99,8 +99,8 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 
 
 		//if( networkFlowModel == null ) {
-    conv.setProblem( project.getBuildingPlan() );
-    conv.run();
+    //conv.setProblem( project.getBuildingPlan() );
+    //conv.run();
     networkFlowModel = conv.getSolution();
 		//}
 

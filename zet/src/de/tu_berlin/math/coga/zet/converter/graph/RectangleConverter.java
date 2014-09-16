@@ -236,7 +236,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 									sumOfSpeedFactors += dsquare.getSpeedFactor();
 									numOfSquares++;
 									rightblocked = true;
-									// damit das n�chste while nicht auch
+									// damit das nächste while nicht auch
 									// noch aufgerufen wird
 								}
 								added++;

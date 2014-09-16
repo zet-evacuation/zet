@@ -101,9 +101,9 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 
 			if( floor != -1 ) {
 				while(this.floorToNodeMapping.size() < floor)
-					this.floorToNodeMapping.add( new ArrayList<Node>() );
+					this.floorToNodeMapping.add( new ArrayList<>() );
 				if( this.floorToNodeMapping.size() <= floor )
-					this.floorToNodeMapping.add( floor, new ArrayList<Node>() );
+					this.floorToNodeMapping.add( floor, new ArrayList<>() );
 				this.floorToNodeMapping.get( floor ).add( node );
 			}
 		}
