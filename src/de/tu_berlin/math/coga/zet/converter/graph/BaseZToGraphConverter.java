@@ -15,7 +15,8 @@ import java.util.logging.Level;
 
 /**
  *
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
+ * @author Martin Groß
  */
 public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, NetworkFlowModel> {
 	protected ZToGraphMapping mapping;

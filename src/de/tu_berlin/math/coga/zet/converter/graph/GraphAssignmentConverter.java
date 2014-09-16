@@ -47,7 +47,6 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 		model.resetAssignment();
 		
 		// the new converted node assignment
-		//IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>( 1 );
 		List<Person> persons = assignment.getPersons();
 
 		// setting the people requirement (negative assignment) to the number of persons in the building
@@ -67,16 +66,12 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 			int YPos = pos.getYInt();
 			// get the square the person is located
 			ZToGraphRasterSquare square = roomRaster.getSquareWithGlobalCoordinates( XPos, YPos );
-                        //System.out.println("Square in Assignment: " + square);
-                        //ZToGraphRasterSquare square = roomRaster.getSquare((int)Math.floor(XPos/400), (int)Math.floor(YPos/400));
+      //System.out.println("Square in Assignment: " + square);
+      //ZToGraphRasterSquare square = roomRaster.getSquare((int)Math.floor(XPos/400), (int)Math.floor(YPos/400));
 			// get the square's associated node
 			Node node = square.getNode();
 
 			// increase the nodes assignment if already defined or set it's assignment to 1
-			//if( nodeAssignment.isDefinedFor( node ) )
-			//	nodeAssignment.increase( node, 1 );
-			//else
-			//	nodeAssignment.set( node, 1 );
 			model.increaseNodeAssignment( node );
 		}
 

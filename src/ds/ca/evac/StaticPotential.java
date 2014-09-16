@@ -94,7 +94,7 @@ public class StaticPotential extends PotentialMap {
      * @param i distance of the cell
      */
     public void setDistance (EvacCell cell, double i) throws IllegalArgumentException{
-    	Double distance = new Double(i);
+    	Double distance = i;
         if(!cellToDistance.containsKey(cell)){
         	cellToDistance.put(cell,distance);
         } else {
