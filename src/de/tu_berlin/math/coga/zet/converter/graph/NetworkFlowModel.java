@@ -65,6 +65,9 @@ public class NetworkFlowModel implements Iterable<Node> {
 		supersink = new Node( 0 );
 		network.setNode( supersink );
 		mapping = new ZToGraphMapping( raster ); // start with an empty mapping in case we have an empty model
+    mapping.setNodeRectangle( supersink, new NodeRectangle(0, 0, 0, 0) );
+    mapping.setFloorForNode( supersink, 0 );
+    
 	}
 
 	public NetworkFlowModel( NetworkFlowModel model ) {

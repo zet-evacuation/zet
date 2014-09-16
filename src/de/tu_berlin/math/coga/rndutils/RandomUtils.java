@@ -8,7 +8,8 @@ import java.util.ArrayList;
 /**
  * This singleton class provides access to a project wide random number
  * generator and some useful methods concerning random numbers.
- * @author Jan-Philipp Kappmeier, Matthias Woste
+ * @author Jan-Philipp Kappmeier
+ * @author Matthias Woste
  */
 public class RandomUtils {
 	/** List of seeds for the random generators. */
@@ -33,8 +34,9 @@ public class RandomUtils {
 		SecureRandom secRandom = new SecureRandom();
 		secRandom.setSeed( SecureRandom.getSeed( 16 ) );
 		seeds.add( secRandom.nextLong() );
-//		seeds.set( 0, secRandom.nextLong() );
-		seeds.set( 0, -7566781686001723112l );
+		seeds.set( 0, secRandom.nextLong() );
+		//seeds.set( 0, -7566781686001723112l );
+    
 		randomGenerator.add( new MersenneTwister( seeds.get( 0 ) ) );
 	}
 

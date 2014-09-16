@@ -47,6 +47,8 @@ public class SpecificFlowCollector {
 	}
 
 	public void collect( int timeStep, EvacCell start, EvacCell end ) {
+    if( true )
+      return;
 		try {
 
 			if( start.equals( end ) ) {

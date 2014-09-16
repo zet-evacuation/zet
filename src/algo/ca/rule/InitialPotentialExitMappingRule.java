@@ -72,8 +72,16 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 		Individual individual = cell.getIndividual();
 		TargetCell target = esp.eca.getIndividualToExitMapping().getExit( individual );
     if( target == null ) {
-      Logger.getGlobal().warning( "No target for Individual specified. Probably wrong rule selection for setting?" );
+      //Logger.getGlobal().warning( "No target for Individual specified. Probably wrong rule selection for setting?" );
 			InitialPotentialShortestPathRule.assignShortestPathPotential( cell, this.esp );
+      
+      // If only one exit, assign it
+      // TODO: throw warning message
+      if( esp.eca.getPotentialManager().getStaticPotentials().size() == 1 ) {
+        individual.setStaticPotential( esp.eca.getPotentialManager().getStaticPotentials().iterator().next() );
+      } else {
+        throw new IllegalStateException( "Mäh!" );
+      }
     } else {
 			StaticPotential potential = potentialMapping.get( target );
       if( potential == null ) {

@@ -27,7 +27,7 @@
           
         </stringListNode>
         <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">
-          <string>ReactionRuleAllPersonsInRoom</string>
+          <string>ReactionRuleCompleteRoom</string>
           <string>WaitingMovementRule</string>
           <string>SaveIndividualsRule</string>
           <string>EvacuateIndividualsRule</string>

@@ -17,7 +17,7 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public class RunComputationAction extends BatchAction {
-  private int runs = 200;
+  public final static int runs = 50;
 
 	public RunComputationAction( JBatch batch ) {
 		super( batch, "Run computation", "play_24.png" );
@@ -31,6 +31,7 @@ public class RunComputationAction extends BatchAction {
       for( int i = 0; i < runs; ++i ) {
         System.out.println( "\n\n\n--------------------------------------------------------------------------" );
         System.out.println( "Starting Computation " + i + "." );
+        
         // check if the input is valid for the operation
         List<Operation<?, ?>> executedOperations = runComputation( computation );
 

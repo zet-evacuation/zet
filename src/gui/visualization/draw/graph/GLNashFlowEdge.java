@@ -40,7 +40,10 @@ public class GLNashFlowEdge extends GLEdge {
 	/** A scale factor. */
 	final static double scale = 0.6;
 	/** The color for the wall. */
-	final static GLColor wallColor = new GLColor( 139, 69, 19, 0.1 );
+	// final static GLColor wallColor = new GLColor( 139, 69, 19, 0.1 ); // original
+  //final static GLColor wallColor = new GLColor( 240, 240, 240, 0.2 );
+  final static GLColor wallColor = new GLColor( 0.66, 0.66, 0.66, 0.3 );
+  //glColor4f(0.75, 0.75, 0.75, 0.1)
 	/** The rainbow colors used for the color effect on the edges. */
 	RainbowGradient rainbowGradient;
 	/** The axis used to rotate to display the edges. */
@@ -86,10 +89,15 @@ public class GLNashFlowEdge extends GLEdge {
 	private void displayEdge( GL gl ) {
 		gl.glPushMatrix();
 		edgeColor.draw( gl );
+    wallColor.draw( gl );
 		gl.glRotated( rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z );
 		final double eps = 0.999;
 		gl.glEnable( gl.GL_BLEND );
-		gl.glBlendFunc( gl.GL_ONE_MINUS_DST_COLOR, gl.GL_ONE );
+		//gl.glBlendFunc( gl.GL_ONE_MINUS_DST_COLOR, gl.GL_ONE );
+		//gl.glBlendFunc( gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA );
+    
+    gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA );
+    
 		glu.gluCylinder( quadObj, scale * capacity * 0.5 * eps, scale * capacity * 0.5 * eps, control.get3DLength(), 16, 1 );
 		gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();
@@ -108,7 +116,12 @@ public class GLNashFlowEdge extends GLEdge {
 		gl.glRotated( rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z );
 		final double eps = 1.001;
 		gl.glEnable( gl.GL_BLEND );
-		gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
+		// Original that works with black background:
+    //gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
+    
+    gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA );
+            
+		//gl.glBlendFunc( gl.GL_DST_COLOR, gl.GL_ZERO );
 		gl.glTranslated( 0, 0, corridorStartPosition * len );
 		double width = eps * scale * corridorCapacity * 0.5;
 		double drawnLength = corridorExitPosition * len - corridorStartPosition * len;

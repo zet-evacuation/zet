@@ -52,7 +52,8 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	private IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
 
 	public GraphVisualizationResults( double d ) {
-		super( null ); // TODO
+		
+    super( null ); // TODO
 	}
 	
 	public GraphVisualizationResults( EarliestArrivalFlowProblem earliestArrivalFlowProblem, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime flowOverTime ) {

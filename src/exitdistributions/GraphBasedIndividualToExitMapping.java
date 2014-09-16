@@ -264,16 +264,16 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
         }
 
       } else {
-//        HashMap<TargetCell, StaticPotential> potentialMapping;
-//        potentialMapping = new HashMap<>();
-//        for( StaticPotential potential : ca.getPotentialManager().getStaticPotentials() ) {
-//          for( TargetCell target : potential.getAssociatedExitCells() ) {
-//            if( potentialMapping.put( target, potential ) != null ) {
-//              throw new UnsupportedOperationException( "There were two potentials leading to the same exit. "
-//                      + "This method can currently not deal with this." );
-//            }
-//          }
-//        }
+        HashMap<TargetCell, StaticPotential> potentialMapping;
+        potentialMapping = new HashMap<>();
+        for( StaticPotential potential : ca.getPotentialManager().getStaticPotentials() ) {
+          for( TargetCell target : potential.getAssociatedExitCells() ) {
+            if( potentialMapping.put( target, potential ) != null ) {
+              throw new UnsupportedOperationException( "There were two potentials leading to the same exit. "
+                      + "This method can currently not deal with this." );
+            }
+          }
+        }
 
 
         if( individualsOfThisNode.size() != exits.size() ) {
@@ -294,80 +294,80 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
           }
         }
 
-//        Comparator<Individual> individualPotentialComparator = new Comparator<Individual>() {
-//
-//          @Override
-//          public int compare( Individual o1, Individual o2 ) {
-//            // compute min distance von o1
-//            int minPotential1 = Integer.MAX_VALUE;
-//            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
-//              if( pot.hasValidPotential( o1.getCell() ) ) {
-//                minPotential1 = Math.min( pot.getPotential( o1.getCell() ), minPotential1 );
-//              }
-//            }
-//
-//            int minPotential2 = Integer.MAX_VALUE;
-//            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
-//              if( pot.hasValidPotential( o2.getCell() ) ) {
-//                minPotential2 = Math.min( pot.getPotential( o2.getCell() ), minPotential2 );
-//              }
-//            }
-//
-//            return minPotential1-minPotential2;
-//            // compute min distance von o2
-//
-//          }
-//
-//        };
-//
-//        while( !individualsOfThisNode.isEmpty() ) {
-//          PriorityQueue<Individual> individualRanking = new PriorityQueue<>( individualPotentialComparator );
-//          for( Individual i : individualsOfThisNode ) {
-//            individualRanking.add( i );
-//          }
-//
-//          Individual i = individualRanking.poll();
-//
-//          // Assign individual to the best exit
-//          Node currentExit = null;
-//          int currentPotential = Integer.MAX_VALUE;
-//          TargetCell currentTargetCell = null;
-//
-//          for( Node exit : exitOccurences.keySet() ) {
-//            List<EvacCell> cells = nodeCellMapping.getCells( exit );
-//            TargetCell targetCell = findATargetCell( cells );
-//            StaticPotential pot = potentialMapping.get( targetCell );
-//            if( pot.getPotential( i.getCell() ) < currentPotential ) {
-//              currentExit = exit;
-//              currentPotential = pot.getPotential( i.getCell() );
-//              currentTargetCell = targetCell;
-//            }
-//          }
-//          individualToExitMapping.put( i, currentTargetCell );
-//          if( exitOccurences.get( currentExit ) > 1 ) {
-//            exitOccurences.put( currentExit, exitOccurences.get( currentExit ) - 1 );
-//          } else {
-//            exitOccurences.remove( currentExit );
-//          }
-//          individualsOfThisNode.remove( i );
-//        }
+        Comparator<Individual> individualPotentialComparator = new Comparator<Individual>() {
+
+          @Override
+          public int compare( Individual o1, Individual o2 ) {
+            // compute min distance von o1
+            int minPotential1 = Integer.MAX_VALUE;
+            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
+              if( pot.hasValidPotential( o1.getCell() ) ) {
+                minPotential1 = Math.min( pot.getPotential( o1.getCell() ), minPotential1 );
+              }
+            }
+
+            int minPotential2 = Integer.MAX_VALUE;
+            for( StaticPotential pot : ca.getPotentialManager().getStaticPotentials() ) {
+              if( pot.hasValidPotential( o2.getCell() ) ) {
+                minPotential2 = Math.min( pot.getPotential( o2.getCell() ), minPotential2 );
+              }
+            }
+
+            return minPotential1-minPotential2;
+            // compute min distance von o2
+
+          }
+
+        };
+
+        while( !individualsOfThisNode.isEmpty() ) {
+          PriorityQueue<Individual> individualRanking = new PriorityQueue<>( individualPotentialComparator );
+          for( Individual i : individualsOfThisNode ) {
+            individualRanking.add( i );
+          }
+
+          Individual i = individualRanking.poll();
+
+          // Assign individual to the best exit
+          Node currentExit = null;
+          int currentPotential = Integer.MAX_VALUE;
+          TargetCell currentTargetCell = null;
+
+          for( Node exit : exitOccurences.keySet() ) {
+            List<EvacCell> cells = nodeCellMapping.getCells( exit );
+            TargetCell targetCell = findATargetCell( cells );
+            StaticPotential pot = potentialMapping.get( targetCell );
+            if( pot.getPotential( i.getCell() ) < currentPotential ) {
+              currentExit = exit;
+              currentPotential = pot.getPotential( i.getCell() );
+              currentTargetCell = targetCell;
+            }
+          }
+          individualToExitMapping.put( i, currentTargetCell );
+          if( exitOccurences.get( currentExit ) > 1 ) {
+            exitOccurences.put( currentExit, exitOccurences.get( currentExit ) - 1 );
+          } else {
+            exitOccurences.remove( currentExit );
+          }
+          individualsOfThisNode.remove( i );
+        }
 
 
 
 				// Assign individuals to target cells by taking the next exit node and looking up its cells
         // (the first cell is chosen as a representative).
-        for( Individual individual : individualsOfThisNode ) {
-          Node exit = exits.remove( 0 );
-          TargetCell targetCell = findATargetCell( nodeCellMapping.getCells( exit ) );
-
-          if( targetCell == null ) {
-            throw new ConversionException( "The node<->cell-mapping yielded a sink that is only mapped to"
-                    + " non-exitcells. This may happen, if all of your ExitCells are also DoorCells"
-                    + " (which is not supported) Sink id: " + exit.id() );
-          }
-
-          individualToExitMapping.put( individual, targetCell );
-        }
+//        for( Individual individual : individualsOfThisNode ) {
+//          Node exit = exits.remove( 0 );
+//          TargetCell targetCell = findATargetCell( nodeCellMapping.getCells( exit ) );
+//
+//          if( targetCell == null ) {
+//            throw new ConversionException( "The node<->cell-mapping yielded a sink that is only mapped to"
+//                    + " non-exitcells. This may happen, if all of your ExitCells are also DoorCells"
+//                    + " (which is not supported) Sink id: " + exit.id() );
+//          }
+//
+//          individualToExitMapping.put( individual, targetCell );
+//        }
 
       }
     }

@@ -23,6 +23,13 @@ import java.util.logging.Level;
 public abstract class EvacuationCellularAutomatonAlgorithm
         extends AbstractCellularAutomatonSimulationAlgorithm<EvacCell,
         EvacuationSimulationProblem, EvacuationSimulationResult> {
+
+  public EvacuationCellularAutomatonAlgorithm() {
+    System.out.println( "Instance created!" );
+  }
+  
+  
+  
   /** The simulation result. */
   private EvacuationSimulationResult evacuationSimulationResult;
 
@@ -109,7 +116,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm
   @Override
   protected boolean isFinished() {
     boolean continueCondition = ((getProblem().eca.getNotSafeIndividualsCount() > 0
-            || getProblem().eca.getTimeStep() < getProblem().eca.getNeededTime()) /*&& !isCancelled()*/);
+            || getProblem().eca.getTimeStep() <= getProblem().eca.getNeededTime()) /*&& !isCancelled()*/);
     return super.isFinished() || !continueCondition;
   }
 

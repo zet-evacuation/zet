@@ -16,6 +16,7 @@
 
 package algo.ca.rule;
 
+import de.tu_berlin.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
@@ -155,63 +156,96 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 			}
 		}
 		if( inSameRoom ) {
-			int startX = cell.getX();
-			int startY = cell.getY();
-
-			EvacCell mostProbableTarget = targets.get( max_index );
-			int targetX = mostProbableTarget.getX();
-			int targetY = mostProbableTarget.getY();
-
-			boolean wayIsntDiagonal = (!(cell.equals( mostProbableTarget ))) && (startX == targetX) || (startY == targetY);
-
-			if( wayIsntDiagonal ) {
-				// raise the probability of the most probable cell:
-				double c = 10.5;
-				p[max_index] = max * c;
-			} else {
-				// find next probable cell (could be two next probable cells!):
-				double max2 = 0;
-				int max_index2 = 0;
-				int nextProbable[] = { -1, -1 };
-				for( int i = 0; i < targets.size(); i++ ) {
-					int X = targets.get( i ).getX();
-					int Y = targets.get( i ).getY();
-					if( ((startX == X) && (targetY == Y)) || ((targetX == X) && (startY == Y)) ) {
-						// if the cell is a (not-diagonal-)neighbour of the actual cell AND of the most probable cell
-						if( p[i] > max2 ) {
-							// if NEW max2 found
-							max2 = p[i];
-							nextProbable[0] = i;
-							nextProbable[1] = -1;
-						} else {
-							if( p[i] == max2 ) {
-								// if SECOND max2 found
-								nextProbable[1] = i;
-							}
-						}
-					}
-				}//end for
-				if( nextProbable[0] != -1 ) {
-					// if at least one nextProbableCell found
-					if( nextProbable[1] != -1 ) {
-						// if exactly two nextProbableCells found
-						// choose one of them randomly:
-						if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
-							max_index2 = nextProbable[0];
-						} else {
-							max_index2 = nextProbable[1];
-						}
-					} else {
-						// if exactly one nextProbableCell found
-						max_index2 = nextProbable[0];
-					}
-
-					// raise the probability of the (chosen) nextProbableCell
-					double c2 = 10.5;
-					p[max_index2] = max2 * c2;
-				}
-
-			}//end else
+      EvacCell  mostProbableTarget = targets.get( max_index );
+      
+      Individual i = cell.getIndividual();
+      Direction8 oldDir = i.getDirection();
+      Direction8 newDir = cell.equals( mostProbableTarget ) ? oldDir : cell.getRelative( mostProbableTarget );
+      
+      if( oldDir.equals( newDir ) ) {
+        // No swaying
+      } else {
+        // swaying!
+        // check, if one of the targets is in the old direction
+        //for( EvacCell target : targets ) {
+        
+    		for( int j = 0; j < targets.size(); ++j ) {
+          EvacCell target = targets.get( j );
+          if( target != cell && oldDir.equals( cell.getRelative( target ) ) ) {
+            // We found a cell in the current direciton
+            p[j] = p[j] * 10.5;
+            
+//            double soll = 0.5;
+//            double N = 0;
+//            for( int i2 = 0; i2 < p.length; ++i2 ) {
+//              N += p[i2];
+//            }
+//            double alterP = p[j];
+//            double K = (soll*N - alterP)*(1-soll);
+//            System.out.println( "Korrektur by " + K + " to " + (K + alterP) + " equals factor " + (K/alterP) );
+//            p[j] += K;
+            
+          }
+        }
+      }
+      
+//      int startX = cell.getX();
+//			int startY = cell.getY();
+//
+//			EvacCell mostProbableTarget = targets.get( max_index );
+//			int targetX = mostProbableTarget.getX();
+//			int targetY = mostProbableTarget.getY();
+//
+//			boolean wayIsntDiagonal = (!(cell.equals( mostProbableTarget ))) && (startX == targetX) || (startY == targetY);
+//
+//			if( wayIsntDiagonal ) {
+//				// raise the probability of the most probable cell:
+//				double c = 10.5;
+//				p[max_index] = max * c;
+//			} else {
+//				// find next probable cell (could be two next probable cells!):
+//				double max2 = 0;
+//				int max_index2 = 0;
+//				int nextProbable[] = { -1, -1 };
+//				for( int i = 0; i < targets.size(); i++ ) {
+//					int X = targets.get( i ).getX();
+//					int Y = targets.get( i ).getY();
+//					if( ((startX == X) && (targetY == Y)) || ((targetX == X) && (startY == Y)) ) {
+//						// if the cell is a (not-diagonal-)neighbour of the actual cell AND of the most probable cell
+//						if( p[i] > max2 ) {
+//							// if NEW max2 found
+//							max2 = p[i];
+//							nextProbable[0] = i;
+//							nextProbable[1] = -1;
+//						} else {
+//							if( p[i] == max2 ) {
+//								// if SECOND max2 found
+//								nextProbable[1] = i;
+//							}
+//						}
+//					}
+//				}//end for
+//				if( nextProbable[0] != -1 ) {
+//					// if at least one nextProbableCell found
+//					if( nextProbable[1] != -1 ) {
+//						// if exactly two nextProbableCells found
+//						// choose one of them randomly:
+//						if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
+//							max_index2 = nextProbable[0];
+//						} else {
+//							max_index2 = nextProbable[1];
+//						}
+//					} else {
+//						// if exactly one nextProbableCell found
+//						max_index2 = nextProbable[0];
+//					}
+//
+//					// raise the probability of the (chosen) nextProbableCell
+//					double c2 = 10.5;
+//					p[max_index2] = max2 * c2;
+//				}
+//
+//			}//end else
 		}// end if inSameRoom
 
 		int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );

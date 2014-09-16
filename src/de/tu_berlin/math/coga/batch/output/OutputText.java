@@ -1,6 +1,7 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
+import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.EvacuationRecording;
@@ -23,7 +24,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
 
   private PrintWriter output = new PrintWriter( System.out );
   //private String basePath = "/homes/combi/kappmeie/Dateien/Programme/zet/output/diss/icem/mcf/";
-  private String basePath = "../../output/diss/icem/shared-bottleneck/brd/";
+  private String basePath = "../../output/diss/telefunken";
 
   private boolean combinedOut = true;
 
@@ -67,6 +68,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
       int time = 0;
 
       //output.write( "Time,Safe\n" );
+      System.out.println( "Recording size: " + recording.length() );
       while( recording.hasNext() ) {
         recording.nextActions();
         Vector<ExitAction> exits = recording.filterActions( ExitAction.class );
@@ -76,7 +78,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
         maxValue = Math.max( maxValue, safe );
       }
 
-      int runs = 199;
+      int runs = RunComputationAction.runs-1;
       if( run == runs ) {
         try {
           output = new PrintWriter( new File( basePath, "combined.csv" ) );

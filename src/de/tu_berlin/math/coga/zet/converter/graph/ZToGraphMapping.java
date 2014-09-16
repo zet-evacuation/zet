@@ -13,23 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * ZToGraphMapping.java
- *
- */
+
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.util.Level;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.zet.model.Room;
-import gui.visualization.VisualizationOptionManager;
 import java.awt.Shape;
 import java.util.HashMap;
 
