@@ -268,7 +268,11 @@ public class NetworkFlowModel implements Iterable<Node> {
 		currentAssignment.set( node, i );
 	}
 
-	void increaseNodeAssignment( Node node ) {
+ 	void increaseNodeAssignment( Node node ) {
+    increaseNodeAssignment( node, 0 );
+  }
+
+	void increaseNodeAssignment( Node node, double transitTime ) {
 		if( accurateStartTimes ) {
       Node individualNode = new Node( nodeCount++ );
       network.setNode( individualNode );
@@ -282,8 +286,8 @@ public class NetworkFlowModel implements Iterable<Node> {
       System.out.println( "Dummy detailed assignment Edge(" + edge.start() + "," + edge.end() + ") created." );
    		network.setEdge( edge );
       edgeCapacities.set( edge, 1 );
-  		transitTimes.set( edge, 10 );
-      exactTransitTimes.set( edge, 0 );
+  		transitTimes.set( edge, (int)transitTime );
+      exactTransitTimes.set( edge, transitTime );
       
       mapping.setFloorForNode( individualNode, 0 );
 
