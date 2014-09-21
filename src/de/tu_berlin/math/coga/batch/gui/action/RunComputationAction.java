@@ -1,6 +1,7 @@
 
 package de.tu_berlin.math.coga.batch.gui.action;
 
+import algo.ca.parameter.TestEvacuationParameterSet;
 import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
@@ -42,6 +43,10 @@ public class RunComputationAction extends BatchAction {
       }
 
 		}
+    
+    System.out.println( "Speeds: " + TestEvacuationParameterSet.speeds );
+    System.out.println( "Count: " + TestEvacuationParameterSet.count );
+    System.out.println( "Average: " + TestEvacuationParameterSet.speeds/TestEvacuationParameterSet.count );
   }
 
   public List<Operation<?, ?>> runComputation( Computation computation ) {

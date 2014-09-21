@@ -1,6 +1,10 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
+import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
@@ -130,7 +134,18 @@ public class OutputText extends AbstractOutput implements TreeListItem {
    * @param gvr
    */
   private void graphResults( GraphVisualizationResults gvr ) {
+    EdgeBasedFlowOverTime ef = gvr.getFlow();
+        
+    System.out.println( "Building arrival pattern: " );
+    int timeHorizon = -1;
+    for( Edge e : gvr.getNetwork().incidentEdges( gvr.getSupersink() ) ) {
+      timeHorizon = Math.max( timeHorizon, ef.get( e ).getLastTimeWithNonZeroValue() );
+    }
+    EarliestArrivalFlowPattern pattern = EarliestArrivalFlowPatternBuilder.fromEdgeBased( ef,
+            gvr.getNetwork().incomingEdges( gvr.getSupersink() ), timeHorizon );
 
+    System.out.println( "Pattern: " );
+    System.out.println( pattern );
   }
 
   /**

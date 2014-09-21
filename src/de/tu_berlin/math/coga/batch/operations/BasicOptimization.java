@@ -4,15 +4,23 @@ package de.tu_berlin.math.coga.batch.operations;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.Edge;
+import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import de.tu_berlin.coga.netflow.ds.network.ExtendedGraph;
 import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
@@ -20,6 +28,7 @@ import zet.tasks.GraphAlgorithmEnumeration;
  * @author Jan-Philipp Kappmeier
  */
 public class BasicOptimization extends AbstractOperation<Project,GraphVisualizationResults> {
+	private static final Logger log = Logger.getGlobal();
 	InputFileReader<Project> input;
 	AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
 	AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
@@ -28,6 +37,7 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 	public BasicOptimization() {
 		// First, we go from zet to network flow model
 		// then, we go from nfm to path based flow
+    // therefore, we need two algorithms
 
 		transformationOperation = new AtomicOperation<>( "Transformation", BuildingPlan.class, NetworkFlowModel.class );
 
@@ -59,14 +69,6 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
     return gvr;
   }
 
-
-
-
-
-
-
-
-
 	@Override
 	public String toString() {
 		return "Basic Optimization";
@@ -91,18 +93,13 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 		System.out.println( "Selected algorithm: " + transformationOperation.getSelectedAlgorithm() );
 
 		// Convert
-		//GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
 		final Algorithm<BuildingPlan,NetworkFlowModel> conv = transformationOperation.getSelectedAlgorithm();
 		conv.setProblem( project.getBuildingPlan() );
 		conv.run();
 		NetworkFlowModel networkFlowModel;
 
 
-		//if( networkFlowModel == null ) {
-    //conv.setProblem( project.getBuildingPlan() );
-    //conv.run();
     networkFlowModel = conv.getSolution();
-		//}
 
 		// convert and create the concrete assignment
 		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
@@ -113,24 +110,27 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 		cav.run();
 		networkFlowModel = cav.getSolution();
 
-
 		// call the graph algorithm
-
-
     Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> gt = eafAlgorithm.getSelectedAlgorithm();
 
  		EarliestArrivalFlowProblem eafp = networkFlowModel.getEAFP();
-
+    
+    
+    System.out.println( "Transforming transit times." );
+    EarliestArrivalFlowProblem oldEafp = eafp;
+    eafp = transformTransitTimes( eafp );
+    IdentifiableIntegerMapping<Edge> newTransitTimes = eafp.getTransitTimes();
+    
 
 		System.out.println( "Earliest arrival transshipment calculation starts" );
-		//EarliestArrivalFlowProblem problem = originalProblem.getEAFP();
 		LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
 		estimator.setProblem( eafp );
 		estimator.run();
 		System.out.println( "Geschätzte Lösung:" + estimator.getSolution() );
 		eafp = networkFlowModel.getEAFP( estimator.getSolution().getUpperBound() );
-
-
+    
+    // The latest call to getEAFP takes the old transit times again! Set them again
+ 		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
 
     gt.setProblem( eafp );
 		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
@@ -144,6 +144,55 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 
 		// create graph vis result
 		gvr = new GraphVisualizationResults( cav.getSolution(), gt.getSolution() );
-
 	}
+  
+  private EarliestArrivalFlowProblem transformTransitTimes( EarliestArrivalFlowProblem eafp ) {
+ 
+		// transform the transit times
+		// compute shortest paths
+
+		Dijkstra dijkstra;
+		DefaultDirectedGraph n = (DefaultDirectedGraph)eafp.getNetwork();
+
+
+		IdentifiableIntegerMapping<Edge> transitTimes;
+
+		transitTimes = eafp.getTransitTimes();
+
+		ExtendedGraph ex = new ExtendedGraph( n, 1, eafp.getSources().size() );
+		Node superNode = ex.getFirstNewNode();
+
+		transitTimes.setDomainSize( ex.edgeCount() ); // reserve space
+
+		for( Node source : eafp.getSources() ) {
+			Edge newEdge = ex.createAndSetEdge( superNode, source );
+			transitTimes.set( newEdge, 0 );
+		}
+
+
+
+		dijkstra = new Dijkstra( ex, eafp.getTransitTimes(), superNode );
+		dijkstra.run();
+
+		dijkstra.getShortestPathTree();
+		log.log(Level.INFO, "Solution: {0}", dijkstra.getShortestPathTree());
+
+
+
+		transitTimes = eafp.getTransitTimes();
+		IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>( transitTimes );
+
+		for( Edge e : eafp.getNetwork().edges() ) {
+			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
+			log.log( Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
+			newTransitTimes.set( e, newTransit );
+		}
+    
+		log.log( Level.INFO, "Old transit: {0}", transitTimes);
+		log.log( Level.INFO, "new transit: {0}", newTransitTimes);
+
+		EarliestArrivalFlowProblem neweafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
+
+    return neweafp;
+  }
 }

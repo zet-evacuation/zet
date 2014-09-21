@@ -10,6 +10,7 @@ import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Person;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.Room;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,6 +55,10 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 		model.setNodeAssignment( model.getSupersink(), -persons.size() );
 		//nodeAssignment.set( superSink, -persons.size() );
 
+    HashMap<Room,Double> roomMaxTime = new HashMap<>();
+    HashMap<Node,Integer> nodeCount = new HashMap<>();
+    HashMap<Node,Room> nodeRoom = new HashMap<>();
+    
 		// for every person do
 		for( int i = 0; i < persons.size(); i++ ) {
 			// get the room that is inhabited by the current person
@@ -72,8 +77,27 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 			Node node = square.getNode();
 
 			// increase the nodes assignment if already defined or set it's assignment to 1
-			model.increaseNodeAssignment( node );
+      //normal:
+			//model.increaseNodeAssignment( node ); 
+      //max-in-room-assignment
+      final double maxTimeForRoom = roomMaxTime.getOrDefault( room, 0d );
+      roomMaxTime.put( room, Math.max( maxTimeForRoom, persons.get( i ).getReaction() ) );
+      final int count = nodeCount.getOrDefault( node, 0 );
+      nodeCount.put( node, count+1 );
+      nodeRoom.put( node, room );
 		}
+    
+    for( Node n : nodeRoom.keySet() ) {
+      int count = nodeCount.get( n );
+      double delay = roomMaxTime.get( nodeRoom.get( n ) );
+      // Delay in sekunden
+      double factor = 1/0.26425707443;
+      
+      for( int i = 0; i < count; ++i ) {
+        model.increaseNodeAssignment( n, delay*factor );
+        System.out.println( "Setting delay: " + (delay*factor) + " for delay " + delay + " in room " + nodeRoom.get( n ) );
+      }
+    }
 
 		// set node assignment to 0 for every node the assignment has not already defined for
 //		IdentifiableCollection<Node> nodes = model.getGraph().nodes();

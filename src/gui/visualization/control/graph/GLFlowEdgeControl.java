@@ -55,14 +55,14 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		this.mainControl = glControl;
 		//controlled = edge;
 		setView( new GLFlowEdge( this ) );
-    System.out.println( "Edge " + edge );
+    //System.out.println( "Edge " + edge );
 
 		// general edge attributes
 		maxFlowRate = graphVisResult.getMaxFlowRate();
-    System.out.println( " - max flow rate: " + maxFlowRate );
+    //System.out.println( " - max flow rate: " + maxFlowRate );
 
 		transitTime = graphVisResult.getTransitTimes().get( edge );
-    System.out.println( " - transit time: " + transitTime );
+    //System.out.println( " - transit time: " + transitTime );
     //transitTime = 1;
 
 		capacity = graphVisResult.getEdgeCapacities().get( edge );
@@ -74,18 +74,18 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
 
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-    System.out.println( " - max time with non zero value: " + maxT);
+    //System.out.println( " - max time with non zero value: " + maxT);
 		int transit = transitTimes.get( edge );
 		if( maxT > 0 )
 			glControl.setMaxTime( maxT + transit );
 		if( maxT > 0 ) {
 			flowOnEdge = new ArrayList<>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add( new Integer( 0 ) );
+				flowOnEdge.add(0);
 			for( int i = 0; i <= maxT; i++ )
-				flowOnEdge.add( new Integer( flowOverTime.get( edge ).get( i ) ) );
+				flowOnEdge.add(flowOverTime.get( edge ).get( i ));
 			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add( new Integer( 0 ) );
+				flowOnEdge.add(0);
 		} else
 			flowOnEdge = new ArrayList<>();
 	}

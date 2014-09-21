@@ -123,8 +123,14 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 		//System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
 		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " counterMale/s. (Should be 1.3x)" );
 
+    speeds += randSpeed;
+    count++;
+    
 		return randSpeed;
 	}
+  
+  public static double speeds;
+  public static int count;
 
 	@Override
 	protected double exhaustionWeightOnSpeed() {

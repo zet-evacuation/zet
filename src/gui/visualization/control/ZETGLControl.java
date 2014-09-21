@@ -351,7 +351,7 @@ public class ZETGLControl implements DrawableControlable {
 			graphControl.setNanoSecondsPerStep( graphControl.getStepCount() == 0 ? 0 : (caControl.getNanoSecondsPerStep() * caControl.getStepCount()) / graphControl.getStepCount() );
 		else {
 			if( ca == null ) {
-				graphControl.setSecondsPerStep( 1 );
+				graphControl.setSecondsPerStep( 0.26425707443 );
 				return;
 			}
 			double maxSpeed = ca.getAbsoluteMaxSpeed();
