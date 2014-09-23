@@ -373,6 +373,8 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 		// Initiate
 		for( RoomRasterSquare c : lowBlock ) {
 			c.setStair(); // Mark the squares as stair squares
+      c.setUpSpeedFactor( stair.getSpeedFactorUp() );
+      c.setDownSpeedFactor( stair.getSpeedFactorDown() );
 			c.setStairPotential( potential );
 		}
 		nextList.addAll( lowBlock );

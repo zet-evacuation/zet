@@ -54,7 +54,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
     createReverseEdges();
 
     // adjust transit times according to stair speed factors
+    log.setLevel( Level.ALL );
 		multiplyWithUpAndDownSpeedFactors();
+    log.setLevel( Level.FINE );
 
 		// set this before reverse edges are computed as they modify the model.
 		model.roundTransitTimes();
@@ -74,13 +76,16 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 	protected abstract void computeTransitTimes();
 
+  int originalEdges;
 	protected void createReverseEdges() {
+    originalEdges = model.numberOfEdges();
 		createReverseEdges( model );
 	}
 
 	public static void createReverseEdges( NetworkFlowModel model ) {
 		//int edgeIndex = numberOfEdges();
 		final int oldEdgeIndex = model.numberOfEdges();
+             
 		model.setNumberOfEdges( model.numberOfEdges() * 2 - model.numberOfSinks() );
 
 		// don't use an iterator here, as it will result in concurrent modification
@@ -97,12 +102,24 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
       if( !edge.isIncidentTo( model.getSupersink() ) ) {
         switch( mapping.getEdgeLevel( edge ) ) {
           case Higher:
-            model.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
-            log.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, mapping.getUpNodeSpeedFactor( edge.start() )});
+            double factor = 1.0;
+            if( mapping.getUpNodeSpeedFactor( edge.start() ) != 1.0 ) {
+              factor = mapping.getUpNodeSpeedFactor( edge.start() );
+            } else if( mapping.getUpNodeSpeedFactor( edge.end() ) != 1.0 ) {
+              factor = mapping.getUpNodeSpeedFactor( edge.end() );
+            }
+            model.divide( edge, factor );
+            log.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, factor});
             break;
           case Lower:
-            model.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
-            log.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, mapping.getDownNodeSpeedFactor( edge.start() )});
+            factor = 1.0;
+            if( mapping.getDownNodeSpeedFactor( edge.start() ) != 1.0 ) {
+              factor = mapping.getDownNodeSpeedFactor( edge.start() );
+            } else if( mapping.getDownNodeSpeedFactor( edge.end() ) != 1.0 ) {
+              factor = mapping.getDownNodeSpeedFactor( edge.end() );
+            }
+            model.divide( edge, factor );
+            log.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, factor});
             break;
         }
       }

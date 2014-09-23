@@ -80,7 +80,7 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
       if( esp.eca.getPotentialManager().getStaticPotentials().size() == 1 ) {
         individual.setStaticPotential( esp.eca.getPotentialManager().getStaticPotentials().iterator().next() );
       } else {
-        throw new IllegalStateException( "Mäh!" );
+        //throw new IllegalStateException( "Mäh!" );
       }
     } else {
 			StaticPotential potential = potentialMapping.get( target );

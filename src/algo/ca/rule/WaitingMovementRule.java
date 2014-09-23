@@ -146,6 +146,12 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 				max_index = i;
 			}
 		}
+    
+    boolean directPath = true; // notice, that direct path is a deterministic rule!
+    if( directPath ) {
+      return targets.get( max_index );
+    }
+    
 
 		// raising probablities only makes sense if the cell and all its neighbours are in the same room
 		boolean inSameRoom = true;

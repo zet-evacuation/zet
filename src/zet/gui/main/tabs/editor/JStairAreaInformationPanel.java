@@ -5,6 +5,7 @@ import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.StairPreset;
 import de.tu_berlin.coga.zet.model.ZLocalization;
+import gui.ZETLoader;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -72,15 +74,15 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 		txtStairFactorUp.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					;
-//					try {
-//						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
-//					} catch( ParseException ex ) {
-//						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
-//					} catch( IllegalArgumentException ex ) {
-//						ZETLoader.sendError( ex.getLocalizedMessage() );
-//					}
+				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+          try {
+						current.setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
+					} catch( ParseException ex ) {
+						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+					} catch( IllegalArgumentException ex ) {
+						ZETLoader.sendError( ex.getLocalizedMessage() );
+					}
+        }
 			}
 		} );
 		this.add( txtStairFactorUp, "0, " + row++ );
@@ -104,15 +106,15 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 		txtStairFactorDown.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					;
-//					try {
-//						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorDown( nfFloat.parse( txtStairFactorDown.getText() ).doubleValue() );
-//					} catch( ParseException ex ) {
-//						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
-//					} catch( IllegalArgumentException ex ) {
-//						ZETLoader.sendError( ex.getLocalizedMessage() );
-//					}
+				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+					try {
+						current.setSpeedFactorDown( nfFloat.parse( txtStairFactorDown.getText() ).doubleValue() );
+					} catch( ParseException ex ) {
+						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+					} catch( IllegalArgumentException ex ) {
+						ZETLoader.sendError( ex.getLocalizedMessage() );
+					}
+        }
 			}
 		} );
 		this.add( txtStairFactorDown, "0, " + row++ );

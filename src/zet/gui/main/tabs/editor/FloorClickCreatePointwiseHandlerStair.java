@@ -41,17 +41,21 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 				// creation has started. If creation is not started anymore, we closed a polygon
 				// and the upper and lower arcs have to be defined
 				super.mouseUp( p, components );
-				if( !isCreationStarted() )
-					stairState = StairStates.Lower;
-			} else
-				super.mouseUp( p, components );
+				if( !isCreationStarted() ) {
+					stairState = StairStates.Lower;          
+        }
+			} else {
+				super.mouseUp( p, components );        
+      }
 		} else {
 			System.out.println( "Trying to add a lower side" );
 			JPolygon stair = getEditStatus().getCurrentEditing();
-			if( stair == null )
-				throw new IllegalStateException( "STAIR is null" );
-			if( !(stair.getPlanPolygon() instanceof StairArea) )
-				throw new AssertionError( "No stair, but instead it is of type " + stair.getPlanPolygon().getClass() );
+      if( stair == null ) {
+        throw new IllegalStateException( "STAIR is null" );
+      }
+      if( !(stair.getPlanPolygon() instanceof StairArea) ) {
+        throw new AssertionError( "No stair, but instead it is of type " + stair.getPlanPolygon().getClass() );
+      }
 
 			Object obj = stair.findClickTargetAt( SwingUtilities.convertPoint( getEditStatus().getControlled(), p, stair ) );
 			if( obj instanceof PlanEdge ) {
@@ -61,13 +65,16 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 				if( stairState == StairStates.Lower ) {
 					sa.setLowerLevel( e.getSource(), e.getTarget() );
 					stairState = StairStates.Upper;
+          System.out.println( "Lower level set." );
 				} else if( stairState == StairStates.Upper ) {
 					try {
 						sa.setUpperLevel( e.getSource(), e.getTarget() );
+            System.out.println( "Upper level set." );
 						stairState = StairStates.Geometric;
 					} catch( StairAreaBoundaryException ex ) {
 						// ignore exception and mouse click. do nothing and wait for correct one.
 						// TODO send an info to the user interface
+            System.err.println( "Ignoring click. Please click correctly!" );
 					}
 				} else
 					throw new AssertionError( "In creation mode, illegally to define upper or lower edges!" );
@@ -80,8 +87,10 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 		if( stairState == StairStates.Geometric ) {
 			if( isCreationStarted() ) {
 				super.rightClick();
-				if( !isCreationStarted() )
-					stairState = StairStates.Lower;
+				if( !isCreationStarted() ) {
+          System.out.println( "Now waiting for lower side." );
+					stairState = StairStates.Lower;          
+        }
 			}
 		}
 	}
