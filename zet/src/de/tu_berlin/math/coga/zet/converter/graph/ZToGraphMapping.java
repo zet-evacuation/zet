@@ -92,7 +92,8 @@ public class ZToGraphMapping {
 	 * @param level the level of the end node compared to the level of the start
 	 * node
 	 */
-	/* TODO package */ public void setEdgeLevel( Edge edge, Level level ) {
+	/* TODO package */
+  public void setEdgeLevel( Edge edge, Level level ) {
 		edgeLevels.set( edge, level );
 	}
 

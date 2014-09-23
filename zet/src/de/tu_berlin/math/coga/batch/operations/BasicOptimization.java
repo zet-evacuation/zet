@@ -184,7 +184,7 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 
 		for( Edge e : eafp.getNetwork().edges() ) {
 			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
-			log.log( Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
+			log.log( Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
 			newTransitTimes.set( e, newTransit );
 		}
     

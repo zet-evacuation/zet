@@ -96,6 +96,10 @@ public class RasterSquare {
 
 		check();
 	}
+  
+  public PlanPoint getCenter() {
+    return new PlanPoint( x + raster/2, y + raster/2 );
+  }
 
 	/**
 	 * Checks whether this square intersects a {@link de.tu_berlin.coga.zet.model.PlanPolygon} or not. The

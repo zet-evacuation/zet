@@ -26,6 +26,9 @@ import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.StairArea;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -130,7 +133,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 						// Initializing variables for speed factor calculation
 
 						//boolean test = square.isStair();
-						double sumOfSpeedFactors = square.getSpeedFactor();
+            double sumOfSpeedFactors = square.getSpeedFactor();
 						double downSpeedFactor = square.getDownSpeedFactor();
 						double upSpeedFactor = square.getUpSpeedFactor();
 						int numOfSquares = 1;
@@ -288,12 +291,12 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							//sources.add( node );
 							model.addSource( node );
 					}
-				}
-				Logger.getGlobal().fine( ": A rastered room was processed and subdivided into nodes." );
-				Logger.getGlobal().finest( "A rastered room was processed and got subdevided like this:" );
-				Logger.getGlobal().finest( room.toString() );
-				//Logger.getGlobal().finest( "A rastered room was processed and got subdevided, nodecount is now " + nodeCount + "." );
-		}
+        }
+      Logger.getGlobal().fine( ": A rastered room was processed and subdivided into nodes." );
+      Logger.getGlobal().finest( "A rastered room was processed and got subdevided like this:" );
+      Logger.getGlobal().finest( room.toString() );
+      //Logger.getGlobal().finest( "A rastered room was processed and got subdevided, nodecount is now " + nodeCount + "." );
+    }
 		// Set graph to model
 		//model.setNetwork( graph );
 		//model.setSources( sources );
@@ -337,13 +340,15 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
 						if( edge == null ) {
 							edge = model.newEdge( lastNode, node );
-							ZToGraphRasterSquare lastSquare = null;
-              if( col > 0 ) {
-                lastSquare = room.getSquare( col - 1, row );
-              } else {
-                throw new AssertionError( "Col should not be zero at this point." );
-              }
-              mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
+              defineEdgeLevel( node, edge, room, mappingLocal, row, col );
+//              
+//							ZToGraphRasterSquare lastSquare = null;
+//              if( col > 0 ) {
+//                lastSquare = room.getSquare( col - 1, row );
+//              } else {
+//                throw new AssertionError( "Col should not be zero at this point." );
+//              }
+//              mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
             }
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
 						//edgesCap.increase( edge, 1 * FACTOR );
@@ -373,12 +378,9 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							edge = model.newEdge( lastNode, node );
 							//graph.addEdge( edge );
 							//sedgesCap.set( edge, 0 );
-							ZToGraphRasterSquare lastSquare = null;
-							if( row > 0 )
-								lastSquare = room.getSquare( col, row - 1 );
-							else
-								throw new AssertionError( ZETLocalization2.loc.getString( "converter.RowIsZeroException" ) );
-							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 0, 1 ) ) );
+              
+              defineEdgeLevel( node, edge, room, mappingLocal, row, col );
+                             
 						}
 						//edgesCap.increase( edge, 1 * FACTOR );
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
@@ -860,4 +862,130 @@ public class RectangleConverter extends BaseZToGraphConverter {
 		Logger.getGlobal().fine( "done." );
 		return table;
 	}
+
+  private double getLowerDistance( StairArea stair, PlanPoint center ) {
+    PlanPoint A = stair.getLowerLevelStart();
+    PlanPoint Ap = stair.getLowerLevelStart();
+    PlanPoint B = center;
+    return dist( A, Ap, B );
+  }
+  
+  private double getHighDistance( StairArea stair, PlanPoint center ) {
+    PlanPoint A = stair.getUpperLevelStart();
+    PlanPoint Ap = stair.getUpperLevelEnd();
+    PlanPoint B = center;
+    return dist( A, Ap, B );
+  }
+  
+  private static double dist(PlanPoint A, PlanPoint Ap, PlanPoint B ) {
+    if( A.x == Ap.x ) {
+      return Math.abs( A.x - B.x );
+    }
+    
+    //System.out.println( "A: " + A );
+    //System.out.println( "Ap: " + Ap );
+    PlanPoint u = new PlanPoint( Ap.x - A.x, Ap.y - A.y );
+    //System.out.println( "u: " + u );
+    
+    PlanPoint BmA = new PlanPoint( B.x - A.x, B.y - A.y );
+    //System.out.println( "B-A: " + BmA );
+    double uu = u.x*u.x + u.y*u.y;
+    //System.out.println( "uu: " + uu );
+    double bmau = BmA.x * u.x + BmA.y * u.y;
+    //System.out.println( "bmau: " + bmau );
+    
+    double f = bmau/uu;
+    //System.out.println( "factor: " + f );
+    
+    PlanPoint P = new PlanPoint( A.x/1000 + u.x/1000 *f, A.y/1000 + u.y/1000 *f );
+    System.out.println( P );
+    System.out.println( B );
+    return P.distance( B );
+  }
+  
+  public static void main( String args[] ) {
+    PlanPoint A = new PlanPoint(4,1,true);
+    PlanPoint Ap = new PlanPoint( 6,1,true);
+    PlanPoint B = new PlanPoint(1,4,true);
+    System.out.println( dist( A, Ap, B ) );
+  }
+
+  // TODO: nicer, use vector math methods
+  private void defineEdgeLevel( Node node, Edge edge, ZToGraphRoomRaster room, ZToGraphMapping mappingLocal, int row, int col ) {
+              Room modelRoom = mapping.getRoom( node );
+              
+              ZToGraphRasterSquare sqStart = null;
+              ZToGraphRasterSquare sqEnd = null;
+              
+              
+              for( ZToGraphRasterSquare sq : room.getAccessibleSquares() ) {
+                if( sq.getNode() == edge.start() ) {
+                  sqStart = sq;
+                }
+                if( sq.getNode() == edge.end() ) {
+                  sqEnd = sq;
+                }
+              }
+              
+              boolean startStair = sqStart.isStair();
+              boolean endStair = sqEnd.isStair();
+              
+              StairArea startArea = null;
+              StairArea endArea = null;
+              
+              for( StairArea stair : modelRoom.getStairAreas() ) {
+                if( stair.contains( sqStart.getCenter() ) ) {
+                  startArea = stair;
+                }
+                if( stair.contains( sqEnd.getCenter() ) ) {
+                  endArea = stair;
+                }
+              }
+              
+
+              if( startStair && endStair ) {
+                // beide innerhalb
+                double startDistanceLower = getLowerDistance( startArea, sqStart.getCenter() );
+                double startDistanceHigh = getHighDistance( startArea, sqStart.getCenter() );
+                double endDistanceLower = getLowerDistance( endArea, sqEnd.getCenter() );
+                double endDistanceHigh = getHighDistance( endArea, sqEnd.getCenter() );
+                if( startDistanceLower < endDistanceLower && startDistanceHigh > endDistanceHigh ) {
+                  // goes up
+                  mappingLocal.setEdgeLevel( edge, Level.Higher);
+                } else if ( startDistanceLower > endDistanceLower && startDistanceHigh < endDistanceHigh ) {
+                  // goes down
+                  mappingLocal.setEdgeLevel( edge, Level.Lower );
+                } else {
+                  // wtf?
+                  mappingLocal.setEdgeLevel( edge, Level.Equal );
+                }
+              } else if( startStair && !endStair ) {
+                // start stair innerhalb
+                double endDistanceLower = getLowerDistance( startArea, sqEnd.getCenter() );
+                double endDistanceHigh = getHighDistance( startArea, sqEnd.getCenter() );
+                if( endDistanceLower < endDistanceHigh ) {
+                  // ende ist näher an lower
+                  mappingLocal.setEdgeLevel( edge, Level.Lower );
+                } else if( endDistanceLower > endDistanceHigh ) {
+                  mappingLocal.setEdgeLevel( edge, Level.Higher );
+                } else {
+                  mappingLocal.setEdgeLevel( edge, Level.Equal );
+                }
+              } else if( !startStair && endStair ) {
+                double startDistanceLower = getLowerDistance( endArea, sqStart.getCenter() );
+                double startDistanceHigh = getHighDistance( endArea, sqStart.getCenter() );
+                if( startDistanceLower < startDistanceHigh ) {
+                  // ende ist näher an lower
+                  mappingLocal.setEdgeLevel( edge, Level.Higher );
+                } else if( startDistanceLower > startDistanceHigh ) {
+                  mappingLocal.setEdgeLevel( edge, Level.Lower );
+                } else {
+                  mappingLocal.setEdgeLevel( edge, Level.Equal );
+                }
+              } else {
+                // beide außerhalb. ignoriere die möglichkeit, dass fast komplett dazwischen eine treppe liegt!
+                mappingLocal.setEdgeLevel( edge, Level.Equal );
+              }
+              
+  }
 }

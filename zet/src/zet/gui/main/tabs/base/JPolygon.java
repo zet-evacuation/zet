@@ -432,23 +432,45 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 
 			// Set various paint options
 			Color edgeColor = ( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
-			if( !isDragged() || draggedCopy )
+			if( !isDragged() || draggedCopy ) {
 				g2.setPaint( edgeColor );
-			else
+      } else { 
 				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
 			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
-			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() )
+      }
+			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() ) {
 				// Paint dashed line to indicate passability
-				if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy )
+				if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy ) {
 					g2.setStroke( stroke_dashed_thick );
-				else
+        } else {
 					g2.setStroke( stroke_dashed_slim );
-			else if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy ) {
-					g2.setPaint( selectedColor );
+        }
+      } else if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy ) {
+				g2.setPaint( selectedColor );
 				g2.setStroke( stroke_thick );
-			} else
-				g2.setStroke( stroke_standard );
+			} else {
+				g2.setStroke( stroke_standard );        
+      }
 
+			// Drawing coordinates for nodes are node1 / node 2
+			if( !isDragged() || draggedCopy ) {
+				g2.fillRect( ed.node1.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node1.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+				g2.fillRect( ed.node2.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node2.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+			}
+
+			// Consider the case, that there is a passable edge whose target
+			// has node1 and node2 in the reversed order (this is absolutely
+			// legal since we are using undirected edges). In this case we have
+			// to make sure that the edge is always drawn in the same direction
+			// because otherwise the line segments of the dashed lines will
+			// overlap and form a solid line. Therefore we introduced the
+			// field startAtNode1
+			if( ed.startDrawingAtNode1 ) {
+        g2.drawLine( ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y, ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y );
+      } else {
+        g2.drawLine( ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y, ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y );
+      }
+      
 			// Set stair options
 			if( myPolygon instanceof StairArea ) {
 				StairArea sme = (StairArea)myPolygon;
@@ -462,10 +484,11 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 					upperPart = false;
 
 				String toDraw = null;
-				if( lowerPart )
-					toDraw = "L";
-				else if( upperPart )
-					toDraw = "U";
+        if( lowerPart ) {
+          toDraw = "L";
+        } else if( upperPart ) {
+          toDraw = "U";
+        }
 
 				if( toDraw != null ) {
 					FontMetrics metrics = g2.getFontMetrics();
@@ -478,24 +501,6 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 					g2.setPaint( oldPaint );
 				}
 			}
-
-				// Drawing coordinates for nodes are node1 / node 2
-			if( !isDragged() || draggedCopy ) {
-				g2.fillRect( ed.node1.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node1.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
-				g2.fillRect( ed.node2.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node2.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
-			}
-
-			// Consider the case, that there is a passable edge whose target
-			// has node1 and node2 in the reversed order (this is absolutely
-			// legal since we are using undirected edges). In this case we have
-			// to make sure that the edge is always drawn in the same direction
-			// because otherwise the line segments of the dashed lines will
-			// overlap and form a solid line. Therefore we introduced the
-			// field startAtNode1
-			if( ed.startDrawingAtNode1 )
-				g2.drawLine( ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y, ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y );
-			else
-				g2.drawLine( ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y, ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y );
 		}
 
 		// ### Paint Polygon-specific stuff like the room name or the area filling ###
