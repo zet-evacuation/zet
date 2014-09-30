@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * GLCell.java
- */
-
 package gui.visualization.draw.ca;
 
 import gui.visualization.control.ca.GLCellControl;
@@ -39,8 +35,9 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	protected static GLColor wallColor = VisualizationOptionManager.getCellWallColor();
 
 	public GLCell( GLCellControl control ) {
-		this( control, VisualizationOptionManager.getCellFloorColor() );
-	}
+    //this( control, VisualizationOptionManager.getCellFloorColor() );
+    this( control, VisualizationOptionManager.getCellWallColor() );
+  }
 
 	public GLCell( GLCellControl control, GLColor color ) {
 		super( control );

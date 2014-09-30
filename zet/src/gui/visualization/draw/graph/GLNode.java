@@ -14,9 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * GLNode.java
- */
 package gui.visualization.draw.graph;
 
 import com.sun.opengl.util.j2d.TextureRenderer;
@@ -51,7 +48,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	static double nodeRadius = VisualizationOptionManager.getNodeRadius(); //1.3 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
 	// TODO read quality preset from VisualizatonOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
+	private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;
 
 	public GLNode( GLNodeControl control ) {
 		super( control );

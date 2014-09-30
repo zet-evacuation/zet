@@ -116,13 +116,22 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 			return GUILocalization.loc.getStringWithoutPrefix( locString );
 		}
 	}
-	
+
+  private static GLCapabilities getCaps() {
+    GLCapabilities caps = new GLCapabilities();
+    caps.setSampleBuffers( true );
+    caps.setNumSamples( 4 );
+
+    System.out.println( caps );
+    return caps;
+  }
+
 	/**
 	 *
 	 * @param guiControl
 	 */
 	public JVisualizationView( GUIControl guiControl ) {
-		super( new VisualizationPanel<>( new ZETVisualization( new GLCapabilities(), guiControl ) ) );
+    super( new VisualizationPanel<>( new ZETVisualization( getCaps(), guiControl ) ) );
 		visualization = getGLContainer();
 		this.guiControl = guiControl;
 
@@ -273,7 +282,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 			}
 		});
 		cameraPanel.set( setCameraPosition, 0, 7 );
-		
+
 		cameraPanel.setRowHeight( 8, 16 );
 
 		resetCameraPosition = new JButton( loc.getString( "Camera.ResetPosition" ) );
@@ -285,7 +294,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 			}
 		});
 		cameraPanel.set( resetCameraPosition, 0, 9 );
-		
+
 		cameraPanel.rebuild();
 		eastPanel.add( cameraPanel, "1, " + row++ );
 
@@ -335,7 +344,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	public void updateFloorSelector() {
 		updateFloorSelector( floorSelector.getItemCount() > 0 ? 0 : -1 );
 	}
-	
+
 	public void updateFloorSelector( int floor ) {
 		floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 		if( floor > -1 )

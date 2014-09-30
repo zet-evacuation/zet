@@ -1,7 +1,3 @@
-/**
- * GLEdge.java
- * Created: Aug 17, 2010,3:17:51 PM
- */
 package gui.visualization.draw.graph;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
@@ -9,7 +5,6 @@ import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLFlowEdgeControl;
-import gui.visualization.control.graph.GLFlowGraphControl;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
@@ -22,10 +17,10 @@ import opengl.framework.abs.AbstractDrawable;
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	static GLColor edgeColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 5;// factor of 1.5 used for test evacuation report
+  static double thickness = 1.5;// factor of 1.5 used for test evacuation report
 	// TODO read quality from VisualOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
+	private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;
 
 	/* The edgeLength of the edge in {@code OpenGL} scaling. */
 	double edgeLength;

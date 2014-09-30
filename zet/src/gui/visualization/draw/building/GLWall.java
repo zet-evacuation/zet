@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * GLWall.java
- * Created on 18.06.2008
- */
-
 package gui.visualization.draw.building;
 
 import de.tu_berlin.math.coga.math.Conversion;
@@ -35,7 +30,8 @@ import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt
+ * @author Jan-Philipp Kappmeier
  *
  */
 public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
@@ -51,8 +47,9 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	public GLWall( GLWallControl control ) {
 		super( control );
 		basePoints = control.getBasePoints();
-		wallColor = VisualizationOptionManager.getCellWallColor();
-		barrier = control.isBarrier();
+    //wallColor = VisualizationOptionManager.getCellWallColor();
+    wallColor = VisualizationOptionManager.getCellFloorColor();
+    barrier = control.isBarrier();
 	}
 
 	@Override
@@ -67,8 +64,9 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	@Override
 	public void performStaticDrawing( GL gl ) {
 		gl.glBegin( GL.GL_POLYGON );
-		VisualizationOptionManager.getCellFloorColor().draw( gl );
-		final Vector3 perturbate = new Vector3(0,0,-0.5); // add a small offset to move the floor under the ca floor-level
+    //VisualizationOptionManager.getCellFloorColor().draw( gl );
+    VisualizationOptionManager.getCellWallColor().draw( gl );
+    final Vector3 perturbate = new Vector3( 0, 0, -0.5 ); // add a small offset to move the floor under the ca floor-level
 		for( GLVector v : basePoints )
 			v.add( perturbate ).draw( gl );
 		gl.glEnd();

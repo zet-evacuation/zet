@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * GLBuilding.java
- * Created on 19.06.2008
- */
 package gui.visualization.draw.building;
 
 import gui.visualization.control.building.GLBuildingControl;
@@ -25,7 +21,8 @@ import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt
+ * @author Jan-Philipp Kappmeier
  */
 public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 
@@ -56,7 +53,7 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 		gl.glEndList();
 		repaint = false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see opengl.framework.abs.AbstractDrawable#update()

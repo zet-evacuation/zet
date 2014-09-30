@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class VisualizationOptionManager
- * Created 08.05.2008, 02:27:00
- */
-
 package gui.visualization;
 
 import ds.PropertyContainer;
@@ -31,7 +26,6 @@ import opengl.drawingutils.GLColor;
  * @author Jan-Philipp Kappmeier
  */
 public class VisualizationOptionManager {
-
 
 	/**
 	 * Utility class hidden private constructor
@@ -49,11 +43,11 @@ public class VisualizationOptionManager {
 	}
 
 	public static double getIndividualHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" )*10;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" );
 	}
 
 	public static double getIndividualRadius() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" )*10;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" );
 	}
 
 	public static double getWallHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm

@@ -75,12 +75,12 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	double defaultFloorHeight = 10;
 
 	private EvacuationSimulationResults caVisResults;
-	
+
 	public GLCellularAutomatonControl( EvacuationSimulationResults caVisResults ) {
 		super();
 		this.caVisResults = caVisResults;
 	}
-	
+
 	public void build() {
 		containsRecording = caVisResults.getRecording() != null;
 		mainControl = this;
@@ -117,10 +117,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		} else {
 			individuals = new ArrayList<>();
 		}
-		
-		// set up individual heights
-		GLIndividual.individualHeight = VisualizationOptionManager.getIndividualHeight() * mainControl.scaling;
-		GLIndividual.individualRadius = VisualizationOptionManager.getIndividualRadius() * mainControl.scaling;
+
 	}
 
 	public double getSecondsPerStep() {
@@ -149,7 +146,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		childControls.addAll( allFloorsByID.values() );
 		view.clear();
 		for( GLCAFloorControl floor : this )
-			view.addChild( floor.getView() );		
+			view.addChild( floor.getView() );
 	}
 
 	@Override

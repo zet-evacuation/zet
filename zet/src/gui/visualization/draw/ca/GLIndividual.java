@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class GLIndividual
- * Erstellt 10.06.2008, 22:23:01
- */
-
 package gui.visualization.draw.ca;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
@@ -38,9 +33,13 @@ import opengl.helper.Frustum;
  */
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
 
-	public static double individualHeight = 30*0.1; // TODO: use the scaling value
-	public static double individualRadius = 10*0.1;
-	public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
+  //public static double individualHeight = 150 * 0.1; // TODO: use the scaling value, original 30
+  //public static double individualRadius = 100 * 0.1; // original 10
+  // set up individual heights
+  private static double individualHeight = 1.2 * VisualizationOptionManager.getIndividualHeight();
+  private static double individualRadius = VisualizationOptionManager.getIndividualRadius();
+
+  public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
 	public static GLColor deadColor = new GLColor( 130, 55, 101 );
 	public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
@@ -57,7 +56,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 	@Override
 	public void update() {
 	}
-	
+
 	static GLColor red = new GLColor( Color.red );
 	static GLColor green = new GLColor( Color.green );
 
@@ -74,7 +73,8 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		} else if( control.isEvacuated() ) {
 			return;
 		} else {
-			headColor = green.blend( red, control.getHeadInformation() );
+      //headColor = green.blend( red, control.getHeadInformation() );
+      headColor = VisualizationOptionManager.getEvacuationNodeColor();
 			bodyColor = individualColor;
 		}
 		gl.glPushMatrix();
@@ -82,7 +82,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		gl.glTranslated( pos.x, pos.y, 0.1);
 		bodyColor.draw( gl );
 
-		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
+    glu.gluCylinder( quadObj, 1.2 * individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
 		headColor.draw( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
 
@@ -92,7 +92,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		Vector3 check = new Vector3( pos.x, pos.y, 1);
 		// TODO Frustum
 		//if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-			glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
+			glu.gluSphere( quadObj, 1.5 * individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 
 		gl.glPopMatrix();
 	}
