@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class AbstractVisualisation
- * Created 20.05.2008, 23:51:14
- */
 package gui.visualization;
 
 import com.sun.opengl.util.Animator;
@@ -374,8 +370,8 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	protected void takeScreenshot( GLAutoDrawable drawable ) {
 		System.out.println( "Save screenshot to " + screenshotFilename );
 		try {
-			Screenshot.writeToFile( new File( screenshotFilename ), drawable.getWidth(), drawable.getHeight(), false );
-		} catch( IOException ex ) {
+      Screenshot.writeToFile( new File( screenshotFilename ), drawable.getWidth(), drawable.getHeight(), false );
+    } catch( IOException ex ) {
 			Debug.printException( ex );
 		} catch( GLException ex ) {
 			Debug.printException( ex );
@@ -483,13 +479,19 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 		mouseMove = MouseEvent.NOBUTTON;
 	}
 
+  @Override
+  public Dimension getSize() {
+    //return super.getSize(); //To change body of generated methods, choose Tools | Templates.
+    return new Dimension( 2048, 2048 );
+  }
+
 	@Override
 	public void mouseDragged( MouseEvent e ) {
 		int y = e.getY();
 		int x = e.getX();
 		switch( mouseMove ) {
 			case MouseEvent.BUTTON1:
-				Dimension size = e.getComponent().getSize();
+        Dimension size = e.getComponent().getSize();
 				if( !is3D && pvm == ParallelViewMode.Isometric ) {
 				} else if( !is3D && pvm == ParallelViewMode.Orthogonal ) {
 					// Hiermit wird der sichtbereich der kamera gedreht

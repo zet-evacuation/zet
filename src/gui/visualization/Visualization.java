@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Visualization.java
- * Created 20.05.2008, 23:50:54
- */
 package gui.visualization;
 
 import de.tu_berlin.math.coga.math.Conversion;
@@ -61,7 +57,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		NotRecording,
 		SkipFrame,
 	}
-	
+
 	protected double sizeMultiplikator = 0.1;
 	protected static final int fontSize = 16;
 	private TextureManager texMan;
@@ -114,7 +110,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	}
 
 	/**
-	 * Creates a new instance of the {@code Visualization} panel with given 
+	 * Creates a new instance of the {@code Visualization} panel with given
 	 * properties in an {@code GLCapabilities}.
 	 * @param capabilities the OpenGL properties of the panel
 	 */
@@ -145,7 +141,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	int screenshotCounter = 0;
 
 	boolean drawLogo = true;
-	
+
 	/**
 	 * Draws the scene, including text and takes screenshots, if necessary.
 	 * @param drawable the {@code OpenGL} context
@@ -159,7 +155,13 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		if( isAnimating() == true && recording == RecordingMode.NotRecording )
 			animate();
 
-		if( recording == RecordingMode.Recording && (drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight) ) {
+    if( drawable.getWidth() != 2048 ) {
+      //System.out.println( "Set size" );
+      //setSize( 2048, 2048 );
+      //return;
+    }
+
+    if( recording == RecordingMode.Recording && (drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight) ) {
 			setSize( movieWidth, movieHeight );
 			return;
 		}
@@ -407,7 +409,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		gl.glEnable( GL.GL_TEXTURE_2D );
 		fontTex.bind();
-		
+
 		// compute time:
 		double secs = Conversion.nanoSecondsToSec * getTimeSinceStart();
 		secs = Math.round( secs * 100 ) / 100.;
@@ -599,7 +601,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
 		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
 		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
-		
+
 		System.out.println( "Textur s_1 geladen" );
 		texMan.newTexture( "n_0", "./textures/n_0.png" );
 		texMan.newTexture( "n_1", "./textures/n_1.png" );
@@ -613,7 +615,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		texMan.newTexture( "n_9", "./textures/n_9.png" );
 		texMan.newTexture( "empty", "./textures/empty.png" );
 
-		
+
 		// load texture font
 		fontBold = new TextureFont( gl, fontTex );
 		fontBold.buildFont( 8, 32, 32, 32, 19 );

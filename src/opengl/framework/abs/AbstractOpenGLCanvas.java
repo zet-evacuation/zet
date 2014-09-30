@@ -71,8 +71,8 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 
 	/**
-	 * 
-	 * @param caps 
+	 *
+	 * @param caps
 	 */
 	public AbstractOpenGLCanvas( GLCapabilities caps ) {
 		super( caps );
@@ -114,7 +114,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	public void setLoop( boolean loop ) {
 		this.loop = loop;
 	}
-	
+
 	/**
 	 * Sets the maximal framerate per second.
 	 * @param maxFPS the framerate
@@ -217,7 +217,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 * @param height the height of the context
 	 */
 	final public void reshape( GLAutoDrawable drawable, int x, int y, int width, int height ) {
-		updateViewport( drawable, x, y, width, height );
+    updateViewport( drawable, x, y, width, height );
 	}
 
 	/**

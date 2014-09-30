@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * QualityPreset.java
- * Created 11.09.2009, 19:06:37
- */
-
 package gui.visualization;
 
 /**
@@ -52,8 +47,6 @@ public enum QualityPreset {
 		public final int nodeSlices;
 		public final int nodeStacks;
 		public final int edgeSlices;
-
-
 
 	/**
 	 * An enumeration of all possible styles of individuals during visualization.
