@@ -55,8 +55,8 @@ public class BuildingResults implements VisualizationResult {
 		protected boolean barrier = false;
 
 		public Wall( Floor floor ) {
-			this.points = new Vector<Point2D.Double>();
-			this.wallTypes = new Vector<ElementType>();
+			this.points = new Vector<>();
+			this.wallTypes = new Vector<>();
 			this.floor = floor;
 		}
 
@@ -68,7 +68,7 @@ public class BuildingResults implements VisualizationResult {
 			this.barrier = barrier;
 		}
 
-		public boolean isRoomIsLeft() {
+		public boolean isRoomLeft() {
 			return roomIsLeft;
 		}
 
@@ -76,7 +76,7 @@ public class BuildingResults implements VisualizationResult {
 			this.roomIsLeft = roomIsLeft;
 		}
 
-		public boolean isRoomIsRight() {
+		public boolean isRoomRight() {
 			return roomIsRight;
 		}
 

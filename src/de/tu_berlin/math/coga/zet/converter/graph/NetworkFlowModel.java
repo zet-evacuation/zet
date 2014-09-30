@@ -236,7 +236,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	void setExactTransitTime( Edge edge, double value ) {
-		exactTransitTimes.set( edge, value );
+		exactTransitTimes.set( edge, value*1.13 );
 	}
 
 	void roundTransitTimes() {

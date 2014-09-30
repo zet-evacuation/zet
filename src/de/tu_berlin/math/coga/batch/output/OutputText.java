@@ -28,7 +28,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
 
   private PrintWriter output = new PrintWriter( System.out );
   //private String basePath = "/homes/combi/kappmeie/Dateien/Programme/zet/output/diss/icem/mcf/";
-  private String basePath = "../../output/diss/telefunken/one";
+  private String basePath = "../../output/diss/telefunken/single-speed-fast";
 
   private boolean combinedOut = true;
 

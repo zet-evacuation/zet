@@ -73,7 +73,7 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 	 * @return true if the room is on the left side, false otherwise.
 	 */
 	public boolean isRoomLeft() {
-		return controlled.isRoomIsLeft();
+		return controlled.isRoomLeft();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 	 * @return true if the room is on the right side, false otherwise
 	 */
 	public boolean isRoomRight() {
-		return controlled.isRoomIsRight();
+		return controlled.isRoomRight();
 	}
 	
 	/**

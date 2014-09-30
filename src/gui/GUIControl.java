@@ -61,10 +61,12 @@ import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.BestResponseOperation;
+import de.tu_berlin.math.coga.batch.operations.ConversionOnly;
 import de.tu_berlin.math.coga.batch.operations.ExitAssignmentOperation;
 import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
+import de.tu_berlin.math.coga.batch.output.TikZOut;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -203,11 +205,11 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerOperationAction( new ExitAssignmentOperation(), "Exit Assignment" );
     batchView.registerOperationAction( new BestResponseOperation(), "Best Response" );
     batchView.registerOperationAction( new MaximumFlowComputation(), "Max Flow Optimization" );
+    batchView.registerOperationAction( new ConversionOnly(), "Conversion" );
 
     batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );
     batchView.registerOutputAction( new OutputText(), "Commandline Output", new ImageIcon( "./icons/document-24.png" ) );
-
-
+    batchView.registerOutputAction( new TikZOut(), "TikZ Output", new ImageIcon( "./icons/document-24.png" ) );
 
 		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
 		JComponent caStatisticView = new JStatisticPanel();
