@@ -61,7 +61,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 
 		allFloorsByID = new ArrayList<>( visResult.getFloors().size() );
 		for( int i = 0; i < visResult.getFloors().size(); ++i )
-			allFloorsByID.add( new ArrayList<GLWallControl> () );
+			allFloorsByID.add( new ArrayList<> () );
 		for( Wall wall : visResult.getWalls() ) {
 			final GLWallControl child = new GLWallControl( wall, mainControl );
 			add( child );

@@ -51,7 +51,6 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public boolean consume( InputFileReader<?> o ) {
-
 		if( o.getTypeClass() == Project.class ) {
 			input = (InputFileReader<Project>)o;
 			return true;

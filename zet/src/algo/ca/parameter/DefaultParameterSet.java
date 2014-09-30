@@ -164,8 +164,12 @@ public class DefaultParameterSet extends AbstractParameterSet {
 		return newExhaustion;
 	}
 
+  @Override
 	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells ) {
-		List<EvacCell> possibleNeighbours = individual.getCell().getNeighbours();
+    List<EvacCell> possibleNeighbours = individual.getCell().getNeighbours();
+		if( possibleNeighbours.isEmpty() ) {
+      return individual.getPanic();
+    }
 
 		double[] potentials = new double[possibleNeighbours.size()];
 		int idx = 0;
