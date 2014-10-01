@@ -47,6 +47,8 @@ public class EdgePopupListener implements ActionListener {
 	private ZControl projectControl;
 	private GUIControl guiControl;
 
+  private EditModeOld edmode = null;
+  
 	public EdgePopupListener( GUIControl guiControl, ZControl projectControl ) {
 		this.guiControl = guiControl;
 		this.projectControl = projectControl;
@@ -63,6 +65,8 @@ public class EdgePopupListener implements ActionListener {
 		this.mousePosition = mousePosition;
 		this.rasterizedPaintMode = rasterizedPaintMode;
 	}
+  
+  RoomEdge lastEdge = null;
 
 	/**
 	 * This method contains the event code that is executed when certain
@@ -72,7 +76,7 @@ public class EdgePopupListener implements ActionListener {
 	@Override
 	public void actionPerformed( ActionEvent e ) {
 		try {
-			if( e.getActionCommand().equals( "makePassable" ) )
+			if( e.getActionCommand().equals( "makePassable" ) ) {
 				if( myEdge instanceof RoomEdge ) {
 					Room myRoom = ((RoomEdge)myEdge).getRoom();
 					RoomEdge partner = null;
@@ -92,7 +96,7 @@ public class EdgePopupListener implements ActionListener {
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Erzeugen Sie zuerst 2 übereinanderliegende Raumbegrenzungen!" ) );
 				} else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können passierbar gemacht werden!" ) );
-			else if( e.getActionCommand().equals( "insertPoint" ) ) {
+      } else if( e.getActionCommand().equals( "insertPoint" ) ) {
 				// Compute a point that is ON the edge (the click is not neccessarily)
 
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
@@ -104,17 +108,22 @@ public class EdgePopupListener implements ActionListener {
 				}
 
 				projectControl.insertPoint( myEdge, newPoint );
-			} else if( e.getActionCommand().equals( "makeTeleport" ) )
-				if( myEdge instanceof RoomEdge )
-					if( null != EditModeOld.TeleportEdgeCreation ) {
+			} else if( e.getActionCommand().equals( "makeTeleport" ) ) {
+				if( myEdge instanceof RoomEdge ) {
+					if( edmode == null ) {
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
-					} else {
-						projectControl.connectToWithTeleportEdge( (RoomEdge)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
-						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
+            edmode = EditModeOld.TeleportEdgeCreation;
+            lastEdge = (RoomEdge)myEdge;
+          } else if( edmode == EditModeOld.TeleportEdgeCreation  ) {
+            System.out.println( "Try to connect " + lastEdge + " with " + ((RoomEdge)myEdge) );
+						projectControl.connectToWithTeleportEdge( lastEdge, (RoomEdge)myEdge );
+						//GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
+            edmode = null;
 					}
-				else
+        } else {
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Stockwerksdurchgängen gemacht werden!" ) );
-			else if( e.getActionCommand().equals( "makeEvacEdge" ) )
+        }
+      } else if( e.getActionCommand().equals( "makeEvacEdge" ) )
 				if( myEdge instanceof RoomEdge )
 					guiControl.getZControl().getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)myEdge );
 				else
