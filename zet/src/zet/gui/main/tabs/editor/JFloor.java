@@ -238,12 +238,26 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		}
 
 		for( JPolygon poly : editStatus.getSelectedPolygons() ) {
-			if( poly.isDragged() )
-				if( poly.getParent() == this )
-					poly.paint( g2, poly.getLocation(), true );
-				else
-					poly.paint( g2, new Point( poly.getLocation().x + poly.getParent().getLocation().x, poly.getLocation().y + poly.getParent().getLocation().y ), true );
+      System.out.println( "drawing selected polygon" );
+			if( poly.isDragged() ) {
+        if( poly.getParent() == this ) {
+          poly.paint( g2, poly.getLocation(), true );
+        } else {
+          poly.paint( g2, new Point( poly.getLocation().x + poly.getParent().getLocation().x, poly.getLocation().y + poly.getParent().getLocation().y ), true );
+        }
+      }
 		}
+    
+    if( editStatus.getEdgePolygon() != null ) {
+      System.out.println( "Polygon with moving edge" );
+      JPolygon poly = editStatus.getEdgePolygon();
+      if( poly.getParent() == this ) {
+        poly.paintEdge( g2, poly.getLocation() );
+      } else {
+        poly.paintEdge( g2, new Point( poly.getLocation().x + poly.getParent().getLocation().x, poly.getLocation().y + poly.getParent().getLocation().y ) );
+      }
+      
+    }
 
 		// If in PolygonCreationMode, draw help-line
 		if( editStatus.getEditMode() == EditMode.CreationPointWise && editStatus.getLastClick() != null ) {

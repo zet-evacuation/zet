@@ -1,7 +1,4 @@
-/**
- * SelectedFloorElements.java
- * Created: 23.11.2012, 12:58:17
- */
+
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.common.util.SelectedElements;
@@ -49,4 +46,8 @@ public class SelectedFloorElements extends SelectedElements<JPolygon> {
 		selectedEdge = null;
 
 	}
+
+  public JPolygon getSelectedElementPolygon() {
+    return selectedElementPolygon;
+  }
 }
