@@ -20,7 +20,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
   static double thickness = 1.5;// factor of 1.5 used for test evacuation report
 	// TODO read quality from VisualOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-	private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;
+	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
 	/* The edgeLength of the edge in {@code OpenGL} scaling. */
 	double edgeLength;

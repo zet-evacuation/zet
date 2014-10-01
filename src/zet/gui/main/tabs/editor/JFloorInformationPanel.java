@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -57,6 +54,8 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 							TableLayout.PREFERRED,
 							TableLayout.PREFERRED,
 							TableLayout.PREFERRED,
+							TableLayout.PREFERRED,
+							20,
 							TableLayout.PREFERRED,
 							TableLayout.FILL
 						} );
@@ -157,6 +156,16 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 		lblFloorSize = new JLabel( "" );
 		this.add( lblFloorSizeDesc, "0,10,2,10" );
 		this.add( lblFloorSize, "0,11,2,11" );
+    
+    JButton cmdRasterizeBuilding = new JButton( "Rastern!" );
+    this.add( cmdRasterizeBuilding, "0,13,2,13" );
+    cmdRasterizeBuilding.addActionListener( new ActionListener() {
+
+      @Override
+      public void actionPerformed( ActionEvent e ) {
+        projectControl.getProject().getBuildingPlan().rasterize();
+      }
+    });
 	}
 
 
