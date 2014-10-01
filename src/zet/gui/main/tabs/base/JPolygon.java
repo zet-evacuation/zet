@@ -434,7 +434,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 			Color edgeColor = ( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
 			if( !isDragged() || draggedCopy ) {
 				g2.setPaint( edgeColor );
-      } else { 
+      } else {
 				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
 			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
       }
@@ -531,7 +531,63 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 		}
 	}
 
-	/**
+  // Temporary method that only draws a dragged copy of a selected edge!
+  public void paintEdge( Graphics2D g2, Point offset ) {
+    if( !isDragged() ) {
+      System.out.println( "Returning because is not dragged!" );
+      return;
+    }
+		final Point totalOffset = new Point( offset.x + dragOffset.x, offset.y + dragOffset.y );
+    System.out.println( "Try drawing moving edge " + selectedEdge );
+
+		// ### Paint the Edges ###
+		Iterator<EdgeData> itEdgeData = edgeData.iterator();
+		{
+      PlanEdge myEdge = selectedEdge;
+			assert ( itEdgeData.hasNext() );
+			
+      EdgeData ed = itEdgeData.next();
+      while( ed.myEdge != myEdge ) {
+        ed = itEdgeData.next();
+      }
+
+			// Set various paint options
+			Color edgeColor = ( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
+			if( !isDragged() || true ) {
+				g2.setPaint( edgeColor );
+      } else {
+				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
+			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
+      }
+			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() ) {
+				// Paint dashed line to indicate passability
+					g2.setStroke( stroke_dashed_thick );
+      } else {
+				g2.setPaint( selectedColor );
+				g2.setStroke( stroke_thick );
+			}
+			// Drawing coordinates for nodes are node1 / node 2
+			if( true ) {
+				g2.fillRect( ed.node1.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node1.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+				g2.fillRect( ed.node2.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node2.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+			}
+
+			// Consider the case, that there is a passable edge whose target
+			// has node1 and node2 in the reversed order (this is absolutely
+			// legal since we are using undirected edges). In this case we have
+			// to make sure that the edge is always drawn in the same direction
+			// because otherwise the line segments of the dashed lines will
+			// overlap and form a solid line. Therefore we introduced the
+			// field startAtNode1
+			if( ed.startDrawingAtNode1 ) {
+        g2.drawLine( ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y, ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y );
+      } else {
+        g2.drawLine( ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y, ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y );
+      }
+		}
+	}
+
+  /**
 	 * Indicates whether the {@code JPolygon} is selected or not.
 	 * @return true if the polygon is selected
 	 */

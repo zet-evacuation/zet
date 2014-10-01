@@ -6,9 +6,11 @@ package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import zet.gui.main.JZetWindow;
@@ -192,4 +194,13 @@ public class EditStatus {
 	void selectEdge( JPolygon toSelect, PlanEdge edge ) {
 		selection.selectEdge( toSelect, edge );
 	}
+  
+ 	List<PlanEdge> getSelectedEdge() {
+    return Collections.singletonList( selection.getSelectedEdge() );
+	}
+  
+  JPolygon getEdgePolygon() {
+    return selection.getSelectedElementPolygon();
+  }
+
 }
