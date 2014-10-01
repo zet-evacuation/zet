@@ -48,7 +48,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	static double nodeRadius = VisualizationOptionManager.getNodeRadius(); //1.3 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
 	// TODO read quality preset from VisualizatonOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-	private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;
+	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
 	public GLNode( GLNodeControl control ) {
 		super( control );

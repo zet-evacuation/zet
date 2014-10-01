@@ -24,7 +24,7 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 	int nodeDisplayMode = GLU.GLU_FILL;
 	GLColor nodeColor = new GLColor( 154, 154, 147 );
 	double radius;
-	private static QualityPreset qualityPreset = QualityPreset.HighQuality;
+	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 	
 	public GLSimpleNode( GLSimpleNodeControl control ) {
 		super( control );

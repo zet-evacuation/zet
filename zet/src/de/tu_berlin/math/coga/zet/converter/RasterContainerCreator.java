@@ -117,10 +117,26 @@ public class RasterContainerCreator {
 						List<ZToCARasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
 
 						Room partnerRoom = rEdge.getLinkTarget().getRoom();
-						if( partnerRoom == null )
+						if( partnerRoom == null ) {
+              System.err.println( "Original room: " + room );
+              System.err.println( "Edge: " + rEdge );
 							throw new RoomEdgeInvalidTargetException( rEdge, "Partner Edge has no room." );
-						if( rEdge.getLinkTarget().getLinkTarget() != rEdge )
-							throw new RoomEdgeInvalidTargetException( rEdge, "Partner edge does not point to original edge." );
+            }
+						if( rEdge.getLinkTarget().getLinkTarget() != rEdge ) {
+              System.err.println( "Original room: " + room );
+              System.err.println( "Partner room: " + partnerRoom );
+              System.err.println( "Edge: " + rEdge );
+              System.err.println( "Link target: " + rEdge.getLinkTarget() );
+              System.err.println( "Back-Target: " + rEdge.getLinkTarget().getLinkTarget() );
+              if( rEdge.fits( rEdge.getLinkTarget() ) ) {
+                rEdge.getLinkTarget().setLinkTarget( rEdge );
+              } else {
+                rEdge.getLinkTarget().setLinkTarget( null );
+                rEdge.setLinkTarget( null );
+              }
+              System.err.println( "Auto-Fixed by deleting the door!" );
+							throw new RoomEdgeInvalidTargetException( rEdge, "Partner edge does not point to original edge." );              
+            }
 
 						ZToCARoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
 						List<ZToCARasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge.getLinkTarget(), partnerRaster );

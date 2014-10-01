@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import zet.gui.GUILocalization;
 import zet.gui.main.JZetWindow;
 
 /**
