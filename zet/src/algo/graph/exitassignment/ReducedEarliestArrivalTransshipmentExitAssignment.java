@@ -169,4 +169,8 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
     public ExitAssignment getExitAssignment() {
         return getSolution();
     }
+  
+  public static void main( String args[] ) {
+    System.out.println( "Ford Fulkerson kompilieren bitte" );
+  }
 }

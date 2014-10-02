@@ -433,7 +433,7 @@ public class DimacsReader implements AlgorithmListener {
 		System.out.println( "Start HIPR" );
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
-		//PushRelabel hipr = new PushRelabelHighestLabel();
+		//PushRelabel hipr = new PushRelabelHighestLabelAlgorithm();
 		PushRelabel hipr = new PushRelabelHighestLabel();
 		hipr.setProblem( mfp );
 		start = System.nanoTime();
@@ -457,7 +457,7 @@ public class DimacsReader implements AlgorithmListener {
 //		System.out.println();
 //		System.out.println( "Start HIPR neu" );
 //		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-//		//hipr = new PushRelabelHighestLabel();
+//		//hipr = new PushRelabelHighestLabelAlgorithm();
 //		hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 //		hipr.setProblem( mfp );
 //		start = System.nanoTime();

@@ -164,7 +164,7 @@ public class AlgorithmControlTest {
 	public void testConvertCellularAutomaton_0args() {
 		System.out.println( "convertCellularAutomaton" );
 		AlgorithmControl instance = null;
-		instance.convertCellularAutomaton();
+		instance.convertCellularAutomaton(instance);
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -189,7 +189,7 @@ public class AlgorithmControlTest {
 	public void testInvalidateConvertedCellularAutomaton() {
 		System.out.println( "invalidateConvertedCellularAutomaton" );
 		AlgorithmControl instance = null;
-		instance.invalidateConvertedCellularAutomaton();
+		//instance.invalidateConvertedCellularAutomaton;
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -243,7 +243,7 @@ public class AlgorithmControlTest {
 	public void testPerformSimulation_0args() {
 		System.out.println( "performSimulation" );
 		AlgorithmControl instance = null;
-		instance.performSimulation();
+		instance.performSimulation(instance,null);
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -271,7 +271,7 @@ public class AlgorithmControlTest {
 		PropertyChangeListener propertyChangeListener = null;
 		AlgorithmListener listener = null;
 		AlgorithmControl instance = null;
-		instance.performSimulationQuick( propertyChangeListener, listener );
+		instance.performSimulationQuick( listener );
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -297,7 +297,7 @@ public class AlgorithmControlTest {
 	public void testCreateConcreteAssignment() throws Exception {
 		System.out.println( "createConcreteAssignment" );
 		AlgorithmControl instance = null;
-		instance.createConcreteAssignment();
+		//instance.createConcreteAssignment();
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -309,7 +309,7 @@ public class AlgorithmControlTest {
 	public void testSetUpSimulationAlgorithm() {
 		System.out.println( "setUpSimulationAlgorithm" );
 		AlgorithmControl instance = null;
-		instance.setUpSimulationAlgorithm();
+//		instance.setUpSimulationAlgorithm();
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -321,7 +321,7 @@ public class AlgorithmControlTest {
 	public void testPauseStepByStep() {
 		System.out.println( "pauseStepByStep" );
 		AlgorithmControl instance = null;
-		instance.pauseStepByStep();
+		//instance.pauseStepByStep();
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
@@ -335,7 +335,7 @@ public class AlgorithmControlTest {
 		PropertyChangeListener propertyChangeListener = null;
 		AlgorithmListener listener = null;
 		AlgorithmControl instance = null;
-		instance.performOneStep( propertyChangeListener, listener );
+		instance.performOneStep( listener );
 		// TODO review the generated test code and remove the default call to fail.
 		fail( "The test case is a prototype." );
 	}
