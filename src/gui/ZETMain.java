@@ -68,33 +68,13 @@ public class ZETMain {
 		privateLogging = false;
 		pm.addPluginsFrom( new File( "./plugins" ).toURI() );
 
-		//AwesomePlugin plugin = pm.getPlugin(AwesomePlugin.class);
 		AlgorithmicPlugin<?,?> plugin = pm.getPlugin(AlgorithmicPlugin.class);
 
-		//System.out.println( plugin.howAreYou() );
-		if( plugin == null )
-			//System.err.println( "Plugin is null!" );
+    if( plugin == null ) {
       log.log( Level.INFO, "Plugin is null!" );
-		else
+    } else {
       log.log( Level.INFO, plugin.toString() );
-			//System.out.println( plugin );
-
-		AtomicOperation<EarliestArrivalFlowProblem,PathBasedFlowOverTime> ao = new AtomicOperation<>( "EAFP", EarliestArrivalFlowProblem.class, PathBasedFlowOverTime.class );
-
-		AtomicOperation<?,?> atomic = ao;
-
-		if( plugin.canTake( atomic.accepts() ) ) {
-			System.out.println( "The plugin can take the input from the atomic operation" );
-			if( plugin.canGenerate( atomic.generates() ) ) {
-				//Algorithm algo = plugin.getAlgorithm();
-				System.out.println( "Algorithm created;" );
-			} else {
-				System.out.println( "The plugin cannot generate the output!" );
-			}
-		} else {
-			System.out.println( "The plugin cannot take the input!" );
-		}
-
+    }
 
 		try {
 			ZETLoader.load( args );
@@ -105,7 +85,6 @@ public class ZETMain {
 			JOptionPane.showMessageDialog( null, "A severe error during initialization occured.", "Error", JOptionPane.ERROR_MESSAGE );
 		}
 	}
-
 
 	/**
 	 * Sets up the standard output and the error output to some logging files.

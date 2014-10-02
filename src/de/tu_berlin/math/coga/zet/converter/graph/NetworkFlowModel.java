@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -273,6 +274,7 @@ public class NetworkFlowModel implements Iterable<Node> {
   }
 
 	void increaseNodeAssignment( Node node, double transitTime ) {
+    Objects.requireNonNull( node, "Node must not be null!" );
 		if( accurateStartTimes ) {
       Node individualNode = new Node( nodeCount++ );
       network.setNode( individualNode );

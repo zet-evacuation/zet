@@ -47,16 +47,15 @@ public class AtomicOperation<U,V> implements Iterable<AlgorithmicPlugin<U,V>> {
 
 	private boolean servedBy( AlgorithmicPlugin<?,?> plugin ) {
 		if( plugin.canTake( accepts() ) ) {
-			System.out.println( "The plugin can take the input from the atomic operation" );
 			if( plugin.canGenerate( generates() ) ) {
 				System.out.println( "Plugin " + plugin + " accepts " + toString() );
 				return true;
 			} else {
-				System.out.println( "The plugin cannot generate the output!" );
-			}
+
+      }
 		} else {
-			System.out.println( "The plugin cannot take the input!" );
-		}
+
+    }
 		return false;
 	}
 

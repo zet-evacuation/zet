@@ -1,7 +1,4 @@
-/**
- * Framework.java
- * Created: 31.07.2014, 16:39:07
- */
+
 package batch.plugins.impl.eat;
 
 import batch.plugins.AlgorithmicPlugin;
@@ -10,7 +7,6 @@ import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 
 /**
  *
