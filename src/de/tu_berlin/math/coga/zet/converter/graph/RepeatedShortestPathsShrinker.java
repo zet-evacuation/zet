@@ -149,28 +149,28 @@ public class RepeatedShortestPathsShrinker extends Algorithm<NetworkFlowModel, N
       int supply = NodesForArea.get( source ).getEvacuees() / numNodesForArea.get( NodesForArea.get( source ) );
       //System.out.println("Node: " + source + " supply: " + supply);
       if( supply > 0 ) {
-        found.addAll( yen.get_shortest_paths( source, problem.getSupersink(), supply ) );
+        found.addAll( yen.getShortestPaths( source, problem.getSupersink(), supply ) );
       } else {
-        found.addAll( yen.get_shortest_paths( source, problem.getSupersink(), 1 ) );
+        found.addAll( yen.getShortestPaths( source, problem.getSupersink(), 1 ) );
       }
 
     }
 
     for( YenPath y : found ) {
       //System.out.println("Pfad: " + y.toString());
-      for( int i = 0; i < y.get_vertices().size() - 1; i++ ) {
-        if( used[y.get_vertices().get( i ).id()][y.get_vertices().get( i + 1 ).id()] == 0 && y.get_vertices().get( i ).id() != 0 && y.get_vertices().get( i + 1 ).id() != 0 ) {
-          Edge n = problem.graph().getEdge( y.get_vertices().get( i ), y.get_vertices().get( i + 1 ) );
-                            //Edge e = new Edge(NumEdges++,y.get_vertices().get(i),y.get_vertices().get(i+1));
+      for( int i = 0; i < y.getNodes().size() - 1; i++ ) {
+        if( used[y.getNodes().get( i ).id()][y.getNodes().get( i + 1 ).id()] == 0 && y.getNodes().get( i ).id() != 0 && y.getNodes().get( i + 1 ).id() != 0 ) {
+          Edge n = problem.graph().getEdge( y.getNodes().get( i ), y.getNodes().get( i + 1 ) );
+                            //Edge e = new Edge(NumEdges++,y.getNodes().get(i),y.getNodes().get(i+1));
           //System.out.println("Transit: " + model.getTransitTime(n));
           solEdges.add( n );
-          used[y.get_vertices().get( i ).id()][y.get_vertices().get( i + 1 ).id()] = 1;
-          used[y.get_vertices().get( i + 1 ).id()][y.get_vertices().get( i ).id()] = 1;
-          if( !solNodes.contains( y.get_vertices().get( i ) ) ) {
-            solNodes.add( y.get_vertices().get( i ) );
+          used[y.getNodes().get( i ).id()][y.getNodes().get( i + 1 ).id()] = 1;
+          used[y.getNodes().get( i + 1 ).id()][y.getNodes().get( i ).id()] = 1;
+          if( !solNodes.contains( y.getNodes().get( i ) ) ) {
+            solNodes.add( y.getNodes().get( i ) );
           }
-          if( !solNodes.contains( y.get_vertices().get( i + 1 ) ) ) {
-            solNodes.add( y.get_vertices().get( i + 1 ) );
+          if( !solNodes.contains( y.getNodes().get( i + 1 ) ) ) {
+            solNodes.add( y.getNodes().get( i + 1 ) );
           }
         }
       }
