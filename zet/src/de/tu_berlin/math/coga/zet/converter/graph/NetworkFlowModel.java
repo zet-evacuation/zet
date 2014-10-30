@@ -72,7 +72,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		mapping = new ZToGraphMapping( raster ); // start with an empty mapping in case we have an empty model
     mapping.setNodeRectangle( supersink, new NodeRectangle(0, 0, 0, 0) );
     mapping.setFloorForNode( supersink, 0 );
-    
+
 	}
 
 	public NetworkFlowModel( NetworkFlowModel model ) {
@@ -237,7 +237,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	void setExactTransitTime( Edge edge, double value ) {
-		exactTransitTimes.set( edge, value*1.13 );
+		exactTransitTimes.set( edge, value*1.1 );
 	}
 
 	void roundTransitTimes() {
@@ -282,7 +282,7 @@ public class NetworkFlowModel implements Iterable<Node> {
       nodeCapacities.set( individualNode, 1 );
       mapping.setDeletedSourceNode( individualNode, false );
 
-      
+
       // edge
       Edge edge = new Edge( edgeIndex++, individualNode, node );
       System.out.println( "Dummy detailed assignment Edge(" + edge.start() + "," + edge.end() + ") created." );
@@ -290,18 +290,18 @@ public class NetworkFlowModel implements Iterable<Node> {
       edgeCapacities.set( edge, 1 );
   		transitTimes.set( edge, (int)transitTime );
       exactTransitTimes.set( edge, transitTime );
-      
+
       mapping.setFloorForNode( individualNode, 0 );
 
       int virtualId = individualNode.id() - individualSourceIndex;
       NodeRectangle rect = new NodeRectangle(400*virtualId, -800, 400*(virtualId+1),-400 );
 
       mapping.setNodeRectangle( individualNode, rect );
-      
-      
-      
+
+
+
     } else {
-      currentAssignment.increase( node, 1 );      
+      currentAssignment.increase( node, 1 );
     }
 	}
 
@@ -315,7 +315,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 
 		edgeCapacities.setDomainSize( network.edgeCount() * network.edgeCount() ); // TODO weird???
 	}
-  
+
   private void ensureCapacities( int persons ) {
 		nodeCapacities.setDomainSize( individualSourceIndex + persons );
 		edgeCapacities.setDomainSize( individualEdgeIndex + persons );
@@ -355,19 +355,19 @@ public class NetworkFlowModel implements Iterable<Node> {
 //		for( int i = 0; i < network.nodes().size(); i++ )
 //			currentAssignment.set( network.nodes().get( i ), 0 );
 	}
-  
+
   /**
    * Resets the current assignment (if any) and prepares for addition of {@code person} flow units as capacities.
-   * @param persons 
+   * @param persons
    */
   void resetAssignment( int persons ) {
     if( !finalized ) {
       completeConstruction();
     }
-    
+
     // add one for test purposes
     network.addNode( new Node( nodeCount++ ) );
-    
+
     // try to remove nodes with higher index
     Iterator<Node> iter = network.nodes().descendingIterator();
     List<Node> toRemove = new LinkedList<>();
@@ -380,12 +380,12 @@ public class NetworkFlowModel implements Iterable<Node> {
     network.removeNodes( toRemove );
     nodeCount = individualSourceIndex;
     edgeIndex = individualEdgeIndex;
-    
-    
+
+
 		currentAssignment = new IdentifiableIntegerMapping<>( network.nodeCount() + persons );
 		for( int i = 0; i < network.nodes().size(); i++ )
 			currentAssignment.set( network.nodes().get( i ), 0 );
-    
+
     ensureCapacities( persons );
 
   }
@@ -416,7 +416,7 @@ public class NetworkFlowModel implements Iterable<Node> {
         final double zs = mapping.getNodeFloorMapping().get( n ) * VisualizationOptionManager.getFloorDistance();
         v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
 //      } else {
-//        
+//
 //        final double zs = 0 * VisualizationOptionManager.getFloorDistance();
 //        v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
 //      }

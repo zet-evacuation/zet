@@ -1,86 +1,72 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package algo.graph.reduction;
 
 import de.tu_berlin.coga.graph.Node;
 import java.util.List;
 import java.util.Vector;
 
-
 /**
  * @author <a href='mailto:Yan.Qi@asu.edu'>Yan Qi</a>
  * @version $Revision: 673 $
  * @latest $Date: 2009-02-05 01:19:18 -0700 (Thu, 05 Feb 2009) $
  */
-public class YenPath
-{
-	List<Node> _vertex_list = new Vector<>();
-	double _weight = -1;
-        double _capacity = -1;
-	
-	public YenPath(){};
-	
-	public YenPath(List<Node> _vertex_list, double _weight, double _cap)
-	{
-		this._vertex_list = _vertex_list;
-		this._weight = _weight;
-                this._capacity = _cap;
-	}
+public class YenPath {
+  List<Node> nodeList = new Vector<>(); // TODO: update data structure
+  double weight = -1;
+  double capacity = -1;
 
-	public double get_weight()
-	{
-		return _weight;
-	}
-	
-	public void set_weight(double weight)
-	{
-		_weight = weight;
-	}
-	
-        public double get_capacity()
-	{
-		return _capacity;
-	}
-	
-	public void set_capacity(double capac)
-	{
-		_capacity = capac;
-	}
-        
-	public List<Node> get_vertices()
-	{
-		return _vertex_list;
-	}
-	
-	
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object right)
-	{
-		if(right instanceof YenPath)
-		{
-			YenPath r_path = (YenPath) right;
-			return _vertex_list.equals(r_path._vertex_list);
-		}
-		return false;
-	}
+  public YenPath() {
+  }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-		return _vertex_list.hashCode();
-	}
-	
-	public String toString()
-	{
-		return _vertex_list.toString()+":"+_weight + ":" + _capacity;
-	}
+  ;
+
+	public YenPath( List<Node> nodeList, double weight, double capacity ) {
+    this.nodeList = nodeList;
+    this.weight = weight;
+    this.capacity = capacity;
+  }
+
+  public double getWeight() {
+    return weight;
+  }
+
+  public void setWeight( double weight ) {
+    this.weight = weight;
+  }
+
+  public double getCapacity() {
+    return capacity;
+  }
+
+  public void setCapacity( double capac ) {
+    capacity = capac;
+  }
+
+  public List<Node> getNodes() {
+    return nodeList;
+  }
+
+  /**
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals( Object object ) {
+    if( object instanceof YenPath ) {
+      YenPath path = (YenPath)object;
+      return nodeList.equals( path.nodeList );
+    }
+    return false;
+  }
+
+  /**
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    return nodeList.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return nodeList.toString() + ":" + weight + ":" + capacity;
+  }
 }
