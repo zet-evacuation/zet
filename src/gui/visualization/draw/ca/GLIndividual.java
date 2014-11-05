@@ -36,7 +36,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
   //public static double individualHeight = 150 * 0.1; // TODO: use the scaling value, original 30
   //public static double individualRadius = 100 * 0.1; // original 10
   // set up individual heights
-  private static double individualHeight = 1.2 * VisualizationOptionManager.getIndividualHeight();
+  private static double individualHeight = /*1.2 **/ VisualizationOptionManager.getIndividualHeight();
   private static double individualRadius = VisualizationOptionManager.getIndividualRadius();
 
   public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
@@ -82,7 +82,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		gl.glTranslated( pos.x, pos.y, 0.1);
 		bodyColor.draw( gl );
 
-    glu.gluCylinder( quadObj, 1.2 * individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
+    glu.gluCylinder( quadObj, /*1.2 **/ individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
 		headColor.draw( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
 
@@ -92,7 +92,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		Vector3 check = new Vector3( pos.x, pos.y, 1);
 		// TODO Frustum
 		//if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-			glu.gluSphere( quadObj, 1.5 * individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
+			glu.gluSphere( quadObj, /*1.5 * */ individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 
 		gl.glPopMatrix();
 	}

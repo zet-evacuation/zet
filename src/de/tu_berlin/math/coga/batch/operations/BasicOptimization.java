@@ -126,7 +126,8 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 		estimator.setProblem( eafp );
 		estimator.run();
 		System.out.println( "Geschätzte Lösung:" + estimator.getSolution() );
-		eafp = networkFlowModel.getEAFP( estimator.getSolution().getUpperBound() );
+//		eafp = networkFlowModel.getEAFP( estimator.getSolution().getUpperBound() );
+    eafp = networkFlowModel.getEAFP( estimator.getSolution().getLowerBound()+1 );
     
     // The latest call to getEAFP takes the old transit times again! Set them again
  		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
@@ -182,7 +183,12 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
 		IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>( transitTimes );
 
 		for( Edge e : eafp.getNetwork().edges() ) {
+      // We have a value of Integer.MAX_VALUE (= infinity) at e.start()) if the node is not reachable.
 			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
+      if( dijkstra.getDistance( e.start() ) == Integer.MAX_VALUE ) {
+      //if( newTransit == 2147483318 ) {
+       newTransit = 0; // the transit time does not matter, the start node is not reachable anyway
+      }
 			log.log( Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
 			newTransitTimes.set( e, newTransit );
 		}

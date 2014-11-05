@@ -43,7 +43,7 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 		super( capabilities );
 		
 		//setBackground( Color.WHITE ); // for report
-		
+    
 		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();

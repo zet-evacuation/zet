@@ -36,6 +36,7 @@ public class OutputVisualization extends AbstractOutput implements TreeListItem 
     } else if( o instanceof BuildingPlan ) {
       showBuildingPlan( (BuildingPlan)o );
     } else {
+      System.err.println( "Unknown class type: " + o );
       throw new IllegalArgumentException( "Type " + o.getClass() + " is not supported! Only "
               + GraphVisualizationResults.class + " and " + EvacuationSimulationResults.class + " are possible." );
     }

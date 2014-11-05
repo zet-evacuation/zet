@@ -1,7 +1,4 @@
-/**
- * GLNashNode.java
- * Created: 30.08.2010 16:35:12
- */
+
 package gui.visualization.draw.graph;
 
 import gui.visualization.control.graph.GLNashNodeControl;
@@ -24,7 +21,5 @@ public class GLNashNode extends GLSimpleNode {
 		super.drawNode( gl );
 		super.performDrawing( gl );
 	}
-
-
 
 }

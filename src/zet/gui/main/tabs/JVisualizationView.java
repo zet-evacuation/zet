@@ -120,7 +120,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
   private static GLCapabilities getCaps() {
     GLCapabilities caps = new GLCapabilities();
     caps.setSampleBuffers( true );
-    caps.setNumSamples( 4 );
+    caps.setNumSamples( 4 ); // enable anti-antialiasing
 
     System.out.println( caps );
     return caps;

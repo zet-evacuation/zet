@@ -1,7 +1,4 @@
-/**
- * GraphVisualization.java
- * Created: 18.3.2010, 12:02:46
- */
+
 package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -12,6 +9,7 @@ import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -72,6 +70,19 @@ public class GraphVisualization {
 		this.transitTimes = eafp.getTransitTimes();
 		this.supplies = eafp.getSupplies();
 		this.sources = eafp.getSources();
+    
+    // repair fake sources
+    
+    List<Node> oldSources = eafp.getSources();
+    this.sources = new LinkedList<>();
+    for( Edge e : eafp.getNetwork().edges() ) {
+      if( oldSources.contains( e.start() ) ) {
+        this.sources.add( e.end() );
+      } else if( oldSources.contains( e.end() ) ) {
+        this.sources.add( e.start() );
+      }
+    }
+    
 		final ArrayList<Node> sink = new ArrayList<>( 1 );
 		sink.add( eafp.getSink() );
 		this.sinks = sink;
@@ -136,33 +147,36 @@ public class GraphVisualization {
 		final double yadd = (maxY - minY)/2;
 		final double zadd = (maxZ - minZ)/2;
 
-		if( maxX < 0 )
-			effectiveOffset.x = maxX + xadd;
-		else if( minX > 0 )
-			effectiveOffset.x = -minX - xadd;
-		else if( minX < 0 )
-			effectiveOffset.x = -minX - xadd;
-		else
-			effectiveOffset.x = -maxX + xadd;
+    if( maxX < 0 ) {
+      effectiveOffset.x = maxX + xadd;
+    } else if( minX > 0 ) {
+      effectiveOffset.x = -minX - xadd;
+    } else if( minX < 0 ) {
+      effectiveOffset.x = -minX - xadd;
+    } else {
+      effectiveOffset.x = -maxX + xadd;
+    }
 
-		if( maxY < 0 )
-			effectiveOffset.y = maxY + yadd;
-		else if( minY > 0 )
-			effectiveOffset.y = -minY - yadd;
-		else if( minY < 0 )
-			effectiveOffset.y = -minY - yadd;
-		else
-			effectiveOffset.y = -maxY + yadd;
+    if( maxY < 0 ) {
+      effectiveOffset.y = maxY + yadd;
+    } else if( minY > 0 ) {
+      effectiveOffset.y = -minY - yadd;
+    } else if( minY < 0 ) {
+      effectiveOffset.y = -minY - yadd;
+    } else {
+      effectiveOffset.y = -maxY + yadd;
+    }
 
-		if( maxZ < 0 )
-			effectiveOffset.z = maxZ + zadd;
-		else if( minZ > 0 )
-			effectiveOffset.z = -minZ - zadd;
-		else if( minZ < 0 )
-			effectiveOffset.z = -minZ - zadd;
-		else
-			effectiveOffset.z = -maxZ + zadd;
-		
+    if( maxZ < 0 ) {
+      effectiveOffset.z = maxZ + zadd;
+    } else if( minZ > 0 ) {
+      effectiveOffset.z = -minZ - zadd;
+    } else if( minZ < 0 ) {
+      effectiveOffset.z = -minZ - zadd;
+    } else {
+      effectiveOffset.z = -maxZ + zadd;
+    }
+
 		System.out.println( "Offset: " + effectiveOffset.toString() );
 	}
 

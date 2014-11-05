@@ -137,6 +137,9 @@ public class Dijkstra {
     while( !queue.isEmpty() ) {
       MinHeap<Node, Integer>.Element min = queue.extractMin();
       Node v = min.getObject();
+      if( v.id() == 610 ) {
+        System.out.println();
+      }
       Integer pv = min.getPriority();
       distances.set( v, pv );
       IdentifiableCollection<Edge> incidentEdges;

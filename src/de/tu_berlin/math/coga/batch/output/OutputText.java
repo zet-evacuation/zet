@@ -135,7 +135,7 @@ public class OutputText extends AbstractOutput implements TreeListItem {
    */
   private void graphResults( GraphVisualizationResults gvr ) {
     EdgeBasedFlowOverTime ef = gvr.getFlow();
-        
+    
     System.out.println( "Building arrival pattern: " );
     int timeHorizon = -1;
     for( Edge e : gvr.getNetwork().incidentEdges( gvr.getSupersink() ) ) {
