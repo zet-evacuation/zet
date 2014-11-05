@@ -102,6 +102,11 @@ public class RasterContainer<T extends RoomRaster<?>> {
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
+    try {
+      map.get( floor ).get( room );
+    } catch (Exception e ) {
+      System.out.println( "Error" );
+    }
     return map.get( floor ).get( room );
   }
 

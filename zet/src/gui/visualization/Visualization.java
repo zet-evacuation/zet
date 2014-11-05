@@ -360,8 +360,13 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Includes getText visible in the scene but not the copyright notice, etc.
 	 */
 	public void drawScene() {
+    gl.glClearColor( 0/255f, 103/255f, 149/255f, 1);
+    
 		gl.glClear( clearBits );
 
+    System.out.println( getBackground() );
+
+    
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		gl.glLoadIdentity();
 		float[] light_position = new float[4];

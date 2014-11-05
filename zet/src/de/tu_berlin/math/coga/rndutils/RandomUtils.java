@@ -35,7 +35,7 @@ public class RandomUtils {
 		secRandom.setSeed( SecureRandom.getSeed( 16 ) );
 		seeds.add( secRandom.nextLong() );
 		seeds.set( 0, secRandom.nextLong() );
-		//seeds.set( 0, -7566781686001723112l );
+		seeds.set( 0, -7566781686001723112l );
     
 		randomGenerator.add( new MersenneTwister( seeds.get( 0 ) ) );
 	}

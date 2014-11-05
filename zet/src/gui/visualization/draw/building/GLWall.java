@@ -65,6 +65,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	public void performStaticDrawing( GL gl ) {
 		gl.glBegin( GL.GL_POLYGON );
     //VisualizationOptionManager.getCellFloorColor().draw( gl );
+    //VisualizationOptionManager.getCellWallColor().draw( gl );
     VisualizationOptionManager.getCellWallColor().draw( gl );
     final Vector3 perturbate = new Vector3( 0, 0, -0.5 ); // add a small offset to move the floor under the ca floor-level
 		for( GLVector v : basePoints )
