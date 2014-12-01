@@ -19,7 +19,6 @@ import algo.graph.thinflow.ThinFlowAlgo;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import ds.graph.problem.NashFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
@@ -32,6 +31,7 @@ import java.util.Vector;
 import java.util.List;
 import Jama.Matrix;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 
 /**
  *

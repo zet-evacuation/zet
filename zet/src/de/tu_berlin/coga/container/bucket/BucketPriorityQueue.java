@@ -1,7 +1,7 @@
 /**
  * BucketPriorityQueue.java Created: Oct 21, 2010, 11:50:07 AM
  */
-package de.tu_berlin.math.coga.datastructure;
+package de.tu_berlin.coga.container.bucket;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;

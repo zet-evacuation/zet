@@ -92,6 +92,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import statistic.ca.CAStatistic;
+import statistic.ca.MultipleCycleCAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JZetWindow;
@@ -145,7 +146,8 @@ public class GUIControl implements AlgorithmListener {
 	private JEditView editview;
 	private JQuickVisualizationView caView;
 	private JVisualizationView visualizationView;
-
+  private JStatisticPanel caStatisticView;
+  
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
@@ -212,7 +214,7 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerOutputAction( new TikZOut(), "TikZ Output", new ImageIcon( "./icons/document-24.png" ) );
 
 		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
-		JComponent caStatisticView = new JStatisticPanel();
+		caStatisticView = new JStatisticPanel();
 		JComponent graphStatisticView = new JGraphStatisticPanel();
 		JComponent logView = new JLogPane( ZETMain.gl );
 		JComponent statisticView = new JStatisticsPanel();
@@ -1326,6 +1328,40 @@ public class GUIControl implements AlgorithmListener {
 						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 						caView.displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
 						ZETLoader.sendMessage( "Simulation beendet" );
+            
+            // Send data to statistic
+            caStatisticView.setCellularAutomaton( algorithmControl.getCellularAutomaton() );
+            caStatisticView.setCA( algorithmControl.getCaVisResults() );
+            
+            BatchResult result = new BatchResult( false );
+
+            // Assume, building results are available here. Should be the case.
+            BatchResultEntry entry = new BatchResultEntry( "Simulation Result", algorithmControl.getBuildingResults() );
+            
+            entry.setCellularAutomatonStatistic( 0, algorithmControl.getCaVisResults().statistic );
+            entry.setCellularAutomatonVisualization( 0, algorithmControl.getCaVisResults() );
+            entry.setCellularAutomaton( 0, algorithmControl.getCellularAutomaton() );
+
+            
+            MultipleCycleCAStatistic mcc = new MultipleCycleCAStatistic( 1 );
+            mcc.addCycle( algorithmControl.getCaVisResults().statistic );
+            entry.setMultipleCycleCAStatistic( mcc );
+            try {
+              //algorithmControl.getCaVisResults().statistic;
+              
+              //CAStatistic cas = new CAStatistic(null );
+              
+              ///entry.setCellularAutomatonStatistic( 1, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
+              //new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().getStoredCAStatisticResults ());
+
+              result.addResult( entry );
+            } catch( IOException ex ) {
+              Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
+              throw new IllegalStateException( "WTF???" );
+            }
+            caStatisticView.setResult( result );
+            
+            
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 					}
 				}

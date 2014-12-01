@@ -15,9 +15,9 @@
  */
 package ds.graph.problem;
 
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.util.HashMap;
 import java.util.List;

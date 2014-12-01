@@ -41,7 +41,7 @@ import statistic.ca.MultipleCycleCAStatistic;
  * flow and the networkmodel, but we store it too to boost the performance when loading
  * the results.
  *
- * @author Timon
+ * @author Timon Kelter
  */
 public class BatchResultEntry {
 	// Identifying information
@@ -56,7 +56,7 @@ public class BatchResultEntry {
 	protected MultipleCycleCAStatistic mccaStatistic;
 	protected EvacuationSimulationResults[] caVis;
 	protected GraphVisualizationResults graphVis;
-        protected CompareVisualizationResults compVisRes;
+  protected CompareVisualizationResults compVisRes;
 	private double averageCAStepsPerSecond;
 	
 	/** The index of the CA cycle with the median evacuation time. */
@@ -66,6 +66,10 @@ public class BatchResultEntry {
 		this.name = name;
 		this.buildingResults = buildingResults;
 		this.medianIndex = -1;
+    
+    cas = new EvacuationCellularAutomaton[1];
+    caStatistics = new CAStatistic[1];
+    caVis = new EvacuationSimulationResults[1];
 	}
 
 	public String getName () { return name; }
@@ -202,4 +206,8 @@ public class BatchResultEntry {
 	public void setAverageCAStepsPerSecond (double averageCAStepsPerSecond) {
 		this.averageCAStepsPerSecond = averageCAStepsPerSecond;
 	}
+
+  public void setMultipleCycleCAStatistic( MultipleCycleCAStatistic mcc ) {
+    this.mccaStatistic = mcc;
+  }
 }

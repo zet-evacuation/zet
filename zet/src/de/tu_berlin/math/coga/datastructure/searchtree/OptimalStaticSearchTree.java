@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.datastructure.searchtree;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.searchtree.OptimalStaticSearchTreeInstance;
+import de.tu_berlin.math.coga.algorithm.searchtree.OptimalStaticSearchTreeInstance;
 import ds.graph.BinaryTreeToString;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;

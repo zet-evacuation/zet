@@ -22,11 +22,12 @@ import ds.graph.flow.ThinFlow;
 
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Set;
 
 public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
 
@@ -76,7 +77,7 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
 
 
      /*function returns a set containing the exiting edges of given nodeset*/
-     private HashSet<Edge> exitingEdges(DynamicNetwork wgraph, HashSet<Node> nodeset) {
+     private HashSet<Edge> exitingEdges(DynamicNetwork wgraph, Set<Node> nodeset) {
          HashSet<Edge> outedges = new HashSet<Edge>();
          HashSet<Edge> inedges = new HashSet<Edge>();
          for(Node n : nodeset) {
@@ -97,7 +98,7 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
 
      /*function returns set containing edges that are behind sparsest cut and for which algorithm does not
      explicitely set flow values*/
-     private HashSet<Edge> behindEdges(DynamicNetwork wgraph, HashSet<Node> nodeset) {
+     private HashSet<Edge> behindEdges(DynamicNetwork wgraph, Set<Node> nodeset) {
          HashSet<Edge> behindEdgeSet = new HashSet();
          for(Edge e: wgraph.edges()) {
              if(!nodeset.contains(e.start()) )
@@ -114,10 +115,10 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
         IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping(getProblem().getGraph().nodeCount());
         IdentifiableDoubleMapping<Edge> flowvalues = new IdentifiableDoubleMapping(getProblem().getGraph().edgeCount()+getNewedgeToOrigedgeMapSize());
         Double q; //congestion
-        HashSet<Node> spcutSet;
-        HashSet<Edge> exitEdges;
-        HashSet<Edge> edgesBehindSparsestCut;
-        HashSet<Edge> internalEdges = new HashSet<Edge>(workingGraph.edges());
+        Set<Node> spcutSet;
+        Set<Edge> exitEdges;
+        Set<Edge> edgesBehindSparsestCut;
+        Set<Edge> internalEdges = new HashSet<Edge>(workingGraph.edges());
 
         SparsestCut sparsestcut;
         Node source = getProblem().getSource();

@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package batch;
 
 import com.thoughtworks.xstream.XStream;
@@ -34,23 +35,24 @@ import java.util.zip.GZIPOutputStream;
 
 /** Wrapper class for the results of a batch run.
  *
- * @author Timon, Jan-Philipp Kappmeier
+ * @author Timon Kelter
+ * @author Jan-Philipp Kappmeier
  */
 public class BatchResult {
 	private boolean storeEntriesInFiles = false;
 	/** Stores either the concrete results (!storeEntriesInFiles) of is just empty 
 	 * (storeEntriesInFiles) except for the currently loaded index.
 	 */
-	private ArrayList<BatchResultEntry> results = new ArrayList<BatchResultEntry>();
+	private ArrayList<BatchResultEntry> results = new ArrayList<>();
 	/** The names of the results are stored separately to be able to extract a
 	 * list of Results wihtout loading each result separately when using 'storeEntriesInFiles'. */
-	private ArrayList<String> entryNames = new ArrayList<String>();
+	private ArrayList<String> entryNames = new ArrayList<>();
 	/** Whether a given entry stores a ca result. */
-	private ArrayList<Boolean> entryCA = new ArrayList<Boolean>();
+	private ArrayList<Boolean> entryCA = new ArrayList<>();
 	/** Whether a given entry stores a graph result. */
-	private ArrayList<Boolean> entryGraph = new ArrayList<Boolean>();
+	private ArrayList<Boolean> entryGraph = new ArrayList<>();
 	/** The file names for storing the entries. */
-	private ArrayList<File> tempFiles = new ArrayList<File>();
+	private ArrayList<File> tempFiles = new ArrayList<>();
 	/** The index of the entry that is currently loaded.  */
 	private int loadedIndex = -1;
 

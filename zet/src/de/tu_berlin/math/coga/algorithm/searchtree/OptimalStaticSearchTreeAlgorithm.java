@@ -2,7 +2,7 @@
  * OptimalStaticSearchTreeAlgorithm.java
  * Created: 05.07.2012, 11:22:07
  */
-package de.tu_berlin.math.coga.algorithm.shortestpath.searchtree;
+package de.tu_berlin.math.coga.algorithm.searchtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.searchtree.OptimalStaticSearchTree;

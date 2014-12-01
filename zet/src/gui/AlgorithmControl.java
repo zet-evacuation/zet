@@ -41,6 +41,7 @@ import java.beans.PropertyChangeListener;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import statistic.ca.CAStatistic;
 import tasks.conversion.BuildingPlanConverter;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.CompareTask;
@@ -64,7 +65,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	private Project project;
 	private NetworkFlowModel networkFlowModel;
 	private GraphVisualizationResults graphVisResults;
-        private CompareVisualizationResults compVisResults;
+  private CompareVisualizationResults compVisResults;
 	//private boolean createdValid = false;
 	private RuntimeException error;
 
@@ -306,15 +307,19 @@ public class AlgorithmControl implements PropertyChangeListener {
 		// TODO visualResultsRecorder normal class, no singleton.
 		EvacuationSimulationResults visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
 
-						EvacuationCellularAutomaton cellularAutomaton = ca;
-						//mapping = mapping;
-						//container = cca;
-						container = conv.getContainer();
-						caVisResults = visResults;
+    
+    //caAlgo.getProblem().caStatisticWriter.getStoredCAStatisticResults().
+    visResults.statistic = new CAStatistic (caAlgo.getProblem().caStatisticWriter.getStoredCAStatisticResults ());
+    
+    EvacuationCellularAutomaton cellularAutomaton = ca;
+    //mapping = mapping;
+    //container = cca;
+    container = conv.getContainer();
+    caVisResults = visResults;
 
-						caControl.tempSetParametersFromEx( caVisResults, ca );
+    caControl.tempSetParametersFromEx( caVisResults, ca );
 
-						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+    //EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 
 		log.info( "done." );

@@ -13,32 +13,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-
 package statistic.ca;
 
 import statistic.ca.results.StoredCAStatisticResults;
 
 /**
  *
- * @author Sylvie
+ * @author Sylvie Temme
  */
 public class CAStatisticWriter {
 
+  private StoredCAStatisticResults storedCAStatisticResults;
 
-    private StoredCAStatisticResults storedCAStatisticResults;
-    
-    public CAStatisticWriter() {
-        storedCAStatisticResults = new StoredCAStatisticResults();
-    }
-    
-    public StoredCAStatisticResults getStoredCAStatisticResults() {
-        return storedCAStatisticResults;
-    }
-    
-    public void saveStatistic() {
-        // X-Stream-Kram zum speichern von storedCAStatisticResults in Datei
-    }
-        
+  public CAStatisticWriter() {
+    storedCAStatisticResults = new StoredCAStatisticResults();
+  }
+
+  public StoredCAStatisticResults getStoredCAStatisticResults() {
+    return storedCAStatisticResults;
+  }
+
+  public void saveStatistic() {
+    // X-Stream-Kram zum speichern von storedCAStatisticResults in Datei
+  }
 
 }

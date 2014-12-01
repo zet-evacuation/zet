@@ -1,6 +1,7 @@
 package de.tu_berlin.math.coga.math.matrix;
 
-import de.tu_berlin.math.coga.datastructure.Triple;
+import de.tu_berlin.coga.common.datastructure.Triple;
+
 
 /**
  *

@@ -1,17 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package algo.graph.spanningtree;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.container.priority.MinHeap;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.util.Random;
 

@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,57 +13,57 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class JStatisticPanel
- * Erstellt 30.04.2008, 20:18:19
- */
-
 package gui.statistic;
 
-import io.visualization.EvacuationSimulationResults;
+import io.visualization.CAVisualizationResults;
 
 import java.awt.BorderLayout;
-import java.awt.event.*;
-
 import javax.swing.JPanel;
 import batch.BatchResult;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.gui.JCAStatisticPanel;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
+import io.visualization.EvacuationSimulationResults;
+import java.awt.Dimension;
+import javax.swing.JTextArea;
 
 /**
  *
- * @author Kapman, Timon Kelter
+ * @author Jan-Philipp Kappmeier
+ * @author Timon Kelter
  */
 public class JStatisticPanel extends JPanel {
-	
-	private JCAStatisticPanel jcasp;
-	
-	public JStatisticPanel() {
-		super();
-		jcasp = new JCAStatisticPanel();
-		setLayout(new BorderLayout());
-	}
-	
-	public void setCellularAutomaton(EvacuationCellularAutomaton ca){
-		jcasp.setCellularAutomaton(ca);
-	}
-	
-	public void setMultipleCycleCAStatistic(MultipleCycleCAStatistic mccas){
-		jcasp.setMultipleCycleCAStatistic(mccas);
-	}
-	
-	public void setCA(EvacuationSimulationResults cavr){
-		jcasp.setCA(cavr);
-	}
-	
-	public void setGraph(GraphVisualizationResults gvr){
-		jcasp.setGraph(gvr);
-	}
-	
-	public void setResult(BatchResult result){
-		jcasp.setResult(result);
-		add(jcasp.getSplitPane(), BorderLayout.CENTER);
-	}
+
+  private JCAStatisticPanel jcasp;
+
+  public JStatisticPanel() {
+    super();
+    jcasp = new JCAStatisticPanel();
+    //jcasp.setPreferredSize( new Dimension( 1000, 1000 ) );
+    setLayout( new BorderLayout() );
+    //add( jcasp );
+    add( jcasp, BorderLayout.CENTER );
+  }
+
+  public void setCellularAutomaton( EvacuationCellularAutomaton ca ) {
+    jcasp.setCellularAutomaton( ca );
+  }
+
+  public void setMultipleCycleCAStatistic( MultipleCycleCAStatistic mccas ) {
+    jcasp.setMultipleCycleCAStatistic( mccas );
+  }
+
+  public void setCA( EvacuationSimulationResults cavr ) {
+    jcasp.setCA( cavr );
+  }
+
+  public void setGraph( GraphVisualizationResults gvr ) {
+    jcasp.setGraph( gvr );
+  }
+
+  public void setResult( BatchResult result ) {
+    jcasp.setResult( result );
+    add( jcasp.getSplitPane(), BorderLayout.CENTER );
+  }
 }
