@@ -2,7 +2,7 @@
  * Tripel.java
  * Created: 18.06.2010 09:55:08
  */
-package de.tu_berlin.math.coga.datastructure;
+package de.tu_berlin.coga.common.datastructure;
 
 
 /**

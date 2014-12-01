@@ -1,13 +1,9 @@
-/**
- * JStatisticsPanel.java
- * Created: May 12, 2010,1:18:11 PM
- */
+
 package gui.statistic;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import umontreal.iro.lecuyer.randvar.GeometricGen;
 
 
 /**

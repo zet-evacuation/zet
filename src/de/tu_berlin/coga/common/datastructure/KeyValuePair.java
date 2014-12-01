@@ -1,7 +1,7 @@
 /**
  * KeyValuePair.java Created: 27.07.2012, 15:21:39
  */
-package de.tu_berlin.math.coga.datastructure;
+package de.tu_berlin.coga.common.datastructure;
 
 import java.util.AbstractMap.SimpleEntry;
 

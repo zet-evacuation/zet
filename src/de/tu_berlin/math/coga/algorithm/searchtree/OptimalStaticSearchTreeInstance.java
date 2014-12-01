@@ -1,9 +1,9 @@
 /**
  * OptimalStaticSearchTreeInstance.java Created: 05.07.2012, 11:23:37
  */
-package de.tu_berlin.math.coga.algorithm.shortestpath.searchtree;
+package de.tu_berlin.math.coga.algorithm.searchtree;
 
-import de.tu_berlin.math.coga.datastructure.KeyValuePair;
+import de.tu_berlin.coga.common.datastructure.KeyValuePair;
 import java.util.ArrayList;
 import java.util.Collections;
 

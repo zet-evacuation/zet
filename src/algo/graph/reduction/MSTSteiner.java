@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package algo.graph.reduction;
 
 import algo.graph.spanningtree.PrimForNetwork;
@@ -18,11 +15,10 @@ import ds.graph.MinSteinerTree;
 import algo.graph.spanningtree.NetworkMST;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.structure.Path;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import algo.graph.spanningtree.NetworkMSTProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 
 /**
  *

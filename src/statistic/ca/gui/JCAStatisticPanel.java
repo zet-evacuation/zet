@@ -13,23 +13,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package statistic.ca.gui;
 
 import io.visualization.EvacuationSimulationResults;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.UUID;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,17 +43,15 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import batch.BatchResult;
 import batch.BatchResultEntry;
-
+import de.tu_berlin.coga.common.datastructure.NamedIndex;
 import ds.PropertyContainer;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.exception.GroupOfIndsNoPotentialException;
@@ -64,12 +60,11 @@ import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 import ds.ca.evac.DeathCause;
-import gui.ZETMain;
-import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import gui.ZETLoader;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import javax.swing.DefaultComboBoxModel;
 import statistic.ca.exception.AllCyclesNoValueBecauseAlreadySafeException;
@@ -77,7 +72,8 @@ import statistic.ca.exception.AllCyclesNoValueBecauseNotSafeException;
 
 /**
  *
- * @author Matthias Woste, Timon Kelter
+ * @author Matthias Woste
+ * @author Timon Kelter
  *
  */
 public class JCAStatisticPanel extends JPanel {
@@ -147,11 +143,12 @@ public class JCAStatisticPanel extends JPanel {
 
 	public JCAStatisticPanel() {
 		super();
-		assignmentTypeToUUID = new HashMap<String, ArrayList<UUID>>();
-		assignmentIndexToShow = new ArrayList<Integer>();
-		diagramCategoryIndexToShow = new ArrayList<Integer>();
-		assignmentGroups = new ArrayList<AssignmentGroupItem>();
-		UUIDToIndividualsForEachResultEntry = new HashMap<UUID, ArrayList<Individual>>();
+		assignmentTypeToUUID = new HashMap<>();
+		assignmentIndexToShow = new ArrayList<>();
+		diagramCategoryIndexToShow = new ArrayList<>();
+		assignmentGroups = new ArrayList<>();
+		UUIDToIndividualsForEachResultEntry = new HashMap<>();
+    setLayout( new BorderLayout() );
 		addComponents();
 	}
 
@@ -205,14 +202,15 @@ public class JCAStatisticPanel extends JPanel {
 	 * Wird aufgerufen, falls die in der ComboBox ein neuer Diagrammtyp
 	 * ausgewählt wurde.
 	 *
-	 * @author matthias
+	 * @author Matthias Woste
 	 *
 	 */
 	private class TypePerformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			JComboBox cb = (JComboBox)e.getSource();
-			categoryDatasetValues = new ArrayList<Double>();
-			categoryDatasetAssignments = new ArrayList<String>();
+			categoryDatasetValues = new ArrayList<>();
+			categoryDatasetAssignments = new ArrayList<>();
 			datasetCollection = new XYSeriesCollection();
 		}
 	}
@@ -263,6 +261,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class AddToDiagramPerformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			if( assignmentIndexToShow.isEmpty() ) {
 				ZETLoader.sendError( "Bitte wählen Sie zuerst eine Belegung aus!" );
@@ -276,12 +275,14 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class RemovePerformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			diagrams.remove( diagramToRemove );
 		}
 	}
 
 	private class GroupPreformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			if( assignmentIndexToShow.size() > 1 ) {
 				AssignmentGroupItem newGroup = new AssignmentGroupItem();
@@ -296,6 +297,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class UngroupPreformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			for( Integer i : assignmentIndexToShow )
 				if( assignmentGroups.get( i ).getAssignmentTypes().size() > 1 ) {
@@ -310,6 +312,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class CreateDiagramPerformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			showDiagramm( statisticType.getSelectedItem().toString() );
 			diagramCategoryListModel.clear();
@@ -320,6 +323,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class RemoveFromDiagramPerformed implements ActionListener {
+    @Override
 		public void actionPerformed( ActionEvent e ) {
 			for( int i = diagramCategoryIndexToShow.size() - 1; i >= 0; i-- ) {
 				diagramCategoryListModel.remove( i );
@@ -339,7 +343,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private ArrayList<ArrayList<Individual>> getIndividualByUUIDForEachResultEntry( ArrayList<UUID> u ) {
-		ArrayList<ArrayList<Individual>> re = new ArrayList<ArrayList<Individual>>();
+		ArrayList<ArrayList<Individual>> re = new ArrayList<>();
 		for( int i = 0; i < u.size(); i++ )
 			re.add( UUIDToIndividualsForEachResultEntry.get( u.get( i ) ) );
 		return re;
@@ -349,14 +353,14 @@ public class JCAStatisticPanel extends JPanel {
 		int maxTimeStep = Integer.MIN_VALUE;
 		for( EvacuationCellularAutomaton ca : selectedBatchResultEntry.getCa() )
 			maxTimeStep = Math.max( maxTimeStep, ca.getTimeStep() + 1 );
-		ArrayList<ArrayList<ArrayList<Individual>>> IndividualPerAssignmentIndexToShow = new ArrayList<ArrayList<ArrayList<Individual>>>();
+		ArrayList<ArrayList<ArrayList<Individual>>> IndividualPerAssignmentIndexToShow = new ArrayList<>();
 		ArrayList<ArrayList<Individual>> IndividualsPerCycle;
 		ArrayList<Individual> tmpIndividualsPerCycle;
 		noIndividualsInAtLeastOneAssignmentIndex = false;
 		for( Integer i : assignmentIndexToShow ) {
-			IndividualsPerCycle = new ArrayList<ArrayList<Individual>>();
+			IndividualsPerCycle = new ArrayList<>();
 			for( int j = 0; j < selectedBatchResultEntry.getCa().length; j++ ) {
-				tmpIndividualsPerCycle = new ArrayList<Individual>();
+				tmpIndividualsPerCycle = new ArrayList<>();
 				for( String s : assignmentGroups.get( i ).getAssignmentTypes() ) {
 					HashSet<Individual> temp = selectedBatchResultEntry.getCa()[j].getIndividualsInAssignmentType( selectedBatchResultEntry.getCa()[j].getAssignmentUUIS( s ) );
 					if( temp == null )
@@ -386,14 +390,11 @@ public class JCAStatisticPanel extends JPanel {
 
 
 		if( diagrammName.equals( "Ausgangsverteilung" ) ) {
-			HashMap<String, Double> exitUtilization = new HashMap<String, Double>();
+			HashMap<String, Double> exitUtilization = new HashMap<>();
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ )
 				try {
 					exitUtilization = mccas.getTakenExit( IndividualPerAssignmentIndexToShow.get( i ) );
-				} catch( OneIndNoPotentialException e ) {
-					continue;
-				} catch( IllegalArgumentException e ) {
-					continue;
+				} catch( OneIndNoPotentialException | IllegalArgumentException e ) {
 				}
 			int j = 0;
 			for( String exitName : exitUtilization.keySet() ) {
@@ -413,7 +414,6 @@ public class JCAStatisticPanel extends JPanel {
 				dataset = new XYSeries( selectedBatchResultEntry.getName() +
 								(PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " +
 								assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
-				income = 0.0;
 
 				for( int c = 0; c <= maxTimeStep; c++ ) {
 					income = mccas.getNumberOfSafeIndividualForGroup( IndividualPerAssignmentIndexToShow.get( i ), c );
@@ -507,7 +507,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 
-				categoryDatasetValues.add( new Double( distanceToPlannedExit ) );
+				categoryDatasetValues.add( distanceToPlannedExit);
 				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
@@ -521,7 +521,7 @@ public class JCAStatisticPanel extends JPanel {
 				} catch( GroupOfIndsNoPotentialException e ) {
 				}
 
-				categoryDatasetValues.add( new Double( distanceToNearestExit ) );
+				categoryDatasetValues.add( distanceToNearestExit);
 				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
@@ -569,11 +569,11 @@ public class JCAStatisticPanel extends JPanel {
 		}
 
 		if( diagrammName.equals( "Distanz über Zeit" ) ) {
-			ArrayList<Double> coveredDistance = new ArrayList<Double>();
-			HashSet<Individual> tmp = new HashSet<Individual>();
+			ArrayList<Double> coveredDistance = new ArrayList<>();
+			HashSet<Individual> tmp = new HashSet<>();
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
 				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
-				coveredDistance = new ArrayList<Double>();
+				coveredDistance = new ArrayList<>();
 				try {
 					coveredDistance = mccas.calculateAverageCoveredDistanceForGroupInTimeSteps( IndividualPerAssignmentIndexToShow.get( i ), 0, maxTimeStep );
 				} catch( GroupOfIndsNoPotentialException e ) {
@@ -611,7 +611,6 @@ public class JCAStatisticPanel extends JPanel {
 			double speed = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
 				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
-				speed = 0.0;
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {
 					try {
@@ -635,7 +634,7 @@ public class JCAStatisticPanel extends JPanel {
 				} catch( AllCyclesNoValueBecauseAlreadySafeException e ) {
 				}
 
-				categoryDatasetValues.add( new Double( maxSpeed * currentAverageStepsPerSeconds ) );
+				categoryDatasetValues.add( maxSpeed * currentAverageStepsPerSeconds );
 				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
@@ -658,7 +657,6 @@ public class JCAStatisticPanel extends JPanel {
 			double panic = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
 				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
-				panic = 0.0;
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {
 					try {
@@ -694,7 +692,6 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private void showDiagramm( String diagrammName ) {
-
 		if( diagrammName.equals( "Grundinformationen" ) ) {
 			String[] columnNames = {"Bezeichnung", "Wert"};
 			EvacuationCellularAutomaton tmpCA;
@@ -708,7 +705,7 @@ public class JCAStatisticPanel extends JPanel {
 			int bestEvacIndex = 0;
 			int aveEvacIndex = 0;
 			int worseEvacIndex = 0;
-			TreeMap<Double, Integer> findMedian = new TreeMap<Double, Integer>();
+			TreeMap<Double, Integer> findMedian = new TreeMap<>();
 			for( int i = 0; i < selectedBatchResultEntry.getCa().length; i++ ) {
 				tmpCA = selectedBatchResultEntry.getCa()[i];
 				nrOfInd += tmpCA.getInitialIndividualCount();
@@ -726,31 +723,31 @@ public class JCAStatisticPanel extends JPanel {
 			aveEvacIndex = findMedian.get( findMedian.firstKey() );
 			worseEvacIndex = findMedian.get( findMedian.lastKey() );
 			Object[][] data = {
-				{new String( "Informationen für Modell" ), new String( selectedBatchResultEntry.getName() )},
-				{new String( "Evakuierungszeit in Sekunden" ), new Double( evacSec / selectedBatchResultEntry.getCa().length )},
-				{new String( "Evakuierungszeit in ZA-Schritten" ), new Double( evacCAStep / selectedBatchResultEntry.getCa().length )},
-				{new String( "Anzahl Individuen" ), new Double( nrOfInd / selectedBatchResultEntry.getCa().length )},
-				{new String( "evakuiert" ), new Double( evac / selectedBatchResultEntry.getCa().length )},
-				{new String( "nicht evakuiert" ), new Double( notEvac / selectedBatchResultEntry.getCa().length )},
-				{new String( "nicht evakuiert weil kein Ausgang erreichbar" ), new Double( notEvacNoExit / selectedBatchResultEntry.getCa().length )},
-				{new String( "nicht evakuiert weil die Zeit nicht gereicht hat" ), new Double( notEvacNoTime / selectedBatchResultEntry.getCa().length )},
-				{new String( "beste Evakuierungszeit (Durchlaufindex,Zeit)" ), new String( "(" + (bestEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[bestEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")" )},
-				{new String( "durchschnit. Evakuierungszeit (Durchlaufindex,Zeit)" ), new String( "(" + (aveEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[aveEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")" )},
-				{new String( "schlechteste Evakuierungszeit (Durchlaufindex,Zeit)" ), new String( "(" + (worseEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[worseEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")" )}};
+				{"Informationen für Modell", selectedBatchResultEntry.getName()},
+				{"Evakuierungszeit in Sekunden", evacSec / selectedBatchResultEntry.getCa().length},
+				{"Evakuierungszeit in ZA-Schritten", evacCAStep / selectedBatchResultEntry.getCa().length},
+				{"Anzahl Individuen", (double) nrOfInd / selectedBatchResultEntry.getCa().length},
+				{"evakuiert", evac / selectedBatchResultEntry.getCa().length},
+				{"nicht evakuiert", notEvac / selectedBatchResultEntry.getCa().length},
+				{"nicht evakuiert weil kein Ausgang erreichbar", notEvacNoExit / selectedBatchResultEntry.getCa().length},
+				{"nicht evakuiert weil die Zeit nicht gereicht hat", notEvacNoTime / selectedBatchResultEntry.getCa().length},
+				{"beste Evakuierungszeit (Durchlaufindex,Zeit)", ("(" + (bestEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[bestEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")")},
+				{"durchschnit. Evakuierungszeit (Durchlaufindex,Zeit)", ("(" + (aveEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[aveEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")")},
+				{"schlechteste Evakuierungszeit (Durchlaufindex,Zeit)", ("(" + (worseEvacIndex + 1) + " - " + (selectedBatchResultEntry.getCa()[worseEvacIndex].getTimeStep() / selectedBatchResultEntry.getCa()[bestEvacIndex].getStepsPerSecond()) + ")")}};
 			basicInformationTable = new JTable( data, columnNames );
 			basicInformationScrollPane = new JScrollPane( basicInformationTable );
 			diagrams.addTable( diagrammName, basicInformationScrollPane, west );
 		}
 
 		if( (noIndividualsInAtLeastOneAssignmentIndex) && !(diagrammName.equals( "Grundinformationen" )) ) {
-			chartData = new ChartData( "bar", "NO INDIVIDUALS in at least one of the choosed dataset(s)", "", new ArrayList<Double>(), new ArrayList<String>() );
+			chartData = new ChartData( "bar", "NO INDIVIDUALS in at least one of the choosed dataset(s)", "", new ArrayList<>(), new ArrayList<>() );
 			evakuierungsdauer = ChartFactory.createBarChart( "NO INDIVIDUALS in at least one of the choosed dataset(s)", "", chartData.getYAxisLabel(), chartData.getCDataSet(), PlotOrientation.VERTICAL, false, true, false );
 			diagrams.addChart( "NO INDIVIDUALS in at least one of the choosed dataset(s)", evakuierungsdauer, west );
 		} else {
 
 			if( diagrammName.equals( "Ausgangsverteilung" ) ) {
 				chartData = new ChartData( "pie", diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), "Ausgänge", categoryDatasetValues, categoryDatasetAssignments );
-				ausgangsverteilung = ChartFactory.createPieChart( diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), chartData.getPieDataSet(), false, true, false );
+				ausgangsverteilung = ChartFactory.createPieChart( diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), ChartData.getPieDataSet(), false, true, false );
 				diagrams.addChart( diagrammName, ausgangsverteilung, west );
 			}
 
@@ -768,7 +765,7 @@ public class JCAStatisticPanel extends JPanel {
 
 			if( diagrammName.equals( "evakuierte Individuen in Prozent" ) ) {
 				chartData = new ChartData( "pie", diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), "Individuen", categoryDatasetValues, categoryDatasetAssignments );
-				evakuierteIndividueninProzent = ChartFactory.createPieChart( diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), chartData.getPieDataSet(), false, true, false );
+				evakuierteIndividueninProzent = ChartFactory.createPieChart( diagrammName + ":" + selectedBatchResultEntry.getName() + "-" + assignmentGroups.get( assignmentIndexToShow.get( 0 ) ).toString(), ChartData.getPieDataSet(), false, true, false );
 				diagrams.addChart( diagrammName, evakuierteIndividueninProzent, west );
 			}
 
@@ -870,54 +867,37 @@ public class JCAStatisticPanel extends JPanel {
 
 		}//end else
 
-		categoryDatasetValues = new ArrayList<Double>();
-		categoryDatasetAssignments = new ArrayList<String>();
+		categoryDatasetValues = new ArrayList<>();
+		categoryDatasetAssignments = new ArrayList<>();
 		//dataset = new XYSeries("");
 		datasetCollection = new XYSeriesCollection();
-		int numberOfIndividuals = 0;
 		diagrams.validate();
 	}
 
 	private void addComponents() {
-		pane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
-		east = new JPanel( new BorderLayout() );
+		diagrams = new DiagramContainer( this );
+		contentD = new JScrollPane( diagrams );
 		west = new JPanel( new BorderLayout() );
+		west.add( contentD, BorderLayout.CENTER );
 
 		properties = addPropertiesComponents();
 		contentP = new JScrollPane( properties );
-
-		diagrams = new DiagramContainer( this );
-		contentD = new JScrollPane( diagrams );
-
-		west.add( contentD, BorderLayout.CENTER );
-
-		west.add( contentD );
+		east = new JPanel( new BorderLayout() );
 		east.add( contentP, BorderLayout.CENTER );
 		east.setMinimumSize( new Dimension( (int)properties.getMinimumSize().getWidth() + 22, (int)properties.getMinimumSize().getHeight() ) );
-
-		east.setPreferredSize( east.getMinimumSize() );
+    east.setPreferredSize( east.getMinimumSize() );
 		east.setMaximumSize( east.getMinimumSize() );
 
-		pane.setLeftComponent( west );
+		pane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
+    pane.setLeftComponent( west );
 		pane.setRightComponent( east );
 		pane.setResizeWeight( 1 );
-		pane.resetToPreferredSizes();
-		add( pane );
+		//pane.resetToPreferredSizes();
+		add( pane, BorderLayout.CENTER );
 	}
 
-	public class diagramClick implements MouseListener {
-		public void mouseEntered( MouseEvent me ) {
-		}
-
-		public void mouseClicked( MouseEvent me ) {
-		}
-
-		public void mouseReleased( MouseEvent me ) {
-		}
-
-		public void mouseExited( MouseEvent me ) {
-		}
-
+	public class diagramClick extends MouseAdapter {
+    @Override
 		public void mousePressed( MouseEvent me ) {
 			Component comp = me.getComponent();
 			String diagramName = "";
@@ -940,6 +920,7 @@ public class JCAStatisticPanel extends JPanel {
 	}
 
 	private class AssignmentTypeListSelect implements ListSelectionListener {
+    @Override
 		public void valueChanged( ListSelectionEvent e ) {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 			int minIndex = lsm.getMinSelectionIndex();
@@ -947,11 +928,12 @@ public class JCAStatisticPanel extends JPanel {
 			assignmentIndexToShow.clear();
 			for( int i = minIndex; i <= maxIndex; i++ )
 				if( lsm.isSelectedIndex( i ) )
-					assignmentIndexToShow.add( new Integer( i ) );
+					assignmentIndexToShow.add( i );
 		}
 	}
 
 	private class DiagramCategoryListSelect implements ListSelectionListener {
+    @Override
 		public void valueChanged( ListSelectionEvent e ) {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 			int minIndex = lsm.getMinSelectionIndex();
@@ -959,7 +941,7 @@ public class JCAStatisticPanel extends JPanel {
 			diagramCategoryIndexToShow.clear();
 			for( int i = minIndex; i <= maxIndex; i++ )
 				if( lsm.isSelectedIndex( i ) )
-					diagramCategoryIndexToShow.add( new Integer( i ) );
+					diagramCategoryIndexToShow.add( i );
 		}
 	}
 

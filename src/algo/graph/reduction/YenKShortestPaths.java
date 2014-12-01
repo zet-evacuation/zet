@@ -1,6 +1,7 @@
 package algo.graph.reduction;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,6 @@ import java.util.Vector;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import java.util.Objects;
 
 /**

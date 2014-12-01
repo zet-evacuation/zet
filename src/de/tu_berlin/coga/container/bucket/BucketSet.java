@@ -1,8 +1,5 @@
-/**
- * BucketSet.java
- * Created: Oct 21, 2010, 2:17:34 PM
- */
-package de.tu_berlin.math.coga.datastructure;
+
+package de.tu_berlin.coga.container.bucket;
 
 import de.tu_berlin.coga.container.mapping.Identifiable;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;

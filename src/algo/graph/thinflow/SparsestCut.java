@@ -18,13 +18,13 @@ package algo.graph.thinflow;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
-import de.tu_berlin.coga.netflow.ds.network.DynamicNetwork;
 import de.tu_berlin.coga.netflow.ds.network.rational.RationalResidualGraph;
-
 import de.tu_berlin.coga.netflow.classic.maxflow.Fujishige;
 import de.tu_berlin.coga.netflow.classic.problems.RationalMaxFlowProblem;
 import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.graph.DynamicNetwork;
 import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
+import java.util.Set;
 
 
 /* SparsestCut.java */
@@ -40,7 +40,7 @@ public class SparsestCut {
 	private IdentifiableDoubleMapping<Edge> cap; //capacities
 	private IdentifiableDoubleMapping<Node> dem; //demands
 
-	private HashSet<Node> mincut;
+	private Set<Node> mincut;
 	private double congestion;
 
 	private Node supersink;
@@ -77,7 +77,7 @@ public class SparsestCut {
 
 	}
 
-	public HashSet<Node> getMinCut() {
+	public Set<Node> getMinCut() {
 		return mincut;
 	}
 
@@ -91,10 +91,10 @@ public class SparsestCut {
 
 	class MinCut {
 		private double maxflowvalue;
-		private HashSet<Node> cutset;
+		private Set<Node> cutset;
 		private IdentifiableDoubleMapping<Edge> flows;
 
-		public MinCut( double value, HashSet<Node> set, IdentifiableDoubleMapping<Edge> f ) {
+		public MinCut( double value, Set<Node> set, IdentifiableDoubleMapping<Edge> f ) {
 			maxflowvalue = value;
 			cutset = set;
 			flows = f;
@@ -104,7 +104,7 @@ public class SparsestCut {
 			return maxflowvalue;
 		}
 
-		public HashSet<Node> getCutSet() {
+		public Set<Node> getCutSet() {
 			return cutset;
 		}
 
@@ -138,7 +138,7 @@ public class SparsestCut {
     bfs.setProblem( resgraph );
     bfs.setStart( source );
     bfs.run();
-		HashSet<Node> cut = bfs.getReachableNodes();
+		Set<Node> cut = bfs.getReachableNodes();
 
 		return new MinCut( maxflow, cut, fuji.getFlow() );
 	}
@@ -202,7 +202,7 @@ public class SparsestCut {
 	private void computeSparsestCut( Node source ) {
 		double throughput = 1.0;
 		MinCut cut;
-		HashSet<Node> mincutset;
+		Set<Node> mincutset;
 
 		while( true ) {
 

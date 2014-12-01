@@ -1,8 +1,5 @@
-/**
- * Tuple.java
- * Created 18.05.2010, 12:51:04
- */
-package de.tu_berlin.math.coga.datastructure;
+
+package de.tu_berlin.coga.common.datastructure;
 
 import java.util.Objects;
 

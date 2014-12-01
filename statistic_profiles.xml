@@ -1,6 +1,6 @@
 <linked-list>
   <profile>
-    <name>Zur Evakuierung ben�tigte Zeit</name>
+    <name>Zur Evakuierung benötigte Zeit</name>
     <type>GLOBAL</type>
     <diagrams class="linked-list">
       <diagram>
@@ -10,12 +10,12 @@
         <yAxisLabel>Zeit</yAxisLabel>
       </diagram>
       <diagram>
-        <title>Tabelle 1: Insgesamt ben�tigte Zeit</title>
+        <title>Tabelle 1: Insgesamt benötigte Zeit</title>
         <type>TABLE</type>
         <xAxisLabel></xAxisLabel>
       </diagram>
       <diagram>
-        <title>Stufenfl�chendiagramm 1: Quantile</title>
+        <title>Stufenflächendiagramm 1: Quantile</title>
         <type>STEP_AREA_CHART</type>
         <xAxisLabel>Personen</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
@@ -25,13 +25,13 @@
         <type>LINE_CHART</type>
       </diagram>
       <diagram>
-        <title>Fl�chendiagramm 1: Minima und Maxima</title>
+        <title>Flächendiagramm 1: Minima und Maxima</title>
         <type>AREA_CHART</type>
         <xAxisLabel>Personen</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
       </diagram>
       <diagram>
-        <title>S�ulendiagramm 1: Ben�tigte Zeit</title>
+        <title>Säulendiagramm 1: benötigte Zeit</title>
         <type>BAR_CHART</type>
         <xAxisLabel>Durchlauf</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
@@ -51,7 +51,7 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../diagrams/diagram[2]"/>
-          <name>Insgesamt ben�tigte Zeit</name>
+          <name>Insgesamt benötigte Zeit</name>
         </attributes>
       </statistic>
       <statistic>
@@ -191,7 +191,7 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../diagrams/diagram[6]"/>
-          <name>Insgesamt ben�tigte Zeit</name>
+          <name>Insgesamt benötigte Zeit</name>
         </attributes>
       </statistic>
       <statistic>
@@ -203,25 +203,25 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../diagrams/diagram"/>
-          <name>Zeit ben�tigt f�r Individuen</name>
+          <name>Zeit benötigt für Individuen</name>
         </attributes>
       </statistic>
     </statistics>
   </profile>
   <profile>
-    <name>Verteilung �ber Ausg�nge</name>
+    <name>Verteilung über Ausgänge</name>
     <type>NODE</type>
     <diagrams class="linked-list">
       <diagram>
-        <title>Kreisdiagramm 1: Verteilung �ber Ausg�nge</title>
+        <title>Kreisdiagramm 1: Verteilung über Ausgänge</title>
         <type>PIE_CHART</type>
       </diagram>
       <diagram>
-        <title>Kreisdiagramm 3D 1: Verteilung �ber Ausg�nge</title>
+        <title>Kreisdiagramm 3D 1: Verteilung über Ausgänge</title>
         <type>PIE_CHART_3D</type>
       </diagram>
       <diagram>
-        <title>Ringdiagramm 1: Verteilung �ber Ausg�nge</title>
+        <title>Ringdiagramm 1: Verteilung über Ausgänge</title>
         <type>RING_CHART</type>
       </diagram>
       <diagram>
@@ -308,19 +308,19 @@
     <type>EDGE</type>
     <diagrams class="linked-list">
       <diagram>
-        <title>Liniendiagramm 1: Fluss �ber Zeit</title>
+        <title>Liniendiagramm 1: Fluss über Zeit</title>
         <type>LINE_CHART</type>
         <xAxisLabel>Zeit</xAxisLabel>
         <yAxisLabel>Fluss</yAxisLabel>
       </diagram>
       <diagram>
-        <title>Stufenfl�chendiagramm 1: Auslastung</title>
+        <title>Stufenflächendiagramm 1: Auslastung</title>
         <type>STEP_AREA_CHART</type>
         <xAxisLabel>Zeit</xAxisLabel>
         <yAxisLabel>Auslastung</yAxisLabel>
       </diagram>
       <diagram>
-        <title>S�ulendiagramm 1: Flussrate</title>
+        <title>Säulendiagramm 1: Flussrate</title>
         <type>BAR_CHART</type>
         <xAxisLabel>Zeit</xAxisLabel>
         <yAxisLabel>Fluss</yAxisLabel>
@@ -398,7 +398,7 @@
     <statistics class="linked-list"/>
   </profile>
   <profile>
-    <name>Kopie von Zur Evakuierung ben�tigte Zeit</name>
+    <name>Kopie von Zur Evakuierung benötigte Zeit</name>
     <type>GLOBAL</type>
     <diagrams class="linked-list">
       <diagram>
@@ -408,12 +408,12 @@
         <yAxisLabel>Zeit</yAxisLabel>
       </diagram>
       <diagram>
-        <title>Säulendiagramm 1: Insgesamt ben�tigte Zeit</title>
+        <title>Säulendiagramm 1: Insgesamt benötigte Zeit</title>
         <type>BAR_CHART</type>
         <xAxisLabel></xAxisLabel>
       </diagram>
       <diagram>
-        <title>Stufenfl�chendiagramm 1: Quantile</title>
+        <title>Stufenflächendiagramm 1: Quantile</title>
         <type>STEP_AREA_CHART</type>
         <xAxisLabel>Personen</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
@@ -423,13 +423,13 @@
         <type>LINE_CHART</type>
       </diagram>
       <diagram>
-        <title>Fl�chendiagramm 1: Minima und Maxima</title>
+        <title>Flächendiagramm 1: Minima und Maxima</title>
         <type>AREA_CHART</type>
         <xAxisLabel>Personen</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
       </diagram>
       <diagram>
-        <title>S�ulendiagramm 1: Ben�tigte Zeit</title>
+        <title>Säulendiagramm 1: benötigte Zeit</title>
         <type>BAR_CHART</type>
         <xAxisLabel>Durchlauf</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
@@ -449,7 +449,7 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../../profile/diagrams/diagram[2]"/>
-          <name>Insgesamt ben�tigte Zeit</name>
+          <name>Insgesamt benötigte Zeit</name>
         </attributes>
       </statistic>
       <statistic>
@@ -589,7 +589,7 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../../profile/diagrams/diagram[6]"/>
-          <name>Insgesamt ben�tigte Zeit</name>
+          <name>Insgesamt benötigte Zeit</name>
         </attributes>
       </statistic>
       <statistic>
@@ -601,7 +601,7 @@
         </statistic>
         <attributes>
           <diagram reference="../../../../../profile/diagrams/diagram"/>
-          <name>Zeit ben�tigt f�r Individuen</name>
+          <name>Zeit benötigt für Individuen</name>
         </attributes>
       </statistic>
       <statistic>

@@ -2,7 +2,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.datastructure.Tuple;
+import de.tu_berlin.coga.common.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Graph;

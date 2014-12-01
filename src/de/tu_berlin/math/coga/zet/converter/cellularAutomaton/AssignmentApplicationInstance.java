@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import de.tu_berlin.math.coga.datastructure.Tuple;
+import de.tu_berlin.coga.common.datastructure.Tuple;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 
 

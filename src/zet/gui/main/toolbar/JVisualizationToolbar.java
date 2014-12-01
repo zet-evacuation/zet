@@ -1,15 +1,12 @@
-/**
- * JVisualizationToolbar.java
- * Created: Jul 19, 2010,7:18:42 PM
- */
+
 package zet.gui.main.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import de.tu_berlin.coga.common.datastructure.NamedIndex;
 import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Button;
-import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETLoader;

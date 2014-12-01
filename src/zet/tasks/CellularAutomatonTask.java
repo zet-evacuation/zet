@@ -20,6 +20,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import io.visualization.EvacuationSimulationResults;
+import statistic.ca.CAStatistic;
 
 
 /**
@@ -70,6 +71,9 @@ public class CellularAutomatonTask extends Algorithm<Project, EvacuationSimulati
 		ca.stopRecording();
     
 		EvacuationSimulationResults visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
+    
+    visResults.statistic = new CAStatistic (caAlgo.getProblem().caStatisticWriter.getStoredCAStatisticResults ());
+    
 		return visResults;
 	}
 
