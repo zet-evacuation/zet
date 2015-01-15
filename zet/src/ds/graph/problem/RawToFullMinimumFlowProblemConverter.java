@@ -1,4 +1,4 @@
-package de.tu_berlin.math.coga.batch.input.converter;
+package ds.graph.problem;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;

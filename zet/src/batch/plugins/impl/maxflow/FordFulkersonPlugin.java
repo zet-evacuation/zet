@@ -4,7 +4,7 @@ package batch.plugins.impl.maxflow;
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.math.coga.batch.input.converter.RawToFullMaximumFlowProblemConverter;
+import ds.graph.problem.RawToFullMaximumFlowProblemConverter;
 import ds.graph.problem.RawMaximumFlowProblem;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
