@@ -1,11 +1,13 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
+import org.zetool.components.batch.output.TreeListItem;
+import org.zetool.components.batch.output.AbstractOutput;
 import org.zetool.graph.Edge;
 import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
 import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
 import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
-import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
+import org.zetool.components.batch.gui.action.RunComputationAction;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.EvacuationRecording;

@@ -3,8 +3,8 @@ package gui;
 
 import org.zetool.container.util.SingleIterator;
 import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.math.coga.batch.gui.JBatch;
-import de.tu_berlin.math.coga.batch.input.Input;
+import org.zetool.coponents.batch.gui.JBatch;
+import org.zetool.components.batch.input.Input;
 import ds.ProjectLoader;
 import gui.GUIControl;
 import java.io.File;

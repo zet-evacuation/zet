@@ -1,8 +1,10 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
+import org.zetool.components.batch.operations.AtomicOperation;
+import org.zetool.components.batch.operations.AbstractOperation;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
+import org.zetool.components.batch.input.reader.InputFileReader;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DefaultDirectedGraph;

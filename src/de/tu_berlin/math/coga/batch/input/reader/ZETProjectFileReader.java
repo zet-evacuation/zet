@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
+import org.zetool.components.batch.input.reader.InputFileReader;
 import ds.ProjectLoader;
 import de.tu_berlin.coga.zet.model.Project;
 import java.io.File;

@@ -1,11 +1,12 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
+import org.zetool.components.batch.operations.AbstractOperation;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
+import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;

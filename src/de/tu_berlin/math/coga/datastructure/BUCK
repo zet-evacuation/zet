@@ -1,0 +1,13 @@
+java_library(
+  name = 'basic',
+  srcs = [
+    'Tuple.java',
+    'Truple.java',
+    'KeyValuePair.java',
+  ],
+  deps = [
+  ],
+  visibility = [ 'PUBLIC' ],
+  source = '1.7',
+  target = '1.7'
+)
