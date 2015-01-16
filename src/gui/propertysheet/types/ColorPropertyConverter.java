@@ -6,7 +6,7 @@ package gui.propertysheet.types;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import de.tu_berlin.coga.common.util.Formatter;
+import org.zetool.common.util.Formatter;
 import gui.propertysheet.abs.AbstractPropertyConverter;
 import java.awt.Color;
 

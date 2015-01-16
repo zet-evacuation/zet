@@ -27,8 +27,8 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
-import de.tu_berlin.coga.common.util.Direction8;
-import de.tu_berlin.coga.common.util.Level;
+import org.zetool.common.util.Direction8;
+import org.zetool.common.util.Level;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.TeleportArea;
 

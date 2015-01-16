@@ -5,7 +5,7 @@
 package batch.plugins.impl.converter;
 
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.zet.model.BuildingPlan;

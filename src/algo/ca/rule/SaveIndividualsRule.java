@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.coga.common.util.IOTools;
+import org.zetool.common.util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
 	static String nord = IOTools.getNextFreeNumberedFilename( "./", "results_nord", 3 );

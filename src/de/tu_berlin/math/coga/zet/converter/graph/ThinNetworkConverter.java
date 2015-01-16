@@ -1,7 +1,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.common.debug.Debug;
-import de.tu_berlin.coga.common.util.Level;
+import org.zetool.common.debug.Debug;
+import org.zetool.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.container.collection.ListSequence;

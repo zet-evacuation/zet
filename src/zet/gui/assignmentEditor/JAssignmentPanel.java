@@ -16,8 +16,8 @@
 
 package zet.gui.assignmentEditor;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;

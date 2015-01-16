@@ -3,7 +3,7 @@
  */
 package opengl.bsp;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.math.vectormath.Plane;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import java.util.LinkedList;

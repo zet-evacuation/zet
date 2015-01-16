@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.scheduling;
 
-import de.tu_berlin.coga.common.datastructure.Tuple;
+import org.zetool.common.datastructure.Tuple;
 import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;

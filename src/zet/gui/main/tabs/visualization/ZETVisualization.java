@@ -1,9 +1,9 @@
 package zet.gui.main.tabs.visualization;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.units.TimeUnits;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;

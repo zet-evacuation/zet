@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.math.matrix;
 
-import de.tu_berlin.coga.common.datastructure.Triple;
+import org.zetool.common.datastructure.Triple;
 
 
 /**

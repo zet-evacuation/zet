@@ -3,7 +3,7 @@ package algo.graph.reduction;
 
 import algo.graph.spanningtree.PrimForNetwork;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.coga.container.collection.ListSequence;

@@ -6,7 +6,7 @@ package zet.tasks;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;

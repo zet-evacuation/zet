@@ -5,7 +5,7 @@ import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 

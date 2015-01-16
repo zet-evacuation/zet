@@ -16,8 +16,8 @@
 
 package de.tu_berlin.coga.util.movies;
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
-import de.tu_berlin.coga.common.util.IOTools;
+import org.zetool.common.localization.LocalizationManager;
+import org.zetool.common.util.IOTools;
 import java.util.List;
 import javax.swing.JPanel;
 

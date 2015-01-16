@@ -16,7 +16,7 @@
 
 package gui.visualization.control;
 
-import de.tu_berlin.coga.common.localization.Localization;
+import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.CompareVisualizationResults;
 import ds.PropertyContainer;

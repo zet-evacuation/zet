@@ -20,7 +20,7 @@ import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import de.tu_berlin.coga.netflow.dynamic.TimeHorizonBounds;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;

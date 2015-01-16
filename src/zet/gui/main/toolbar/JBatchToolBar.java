@@ -1,8 +1,8 @@
 
 package zet.gui.main.toolbar;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.Localized;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.Localized;
 import gui.GUIControl;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;

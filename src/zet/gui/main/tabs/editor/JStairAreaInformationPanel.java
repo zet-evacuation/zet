@@ -1,7 +1,7 @@
 
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.StairPreset;
 import de.tu_berlin.coga.zet.model.ZLocalization;

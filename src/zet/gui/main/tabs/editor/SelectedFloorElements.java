@@ -1,7 +1,7 @@
 
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.common.util.SelectedElements;
+import org.zetool.common.util.SelectedElements;
 import de.tu_berlin.coga.zet.model.PlanEdge;
 import zet.gui.main.tabs.base.JPolygon;
 

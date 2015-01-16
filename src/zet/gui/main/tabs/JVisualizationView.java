@@ -16,8 +16,8 @@
 
 package zet.gui.main.tabs;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import de.tu_berlin.math.coga.components.JArrayPanel;

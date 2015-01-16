@@ -3,7 +3,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.searchtree;
 
-import de.tu_berlin.coga.common.datastructure.KeyValuePair;
+import org.zetool.common.datastructure.KeyValuePair;
 import java.util.ArrayList;
 import java.util.Collections;
 

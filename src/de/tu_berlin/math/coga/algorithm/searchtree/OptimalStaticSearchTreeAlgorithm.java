@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.searchtree;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.searchtree.OptimalStaticSearchTree;
 import de.tu_berlin.coga.graph.Node;
 import java.util.logging.Level;

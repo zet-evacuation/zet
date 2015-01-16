@@ -4,7 +4,7 @@
  */
 package statistics.collectors;
 
-import de.tu_berlin.coga.common.datastructure.Tuple;
+import org.zetool.common.datastructure.Tuple;
 import java.util.ArrayList;
 import umontreal.iro.lecuyer.stat.TallyStore;
 

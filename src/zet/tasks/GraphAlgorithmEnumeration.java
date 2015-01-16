@@ -28,7 +28,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;

@@ -3,7 +3,7 @@ package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.parameter.AbstractParameterSet;
 import algo.ca.parameter.ParameterSet;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.PropertyContainer;

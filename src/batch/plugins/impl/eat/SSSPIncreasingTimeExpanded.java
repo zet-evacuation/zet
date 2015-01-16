@@ -2,7 +2,7 @@
 package batch.plugins.impl.eat;
 
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
 import de.tu_berlin.coga.netflow.dynamic.eatapprox.EatPatternBFS;

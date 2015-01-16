@@ -36,7 +36,7 @@ import gui.visualization.draw.ca.GLSaveCell;
 import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
-import de.tu_berlin.coga.common.util.Direction8;
+import org.zetool.common.util.Direction8;
 import ds.ca.evac.TeleportCell;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;

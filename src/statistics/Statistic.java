@@ -4,7 +4,7 @@
  */
 package statistics;
 
-import de.tu_berlin.coga.common.datastructure.Tuple;
+import org.zetool.common.datastructure.Tuple;
 import statistics.collectors.AgeCollector;
 import statistics.collectors.SpecificFlowCollector;
 import statistics.collectors.SpeedCollector;

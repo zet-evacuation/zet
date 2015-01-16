@@ -19,7 +19,7 @@ package gui.propertysheet;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import org.zetool.common.localization.AbstractLocalization;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.DefaultPropertyTreeNodeConverter;
 import gui.propertysheet.BasicProperty;

@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.coga.common.localization.Localized;
+import org.zetool.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import javax.swing.AbstractButton;
 

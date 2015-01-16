@@ -16,7 +16,7 @@
 
 package zet.gui.main.tabs;
 
-import de.tu_berlin.coga.common.localization.Localization;
+import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.components.JRuler;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.AssignmentArea;

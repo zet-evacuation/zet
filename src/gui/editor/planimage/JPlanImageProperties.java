@@ -16,7 +16,7 @@
 
 package gui.editor.planimage;
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;

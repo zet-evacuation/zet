@@ -15,8 +15,8 @@
  */
 package zet.gui.main.tabs.base;
 
-import static de.tu_berlin.coga.common.util.Helper.in;
-import de.tu_berlin.coga.common.util.Selectable;
+import static org.zetool.common.util.Helper.in;
+import org.zetool.common.util.Selectable;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.Barrier;

@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.math;
 
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.units.TimeUnits;
 import java.util.Arrays;
 
 /**

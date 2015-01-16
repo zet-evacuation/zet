@@ -1,9 +1,9 @@
 
 package zet.gui.main.menu;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
-import de.tu_berlin.coga.common.localization.Localized;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
+import org.zetool.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import gui.GUIControl;

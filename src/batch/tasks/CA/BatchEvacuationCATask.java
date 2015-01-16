@@ -28,7 +28,7 @@ import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.zet.model.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
