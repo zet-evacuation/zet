@@ -16,7 +16,7 @@
 
 package gui;
 
-import batch.plugins.AlgorithmicPlugin;
+import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.debug.HTMLLoggerHandler;
 import org.zetool.common.debug.SimpleFileHandler;

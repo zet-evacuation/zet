@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.maxflow;
 
-import batch.plugins.AlgorithmicPlugin;
+import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.MaximumFlow;
 import ds.graph.problem.RawToFullMaximumFlowProblemConverter;

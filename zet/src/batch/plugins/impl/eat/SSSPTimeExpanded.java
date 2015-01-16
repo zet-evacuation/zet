@@ -2,7 +2,7 @@
 package batch.plugins.impl.eat;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import batch.plugins.AlgorithmicPlugin;
+import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.dynamic.earliestarrival.old.EATransshipmentWithTHSSSP;

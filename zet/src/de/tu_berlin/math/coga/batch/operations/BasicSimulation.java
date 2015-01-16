@@ -1,5 +1,7 @@
 package de.tu_berlin.math.coga.batch.operations;
 
+import org.zetool.components.batch.operations.AtomicOperation;
+import org.zetool.components.batch.operations.AbstractOperation;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
@@ -8,7 +10,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
+import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;

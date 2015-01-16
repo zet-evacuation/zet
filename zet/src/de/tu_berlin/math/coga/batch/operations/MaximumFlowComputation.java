@@ -1,9 +1,11 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
+import org.zetool.components.batch.operations.AtomicOperation;
+import org.zetool.components.batch.operations.AbstractOperation;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
+import org.zetool.components.batch.input.reader.InputFileReader;
 import ds.graph.problem.RawMaximumFlowProblem;
 
 /**

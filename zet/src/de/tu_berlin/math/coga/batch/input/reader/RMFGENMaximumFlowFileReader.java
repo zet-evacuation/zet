@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
+import org.zetool.components.batch.input.reader.InputFileReader;
 import ds.graph.problem.RawMaximumFlowProblem;
 import java.io.BufferedReader;
 import java.io.File;

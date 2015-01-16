@@ -5,7 +5,7 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import batch.plugins.AlgorithmicPlugin;
+import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 

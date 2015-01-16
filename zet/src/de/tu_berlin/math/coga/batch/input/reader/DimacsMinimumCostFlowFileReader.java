@@ -1,6 +1,7 @@
 
 package de.tu_berlin.math.coga.batch.input.reader;
 
+import org.zetool.components.batch.input.reader.InputFileReader;
 import static de.tu_berlin.math.coga.batch.input.reader.DimacsReader.commentLine;
 import ds.graph.problem.RawMinimumCostFlowProblem;
 

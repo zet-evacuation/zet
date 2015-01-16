@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.eat;
 
-import batch.plugins.AlgorithmicPlugin;
+import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;

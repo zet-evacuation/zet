@@ -1,6 +1,8 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
+import org.zetool.components.batch.output.TreeListItem;
+import org.zetool.components.batch.output.AbstractOutput;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
