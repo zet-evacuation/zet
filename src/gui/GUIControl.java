@@ -56,8 +56,14 @@ import gui.visualization.control.ZETGLControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.DXFWriter;
 import de.tu_berlin.coga.util.movies.MovieManager;
+import de.tu_berlin.math.coga.batch.input.FileFormat;
 import de.tu_berlin.math.coga.batch.input.InputDirectory;
 import de.tu_berlin.math.coga.batch.input.InputFiles;
+import de.tu_berlin.math.coga.batch.input.ProblemType;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMaximumFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.reader.RMFGENMaximumFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.BasicSimulation;
 import de.tu_berlin.math.coga.batch.operations.BestResponseOperation;
@@ -194,13 +200,28 @@ public class GUIControl implements AlgorithmListener {
 
 		// Components in tabs
 		editview = Localizer.instance().registerNewComponent( new JEditView( editStatus, this, selection ) );
-		selection.addObserver( editview );
-		caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
-		JBatch batchView = new JBatch();
+    selection.addObserver( editview );
+    caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
+    JBatch batchView = new JBatch();
     // Initialize batchView
+
+    final ProblemType EVACUATION_PROJECT = new ProblemType( "Evacuation Project", "Number of Floors, Number of Exits, Maximal Number of Evacuees" );
+    final ProblemType MAXIMUM_FLOW = new ProblemType( "Maximum Flow Problem", "Number of Nodes, Number of Edges" );
+    final ProblemType MINIMUM_COST_FLOW = new ProblemType( "Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply" );
+
+    final FileFormat DIMACS_MAXIMUM_FLOW = new FileFormat( MAXIMUM_FLOW, DimacsMaximumFlowFileReader.class, "DIMACS Maximum Flow Problem", "max" );
+    final FileFormat DIMACS_MINIMUM_COST_FLOW = new FileFormat( MINIMUM_COST_FLOW, DimacsMinimumCostFlowFileReader.class, "DIMACS Minimum Cost Flow Problem", "min", "net" );
+    final FileFormat RMFGEN_MAXIMUM_FLOW = new FileFormat( MAXIMUM_FLOW, RMFGENMaximumFlowFileReader.class, "RMFGEN Maximum Flow Problem", "rmf" );
+    final FileFormat ZET_PROJECT = new FileFormat( EVACUATION_PROJECT, ZETProjectFileReader.class, "ZET Evacuation Project", new ImageIcon( "./icons/zet_24.png" ), "zet" );
+
+    batchView.registerFileFormat( DIMACS_MAXIMUM_FLOW );
+    batchView.registerFileFormat( DIMACS_MINIMUM_COST_FLOW );
+    batchView.registerFileFormat( RMFGEN_MAXIMUM_FLOW );
+    batchView.registerFileFormat( ZET_PROJECT );
+  
     batchView.registerInputAction( new ProjectInput( this ), "Add current project", new ImageIcon("./icons/box_24.png" ) );
-    batchView.registerInputAction( new InputFiles( batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
-    batchView.registerInputAction( new InputDirectory( batchView ), "Add input directory", new ImageIcon("./icons/folder_add_24.png" ) );
+    batchView.registerInputAction( new InputFiles( batchView, batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
+    batchView.registerInputAction( new InputDirectory( batchView, batchView ), "Add input directory", new ImageIcon("./icons/folder_add_24.png" ) );
 
     batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
     batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
