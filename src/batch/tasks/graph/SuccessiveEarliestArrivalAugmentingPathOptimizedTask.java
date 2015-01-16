@@ -16,13 +16,13 @@
 
 package batch.tasks.graph;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.common.algorithm.Transformation;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  * Transforms an instance of {@link NetworkFlowModel} to an {@link EarliestArrivalFlowProblem}

@@ -16,20 +16,20 @@
 
 package ds;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.classic.PathComposition;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.classic.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
-import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.util.ArrayList;
 import opengl.framework.abs.VisualizationResult;
 

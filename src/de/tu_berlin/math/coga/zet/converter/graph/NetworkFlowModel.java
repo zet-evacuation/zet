@@ -16,20 +16,20 @@
 
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.util.GraphInstanceChecker;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.coga.netflow.util.GraphInstanceChecker;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.DynamicNetwork;
 import gui.visualization.VisualizationOptionManager;
 import java.util.Collections;
 import java.util.Iterator;

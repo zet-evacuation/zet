@@ -7,7 +7,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import gui.visualization.draw.graph.GLEdge;
 import opengl.framework.abs.AbstractControl;
 

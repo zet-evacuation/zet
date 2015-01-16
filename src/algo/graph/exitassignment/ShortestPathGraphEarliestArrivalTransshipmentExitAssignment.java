@@ -16,27 +16,27 @@
 
 package algo.graph.exitassignment;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.structure.Forest;
+import org.zetool.graph.Edge;
+import org.zetool.graph.structure.Forest;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.structure.Path;
-import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
-import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.Path;
+import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.netflow.ds.flow.MaximumFlow;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.classic.problems.MaximumFlowProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.netflow.dynamic.TimeHorizonBounds;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.netflow.dynamic.TimeHorizonBounds;
 
 /**
  *

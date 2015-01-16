@@ -1,6 +1,6 @@
 package algo.graph.reduction;
 
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.util.List;
 import java.util.Vector;
 

@@ -15,10 +15,10 @@
  */
 package algo.graph.nashflow;
 
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import java.util.HashSet;
 import java.util.HashMap;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import java.util.List;
 import java.util.ArrayList;

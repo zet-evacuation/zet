@@ -17,8 +17,8 @@
 
 package algo.graph.nashflow;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import java.util.HashMap;
 import java.util.List;

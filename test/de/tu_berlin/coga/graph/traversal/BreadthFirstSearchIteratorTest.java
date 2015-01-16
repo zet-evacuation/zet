@@ -1,6 +1,8 @@
 
 package de.tu_berlin.coga.graph.traversal;
 
+import org.zetool.graph.traversal.GeneralBreadthFirstSearchIterator;
+import org.zetool.graph.traversal.EdgeNodePair;
 import org.zetool.common.util.Helper;
 import java.util.Arrays;
 import org.junit.Test;

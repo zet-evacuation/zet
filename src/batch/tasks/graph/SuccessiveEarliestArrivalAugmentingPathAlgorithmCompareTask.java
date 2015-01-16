@@ -4,12 +4,12 @@
  */
 package batch.tasks.graph;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.SEAAPAlgoWithTH;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.earliestarrival.old.SEAAPAlgoWithTH;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
-import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  *

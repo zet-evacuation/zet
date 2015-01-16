@@ -4,11 +4,11 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.netflow.dynamic.maxflow.MaxFlowOverTime;
+import org.zetool.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;

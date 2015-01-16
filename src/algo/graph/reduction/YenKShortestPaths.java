@@ -1,14 +1,14 @@
 package algo.graph.reduction;
 
 import org.zetool.container.priority.MinHeap;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import java.util.Objects;
 
 /**

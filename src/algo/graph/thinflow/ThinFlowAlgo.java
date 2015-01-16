@@ -20,11 +20,11 @@ import org.zetool.common.algorithm.Algorithm;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Set;

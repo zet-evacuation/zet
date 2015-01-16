@@ -1,14 +1,14 @@
 package test;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.structure.StaticPath;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlow;
-import de.tu_berlin.coga.netflow.ds.structure.StaticFlowPath;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.StaticPath;
+import org.zetool.netflow.ds.flow.PathBasedFlow;
+import org.zetool.netflow.ds.structure.StaticFlowPath;
 import gurobi.GRB;
 import gurobi.GRBConstr;
 import gurobi.GRBEnv;

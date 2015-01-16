@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import com.thoughtworks.xstream.XStream;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
@@ -22,7 +22,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import ds.GraphVisualizationResults;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import event.EventListener;
 import event.EventServer;

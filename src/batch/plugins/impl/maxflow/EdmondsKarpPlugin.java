@@ -3,8 +3,8 @@ package batch.plugins.impl.maxflow;
 
 import batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
-import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
+import org.zetool.netflow.classic.maxflow.EdmondsKarp;
+import org.zetool.netflow.ds.flow.MaximumFlow;
 import ds.graph.problem.RawToFullMaximumFlowProblemConverter;
 import ds.graph.problem.RawMaximumFlowProblem;
 import net.xeoh.plugins.base.annotations.PluginImplementation;

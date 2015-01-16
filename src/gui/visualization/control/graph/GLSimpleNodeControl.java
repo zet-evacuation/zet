@@ -4,12 +4,12 @@
  */
 package gui.visualization.control.graph;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Graph;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Graph;
+import org.zetool.graph.Node;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.draw.graph.GLSimpleNode;
 import gui.visualization.util.FlowCalculator;

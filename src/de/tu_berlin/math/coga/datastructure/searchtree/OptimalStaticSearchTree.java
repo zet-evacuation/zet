@@ -6,8 +6,8 @@ package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import de.tu_berlin.math.coga.algorithm.searchtree.OptimalStaticSearchTreeInstance;
 import ds.graph.BinaryTreeToString;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 
 

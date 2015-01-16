@@ -16,23 +16,23 @@
 
 package zet.tasks;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.DynamicTransshipmentProblem;
-import de.tu_berlin.coga.netflow.dynamic.transshipment.QuickestTransshipment;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentMinCost;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentSSSP;
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
-import de.tu_berlin.coga.netflow.dynamic.maxflow.MaxFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.maxflow.TimeExpandedMaximumFlowOverTime;
+import org.zetool.netflow.dynamic.problems.DynamicTransshipmentProblem;
+import org.zetool.netflow.dynamic.transshipment.QuickestTransshipment;
+import org.zetool.netflow.dynamic.earliestarrival.old.EATransshipmentMinCost;
+import org.zetool.netflow.dynamic.earliestarrival.old.EATransshipmentSSSP;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.earliestarrival.old.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
+import org.zetool.netflow.dynamic.maxflow.MaxFlowOverTime;
+import org.zetool.netflow.dynamic.maxflow.TimeExpandedMaximumFlowOverTime;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
-import de.tu_berlin.coga.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
+import org.zetool.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  * Enumerates the types of graph algorithms and assigns each of them a way

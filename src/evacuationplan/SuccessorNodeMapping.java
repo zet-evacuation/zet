@@ -19,9 +19,9 @@
  */
 
 package evacuationplan;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.graph.Node;
+import org.zetool.graph.Edge;
 import java.util.HashMap;
 
 

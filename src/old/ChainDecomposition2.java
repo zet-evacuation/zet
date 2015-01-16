@@ -19,16 +19,16 @@
  */
 package old;
 
-import de.tu_berlin.coga.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 //import ds.graph.flow.FlowOverTimeEdgeSequence;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdgeSequence;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.structure.FlowOverTimeEdge;
+import org.zetool.netflow.ds.structure.FlowOverTimeEdgeSequence;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;

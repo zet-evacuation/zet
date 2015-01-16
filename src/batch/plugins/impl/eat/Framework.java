@@ -3,9 +3,9 @@ package batch.plugins.impl.eat;
 
 import batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 /**

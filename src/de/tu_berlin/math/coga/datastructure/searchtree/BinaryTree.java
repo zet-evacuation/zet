@@ -3,13 +3,13 @@ package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import org.zetool.container.collection.ListSequence;
 import org.zetool.container.collection.ArraySet;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import ds.graph.GraphLocalization;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.util.Iterator;
 
 

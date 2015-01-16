@@ -18,9 +18,9 @@ package de.tu_berlin.math.coga.graph.generator;
 
 import org.zetool.container.mapping.Identifiable;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.util.Random;
 
 /**

@@ -1,6 +1,11 @@
 
 package de.tu_berlin.coga.graph;
 
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.SimpleUndirectedGraph;
+import org.zetool.graph.UndirectedGraph;
+import org.zetool.graph.DefaultDirectedGraph;
+
 
 /**
  * Unit test for graphs.

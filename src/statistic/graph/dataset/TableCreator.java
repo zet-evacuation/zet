@@ -20,8 +20,8 @@
 
 package statistic.graph.dataset;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;

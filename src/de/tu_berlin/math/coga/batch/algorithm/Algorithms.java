@@ -5,11 +5,11 @@
 package de.tu_berlin.math.coga.batch.algorithm;
 
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.structure.Path;
-import de.tu_berlin.coga.graph.util.GraphUtil;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.Path;
+import org.zetool.graph.util.GraphUtil;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

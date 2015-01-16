@@ -1,7 +1,8 @@
 
 package de.tu_berlin.coga.graph.traversal;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.traversal.DepthFirstSearch;
+import org.zetool.graph.DirectedGraph;
 import de.tu_berlin.coga.graph.GraphTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

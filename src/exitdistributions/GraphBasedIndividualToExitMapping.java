@@ -23,7 +23,7 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
 import ds.ca.evac.DeathCause;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.text.DecimalFormat;
 import java.util.ArrayList;

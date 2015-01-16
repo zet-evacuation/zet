@@ -1,9 +1,9 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.GraphVisualizationResults;

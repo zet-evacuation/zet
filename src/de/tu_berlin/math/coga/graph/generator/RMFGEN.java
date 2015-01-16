@@ -5,11 +5,11 @@ package de.tu_berlin.math.coga.graph.generator;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.util.ArrayList;
 
 /**

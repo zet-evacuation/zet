@@ -1,7 +1,7 @@
 package de.tu_berlin.coga.graph.traversal;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.DefaultDirectedGraph;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;

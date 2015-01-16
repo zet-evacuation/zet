@@ -4,15 +4,15 @@
  */
 package algo.graph.reduction;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.container.collection.ListSequence;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import java.util.Collection;

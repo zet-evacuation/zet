@@ -18,7 +18,7 @@ package algo.graph.exitassignment;
 
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
 

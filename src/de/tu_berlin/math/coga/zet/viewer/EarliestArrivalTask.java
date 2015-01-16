@@ -4,15 +4,15 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.tasks.ProcessUpdateMessage;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import org.zetool.common.algorithm.AlgorithmTerminatedEvent;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import javax.swing.SwingWorker;
 
 /**

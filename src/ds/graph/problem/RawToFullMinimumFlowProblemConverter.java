@@ -1,10 +1,10 @@
 package ds.graph.problem;
 
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.netflow.classic.problems.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 

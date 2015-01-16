@@ -16,14 +16,14 @@
 
 package old;
 
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EarliestArrivalAugmentingPathProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.EarliestArrivalAugmentingPath;
-import de.tu_berlin.coga.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.netflow.dynamic.earliestarrival.EarliestArrivalAugmentingPathProblem;
+import org.zetool.netflow.dynamic.earliestarrival.EarliestArrivalAugmentingPath;
+import org.zetool.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.container.mapping.TimeIntegerMapping;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;

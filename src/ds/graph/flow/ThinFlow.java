@@ -22,8 +22,8 @@
 package ds.graph.flow;
 
 import ds.graph.problem.ThinFlowProblem;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 
 /**

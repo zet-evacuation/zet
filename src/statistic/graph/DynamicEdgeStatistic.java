@@ -19,7 +19,7 @@
  */
 package statistic.graph;
 
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 
 /**
  *
