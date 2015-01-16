@@ -5,11 +5,11 @@
 package de.tu_berlin.math.coga.algorithm.scheduling;
 
 import org.zetool.common.datastructure.Tuple;
-import de.tu_berlin.coga.netflow.classic.maxflow.EdmondsKarp;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
+import org.zetool.netflow.classic.maxflow.EdmondsKarp;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.netflow.classic.problems.MaximumFlowProblem;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;

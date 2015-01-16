@@ -2,7 +2,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.APSPAlgo;
 import org.zetool.container.collection.ListSequence;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 /**
  *

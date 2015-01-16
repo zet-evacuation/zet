@@ -16,16 +16,16 @@
 
 package algo.graph.exitassignment;
 
-import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
+import org.zetool.graph.Node;
+import org.zetool.netflow.ds.flow.MaximumFlow;
+import org.zetool.netflow.classic.problems.MaximumFlowProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.netflow.classic.maxflow.FordFulkerson;
+import org.zetool.netflow.classic.maxflow.FordFulkerson;
 
 /**
  *

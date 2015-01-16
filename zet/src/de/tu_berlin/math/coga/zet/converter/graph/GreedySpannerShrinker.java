@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.GreedyAlgo;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import algo.graph.spanningtree.MinSpanningTreeProblem;

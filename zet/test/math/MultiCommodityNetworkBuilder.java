@@ -2,9 +2,9 @@
 package math;
 
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

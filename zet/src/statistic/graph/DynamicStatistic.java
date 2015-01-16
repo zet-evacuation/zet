@@ -19,7 +19,7 @@
  */
 package statistic.graph;
 
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import statistic.graph.IntegerDoubleMapping.TimeValuePair;
 import static statistic.graph.DynamicNodeStatistic.*;
 

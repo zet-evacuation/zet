@@ -4,14 +4,14 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

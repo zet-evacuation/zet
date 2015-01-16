@@ -23,7 +23,7 @@ package ds.graph.flow;
 
 import ds.graph.problem.NashFlowProblem;
 import java.util.Vector;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 
 /**

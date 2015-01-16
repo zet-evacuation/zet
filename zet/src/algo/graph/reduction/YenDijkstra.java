@@ -2,11 +2,11 @@ package algo.graph.reduction;
 
 import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;

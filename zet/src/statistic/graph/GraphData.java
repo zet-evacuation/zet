@@ -16,16 +16,16 @@
 
 package statistic.graph;
 
-import de.tu_berlin.coga.netflow.classic.PathComposition;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.netflow.classic.PathComposition;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;
+import org.zetool.graph.Node;
+import org.zetool.netflow.ds.structure.FlowOverTimeEdge;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -7,7 +7,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import gui.visualization.draw.graph.GLNashFlowEdge;
 import opengl.drawingutils.RainbowGradient;
 

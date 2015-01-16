@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
 import static org.junit.Assert.*;
 import org.junit.Test;

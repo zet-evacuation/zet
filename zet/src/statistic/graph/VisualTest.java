@@ -20,10 +20,10 @@
 package statistic.graph;
 
 
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

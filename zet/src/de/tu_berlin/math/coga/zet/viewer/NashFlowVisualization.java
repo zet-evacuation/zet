@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.viewer;
 
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;

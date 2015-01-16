@@ -17,8 +17,8 @@ package gui.visualization.control.graph;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.draw.graph.GLNode;

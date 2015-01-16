@@ -6,13 +6,13 @@ package algo.graph.reduction;
 
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Graph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Graph;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.collection.ListSequence;
 import algo.graph.spanningtree.UndirectedTree;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import java.util.Random;
 

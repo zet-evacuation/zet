@@ -1,10 +1,10 @@
 
 package de.tu_berlin.math.coga.batch.output;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
-import de.tu_berlin.coga.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
+import org.zetool.graph.Edge;
+import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
+import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
+import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;

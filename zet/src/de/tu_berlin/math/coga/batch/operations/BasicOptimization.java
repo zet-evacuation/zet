@@ -1,24 +1,24 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.ds.network.ExtendedGraph;
-import de.tu_berlin.coga.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.network.ExtendedGraph;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import zet.tasks.GraphAlgorithmEnumeration;

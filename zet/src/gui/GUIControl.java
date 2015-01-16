@@ -1,7 +1,7 @@
 
 package gui;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.BatchResult;
 import batch.BatchResultEntry;
 import batch.tasks.AlgorithmTask;

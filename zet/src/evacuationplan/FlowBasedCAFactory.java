@@ -19,7 +19,7 @@ import java.util.List;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import ds.ca.evac.EvacuationCellularAutomaton;

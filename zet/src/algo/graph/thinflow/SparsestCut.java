@@ -15,15 +15,15 @@
  */
 package algo.graph.thinflow;
 
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.Edge;
 import java.util.HashSet;
-import de.tu_berlin.coga.netflow.ds.network.rational.RationalResidualGraph;
-import de.tu_berlin.coga.netflow.classic.maxflow.Fujishige;
-import de.tu_berlin.coga.netflow.classic.problems.RationalMaxFlowProblem;
+import org.zetool.netflow.ds.network.rational.RationalResidualGraph;
+import org.zetool.netflow.classic.maxflow.Fujishige;
+import org.zetool.netflow.classic.problems.RationalMaxFlowProblem;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
-import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
+import org.zetool.graph.DynamicNetwork;
+import org.zetool.graph.traversal.BreadthFirstSearch;
 import java.util.Set;
 
 

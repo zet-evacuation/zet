@@ -16,14 +16,14 @@
 
 package algo.graph.exitassignment;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.DirectedGraph;
 
 /**
  *

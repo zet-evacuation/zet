@@ -20,9 +20,9 @@ import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 import org.zetool.common.algorithm.Algorithm;
 import ds.graph.problem.NashFlowProblem;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.algorithm.shortestpath.RationalDijkstra;
 import ds.graph.flow.NashFlow;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Vector;
 import java.util.List;
 import Jama.Matrix;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 
 /**
  *

@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
@@ -14,13 +14,13 @@ import org.zetool.common.algorithm.AlgorithmTerminatedEvent;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.TimeUnits;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.graph.DirectedGraph;
+import org.zetool.graph.Node;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.DirectedGraph;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

@@ -4,8 +4,8 @@
  */
 package ds.graph;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import algo.graph.spanningtree.MinSpanningTreeProblem;

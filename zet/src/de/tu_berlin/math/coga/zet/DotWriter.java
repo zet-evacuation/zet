@@ -4,10 +4,10 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

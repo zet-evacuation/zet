@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.awt.Point;
 
 /**

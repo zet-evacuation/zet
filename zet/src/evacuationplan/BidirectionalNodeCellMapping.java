@@ -26,7 +26,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.Room;
 import ds.ca.evac.EvacCell;

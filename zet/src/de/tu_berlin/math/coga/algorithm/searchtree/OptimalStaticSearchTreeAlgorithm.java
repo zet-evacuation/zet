@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.algorithm.searchtree;
 
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.searchtree.OptimalStaticSearchTree;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.util.logging.Level;
 
 

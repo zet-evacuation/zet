@@ -2,23 +2,23 @@
 package algo.graph.reduction;
 
 import algo.graph.spanningtree.PrimForNetwork;
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import org.zetool.container.collection.ListSequence;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.structure.Forest;
-import de.tu_berlin.coga.graph.Graph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.structure.Forest;
+import org.zetool.graph.Graph;
 import org.zetool.container.collection.IdentifiableCollection;
 import ds.graph.MinSteinerTree;
 import algo.graph.spanningtree.NetworkMST;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.graph.structure.Path;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.Path;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
 import algo.graph.spanningtree.NetworkMSTProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 
 /**
  *

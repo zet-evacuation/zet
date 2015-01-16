@@ -21,10 +21,10 @@ package algo.graph.nashflow;
 import org.junit.Test;
 import ds.graph.problem.NashFlowProblem;
 import ds.graph.flow.NashFlow;
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 
 
 

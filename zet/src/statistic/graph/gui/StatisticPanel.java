@@ -28,7 +28,7 @@ import statistic.graph.gui.event.StatisticDiagramChangedEvent;
 import statistic.graph.gui.event.StatisticSelectionChangedEvent;
 import statistic.graph.gui.event.DiagramEvent;
 import statistic.graph.gui.event.DiagramListener;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Node;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -1,11 +1,11 @@
 
 package batch.plugins.impl.eat;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.netflow.dynamic.earliestarrival.old.EATransshipmentWithTHSSSP;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.dynamic.earliestarrival.old.EATransshipmentWithTHSSSP;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 

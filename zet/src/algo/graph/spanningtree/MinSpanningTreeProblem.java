@@ -5,9 +5,9 @@
 package algo.graph.spanningtree;
 
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Graph;
+import org.zetool.graph.Graph;
 
 /**
  *

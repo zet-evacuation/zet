@@ -16,23 +16,23 @@
 
 package algo.graph.exitassignment;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.coga.netflow.classic.maxflow.PathDecomposition;
-import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import de.tu_berlin.coga.netflow.classic.mincost.SuccessiveShortestPath;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.netflow.classic.maxflow.PathDecomposition;
+import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import org.zetool.netflow.classic.mincost.SuccessiveShortestPath;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.graph.Edge;
+import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlow;
-import de.tu_berlin.coga.netflow.ds.structure.StaticFlowPath;
-import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
+import org.zetool.graph.Node;
+import org.zetool.netflow.ds.flow.MaximumFlow;
+import org.zetool.netflow.ds.flow.PathBasedFlow;
+import org.zetool.netflow.ds.structure.StaticFlowPath;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.netflow.classic.problems.MaximumFlowProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.graph.DirectedGraph;
-import de.tu_berlin.coga.netflow.classic.maxflow.FordFulkerson;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.netflow.classic.maxflow.FordFulkerson;
 import java.util.LinkedList;
 import java.util.List;
 

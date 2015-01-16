@@ -22,10 +22,10 @@
 
 package ds.graph.problem;
 
-import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.graph.Node;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import de.tu_berlin.coga.graph.DynamicNetwork;
+import org.zetool.graph.DynamicNetwork;
 
 public class ThinFlowProblem {
 
