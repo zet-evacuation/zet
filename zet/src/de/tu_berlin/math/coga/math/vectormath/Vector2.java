@@ -1,7 +1,7 @@
 package de.tu_berlin.math.coga.math.vectormath;
 
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.coga.geom.Point;
 import de.tu_berlin.math.coga.math.Conversion;
 import java.text.NumberFormat;

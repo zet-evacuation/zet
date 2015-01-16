@@ -51,7 +51,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import de.tu_berlin.coga.common.datastructure.NamedIndex;
+import org.zetool.common.datastructure.NamedIndex;
 import ds.PropertyContainer;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.exception.GroupOfIndsNoPotentialException;

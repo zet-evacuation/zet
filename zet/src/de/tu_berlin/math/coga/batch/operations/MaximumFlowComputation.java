@@ -1,7 +1,7 @@
 
 package de.tu_berlin.math.coga.batch.operations;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import ds.graph.problem.RawMaximumFlowProblem;

@@ -1,7 +1,7 @@
 
 package zet.gui.main.menu.popup;
 
-import de.tu_berlin.coga.common.localization.Localization;
+import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;

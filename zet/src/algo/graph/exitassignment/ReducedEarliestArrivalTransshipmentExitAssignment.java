@@ -34,7 +34,7 @@ import de.tu_berlin.coga.netflow.ds.flow.MaximumFlow;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import de.tu_berlin.coga.netflow.dynamic.TimeHorizonBounds;

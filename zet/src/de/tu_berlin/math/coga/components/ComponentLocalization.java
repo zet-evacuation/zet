@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import org.zetool.common.localization.AbstractLocalization;
 import java.util.MissingResourceException;
 
 /**

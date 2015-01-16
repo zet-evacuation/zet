@@ -4,10 +4,10 @@
  */
 package zet.tasks;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
+import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AlgorithmListener;
+import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;

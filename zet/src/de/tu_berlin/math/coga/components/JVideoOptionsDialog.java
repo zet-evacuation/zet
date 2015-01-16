@@ -16,10 +16,10 @@
 
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
-import de.tu_berlin.coga.common.util.units.BinaryUnits;
-import de.tu_berlin.coga.common.util.Formatter;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
+import org.zetool.common.util.units.BinaryUnits;
+import org.zetool.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import de.tu_berlin.coga.util.movies.MovieWriter;

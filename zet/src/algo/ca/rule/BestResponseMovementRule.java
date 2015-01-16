@@ -16,8 +16,8 @@
 package algo.ca.rule;
 
 
-import de.tu_berlin.coga.common.util.Direction8;
-import de.tu_berlin.coga.common.util.Level;
+import org.zetool.common.util.Direction8;
+import org.zetool.common.util.Level;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;

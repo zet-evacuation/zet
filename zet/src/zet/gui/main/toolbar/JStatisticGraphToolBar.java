@@ -3,9 +3,9 @@ package zet.gui.main.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import de.tu_berlin.coga.common.datastructure.NamedIndex;
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.Localized;
+import org.zetool.common.datastructure.NamedIndex;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.Localized;
 import gui.GUIControl;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;

@@ -16,16 +16,12 @@
 
 package gui;
 
-import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.math.coga.batch.operations.AtomicOperation;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.common.debug.Debug;
-import de.tu_berlin.coga.common.debug.HTMLLoggerHandler;
-import de.tu_berlin.coga.common.debug.SimpleFileHandler;
-import de.tu_berlin.coga.common.debug.SimpleLogFormatter;
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.common.debug.Debug;
+import org.zetool.common.debug.HTMLLoggerHandler;
+import org.zetool.common.debug.SimpleFileHandler;
+import org.zetool.common.debug.SimpleLogFormatter;
+import org.zetool.common.util.Formatter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

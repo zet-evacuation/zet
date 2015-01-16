@@ -16,7 +16,7 @@
 
 package de.tu_berlin.math.coga.math.vectormath;
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import java.text.NumberFormat;
 import java.text.ParseException;

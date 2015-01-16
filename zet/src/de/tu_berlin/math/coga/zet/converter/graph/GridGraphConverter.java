@@ -2,9 +2,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.common.util.Direction8;
-import static de.tu_berlin.coga.common.util.Direction8.*;
-import static de.tu_berlin.coga.common.util.Level.*;
+import org.zetool.common.util.Direction8;
+import static org.zetool.common.util.Direction8.*;
+import static org.zetool.common.util.Level.*;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.graph.Edge;

@@ -16,8 +16,8 @@
 
 package de.tu_berlin.coga.util.movies;
 
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.IOTools;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.IOTools;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

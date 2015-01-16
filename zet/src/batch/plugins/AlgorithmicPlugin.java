@@ -4,7 +4,7 @@
  */
 package batch.plugins;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import net.xeoh.plugins.base.Plugin;
 
 

@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tu_berlin.coga.common.util.Direction8;
-import de.tu_berlin.coga.common.util.Level;
+import org.zetool.common.util.Direction8;
+import org.zetool.common.util.Level;
 import de.tu_berlin.coga.zet.model.Barrier;
 import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.Floor;

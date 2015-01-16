@@ -16,7 +16,7 @@
 
 package algo.ca.rule;
 
-import de.tu_berlin.coga.common.util.Direction8;
+import org.zetool.common.util.Direction8;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.evac.DoorCell;

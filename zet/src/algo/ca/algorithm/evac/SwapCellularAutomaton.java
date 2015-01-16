@@ -17,7 +17,7 @@ package algo.ca.algorithm.evac;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
-import de.tu_berlin.coga.common.util.Direction8;
+import org.zetool.common.util.Direction8;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;

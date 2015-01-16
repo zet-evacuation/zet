@@ -17,10 +17,10 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.common.util.Direction8;
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.Level;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
+import org.zetool.common.util.Direction8;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.Level;
+import org.zetool.common.util.units.TimeUnits;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;

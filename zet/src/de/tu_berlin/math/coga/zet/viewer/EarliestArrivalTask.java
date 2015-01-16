@@ -7,11 +7,11 @@ package de.tu_berlin.math.coga.zet.viewer;
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import batch.tasks.ProcessUpdateMessage;
-import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
+import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AlgorithmListener;
+import org.zetool.common.algorithm.AlgorithmProgressEvent;
+import org.zetool.common.algorithm.AlgorithmStartedEvent;
+import org.zetool.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import javax.swing.SwingWorker;
 

@@ -18,7 +18,7 @@ package algo.graph.nashflow;
 import algo.graph.thinflow.ThinFlowAlgo;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import ds.graph.problem.NashFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;

@@ -9,7 +9,7 @@
  */
 package gui;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.APSPGraphShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.ClusterShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphConverterAndShrinker;

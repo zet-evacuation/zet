@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.common.algorithm.parameter.Parameter;
+import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.parameter.Parameter;
 import java.io.File;
 
 /**

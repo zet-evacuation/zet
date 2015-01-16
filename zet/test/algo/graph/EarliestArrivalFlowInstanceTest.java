@@ -6,11 +6,11 @@ package algo.graph;
 
 import de.tu_berlin.coga.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import de.tu_berlin.coga.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
-import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.coga.common.util.Formatter;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
+import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AlgorithmProgressEvent;
+import org.zetool.common.algorithm.AlgorithmListener;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.units.TimeUnits;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.Node;

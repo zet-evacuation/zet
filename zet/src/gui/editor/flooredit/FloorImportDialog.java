@@ -32,7 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import de.tu_berlin.coga.common.localization.Localization;
+import org.zetool.common.localization.Localization;
 import ds.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETLoader;

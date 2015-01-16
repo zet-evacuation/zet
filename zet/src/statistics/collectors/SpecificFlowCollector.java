@@ -4,7 +4,7 @@
  */
 package statistics.collectors;
 
-import de.tu_berlin.coga.common.datastructure.Triple;
+import org.zetool.common.datastructure.Triple;
 import ds.ca.evac.EvacCell;
 import java.awt.Point;
 import java.util.ArrayList;

@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.MSTSteiner;
 import algo.graph.spanningtree.Prim;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;

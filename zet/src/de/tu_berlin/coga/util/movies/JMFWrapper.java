@@ -16,8 +16,8 @@
 
 package de.tu_berlin.coga.util.movies;
 
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
 import java.util.List;
 import java.util.Vector;
 import javax.media.MediaLocator;

@@ -17,7 +17,7 @@ package gui.visualization;
 
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
-import de.tu_berlin.coga.common.debug.Debug;
+import org.zetool.common.debug.Debug;
 import de.tu_berlin.math.coga.math.Conversion;
 import event.EventServer;
 import event.MessageEvent;

@@ -4,9 +4,9 @@
  */
 package gui;
 
-import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.coga.common.util.Quantity;
-import de.tu_berlin.coga.common.util.units.TimeUnits;
+import org.zetool.common.algorithm.AlgorithmListener;
+import org.zetool.common.util.Quantity;
+import org.zetool.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;

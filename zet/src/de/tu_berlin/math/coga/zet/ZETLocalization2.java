@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.coga.common.localization.Localization;
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.AbstractLocalization;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
 
 /**
  *

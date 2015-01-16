@@ -1,7 +1,7 @@
 
 package zet.gui.treeview;
 
-import de.tu_berlin.coga.common.localization.LocalizationManager;
+import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.Area;
 
 /**

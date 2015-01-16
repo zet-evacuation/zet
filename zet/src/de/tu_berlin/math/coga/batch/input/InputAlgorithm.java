@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 
 /**
  *

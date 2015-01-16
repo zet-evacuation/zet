@@ -27,7 +27,7 @@ import de.tu_berlin.coga.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 
 /**
  *

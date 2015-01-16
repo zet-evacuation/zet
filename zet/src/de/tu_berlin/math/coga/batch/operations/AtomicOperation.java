@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.operations;
 
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.coga.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.Algorithm;
 import gui.ZETMain;
 import java.util.Collection;
 import java.util.Iterator;

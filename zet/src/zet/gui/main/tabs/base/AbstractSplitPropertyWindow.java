@@ -21,7 +21,7 @@
 
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.coga.common.localization.Localized;
+import org.zetool.common.localization.Localized;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JComponent;
