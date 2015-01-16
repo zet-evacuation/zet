@@ -21,8 +21,8 @@ package old;
 
 import de.tu_berlin.coga.netflow.ds.network.ImplicitTimeExpandedResidualNetwork;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.Node;
 //import ds.graph.flow.FlowOverTimeEdgeSequence;
 import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimeEdge;

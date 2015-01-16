@@ -22,8 +22,8 @@ import ds.graph.flow.ThinFlow;
 
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.collection.ListSequence;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.collection.ListSequence;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.graph.DynamicNetwork;
 import java.util.HashSet;
 import java.util.HashMap;

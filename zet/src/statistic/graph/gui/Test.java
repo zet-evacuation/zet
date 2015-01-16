@@ -26,7 +26,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import java.awt.BorderLayout;

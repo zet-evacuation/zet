@@ -3,11 +3,11 @@ package algo.graph.spanningtree;
 
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.container.collection.ListSequence;
-import de.tu_berlin.coga.container.priority.MinHeap;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableObjectMapping;
+import org.zetool.container.collection.ListSequence;
+import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.coga.graph.DynamicNetwork;
 import de.tu_berlin.coga.graph.Node;
 import java.util.Random;

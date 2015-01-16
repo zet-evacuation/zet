@@ -16,8 +16,8 @@
 
 package de.tu_berlin.math.coga.graph.generator;
 
-import de.tu_berlin.coga.container.mapping.Identifiable;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.Identifiable;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.graph.DirectedGraph;

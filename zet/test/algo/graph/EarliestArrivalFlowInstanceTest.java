@@ -12,7 +12,7 @@ import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.TimeUnits;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;

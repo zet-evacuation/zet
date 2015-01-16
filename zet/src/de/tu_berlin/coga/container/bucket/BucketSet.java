@@ -1,8 +1,8 @@
 
 package de.tu_berlin.coga.container.bucket;
 
-import de.tu_berlin.coga.container.mapping.Identifiable;
-import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import org.zetool.container.mapping.Identifiable;
+import org.zetool.container.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 import java.util.Objects;
 

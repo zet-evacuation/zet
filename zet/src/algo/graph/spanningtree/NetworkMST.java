@@ -4,7 +4,7 @@
  */
 package algo.graph.spanningtree;
 
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Edge;
 
 /**

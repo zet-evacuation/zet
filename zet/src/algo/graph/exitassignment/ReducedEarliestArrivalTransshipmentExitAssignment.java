@@ -24,8 +24,8 @@ import de.tu_berlin.coga.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGa
 import de.tu_berlin.coga.netflow.classic.problems.MaximumFlowProblem;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.structure.Forest;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.netflow.ds.flow.FlowOverTimeImplicit;

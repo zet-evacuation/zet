@@ -23,7 +23,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
