@@ -7,8 +7,8 @@ package ds.graph;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.Graph;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
-import de.tu_berlin.coga.container.collection.ArraySet;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.ArraySet;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import java.util.Iterator;
 

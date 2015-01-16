@@ -21,7 +21,7 @@ import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayList;

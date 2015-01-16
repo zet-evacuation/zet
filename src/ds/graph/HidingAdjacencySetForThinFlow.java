@@ -11,7 +11,7 @@ package ds.graph;
  */
 
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import java.util.Iterator;
 import java.util.LinkedList;
 

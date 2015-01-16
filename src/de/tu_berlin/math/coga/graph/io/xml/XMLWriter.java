@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
 import java.io.BufferedWriter;
 import java.io.File;

@@ -19,7 +19,7 @@ import de.tu_berlin.coga.graph.Edge;
 import java.util.HashSet;
 import java.util.HashMap;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import java.util.List;
 import java.util.ArrayList;
 

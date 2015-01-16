@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.algorithm.searchtree.OptimalStaticSearchTreeInstan
 import ds.graph.BinaryTreeToString;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 
 
 /**

@@ -6,7 +6,7 @@ import de.tu_berlin.coga.graph.Node;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
 import de.tu_berlin.coga.netflow.classic.problems.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * Converter that transforms memory-efficient raw minimum cost flow problems

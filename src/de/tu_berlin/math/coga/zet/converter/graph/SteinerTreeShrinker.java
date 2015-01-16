@@ -7,15 +7,15 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.MSTSteiner;
 import algo.graph.spanningtree.Prim;
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.container.collection.ListSequence;
+import org.zetool.container.collection.ListSequence;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.MinSteinerTree;
 import de.tu_berlin.coga.graph.Node;
 import ds.graph.NodeRectangle;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

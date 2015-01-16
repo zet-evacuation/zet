@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.GreedyAlgo;
 import de.tu_berlin.coga.graph.Edge;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import algo.graph.spanningtree.UndirectedTree;
 import algo.graph.spanningtree.MinSpanningTreeProblem;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

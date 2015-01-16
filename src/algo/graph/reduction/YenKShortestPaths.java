@@ -1,6 +1,6 @@
 package algo.graph.reduction;
 
-import de.tu_berlin.coga.container.priority.MinHeap;
+import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.coga.graph.DynamicNetwork;
 import java.util.HashMap;
 import java.util.List;

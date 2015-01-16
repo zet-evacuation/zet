@@ -32,7 +32,7 @@ import de.tu_berlin.coga.netflow.ds.structure.FlowOverTimePath;
 import de.tu_berlin.coga.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.netflow.ds.network.ExtendedGraph;
 import de.tu_berlin.coga.graph.DefaultDirectedGraph;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import gui.AlgorithmControl;

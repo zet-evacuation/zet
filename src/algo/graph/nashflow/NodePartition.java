@@ -19,7 +19,7 @@ package algo.graph.nashflow;
 
 import java.util.ArrayList;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;

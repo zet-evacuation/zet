@@ -19,7 +19,7 @@ import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.coga.graph.Edge;
 import de.tu_berlin.coga.netflow.ds.flow.EdgeBasedFlowOverTime;
-import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import gui.visualization.draw.graph.GLFlowEdge;
 import java.util.ArrayList;
 

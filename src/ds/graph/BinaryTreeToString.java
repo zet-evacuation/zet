@@ -6,7 +6,7 @@ package ds.graph;
 
 import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableMapping;
+import org.zetool.container.mapping.IdentifiableMapping;
 import java.util.LinkedList;
 import java.util.Queue;
 

@@ -17,7 +17,7 @@ package ds.ca.evac;
 
 import algo.ca.rule.PotentialValueTuple;
 import org.zetool.common.util.Direction8;
-import de.tu_berlin.coga.container.mapping.Identifiable;
+import org.zetool.container.mapping.Identifiable;
 import java.util.UUID;
 
 /**

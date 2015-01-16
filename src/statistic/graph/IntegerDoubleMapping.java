@@ -19,8 +19,8 @@
  */
 package statistic.graph;
 
-import de.tu_berlin.coga.container.mapping.TimeIntegerMapping;
-import de.tu_berlin.coga.container.mapping.TimeIntegerPair;
+import org.zetool.container.mapping.TimeIntegerMapping;
+import org.zetool.container.mapping.TimeIntegerPair;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.SortedSet;

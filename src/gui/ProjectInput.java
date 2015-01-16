@@ -1,7 +1,7 @@
 
 package gui;
 
-import de.tu_berlin.coga.container.util.SingleIterator;
+import org.zetool.container.util.SingleIterator;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.batch.input.Input;

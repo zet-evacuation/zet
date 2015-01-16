@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.List;
 import Jama.Matrix;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.graph.DynamicNetwork;
 
 /**

@@ -21,7 +21,7 @@ import java.util.HashSet;
 import de.tu_berlin.coga.netflow.ds.network.rational.RationalResidualGraph;
 import de.tu_berlin.coga.netflow.classic.maxflow.Fujishige;
 import de.tu_berlin.coga.netflow.classic.problems.RationalMaxFlowProblem;
-import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.coga.graph.DynamicNetwork;
 import de.tu_berlin.coga.graph.traversal.BreadthFirstSearch;
 import java.util.Set;

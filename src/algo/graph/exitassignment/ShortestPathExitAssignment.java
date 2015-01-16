@@ -18,11 +18,11 @@ package algo.graph.exitassignment;
 
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.container.priority.MinHeap;
+import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.graph.Node;
-import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import org.zetool.container.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.coga.graph.DirectedGraph;
 
 /**
