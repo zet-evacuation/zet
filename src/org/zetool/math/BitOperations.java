@@ -18,7 +18,7 @@
  * BitOperations.java
  * Created 22.02.2010, 21:16:20
  */
-package de.tu_berlin.math.coga.math;
+package org.zetool.math;
 
 /**
  * The class {@code BitOperations} is a utility class that provides some

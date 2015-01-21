@@ -2,7 +2,7 @@
  * Conversion.java
  * Created: Mar 9, 2010,2:31:17 PM
  */
-package de.tu_berlin.math.coga.math;
+package org.zetool.math;
 
 /**
  *

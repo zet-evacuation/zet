@@ -20,7 +20,7 @@
  */
 package gui;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.IOException;

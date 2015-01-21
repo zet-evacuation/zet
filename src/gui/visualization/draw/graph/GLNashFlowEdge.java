@@ -5,7 +5,7 @@
 package gui.visualization.draw.graph;
 
 import opengl.drawingutils.RainbowGradient;
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
 import gui.visualization.control.graph.GLEdgeControl;

@@ -16,7 +16,7 @@
 
 package gui.visualization;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import event.EventServer;
 import event.MessageEvent;

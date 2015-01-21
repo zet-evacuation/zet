@@ -5,7 +5,7 @@
 
 package de.tu_berlin.math.coga.rndutils.distribution.discrete;
 
-import de.tu_berlin.math.coga.math.Combinatorics;
+import org.zetool.math.Combinatorics;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 

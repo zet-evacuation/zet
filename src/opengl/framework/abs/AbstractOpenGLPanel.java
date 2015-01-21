@@ -23,7 +23,7 @@ package opengl.framework.abs;
 
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.FPSAnimator;
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

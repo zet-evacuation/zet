@@ -19,7 +19,7 @@
  * Created 22.02.2010, 21:11:16
  */
 
-package de.tu_berlin.math.coga.math;
+package org.zetool.math;
 
 /**
  * The class {@code Combinatorics} is a utility class that provides

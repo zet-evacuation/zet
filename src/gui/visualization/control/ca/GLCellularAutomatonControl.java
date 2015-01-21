@@ -21,7 +21,7 @@
 
 package gui.visualization.control.ca;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 import ds.ca.results.DieAction;
