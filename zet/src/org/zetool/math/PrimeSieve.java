@@ -2,7 +2,7 @@
  * PrimeSieve.java
  * Created: Feb 15, 2010,2:29:27 PM
  */
-package de.tu_berlin.math.coga.math;
+package org.zetool.math;
 
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.TimeUnits;

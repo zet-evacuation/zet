@@ -15,7 +15,7 @@
  */
 package opengl.helper;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Plane;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 

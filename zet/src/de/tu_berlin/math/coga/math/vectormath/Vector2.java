@@ -3,7 +3,7 @@ package de.tu_berlin.math.coga.math.vectormath;
 
 import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.coga.geom.Point;
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import java.text.NumberFormat;
 import java.text.ParseException;
 

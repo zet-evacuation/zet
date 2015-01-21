@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableObjectMapping;

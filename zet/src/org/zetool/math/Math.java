@@ -2,7 +2,7 @@
  * Math.java
  * Created 22.02.2010, 21:26:06
  */
-package de.tu_berlin.math.coga.math;
+package org.zetool.math;
 
 /**
  * The class {@code Math} is a utility class that provides some additional

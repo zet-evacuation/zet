@@ -16,7 +16,7 @@
 
 package gui.visualization.draw.building;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.building.GLWallControl;

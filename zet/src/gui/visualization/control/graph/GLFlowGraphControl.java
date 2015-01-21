@@ -17,7 +17,7 @@
 package gui.visualization.control.graph;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import ds.GraphVisualizationResults;
 import org.zetool.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
