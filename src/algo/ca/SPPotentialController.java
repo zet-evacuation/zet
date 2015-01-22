@@ -18,8 +18,8 @@ package algo.ca;
 
 import algo.ca.util.PotentialUtils;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.generators.GeneralRandom;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.DynamicPotential;

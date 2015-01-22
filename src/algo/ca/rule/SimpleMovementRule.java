@@ -16,7 +16,7 @@
 
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 import ds.ca.evac.EvacCell;
 import java.util.List;
 

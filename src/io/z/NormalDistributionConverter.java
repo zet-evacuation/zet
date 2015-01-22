@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 
 /**
  * A converter that allows to load and store {@link NormalDistribution}

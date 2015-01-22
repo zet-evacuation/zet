@@ -14,7 +14,7 @@ import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.BinaryUnits;
 import org.zetool.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
-import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
+import org.zetool.rndutils.distribution.discrete.UniformDistribution;
 import org.zetool.graph.Edge;import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.Node;
 import org.zetool.netflow.ds.flow.MaximumFlow;

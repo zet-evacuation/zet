@@ -19,7 +19,7 @@ import ds.ca.evac.EvacCell;
 import ds.ca.evac.DeathCause;
 import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 
 /**
  * Sets a random exit to an individual.

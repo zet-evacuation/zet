@@ -16,8 +16,8 @@
 
 package algo.ca.parameter;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 
 
 /**

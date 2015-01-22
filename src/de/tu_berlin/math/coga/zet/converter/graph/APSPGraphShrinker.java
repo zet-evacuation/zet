@@ -1,6 +1,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.algorithm.shortestpath.APSPAlgo;
+//import de.tu_berlin.math.coga.algorithm.shortestpath.APSPAlgo;
+import org.zetool.algorithm.shortestpath.APSPAlgo;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
@@ -27,7 +28,9 @@ public class APSPGraphShrinker extends GraphShrinker {
 	IdentifiableCollection<Edge> runEdge() {
 		//using APSP algorithm:
     int numEdges=0;
-    APSPAlgo apspalgo = new APSPAlgo( getProblem() );
+    
+    //APSPAlgo apspalgo = new APSPAlgo( getProblem() );
+    APSPAlgo apspalgo = new APSPAlgo();
 		int[][] succ = apspalgo.run();
 		int numNodes = getProblem().numberOfNodes() - 1;
 

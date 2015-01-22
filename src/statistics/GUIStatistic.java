@@ -9,8 +9,8 @@
  */
 package statistics;
 
-import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.distribution.Distribution;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.coga.zet.model.ZControl;
 import java.awt.Color;
 import java.io.File;
