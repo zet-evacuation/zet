@@ -3,8 +3,8 @@
  */
 package de.tu_berlin.math.coga.graph.generator;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.distribution.DiscreteDistribution;
 import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.Node;

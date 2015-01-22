@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import ds.ca.evac.EvacCell;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 
 /**
  * This rule combines the to concrete rules "ChangePotentialFamiliarityRule" and

@@ -17,7 +17,7 @@
 package algo.ca.rule;
 
 import org.zetool.common.util.Direction8;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.results.IndividualStateChangeAction;

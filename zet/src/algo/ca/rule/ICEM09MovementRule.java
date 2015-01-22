@@ -18,7 +18,7 @@ package algo.ca.rule;
 import ds.ca.evac.EvacCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 import java.util.List;
 
 /**

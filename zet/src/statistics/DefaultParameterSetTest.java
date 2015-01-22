@@ -6,8 +6,8 @@
 package statistics;
 
 import algo.ca.parameter.DefaultParameterSet;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 import gui.editor.properties.PropertyLoadException;
 import ds.PropertyContainer;
 import java.io.BufferedWriter;

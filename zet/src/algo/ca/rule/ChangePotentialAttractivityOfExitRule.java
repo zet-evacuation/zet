@@ -22,7 +22,7 @@ import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.SaveCell;
 import ds.ca.evac.StaticPotential;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 
 /**
  * This rule changes the Individuals StaticPotential. It chooses the admissible 

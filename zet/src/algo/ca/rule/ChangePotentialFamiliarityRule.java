@@ -15,8 +15,8 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.generators.GeneralRandom;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;

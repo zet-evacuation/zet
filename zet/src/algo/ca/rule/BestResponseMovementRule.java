@@ -23,7 +23,7 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 import java.util.ArrayList;
 import java.util.List;
 import util.DebugFlags;

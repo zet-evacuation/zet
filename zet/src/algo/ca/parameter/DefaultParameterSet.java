@@ -17,8 +17,8 @@
 package algo.ca.parameter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.DynamicPotential;

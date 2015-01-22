@@ -16,7 +16,7 @@
 
 package algo.ca.algorithm.evac;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import org.zetool.rndutils.RandomUtils;
 import ds.ca.evac.Individual;
 import java.util.Arrays;
 import java.util.Collections;

@@ -18,12 +18,12 @@ package zet.gui.assignmentEditor;
 
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
-import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.HyperExponentialDistribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
+import org.zetool.rndutils.distribution.Distribution;
+import org.zetool.rndutils.distribution.continuous.ErlangDistribution;
+import org.zetool.rndutils.distribution.continuous.ExponentialDistribution;
+import org.zetool.rndutils.distribution.continuous.HyperExponentialDistribution;
+import org.zetool.rndutils.distribution.continuous.NormalDistribution;
+import org.zetool.rndutils.distribution.continuous.UniformDistribution;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;
@@ -81,9 +81,9 @@ import zet.gui.GUILocalization;
  * box that contains some types (that can describe different types of people).
  * All of the parameters of the different assignment types can be set
  * as probability distributions. Currently
- * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution},
- * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution},
- * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution},
+ * {@link org.zetool.rndutils.distribution.continuous.NormalDistribution},
+ * {@link org.zetool.rndutils.distribution.continuous.UniformDistribution},
+ * {@link org.zetool.rndutils.distribution.continuous.ExponentialDistribution},
  * {@link ErlangDistribution} and
  * {@link HyperExponentialDistribution} are supported.
  * @author Jan-Philipp Kappmeier

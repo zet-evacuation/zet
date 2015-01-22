@@ -15,8 +15,8 @@
  */
 package evacuationplan;
 
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
+import org.zetool.rndutils.RandomUtils;
+import org.zetool.rndutils.generators.GeneralRandom;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
