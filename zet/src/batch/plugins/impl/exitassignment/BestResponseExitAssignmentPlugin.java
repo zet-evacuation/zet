@@ -4,7 +4,7 @@ package batch.plugins.impl.exitassignment;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class BestResponseExitAssignmentPlugin extends ShortestPathExitAssignment implements AlgorithmicPlugin<NetworkFlowModel, ExitAssignment> {
+public class BestResponseExitAssignmentPlugin extends ShortestPathExitAssignment implements AlgorithmPlugin<NetworkFlowModel, ExitAssignment> {
 
 	@Override
 	public String getName() {
@@ -35,4 +35,9 @@ public class BestResponseExitAssignmentPlugin extends ShortestPathExitAssignment
 	public Algorithm<NetworkFlowModel, ExitAssignment> getAlgorithm() {
     return new EarliestArrivalTransshipmentExitAssignment();
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

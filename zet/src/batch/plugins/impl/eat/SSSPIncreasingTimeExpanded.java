@@ -1,10 +1,9 @@
 
 package batch.plugins.impl.eat;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
-import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
 import org.zetool.netflow.dynamic.eatapprox.EatPatternBFS;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -14,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class SSSPIncreasingTimeExpanded implements AlgorithmicPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
+public class SSSPIncreasingTimeExpanded implements AlgorithmPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
 	@Override
 	public String getName() {
 		return "SSSP in increasing time expanded network";
@@ -54,5 +53,10 @@ public class SSSPIncreasingTimeExpanded implements AlgorithmicPlugin<EarliestArr
       }
     };
     return algo;
+  }
+
+  @Override
+  public String toString() {
+    return getName();
   }
 }

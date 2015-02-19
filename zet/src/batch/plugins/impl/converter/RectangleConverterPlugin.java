@@ -1,10 +1,6 @@
-/**
- * ConverterPlugin.java
- * Created: 28.03.2014, 17:26:39
- */
 package batch.plugins.impl.converter;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
@@ -17,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class RectangleConverterPlugin implements AlgorithmicPlugin<BuildingPlan, NetworkFlowModel> {
+public class RectangleConverterPlugin implements AlgorithmPlugin<BuildingPlan, NetworkFlowModel> {
 
 	@Override
 	public String getName() {
@@ -38,4 +34,9 @@ public class RectangleConverterPlugin implements AlgorithmicPlugin<BuildingPlan,
 	public Algorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
 		return new RectangleConverter();
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

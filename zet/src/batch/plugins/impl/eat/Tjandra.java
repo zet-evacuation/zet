@@ -1,8 +1,8 @@
 package batch.plugins.impl.eat;
 
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -12,7 +12,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class Tjandra implements AlgorithmicPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
+public class Tjandra implements AlgorithmPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
 
   @Override
   public String getName() {
@@ -52,5 +52,10 @@ public class Tjandra implements AlgorithmicPlugin<EarliestArrivalFlowProblem, Pa
       }
     };
     return algo;
+  }
+
+  @Override
+  public String toString() {
+    return getName();
   }
 }

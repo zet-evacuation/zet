@@ -1,8 +1,8 @@
 
 package batch.plugins.impl.eat;
 
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.dynamic.earliestarrival.old.EATransshipmentWithTHSSSP;
@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class SSSPTimeExpanded implements AlgorithmicPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
+public class SSSPTimeExpanded implements AlgorithmPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
 
 	@Override
 	public String getName() {
@@ -57,4 +57,9 @@ public class SSSPTimeExpanded implements AlgorithmicPlugin<EarliestArrivalFlowPr
     };
     return algo;
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.maxflow;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import org.zetool.netflow.ds.flow.MaximumFlow;
@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class Goldberg implements AlgorithmicPlugin<RawMaximumFlowProblem, MaximumFlow> {
+public class Goldberg implements AlgorithmPlugin<RawMaximumFlowProblem, MaximumFlow> {
   
 	@Override
 	public String getName() {
@@ -52,4 +52,9 @@ public class Goldberg implements AlgorithmicPlugin<RawMaximumFlowProblem, Maximu
     };
     return algo;
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

@@ -4,6 +4,7 @@ package gui;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import batch.plugins.AlgorithmPlugin;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.VisualizationDataStructureTask;
 import org.zetool.coponents.batch.gui.JBatch;
@@ -84,6 +85,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -96,6 +98,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.ParserConfigurationException;
+import net.xeoh.plugins.base.Plugin;
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 import org.xml.sax.SAXException;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
@@ -169,7 +174,8 @@ public class GUIControl implements AlgorithmListener {
 	 */
 	public GUIControl() { }
 
-	public void createZETWindow() {
+  @SuppressWarnings("rawtypes")
+  public void createZETWindow() {
 		zcontrol = new ZControl();
 		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 
@@ -223,6 +229,18 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerInputAction( new InputFiles( batchView, batchView ), "Add input file(s)", new ImageIcon("./icons/document_add_24.png" ) );
     batchView.registerInputAction( new InputDirectory( batchView, batchView ), "Add input directory", new ImageIcon("./icons/folder_add_24.png" ) );
 
+    // Load plugins
+    
+    PluginManager pm = ZETMain.pm;
+    
+    PluginManagerUtil pmu = new PluginManagerUtil( pm );
+    Collection<AlgorithmPlugin> plugins = pmu.getPlugins( AlgorithmPlugin.class);
+    
+    for( AlgorithmPlugin p : plugins ) {
+      log.log(Level.INFO, "Found algorithm plugin: {0}", p.toString());
+      batchView.registerAlgorithm( p );
+    }
+    
     batchView.registerOperationAction( new BasicOptimization(), "Basic Optimization" );
     batchView.registerOperationAction( new BasicSimulation(), "Simulation" );
     batchView.registerOperationAction( new ExitAssignmentOperation(), "Exit Assignment" );

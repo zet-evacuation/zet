@@ -5,7 +5,7 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class InOrderPlugin implements AlgorithmicPlugin<EvacuationSimulationProblem,EvacuationSimulationResult> {
+public class InOrderPlugin implements AlgorithmPlugin<EvacuationSimulationProblem,EvacuationSimulationResult> {
 
   @Override
   public String getName() {
@@ -36,5 +36,10 @@ public class InOrderPlugin implements AlgorithmicPlugin<EvacuationSimulationProb
   public Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> getAlgorithm() {
     EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonInOrder();
     return algo;
+  }
+
+  @Override
+  public String toString() {
+    return getName();
   }
 }

@@ -1,10 +1,6 @@
-/**
- * GridConverterPlugin.java
- * Created: 03.04.2014, 17:11:37
- */
 package batch.plugins.impl.converter;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -17,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class GridConverterPlugin implements AlgorithmicPlugin<BuildingPlan, NetworkFlowModel> {
+public class GridConverterPlugin implements AlgorithmPlugin<BuildingPlan, NetworkFlowModel> {
 
 	@Override
 	public String getName() {
@@ -38,4 +34,9 @@ public class GridConverterPlugin implements AlgorithmicPlugin<BuildingPlan, Netw
 	public Algorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
 		return new GridGraphConverter();
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }
