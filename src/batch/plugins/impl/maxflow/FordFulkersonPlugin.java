@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.maxflow;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.MaximumFlow;
 import ds.graph.problem.RawToFullMaximumFlowProblemConverter;
@@ -13,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class FordFulkersonPlugin implements AlgorithmicPlugin<RawMaximumFlowProblem, MaximumFlow> {
+public class FordFulkersonPlugin implements AlgorithmPlugin<RawMaximumFlowProblem, MaximumFlow> {
 
 	@Override
 	public String getName() {
@@ -49,4 +49,9 @@ public class FordFulkersonPlugin implements AlgorithmicPlugin<RawMaximumFlowProb
     };
     return algo;
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

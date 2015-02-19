@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.maxflow;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.classic.maxflow.EdmondsKarp;
 import org.zetool.netflow.ds.flow.MaximumFlow;
@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class EdmondsKarpPlugin implements AlgorithmicPlugin<RawMaximumFlowProblem, MaximumFlow> {
+public class EdmondsKarpPlugin implements AlgorithmPlugin<RawMaximumFlowProblem, MaximumFlow> {
 
 	@Override
 	public String getName() {
@@ -50,4 +50,9 @@ public class EdmondsKarpPlugin implements AlgorithmicPlugin<RawMaximumFlowProble
     };
     return algo;
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

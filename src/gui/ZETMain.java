@@ -16,7 +16,7 @@
 
 package gui;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.debug.HTMLLoggerHandler;
 import org.zetool.common.debug.SimpleFileHandler;
@@ -63,8 +63,9 @@ public class ZETMain {
 		setUpLog( false, true, false, true );
 		privateLogging = false;
 		pm.addPluginsFrom( new File( "./plugins" ).toURI() );
+    System.out.println( pm );
 
-		AlgorithmicPlugin<?,?> plugin = pm.getPlugin(AlgorithmicPlugin.class);
+		AlgorithmPlugin<?,?> plugin = pm.getPlugin(AlgorithmPlugin.class);
 
     if( plugin == null ) {
       log.log( Level.INFO, "Plugin is null!" );

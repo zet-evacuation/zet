@@ -5,7 +5,7 @@
 
 package algo.ca.parameter;
 
-import de.tu_berlin.math.coga.rndutils.distribution.discrete.GeometricDistribution;
+import org.zetool.rndutils.distribution.discrete.GeometricDistribution;
 import junit.framework.TestCase;
 
 /**

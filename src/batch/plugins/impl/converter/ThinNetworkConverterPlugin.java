@@ -1,10 +1,6 @@
-/**
- * ThinNetworkConverterPlugin.java
- * Created: 03.04.2014, 17:11:46
- */
 package batch.plugins.impl.converter;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ThinNetworkConverter;
@@ -17,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class ThinNetworkConverterPlugin implements AlgorithmicPlugin<BuildingPlan, NetworkFlowModel> {
+public class ThinNetworkConverterPlugin implements AlgorithmPlugin<BuildingPlan, NetworkFlowModel> {
 
 	@Override
 	public String getName() {
@@ -38,4 +34,9 @@ public class ThinNetworkConverterPlugin implements AlgorithmicPlugin<BuildingPla
 	public Algorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
 		return new ThinNetworkConverter();
 	}
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

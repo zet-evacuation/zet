@@ -4,7 +4,7 @@
  */
 package math;
 
-import de.tu_berlin.math.coga.math.Conversion;
+import org.zetool.math.Conversion;
 import junit.framework.TestCase;
 import org.junit.Test;
 

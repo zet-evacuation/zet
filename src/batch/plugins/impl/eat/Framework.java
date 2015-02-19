@@ -1,7 +1,7 @@
 
 package batch.plugins.impl.eat;
 
-import org.zetool.components.batch.plugins.AlgorithmicPlugin;
+import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalApproximationAlgorithm;
@@ -13,7 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class Framework implements AlgorithmicPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
+public class Framework implements AlgorithmPlugin<EarliestArrivalFlowProblem, PathBasedFlowOverTime> {
 	@Override
 	public String getName() {
 		return "2-Approx-Based";
@@ -54,5 +54,10 @@ public class Framework implements AlgorithmicPlugin<EarliestArrivalFlowProblem, 
       }
     };
     return algo;
+  }
+
+  @Override
+  public String toString() {
+    return getName();
   }
 }
