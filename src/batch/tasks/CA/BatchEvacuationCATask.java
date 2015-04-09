@@ -38,6 +38,7 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import evacuationplan.FlowBasedCAFactory;
 
 /**
@@ -108,7 +109,7 @@ public class BatchEvacuationCATask implements Runnable {
 
 		ConcreteAssignment concreteAssignment;
 		if (concreteAssignments == null) {
-			concreteAssignment = assignment.createConcreteAssignment (400);
+			concreteAssignment = AssignmentConcrete.createConcreteAssignment (assignment, 400);
 		} else {
 			concreteAssignment = concreteAssignments[runNumber];
 		}

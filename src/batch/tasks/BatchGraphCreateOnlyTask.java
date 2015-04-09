@@ -10,6 +10,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**
  *
@@ -61,7 +62,7 @@ public class BatchGraphCreateOnlyTask {
 		//Run graph algo on the last CA instance if possible
 		ConcreteAssignment concreteAssignment;
 		if( runNumber < 0 )
-			concreteAssignment = assignment.createConcreteAssignment( 400 );
+			concreteAssignment = concreteAssignment = AssignmentConcrete .createConcreteAssignment( assignment, 400 );
 		else
 			concreteAssignment = concreteAssignments[runNumber];
 		//ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );

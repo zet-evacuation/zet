@@ -19,6 +19,7 @@ import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import io.visualization.EvacuationSimulationResults;
 import statistic.ca.CAStatistic;
 
@@ -55,7 +56,7 @@ public class CellularAutomatonTask extends Algorithm<Project, EvacuationSimulati
 		// create and convert concrete assignment
 		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
 			ca.setAssignmentType( at.getName(), at.getUid() );
-		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
 		cac.run();

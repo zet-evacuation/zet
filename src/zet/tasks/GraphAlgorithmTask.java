@@ -16,6 +16,7 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**
  *
@@ -40,7 +41,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		}
 
 		// convert and create the concrete assignment
-		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 		
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 		

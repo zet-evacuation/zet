@@ -74,6 +74,7 @@ import de.tu_berlin.math.coga.batch.operations.MaximumFlowComputation;
 import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -98,7 +99,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.ParserConfigurationException;
-import net.xeoh.plugins.base.Plugin;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 import org.xml.sax.SAXException;
@@ -711,7 +711,7 @@ public class GUIControl implements AlgorithmListener {
 		//	st.addPropertyChangeListener( propertyChangeListener );
 		//st.execute();
 
-		ConcreteAssignment concreteAssignment = zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( zcontrol.getProject().getCurrentAssignment(), 400 );
 
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( originalProblem );
 

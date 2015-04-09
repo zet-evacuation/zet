@@ -25,6 +25,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import io.visualization.EvacuationSimulationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -147,7 +148,7 @@ public class AlgorithmControlCellularAutomaton {
 	void createConcreteAssignment( Project project ) throws IllegalArgumentException, ZToCAConverter.ConversionNotSupportedException {
 		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
 			cellularAutomaton.setAssignmentType( at.getName(), at.getUid() );
-		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		cac.setProblem( new AssignmentApplicationInstance( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ), concreteAssignment ) );
 		cac.run();

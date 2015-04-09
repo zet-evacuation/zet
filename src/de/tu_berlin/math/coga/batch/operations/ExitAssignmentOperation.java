@@ -14,6 +14,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
@@ -81,7 +82,7 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
     NetworkFlowModel networkFlowModel = conv.getSolution();
 
 		// convert and create the concrete assignment
-		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 		
     GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 		cav.setProblem( concreteAssignment );

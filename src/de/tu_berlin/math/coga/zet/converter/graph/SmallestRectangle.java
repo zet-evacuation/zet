@@ -6,8 +6,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
-import de.tu_berlin.coga.geom.ArbitraryRectangle;
-import de.tu_berlin.coga.geom.Rectangle;
+import org.zetool.math.geom.ArbitraryRectangle;
+import org.zetool.math.geom.Rectangle;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import java.awt.Point;
@@ -158,7 +158,7 @@ public class SmallestRectangle implements Rectangle {
     recPoints.add( po4 );
   }
 
-  de.tu_berlin.coga.geom.Point getPoint( int i ) {
+  org.zetool.math.geom.Point getPoint( int i ) {
     return recPoints.get( i );
   }
 
@@ -239,17 +239,17 @@ public class SmallestRectangle implements Rectangle {
   }
 
   @Override
-  public de.tu_berlin.coga.geom.Point getCoordinate( CornerCoordinates c ) {
+  public org.zetool.math.geom.Point getCoordinate( CornerCoordinates c ) {
     return getPoint( c.ordinal() );
   }
 
   @Override
-  public Rectangle rotate( double angle, de.tu_berlin.coga.geom.Point rotation ) {
+  public Rectangle rotate( double angle, org.zetool.math.geom.Point rotation ) {
     return ArbitraryRectangle.rotate( this, angle, rotation );
   }
 
   @Override
-  public Iterator<de.tu_berlin.coga.geom.Point> iterator() {
+  public Iterator<org.zetool.math.geom.Point> iterator() {
     throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
   }
 }

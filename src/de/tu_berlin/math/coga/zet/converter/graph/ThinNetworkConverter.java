@@ -9,8 +9,8 @@ import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.geom.ArbitraryRectangle;
-import de.tu_berlin.coga.geom.Rectangle;
+import org.zetool.math.geom.ArbitraryRectangle;
+import org.zetool.math.geom.Rectangle;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.AssignmentArea;
 import de.tu_berlin.coga.zet.model.DelayArea;
@@ -1545,12 +1545,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     int DirectionRight, DirectionDown; //0 der 1 je nachdem ob Raum höher oder breiter ist...
 
     //new version of creating rectangulation Nodes for room with arbitrary direction
-    de.tu_berlin.coga.geom.Point nw = rectangle.getPoint( 0 );
-    de.tu_berlin.coga.geom.Point ne = rectangle.getPoint( 1 );
-    de.tu_berlin.coga.geom.Point sw = rectangle.getPoint( 2 );
-    de.tu_berlin.coga.geom.Point se = rectangle.getPoint( 3 );
+    org.zetool.math.geom.Point nw = rectangle.getPoint( 0 );
+    org.zetool.math.geom.Point ne = rectangle.getPoint( 1 );
+    org.zetool.math.geom.Point sw = rectangle.getPoint( 2 );
+    org.zetool.math.geom.Point se = rectangle.getPoint( 3 );
     //compute rotation angle
-    de.tu_berlin.coga.geom.Point origin, lower;
+    org.zetool.math.geom.Point origin;
+    //compute rotation angle
+    org.zetool.math.geom.Point lower;
     if( nw.getX() < sw.getX() ) {
       origin = nw;
       lower = sw;
@@ -1750,7 +1752,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
     for( Node node2 : innernodes ) {
       Rectangle getPoints = coveredArea.get( node2 );
       List<PlanPoint> p = new LinkedList<>();
-      for( de.tu_berlin.coga.geom.Point po : getPoints ) {
+      for( org.zetool.math.geom.Point po : getPoints ) {
         p.add( new PlanPoint( po.getX(), po.getY() ) );
       }
       PlanPolygon poly = new PlanPolygon( de.tu_berlin.coga.zet.model.PlanEdge.class );

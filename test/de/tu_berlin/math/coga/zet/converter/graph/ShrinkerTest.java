@@ -9,6 +9,7 @@ import org.zetool.common.debug.Debug;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import java.util.logging.Level;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -121,7 +122,7 @@ public class ShrinkerTest {
 		assertEquals( "Number of edges", targetEdges, conv.getSolution().numberOfEdges() );
 
 		// concrete assignment
-		ConcreteAssignment concreteAssignment = ig.zControl.getProject().getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( ig.zControl.getProject().getCurrentAssignment(), 400 );
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( conv.getSolution() );
 		cav.setProblem( concreteAssignment );
 		cav.run();

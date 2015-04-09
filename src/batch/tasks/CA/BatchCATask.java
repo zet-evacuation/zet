@@ -31,6 +31,7 @@ import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.Assignment;
 import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import io.visualization.EvacuationSimulationResults;
@@ -99,7 +100,7 @@ public class BatchCATask implements Runnable {
 		for( AssignmentType at : assignment.getAssignmentTypes() )
 			ca.setAssignmentType( at.getName(), at.getUid() );
 		ConcreteAssignment concreteAssignment;
-		concreteAssignment = assignment.createConcreteAssignment( 400 );
+		concreteAssignment = AssignmentConcrete.createConcreteAssignment( assignment, 400 );
 		concreteAssignments[runNumber] = concreteAssignment;
 		CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, null, null );

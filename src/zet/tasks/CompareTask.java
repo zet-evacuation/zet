@@ -15,6 +15,7 @@ import ds.CompareVisualizationResults;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**
  *
@@ -54,14 +55,14 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
         }
         
         // convert and create the concrete assignment for the original network
-	ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );	
+	ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );	
 	GraphAssignmentConverter cav = new GraphAssignmentConverter( OrigNetwork );		
 	cav.setProblem( concreteAssignment );
 	cav.run();
 	OrigNetwork = cav.getSolution();
         
         // convert and create the concrete assignment for the thin network
-        ConcreteAssignment concreteAssignment2 = project.getCurrentAssignment().createConcreteAssignment( 400 );	
+        ConcreteAssignment concreteAssignment2 = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );	
 	GraphAssignmentConverter cav2 = new GraphAssignmentConverter( ThinNetwork );		
 	cav2.setProblem( concreteAssignment2 );
 	cav2.run();

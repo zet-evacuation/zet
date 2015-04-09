@@ -21,6 +21,7 @@
 
 package batch.tasks;
 
+import event.ProcessUpdateMessage;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
