@@ -6,6 +6,7 @@ import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -83,7 +84,7 @@ public class ConversionOnly extends AbstractOperation<Project,GraphVisualization
     networkFlowModel = conv.getSolution();
 
 		// convert and create the concrete assignment
-		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 

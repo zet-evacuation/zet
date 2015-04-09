@@ -1,7 +1,4 @@
-/**
- * XmlFileReaderWriter.java
- * Created: 18.03.2010, 10:53:48
- */
+
 package de.tu_berlin.math.coga.zet;
 
 import org.zetool.graph.DirectedGraph;
@@ -20,6 +17,7 @@ import org.zetool.netflow.classic.problems.MinimumCostFlowProblem;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.ZControl;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
@@ -126,7 +124,7 @@ public class XmlFileReaderWriter {
 		NetworkFlowModel nfm = a.getNetworkFlowModel();
 		
 
-		ConcreteAssignment concreteAssignment = p.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( p.getCurrentAssignment(), 400 );
 		
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( nfm );
 		

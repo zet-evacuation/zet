@@ -35,6 +35,7 @@ import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
@@ -576,7 +577,7 @@ public class CZET {
 				if( a.getNetworkFlowModel() == null )
 					throw new IllegalStateException();
 
-				ConcreteAssignment concreteAssignment = fr.getSolution().getCurrentAssignment().createConcreteAssignment( 400 );
+				ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( fr.getSolution().getCurrentAssignment(), 400 );
 
 				NetworkFlowModel nfm = a.getNetworkFlowModel();
 
@@ -873,7 +874,7 @@ public class CZET {
 		if( a.getNetworkFlowModel() == null )
 			throw new IllegalStateException();
 
-		ConcreteAssignment concreteAssignment = p.getCurrentAssignment().createConcreteAssignment( 400 );
+		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( p.getCurrentAssignment(), 400 );
 
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( a.getNetworkFlowModel() );
 

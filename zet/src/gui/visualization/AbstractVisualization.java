@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package gui.visualization;
 
 import com.sun.opengl.util.Animator;
@@ -22,7 +23,6 @@ import org.zetool.math.Conversion;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;

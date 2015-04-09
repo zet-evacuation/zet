@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.viewer;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import batch.tasks.ProcessUpdateMessage;
+import event.ProcessUpdateMessage;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;

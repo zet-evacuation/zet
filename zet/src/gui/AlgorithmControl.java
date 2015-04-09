@@ -31,6 +31,7 @@ import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import evacuationplan.BidirectionalNodeCellMapping;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
@@ -229,7 +230,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		log.info( "Compute concrete assignment..." );
 		ConcreteAssignment concreteAssignment;
 
-		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 		cav.setProblem( concreteAssignment );
 		cav.run();

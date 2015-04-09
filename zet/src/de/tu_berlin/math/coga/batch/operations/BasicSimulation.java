@@ -10,6 +10,7 @@ import de.tu_berlin.coga.zet.model.AssignmentType;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
 import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
@@ -107,7 +108,7 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
     for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() ) {
       ca.setAssignmentType( at.getName(), at.getUid() );
     }
-    ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+    ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
     final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
     cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
     cac.run();
