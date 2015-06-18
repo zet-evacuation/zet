@@ -1,15 +1,15 @@
 
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Person;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import static de.tu_berlin.coga.zet.model.ZLocalization.loc;
-import de.tu_berlin.coga.zet.model.exception.TooManyPeopleException;
+import de.zet_evakuierung.model.Assignment;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.AssignmentType;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Person;
+import de.zet_evakuierung.model.PlanPoint;
+import static de.zet_evakuierung.model.ZLocalization.loc;
+import de.zet_evakuierung.model.exception.TooManyPeopleException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

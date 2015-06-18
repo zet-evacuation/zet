@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package evacuationplan;
 
 import org.zetool.rndutils.RandomUtils;
@@ -30,7 +31,6 @@ import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import util.DebugFlags;
 
 /**
  * This class controls the behavior of a cellular automaton so that the individuals
@@ -91,15 +91,9 @@ public class CAPathPassabilityChecker {
      * @throws java.lang.IllegalArgumentException if there is no path defined for the individual
      */
 	public boolean canPass(Individual i, EvacCell from, EvacCell to) throws IllegalArgumentException {
-		if (DebugFlags.EVAPLANCHECKER){
-			System.out.print("Pass check for individual "+i.id()+" ");
-		}
 		if (individualSuccessorNodeMapping.isDefinedFor(i)) {
 			Node fromNode = nodeCellMapping.getNode(from);
 			Node toNode = nodeCellMapping.getNode(to);
-			if (DebugFlags.EVAPLANCHECKER){
-				System.out.println("Pass check from node "+fromNode+" to "+toNode+".");
-			}
 			if (fromNode.equals(toNode)) {
 				return true;
 			}
@@ -111,9 +105,6 @@ public class CAPathPassabilityChecker {
 					if (fromNode.equals(individualSuccessorNodeMapping.get(i).getSuccessor(toNode))) {
 						return true;
 					}
-			}
-			if (DebugFlags.EVAPLANCHECKER){
-				System.out.println("false");
 			}
 			return false;
 		} else
@@ -174,9 +165,6 @@ public class CAPathPassabilityChecker {
 				// calculate successor mapping from path
 				SuccessorNodeMapping succNodeMapping = new SuccessorNodeMapping(dynamicPathFlow);
 				individualSuccessorNodeMapping.set(chosenIndividual, succNodeMapping);
-				if (DebugFlags.EVAPLANCHECKER){
-					System.out.println("Mapped individual "+chosenIndividual.id()+" to "+dynamicPathFlow+", individual stands on ("+chosenIndividual.getCell().getX()+","+chosenIndividual.getCell().getY()+"), "+nodeCellMapping.getNode(chosenIndividual.getCell()));
-				}
 				// calculate potential for this individual according to its path
 				EvacPotential ep = calculateIndividualPotential(chosenIndividual, dynamicPathFlow.lastEdge().start());
 				individualPotentialMapping.set(chosenIndividual, ep);
@@ -197,13 +185,9 @@ public class CAPathPassabilityChecker {
 		ArrayList<EvacCell> cellList = nodeCellMapping.getCells(exitNode);
 		ArrayList<ExitCell> exitCellList = new ArrayList<ExitCell>(cellList.size());
 		for (EvacCell cell : cellList){
-			if (!(cell instanceof ExitCell)){
-				if (DebugFlags.EVAPLANCHECKER){
-				    System.out.println("Found a cell that lies in an exit node but is not an exit cell.");
-				}
-			} else {
-			    exitCellList.add((ExitCell)cell);
-			}
+      if( cell instanceof ExitCell ) {
+        exitCellList.add( (ExitCell) cell );
+      }
 		}
 		StaticPotential pot = indPotCal.createStaticPotential(exitCellList);
 		return pot.getAsEvacPotential(i, this);

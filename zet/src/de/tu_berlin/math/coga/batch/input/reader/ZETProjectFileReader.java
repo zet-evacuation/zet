@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.batch.input.reader;
 
 import org.zetool.components.batch.input.reader.InputFileReader;
-import ds.ProjectLoader;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.ProjectLoader;
+import de.zet_evakuierung.model.Project;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;

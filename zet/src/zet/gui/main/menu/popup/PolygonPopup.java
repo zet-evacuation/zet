@@ -3,9 +3,9 @@ package zet.gui.main.menu.popup;
 
 import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.components.framework.Menu;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.Assignment;
+import de.zet_evakuierung.model.AssignmentType;
+import de.zet_evakuierung.model.PlanPolygon;
 import gui.GUIControl;
 import java.io.IOException;
 import java.util.LinkedList;

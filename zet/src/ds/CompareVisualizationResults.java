@@ -4,8 +4,8 @@
  */
 package ds;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector2;
-import opengl.framework.abs.VisualizationResult;
+import org.zetool.math.vectormath.Vector2;
+import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  *

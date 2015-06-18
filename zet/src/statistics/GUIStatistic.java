@@ -11,7 +11,7 @@ package statistics;
 
 import org.zetool.rndutils.distribution.Distribution;
 import org.zetool.rndutils.distribution.continuous.NormalDistribution;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;

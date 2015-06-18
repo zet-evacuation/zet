@@ -42,8 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import javax.media.opengl.GL;
-import opengl.framework.abs.DrawableControlable;
-import opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *  @author Jan-Philipp Kappmeier

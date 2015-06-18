@@ -18,9 +18,9 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import org.zetool.graph.Node;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
 
 /**
  * The class {@code ZToGraphRasterSquare} represents a raster square used to

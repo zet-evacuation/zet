@@ -25,15 +25,16 @@ import static org.zetool.common.util.Direction8.*;
 import org.zetool.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
+import de.zet_evakuierung.model.AbstractFloor;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.SaveCell;
 import ds.ca.evac.StaticPotential;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Project;
+import de.zet_evakuierung.model.TeleportArea;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -124,12 +125,12 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		//AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
-		for( Floor floor : lastContainer.getFloors() )
+		for( AbstractFloor floor : lastContainer.getFloors() )
 			createAllRooms( floor, lastContainer.getAllRasteredRooms( floor ), buildingPlan.getFloorID( floor ) );
 
 		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
-		for( Floor floor : lastContainer.getFloors() ) {
+		for( AbstractFloor floor : lastContainer.getFloors() ) {
 			convertedCA.addFloor( floor );
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
 			if( rooms != null )
@@ -257,7 +258,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @return the created {@link ds.ca.Room}
 	 * @throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
-	protected ds.ca.evac.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
+	protected ds.ca.evac.Room convertRoom( ZToCARoomRaster rasteredRoom, AbstractFloor onFloor, int floorID ) throws ConversionNotSupportedException {
 		final int width = rasteredRoom.getColumnCount();
 		final int height = rasteredRoom.getRowCount();
 		ds.ca.evac.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
@@ -294,7 +295,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param rooms a collection of rooms on the floor. This is not checked!
 	 * @param floorID the id of the floor
 	 */
-	protected void createAllRooms( Floor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
+	protected void createAllRooms( AbstractFloor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
 		if( rooms != null ) {
 			for( ZToCARoomRaster rasteredRoom : rooms ) {
 				final int width = rasteredRoom.getColumnCount();
@@ -348,7 +349,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 				ds.ca.evac.DoorCell partnerDoor = (ds.ca.evac.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
-					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (de.tu_berlin.coga.zet.model.Room) ( partner.getPolygon()) );
+					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom((de.zet_evakuierung.model.Room) ( partner.getPolygon()) );
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
@@ -404,7 +405,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 			//System.out.println( square.getPolygon() );
 			// Find the appropriate TeleportArea
-			de.tu_berlin.coga.zet.model.Room r = (de.tu_berlin.coga.zet.model.Room) square.getPolygon();
+			de.zet_evakuierung.model.Room r = (de.zet_evakuierung.model.Room) square.getPolygon();
 			for( TeleportArea t : r.getTeleportAreas() ) {
 				if( t.contains( square.getSquare() ) ) {
 					System.out.println( "Teleport-Area gefunden: " + t.getName() );
@@ -417,7 +418,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 						} else {
 							System.out.println( "Suche die Zielzelle:" );
 
-							de.tu_berlin.coga.zet.model.Room targetRoom = t.getAssociatedRoom();
+							de.zet_evakuierung.model.Room targetRoom = t.getAssociatedRoom();
 							ZToCARoomRaster targetRoomRaster = lastContainer.getRasteredRoom( targetRoom);
 							//ZToCARoomRaster roomRaster = lastMapping.get( lastContainer.getRasteredRoom( targetRoom) );
 							for( ZToCARasterSquare sq : targetRoomRaster.getAccessibleSquares() ) {

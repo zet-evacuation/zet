@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.graph.Node;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Person;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Person;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.Room;
 import java.util.HashMap;
 import java.util.List;
 

@@ -88,7 +88,11 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     int totalCapacities = 0;
     IdentifiableIntegerMapping<Node> estimatedCapacities = new IdentifiableIntegerMapping<>( model.graph().nodes() );
     for( Node sink : sinks ) {
-      estimatedCapacities.set( sink, estimateCapacityByMaximumFlow( model, sink ) );
+      long est = estimateCapacityByMaximumFlow( model, sink );
+      if( est > Integer.MAX_VALUE ) {
+        throw new IllegalStateException("Flow value " + est + " too large." );
+      }
+      estimatedCapacities.set( sink, (int)est );
       totalCapacities += estimatedCapacities.get( sink );
     }
     int totalSupplies = 0;
@@ -136,7 +140,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     return result;
   }
 
-  protected int estimateCapacityByMaximumFlow( NetworkFlowModel model, Node sink ) {
+  protected long estimateCapacityByMaximumFlow( NetworkFlowModel model, Node sink ) {
     IdentifiableCollection<Node> sinks = model.graph().predecessorNodes( model.getSupersink() );
     IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<>( model.edgeCapacities() );
     for( Node s : sinks ) {

@@ -17,13 +17,13 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZModelAreaEvent;
-import de.tu_berlin.coga.zet.model.ZModelRoomEvent;
+import de.zet_evakuierung.model.Area;
+import de.zet_evakuierung.model.Barrier;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZModelAreaEvent;
+import de.zet_evakuierung.model.ZModelRoomEvent;
 import event.EventListener;
 import gui.GUIControl;
 import gui.GUIOptionManager;

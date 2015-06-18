@@ -20,9 +20,9 @@
  */
 package zet.gui.components.model;
 
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.Assignment;
+import de.zet_evakuierung.model.AssignmentType;
+import de.zet_evakuierung.model.ZControl;
 import java.io.IOException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

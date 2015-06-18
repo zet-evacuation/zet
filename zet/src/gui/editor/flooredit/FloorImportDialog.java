@@ -17,9 +17,10 @@
 package gui.editor.flooredit;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Floor;
+import de.zet_evakuierung.model.Project;
+import de.zet_evakuierung.model.Floor;
 import de.tu_berlin.math.coga.components.framework.Button;
+import de.zet_evakuierung.model.AbstractFloor;
 import gui.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
@@ -33,7 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import org.zetool.common.localization.Localization;
-import ds.ProjectLoader;
+import de.zet_evakuierung.model.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETLoader;
 
@@ -46,7 +47,7 @@ public class FloorImportDialog extends JDialog {
 	/** The localization class. */
 	private static final Localization loc = ZETLocalization2.loc;
 	/** The elements of the floor list. */
-	private Vector<Floor> floors = new Vector<>();
+	private Vector<AbstractFloor> floors = new Vector<>();
 	/** The list of floors available in the newly loaded project. */
 	private JList list;
 	/** The project loaded in the editor. */
@@ -127,7 +128,7 @@ public class FloorImportDialog extends JDialog {
 					//Project loaded = Project.load(jfcProject.getSelectedFile());
 					Project loaded = ProjectLoader.load( jfcProject.getSelectedFile() );
 					floors.clear();
-					for( Floor floor : loaded.getBuildingPlan().getFloors() )
+					for( AbstractFloor floor : loaded.getBuildingPlan().getFloors() )
 						floors.add( floor );
 					list.setListData( floors );
 				} catch( Exception ex ) {

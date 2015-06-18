@@ -16,8 +16,8 @@
 
 package zet.gui.assignmentEditor;
 
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.Project;
+import de.zet_evakuierung.model.ZControl;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;

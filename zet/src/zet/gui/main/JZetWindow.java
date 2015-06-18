@@ -22,7 +22,7 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
@@ -60,7 +60,7 @@ import javax.swing.event.ChangeListener;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
 import zet.gui.main.tabs.JEditView;
-import zet.util.ConversionTools;
+import de.zet_evakuierung.util.ConversionTools;
 
 /**
  * The main window of the ZET application.

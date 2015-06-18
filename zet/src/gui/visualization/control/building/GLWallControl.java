@@ -30,8 +30,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import opengl.drawingutils.GLVector;
-import opengl.framework.abs.Controlable;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.Controlable;
 
 /**
  * @author Daniel R. Schmidt, Jan-Philipp Kappmeier

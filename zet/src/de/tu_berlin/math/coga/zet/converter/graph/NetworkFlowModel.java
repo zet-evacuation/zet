@@ -20,7 +20,7 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.coga.netflow.util.GraphInstanceChecker;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;

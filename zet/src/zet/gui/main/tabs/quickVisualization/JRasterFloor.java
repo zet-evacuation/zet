@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * JRasterFloor.java
- * Created on 27.01.2008, 18:54:52
- */
-
 package zet.gui.main.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
@@ -29,8 +24,8 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
 import org.zetool.common.util.Direction8;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Room;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.DynamicPotential;
@@ -39,7 +34,7 @@ import ds.ca.evac.PotentialManager;
 import ds.ca.evac.SaveCell;
 import ds.ca.evac.StairCell;
 import ds.ca.evac.StaticPotential;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import zet.gui.main.tabs.base.AbstractFloor;
 import java.awt.Color;
 import java.awt.Component;

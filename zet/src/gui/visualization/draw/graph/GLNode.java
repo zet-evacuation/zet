@@ -30,10 +30,10 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import opengl.drawingutils.GLColor;
-import opengl.framework.abs.AbstractDrawable;
-import opengl.helper.Texture;
-import opengl.helper.TextureManager;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.helper.Texture;
+import org.zetool.opengl.helper.TextureManager;
 
 public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	private double graphHeight = 70.0;

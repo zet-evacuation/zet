@@ -16,7 +16,6 @@
 
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import org.zetool.common.util.Direction8;
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.Level;
@@ -25,10 +24,9 @@ import ds.PropertyContainer;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.StairArea;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -397,7 +395,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 	protected void computeTransitTimes() {
 		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms();
 		final long startTT = System.currentTimeMillis();
-		log.log( java.util.logging.Level.FINE, "Computing transit times..." );
+		LOG.log( java.util.logging.Level.FINE, "Computing transit times..." );
 
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 

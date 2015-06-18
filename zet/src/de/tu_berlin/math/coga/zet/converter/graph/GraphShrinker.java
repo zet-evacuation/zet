@@ -27,7 +27,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	
 	@Override
 	protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
-		log.log( Level.INFO, "Shrinking a Graph with {0} nodes and {1} edges.", new Object[]{problem.numberOfNodes(), problem.numberOfEdges()} );
+		LOG.log( Level.INFO, "Shrinking a Graph with {0} nodes and {1} edges.", new Object[]{problem.numberOfNodes(), problem.numberOfEdges()} );
 
 		// create a new model
 		newModel = new NetworkFlowModel( problem );
@@ -51,7 +51,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 		// copy the remaining information into the new mapping
 		copyMappingInformation();
 
-		log.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
+		LOG.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
 		
 		checkPlausibility();
 
@@ -125,7 +125,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	}
 
 	private void checkPlausibility() {
-		log.info( "Check plausibility" );
+		LOG.info( "Check plausibility" );
 		
 		NetworkFlowModel oldModel = getProblem();
 		
@@ -137,7 +137,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 			int oldTransit = oldModel.getTransitTime( oldEdge );
 			
 			if( newTransit != oldTransit )
-				log.log( Level.WARNING, "newTransit = {0} = {1} = {2}", new Object[]{ newTransit, oldTransit, oldTransit });
+				LOG.log( Level.WARNING, "newTransit = {0} = {1} = {2}", new Object[]{ newTransit, oldTransit, oldTransit });
 			
 			assert newTransit == oldTransit;
 		}

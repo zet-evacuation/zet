@@ -34,10 +34,10 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
-import opengl.framework.Camera;
-import opengl.helper.ProjectionHelper;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import opengl.framework.abs.AbstractOpenGLCanvas;
+import org.zetool.opengl.helper.ProjectionHelper;
+import org.zetool.math.vectormath.Vector3;
+import org.zetool.opengl.framework.Camera;
+import org.zetool.opengl.framework.abs.AbstractOpenGLCanvas;
 
 public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 

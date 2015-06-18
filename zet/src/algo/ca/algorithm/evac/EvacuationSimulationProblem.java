@@ -26,7 +26,7 @@ import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAut
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.Project;
 import statistic.ca.CAStatisticWriter;
 
 /**

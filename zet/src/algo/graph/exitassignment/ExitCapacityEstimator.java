@@ -36,7 +36,7 @@ public class ExitCapacityEstimator {
 	public ExitCapacityEstimator() {
 	}
 
-	public int estimateCapacityByMaximumFlow( NetworkFlowModel model, Node sink ) {
+	public long estimateCapacityByMaximumFlow( NetworkFlowModel model, Node sink ) {
 		IdentifiableCollection<Node> sinks = model.graph().predecessorNodes( model.getSupersink() );
 		IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<>( model.edgeCapacities() );
 		for( Node s : sinks )

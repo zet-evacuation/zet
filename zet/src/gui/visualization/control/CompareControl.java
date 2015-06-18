@@ -4,11 +4,11 @@
  */
 package gui.visualization.control;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import ds.CompareVisualizationResults;
 import gui.visualization.draw.graph.GLCompare;
-import opengl.framework.abs.AbstractControl;
-import opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.framework.abs.AbstractControl;
+import org.zetool.opengl.framework.abs.DrawableControlable;
 
 
 /**

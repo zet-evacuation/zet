@@ -15,7 +15,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.PlanPolygon;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import java.util.Collections;
 import java.util.List;

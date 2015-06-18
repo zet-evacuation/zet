@@ -20,9 +20,9 @@ import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
 import javax.media.opengl.GL;
-import opengl.drawingutils.GLColor;
-import opengl.drawingutils.GLVector;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 import org.zetool.common.util.Direction8;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {

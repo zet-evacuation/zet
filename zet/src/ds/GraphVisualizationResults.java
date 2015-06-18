@@ -19,7 +19,7 @@ package ds;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.classic.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
@@ -31,7 +31,7 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
 import java.util.ArrayList;
-import opengl.framework.abs.VisualizationResult;
+import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  * The class {@code GraphVisualizationResults} contains all information necessary to visualize the result of a dynamic flow algorithm.

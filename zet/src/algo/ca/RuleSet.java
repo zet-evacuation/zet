@@ -106,8 +106,6 @@ public abstract class RuleSet implements Iterable<Rule> {
 		Rule rule = null;
 		try {
 			ruleClass = Class.forName( "algo.ca.rule." + ruleName );
-			if( util.DebugFlags.RULESET )
-				System.out.println( "Rule " + ruleName + " wird geladen." );
 			rule = (Rule) ruleClass.getConstructor().newInstance();
 		} catch( ClassNotFoundException e ) {
 			e.printStackTrace();

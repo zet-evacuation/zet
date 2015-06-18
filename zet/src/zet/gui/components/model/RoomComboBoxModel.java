@@ -19,9 +19,10 @@
  */
 package zet.gui.components.model;
 
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -35,10 +36,10 @@ import javax.swing.DefaultComboBoxModel;
 public class RoomComboBoxModel extends DefaultComboBoxModel<Room> {
 	private List<Room> entries = new LinkedList<>();
 	private boolean initializing;
-	private FloorComboBox<Floor> floorSelector;
+	private FloorComboBox<AbstractFloor> floorSelector;
 	private boolean disableUpdate = false;
 
-	public RoomComboBoxModel( ZControl zcontrol, FloorComboBox<Floor> floorSelector ) {
+	public RoomComboBoxModel( ZControl zcontrol, FloorComboBox<AbstractFloor> floorSelector ) {
 		super();
 		this.floorSelector = floorSelector;
 	}

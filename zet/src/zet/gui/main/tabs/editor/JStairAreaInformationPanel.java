@@ -2,9 +2,9 @@
 package zet.gui.main.tabs.editor;
 
 import org.zetool.common.localization.LocalizationManager;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.StairPreset;
-import de.tu_berlin.coga.zet.model.ZLocalization;
+import de.zet_evakuierung.model.StairArea;
+import de.zet_evakuierung.model.StairPreset;
+import de.zet_evakuierung.model.ZLocalization;
 import gui.ZETLoader;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;

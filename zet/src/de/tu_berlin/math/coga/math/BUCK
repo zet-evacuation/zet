@@ -1,4 +1,0 @@
-java_library(
-  name = 'PrimeSieve',
-  srcs = ['PrimeSieve.java'],
-)

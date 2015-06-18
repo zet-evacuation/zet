@@ -23,7 +23,7 @@ import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.Room;
 import java.awt.Shape;
 import java.util.HashMap;
 

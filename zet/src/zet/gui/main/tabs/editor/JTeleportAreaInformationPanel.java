@@ -5,10 +5,10 @@
 package zet.gui.main.tabs.editor;
 
 
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.TeleportArea;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
@@ -161,7 +161,7 @@ public class JTeleportAreaInformationPanel extends JInformationPanel<TeleportAre
 		else
 			cbxTargetArea.setSelectedItem( current.getTargetArea() );
 
-		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
+		for( AbstractFloor f : projectControl.getProject().getBuildingPlan().getFloors() )
 			for( Room r : f.getRooms() ) {
 				for( EvacuationArea e : r.getEvacuationAreas() ) {
 		//			cbxPreferredExit.addItem( e );

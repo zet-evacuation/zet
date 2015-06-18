@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.swing.UIManager;
 import junit.framework.TestCase;
-import opengl.helper.TextureFontStrings;
+import org.zetool.opengl.helper.TextureFontStrings;
 import org.junit.Test;
 
 /**

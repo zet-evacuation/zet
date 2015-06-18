@@ -4,7 +4,7 @@
  */
 package statistics;
 
-import org.zetool.common.datastructure.Tuple;
+import org.zetool.common.datastructure.SimpleTuple;
 import statistics.collectors.AgeCollector;
 import statistics.collectors.SpecificFlowCollector;
 import statistics.collectors.SpeedCollector;
@@ -47,7 +47,7 @@ public class Statistic {
 	}
 
 	public void collectAgeSpeed( double age, double speed ) {
-		speedCollector.add( new Tuple( age, speed ) );
+		speedCollector.add( new SimpleTuple( age, speed ) );
 	}
 
 	/**

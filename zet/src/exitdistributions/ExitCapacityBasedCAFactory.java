@@ -23,8 +23,8 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.ConcreteAssignment;
 
 /**
  *

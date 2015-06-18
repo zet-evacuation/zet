@@ -13,20 +13,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package io;
 
+import de.zet_evakuierung.model.AbstractFloor;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.InaccessibleArea;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import util.DebugFlags;
+import de.zet_evakuierung.model.Barrier;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.InaccessibleArea;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
 
 /**
  * This class provides a static method to export a building plan  
@@ -73,10 +73,10 @@ public class DXFWriter {
 		String output = "0\nSECTION\n2\n";
 		output += "ENTITIES\n";
 		int floorNr = 0;
-		for (Floor floor : buildingPlan.getFloors()){
-			for (Room room : floor.getRooms()){
-				for (RoomEdge edge : room.getPolygon().getEdges()){
-					if (edge.isPassable()){
+		for( AbstractFloor floor : buildingPlan.getFloors() ) {
+			for( Room room : floor.getRooms() ) {
+				for( RoomEdge edge : room.getPolygon().getEdges() ) {
+					if( edge.isPassable() ) {
 						output += edgeToLine(edge, floorNr,5);
 					} else {
 						output += edgeToLine(edge, floorNr,0);
@@ -101,9 +101,6 @@ public class DXFWriter {
 		
 		output += "0\nENDSEC\n";
 		output += "0\nEOF\n";
-		if (DebugFlags.DXF){
-			System.out.println(output);
-		}
 
 	   BufferedWriter outputWriter = new BufferedWriter(new FileWriter(file));
 	   outputWriter.write(output);

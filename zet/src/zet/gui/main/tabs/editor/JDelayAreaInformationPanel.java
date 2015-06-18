@@ -5,7 +5,7 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
-import de.tu_berlin.coga.zet.model.DelayArea;
+import de.zet_evakuierung.model.DelayArea;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;

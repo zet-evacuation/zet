@@ -5,7 +5,7 @@ import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.TimeUnits;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;
@@ -16,8 +16,8 @@ import java.awt.event.MouseWheelEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
-import opengl.drawingutils.GLColor;
-import opengl.helper.ProjectionHelper;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.helper.ProjectionHelper;
 import zet.gui.GUILocalization;
 
 /**

@@ -22,7 +22,7 @@ import org.zetool.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.PlanPolygon;
 import gui.editor.CoordinateTools;
 import java.awt.BasicStroke;
 import java.awt.Color;

@@ -13,8 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package algo.ca.rule;
 
+package algo.ca.rule;
 
 import org.zetool.common.util.Direction8;
 import org.zetool.common.util.Level;
@@ -26,7 +26,6 @@ import ds.ca.results.IndividualStateChangeAction;
 import org.zetool.rndutils.RandomUtils;
 import java.util.ArrayList;
 import java.util.List;
-import util.DebugFlags;
 
 /**
  *
@@ -52,8 +51,6 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 
 	@Override
 	protected void onExecute( ds.ca.evac.EvacCell cell ) {
-		if( DebugFlags.EVAPLANCHECKER )
-			System.out.print( "Move individual " + cell.getIndividual().id() + " " );
 		ind = cell.getIndividual();
 
 		if( canMove( ind ) )
@@ -162,11 +159,10 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 				esp.eca.moveIndividual( i.getCell(), targetCell );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), speed * esp.eca.getSecondsPerStep() );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int)Math.ceil( i.getStepEndTime() ), dist );
-			} else
-				if( util.DebugFlags.CA_SWAP_USED_OUTPUT )
-					System.err.println( "Quetschregel oder Individuum läuft doch nicht!!" );
-		} else
-			throw new IllegalStateException( "Individuum has no speed." );
+			}
+		} else {
+			throw new IllegalStateException( "Individuum has no speed." );      
+    }
 	}
 
 	/**

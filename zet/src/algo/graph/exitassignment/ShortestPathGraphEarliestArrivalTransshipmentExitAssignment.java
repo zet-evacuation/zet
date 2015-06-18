@@ -108,7 +108,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
         return result;
     }
 
-    protected int estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
+    protected long estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
         IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
         IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<>(model.edgeCapacities());
         for (Node s : sinks) {

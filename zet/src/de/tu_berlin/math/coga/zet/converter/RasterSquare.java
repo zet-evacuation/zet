@@ -13,19 +13,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * RasterSquare.java
- */
+
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
 import java.util.ArrayList;
+
 
 /**
  * <p>A {@code RasterSquare} is an element of a {@link RoomRaster} of a
- * {@link de.tu_berlin.coga.zet.model.PlanPolygon}, especially for a {@link de.tu_berlin.coga.zet.model.Room}.</p>
+ * {@link de.zet_evakuierung.model.PlanPolygon}, especially for a {@link de.zet_evakuierung.model.Room}.</p>
  * <p>The polygon is divided in a raster of squares. Each square can intersect
  * the polyonom, or not and has a position in the global coordinate system of
  * the rasterized polygon.</p>
@@ -43,33 +42,33 @@ public class RasterSquare {
 	 * @author Jan-Philipp Kappmeier
 	 */
 	public enum FieldIntersectType {
-		/** The {@link RasterSquare} is completely inside the {@link de.tu_berlin.coga.zet.model.PlanPolygon}. */
+	/** The {@link RasterSquare} is completely inside the {@link de.tu_berlin.coga.zet.model.PlanPolygon}. {@link RasterSquare} is completely inside the {@link de.zet_evakuierung.model.PlanPolygon}. */
 		Inside,
-		/** The {@link RasterSquare} intersects the {@link de.tu_berlin.coga.zet.model.PlanPolygon} but is not contained completely in it. */
+		/** *  The {@link RasterSquare} intersects the {@link de.zet_evakuierung.model.PlanPolygon} but is not contained completely in it. */
 		Intersects,
-		/** The {@link RasterSquare} is completely outside the {@link de.tu_berlin.coga.zet.model.PlanPolygon}. */
+		/** *  The {@link RasterSquare} is completely outside the {@link de.zet_evakuierung.model.PlanPolygon}. */
 		Outside;
 	}
-	/** The {@link de.tu_berlin.coga.zet.model.PlanPolygon} describing the coordinates of this square. */
-	private PlanPolygon<?> square;
-	/** The {@link de.tu_berlin.coga.zet.model.PlanPolygon} that is rasterized. */
-	private PlanPolygon<?> p;
+	/** *  The {@link de.zet_evakuierung.model.PlanPolygon} describing the coordinates of this square. */
+	private final PlanPolygon<?> square;
+	/** *  The {@link de.zet_evakuierung.model.PlanPolygon} that is rasterized. */
+	private final PlanPolygon<?> p;
 	/** Describes the the squares intersection status. */
 	private FieldIntersectType intersectType;
 	/** The column-index of the square in the raster array created during a rasterization of a polygon. */
-	private int column;
+	private final int column;
 	/** The row-index of the square in the raster array created during a rasterization of a polygon. */
-	private int row;
+	private final int row;
 	/** the {@code x}-coordinate of the upper left corner in the global coordinate system. */
-	private int x;
+	private final int x;
 	/** the {@code y}-coordinate of the upper left corner in the global coordinate system */
-	private int y;
+	private final int y;
 	/** The size of the raster used in rasterization process. Defines width and height of the square. */
-	private int raster;
+	private final int raster;
 	private int stairPotential;
 
 	/**
-	 * Creates a new instance of {@code RasterSquare} belonging to a {@link de.tu_berlin.coga.zet.model.PlanPolygon}.
+	 * Creates a new instance of {@code RasterSquare} belonging to a {@link de.zet_evakuierung.model.PlanPolygon}.
 	 * @param p the polygon to which this square belongs
 	 * @param column the column-index of this square in the array of raster-squares, starting with 0
 	 * @param row the row-index of this square in the array of raster-squares, starting with 0
@@ -102,7 +101,7 @@ public class RasterSquare {
   }
 
 	/**
-	 * Checks whether this square intersects a {@link de.tu_berlin.coga.zet.model.PlanPolygon} or not. The
+	 * Checks whether this square intersects a {@link de.zet_evakuierung.model.PlanPolygon} or not. The
 	 * status is stored and can be accessed via {@link #getIntersectType()}. The
 	 * polygon has to be set in the constructor.
 	 */

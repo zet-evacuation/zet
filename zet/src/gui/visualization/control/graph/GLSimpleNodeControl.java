@@ -5,7 +5,7 @@
 package gui.visualization.control.graph;
 
 import org.zetool.graph.DirectedGraph;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Graph;
@@ -14,7 +14,7 @@ import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.draw.graph.GLSimpleNode;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
-import opengl.framework.abs.AbstractControl;
+import org.zetool.opengl.framework.abs.AbstractControl;
 
 /**
  * A class that controls a node of a graph, used by its visualization glass

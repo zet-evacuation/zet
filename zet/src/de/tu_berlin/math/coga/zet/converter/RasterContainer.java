@@ -13,11 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Room;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,9 +33,9 @@ import java.util.Set;
  */
 public class RasterContainer<T extends RoomRaster<?>> {
   /** A hash map that maps rooms to their rastered versions. */
-  protected HashMap<Floor, HashMap<Room, T>> map;
+  protected HashMap<AbstractFloor, HashMap<Room, T>> map;
   /** A list containing all floors. */
-  protected List<Floor> floors;
+  protected List<AbstractFloor> floors;
   /** An array list containing all rastered rooms contained in the hash map. */
   protected ArrayList<T> rasteredRooms;
 
@@ -54,7 +56,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     if( room == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.RoomIsNullException" ) );
     }
-    Floor floor = room.getAssociatedFloor();
+    AbstractFloor floor = room.getAssociatedFloor();
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -79,7 +81,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
    * @param floor A floor in the Z-Format.
    * @return All rooms (in Z-Format) for which the container has rastered versions.
    */
-  public Set<Room> getRooms( Floor floor ) {
+  public Set<Room> getRooms( AbstractFloor floor ) {
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -98,7 +100,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     if( room == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.RoomIsNullException" ) );
     }
-    Floor floor = room.getAssociatedFloor();
+    AbstractFloor floor = room.getAssociatedFloor();
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -125,7 +127,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
    * @return all an unmodifiable collection of all rastered versions of rooms contained in this
    * {@code ZToGraphRasterContainer} that lie in the floor {@code floor}.
    */
-  public Collection<T> getAllRasteredRooms( Floor floor ) {
+  public Collection<T> getAllRasteredRooms( AbstractFloor floor ) {
     if( map.containsKey( floor ) ) {
       return Collections.unmodifiableCollection( ((map.get( floor )).values()) );
     } else {
@@ -133,11 +135,11 @@ public class RasterContainer<T extends RoomRaster<?>> {
     }
   }
 
-  public void setFloors( List<Floor> floors ) {
+  public void setFloors( List<AbstractFloor> floors ) {
     this.floors = floors;
   }
 
-  public List<Floor> getFloors() {
+  public List<AbstractFloor> getFloors() {
     return Collections.unmodifiableList( floors );
   }
 }

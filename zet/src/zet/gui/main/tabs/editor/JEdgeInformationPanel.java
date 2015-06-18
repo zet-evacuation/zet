@@ -4,12 +4,12 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.DefaultEvacuationFloor;
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.TeleportEdge;
+import de.zet_evakuierung.model.DefaultEvacuationFloor;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
+import de.zet_evakuierung.model.TeleportEdge;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

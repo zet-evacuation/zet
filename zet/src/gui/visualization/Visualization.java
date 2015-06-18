@@ -17,7 +17,7 @@
 package gui.visualization;
 
 import org.zetool.math.Conversion;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
@@ -35,14 +35,14 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
-import opengl.drawingutils.GLColor;
-import opengl.framework.abs.DrawableControlable;
-import opengl.helper.Frustum;
-import opengl.helper.ProjectionHelper;
-import opengl.helper.Texture;
-import opengl.helper.TextureFont;
-import opengl.helper.TextureFontStrings;
-import opengl.helper.TextureManager;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
+import org.zetool.opengl.helper.ProjectionHelper;
+import org.zetool.opengl.helper.Texture;
+import org.zetool.opengl.helper.TextureFont;
+import org.zetool.opengl.helper.TextureFontStrings;
+import org.zetool.opengl.helper.TextureManager;
 
 /**
  * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes

@@ -4,7 +4,7 @@ import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.zet_evakuierung.model.BuildingPlan;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 

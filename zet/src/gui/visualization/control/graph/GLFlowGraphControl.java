@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.opengl.GL;
-import opengl.framework.abs.DrawableControlable;
-import opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *  @author Jan-Philipp Kappmeier

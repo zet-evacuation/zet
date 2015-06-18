@@ -9,9 +9,9 @@ import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Graph;
 import org.zetool.graph.Node;
 import gui.visualization.draw.graph.GLGraph;
-import opengl.framework.abs.AbstractControl;
-import opengl.framework.abs.DrawableControlable;
-import opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.AbstractControl;
+import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
 
 
 /**

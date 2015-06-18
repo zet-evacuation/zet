@@ -52,7 +52,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import opengl.helper.TextureFontStrings;
+import org.zetool.opengl.helper.TextureFontStrings;
 
 /**
  * A dialog window allowing to set the options used to create a video. The

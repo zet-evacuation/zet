@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca.algorithm.evac;
 
 import algo.ca.rule.AbstractMovementRule;
@@ -109,8 +110,6 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 		// erster Lauf ist beendet. Versuche nun ob welche swappen können
 		for( Individual i : unfinished ) {
 			if( individualSwapped.contains( i ) ) {
-				if( util.DebugFlags.CA_SWAP )
-					System.out.println( "Individuum " + i.id() + " hat schon geswappt." );
 				continue;
 			}
 			List<EvacCell> possibleTargets = individualPossibleMapping.get( i );
@@ -138,8 +137,6 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 					// steht ein individual drauf.
 					Individual i2 = target.getIndividual();
 					if( individualSwapped.contains( i2 ) ) {
-						if( util.DebugFlags.CA_SWAP )
-							System.out.println( "Individuum " + i2.id() + " hat schon geswappt." );
 						unfinished2.add( i );
 					} else {
 						List<EvacCell> possibleTargets2 = individualPossibleMapping.get( i2 );

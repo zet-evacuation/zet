@@ -13,10 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package evacuationplan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+package evacuationplan;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
@@ -25,13 +23,13 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
-
-import org.zetool.graph.Node;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.Room;
 import ds.ca.evac.EvacCell;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.zetool.graph.Node;
 
-import util.DebugFlags;
 
 /**
  * Contains a mapping from nodes to cells and a mapping from cells to nodes.
@@ -59,7 +57,7 @@ public class BidirectionalNodeCellMapping {
 		HashMap<Node, ArrayList<ZToGraphRasterSquare>> nodeToGraphSquareMapping = new HashMap<Node, ArrayList<ZToGraphRasterSquare>>();
 		HashMap<ZToGraphRasterSquare,ZToCARasterSquare> graphToCARasterSquare = new HashMap<ZToGraphRasterSquare,ZToCARasterSquare>();
 		
-		for (Floor floor:graphRaster.getFloors()){
+		for( AbstractFloor floor:graphRaster.getFloors()){
 			if (floor.getRooms().size() > 0){
 				for (Room room:graphRaster.getRooms(floor)){
 					ZToGraphRoomRaster graphRasteredRoom = graphRaster.getRasteredRoom(room);
@@ -96,18 +94,8 @@ public class BidirectionalNodeCellMapping {
 				EvacCell cell = caSquaresToCells.get(caSquare);
 				cellsOfThisNode.add( cell );
 				cellNodeMapping.put( cell, node );
-				if (DebugFlags.EVAPLANCHECKER){
-					System.out.println("Mapped ("+cell.getX()+","+cell.getY()+") to "+node);
-				}
 			}
 			nodeCellMapping.put( node, cellsOfThisNode );
-			if (DebugFlags.EVAPLANCHECKER){
-				System.out.println("Mapped "+node+" to ");
-				for (EvacCell cell:cellsOfThisNode){
-					System.out.print(cell.coordToString()+" ");
-				}
-				System.out.println();
-			}
 		}
 	}
 	

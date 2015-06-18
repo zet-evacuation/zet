@@ -35,7 +35,7 @@ import gui.visualization.draw.ca.GLIndividual;
 import gui.visualization.draw.ca.GLSaveCell;
 import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
-import opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.common.util.Direction8;
 import ds.ca.evac.TeleportCell;
 import gui.visualization.VisualizationOptionManager;

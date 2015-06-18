@@ -4,12 +4,12 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ import org.junit.Test;
 public class InstanceGenerator {
 		ZControl zControl;
 		private Room r;
-		private Floor fl;
+		private AbstractFloor fl;
 		private AssignmentArea a;
 		private EvacuationArea e;
 

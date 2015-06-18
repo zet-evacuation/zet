@@ -1,13 +1,13 @@
 package gui.visualization.draw.graph;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLFlowEdgeControl;
 import javax.media.opengl.GL;
-import opengl.drawingutils.GLColor;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 
 /**

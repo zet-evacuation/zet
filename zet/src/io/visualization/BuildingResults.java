@@ -15,8 +15,8 @@
  */
 package io.visualization;
 
-import de.tu_berlin.coga.zet.model.AbstractFloor;
-import opengl.framework.abs.VisualizationResult;
+import de.zet_evakuierung.model.AbstractFloor;
+import org.zetool.opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,8 +24,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.RelativePosition;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.RelativePosition;
+import de.zet_evakuierung.model.Room;
 import java.util.Vector;
 
 /**
@@ -133,28 +134,43 @@ public class BuildingResults implements VisualizationResult {
 		public String getName() {
 			return name;
 		}
+
+    @Override
+    public List<Room> getRooms() {
+      throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int roomCount() {
+      throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<Room> iterator() {
+      throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+    }
 	}
 	private LinkedList<Wall> walls;
 	private HashMap<Integer, Floor> floors;
 
-	public BuildingResults( de.tu_berlin.coga.zet.model.BuildingPlan buildingPlan ) {
+	public BuildingResults( de.zet_evakuierung.model.BuildingPlan buildingPlan ) {
 		walls = new LinkedList<>();
 		floors = new HashMap<>();
 
-		for( de.tu_berlin.coga.zet.model.Floor zFloor : buildingPlan.getFloors() ) {
+		for( AbstractFloor zFloor : buildingPlan.getFloors() ) {
 			Floor buildingFloor = new Floor( buildingPlan.getFloorID( zFloor ), zFloor.getName() );
 
 			if( zFloor.getRooms().size() >= 0 ) { // TODO: remove as not necessary
 				if( floors.put( buildingFloor.id(), buildingFloor ) != null )
 					throw new RuntimeException( "Error while building the visualisation data out of the building plan: " + "There were two z-floors with the same id. " );
 
-				for( de.tu_berlin.coga.zet.model.Room room : zFloor.getRooms() ) {
+				for( de.zet_evakuierung.model.Room room : zFloor.getRooms() ) {
 					addHeterogeneousEdgeList( room.getPolygon().edgeIterator( false ), room.getPolygon(), buildingFloor );
-					for( de.tu_berlin.coga.zet.model.Barrier barrier : room.getBarriers() ) {
+					for( de.zet_evakuierung.model.Barrier barrier : room.getBarriers() ) {
 						Wall w = addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.ElementType.INACCESSIBLE );
 						w.setBarrier( true );
 					}
-					for( de.tu_berlin.coga.zet.model.InaccessibleArea area : room.getInaccessibleAreas() )
+					for( de.zet_evakuierung.model.InaccessibleArea area : room.getInaccessibleAreas() )
 						addHomogeneousEdgeList( area.edgeIterator( false ), area, buildingFloor, Wall.ElementType.INACCESSIBLE );
 				}
 			}
@@ -173,11 +189,11 @@ public class BuildingResults implements VisualizationResult {
 		return Collections.unmodifiableCollection( floors.values() );
 	}
 
-	protected void addHeterogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.RoomEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor ) {
+	protected void addHeterogeneousEdgeList( Iterator<? extends de.zet_evakuierung.model.RoomEdge> edgeIt, de.zet_evakuierung.model.PlanPolygon<?> room, Floor floor ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.RoomEdge firstEdge = edgeIt.next();
+			de.zet_evakuierung.model.RoomEdge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			if( firstEdge.isPassable() ) {
 				curWall.addPoint( firstEdge.getSource(), Wall.ElementType.PASSABLE );
@@ -189,7 +205,7 @@ public class BuildingResults implements VisualizationResult {
 		}
 
 		while( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.RoomEdge curEdge = edgeIt.next();
+			de.zet_evakuierung.model.RoomEdge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			if( curEdge.isPassable() )
 				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.PASSABLE );
@@ -199,18 +215,18 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 	}
 
-	protected final Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.PlanEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
+	protected final Wall addHomogeneousEdgeList( Iterator<? extends de.zet_evakuierung.model.PlanEdge> edgeIt, de.zet_evakuierung.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.PlanEdge firstEdge = edgeIt.next();
+			de.zet_evakuierung.model.PlanEdge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			curWall.addPoint( firstEdge.getSource(), type );
 			curWall.addPoint( firstEdge.getTarget(), type );
 		}
 
 		while( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.PlanEdge curEdge = edgeIt.next();
+			de.zet_evakuierung.model.PlanEdge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			curWall.addPoint( curEdge.getTarget(), type );
 		}
@@ -225,7 +241,7 @@ public class BuildingResults implements VisualizationResult {
 	 * @param room the room
 	 * @param curWall the wall
 	 */
-	private void checkOrientation( de.tu_berlin.coga.zet.model.PlanEdge edge, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Wall curWall ) {
+	private void checkOrientation( de.zet_evakuierung.model.PlanEdge edge, de.zet_evakuierung.model.PlanPolygon<?> room, Wall curWall ) {
 		boolean isLeft = room.relativePolygonPosition( edge, RelativePosition.Left );
 		boolean isRight = room.relativePolygonPosition( edge, RelativePosition.Right );
 		if( isLeft != isRight ) {

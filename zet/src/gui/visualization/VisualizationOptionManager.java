@@ -19,7 +19,7 @@ package gui.visualization;
 import ds.PropertyContainer;
 import gui.visualization.control.ZETGLControl;
 import java.awt.Color;
-import opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLColor;
 
 /**
  *

@@ -90,7 +90,7 @@ public final class RasterTools {
 	 * @param raster
 	 * @return A list of all squares adjacent to the edge.
 	 */
-	public static <T extends RoomRasterSquare> List<T> getSquaresAlongEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+	public static <T extends RoomRasterSquare> List<T> getSquaresAlongEdge( de.zet_evakuierung.model.PlanEdge edge, RoomRaster<T> raster ) {
 		LinkedList<T> adjacentSquares = new LinkedList<>();
 
 		adjacentSquares.addAll( getSquaresAboveEdge( edge, raster ) );
@@ -113,7 +113,7 @@ public final class RasterTools {
 	 * @return All adjacent raster squares above this edge. If the edge is parallel to
 	 * the y-axis, the returned list is empty.
 	 */
-	public final static <T extends RoomRasterSquare> List<T> getSquaresAboveEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+	public final static <T extends RoomRasterSquare> List<T> getSquaresAboveEdge( de.zet_evakuierung.model.PlanEdge edge, RoomRaster<T> raster ) {
 		int rasterX1 = RasterTools.polyCoordToRasterCoord( edge.boundLeft(), raster.getXOffset(), raster );
 		int rasterX2 = RasterTools.polyCoordToRasterCoord( edge.boundRight(), raster.getXOffset(), raster );
 
@@ -146,7 +146,7 @@ public final class RasterTools {
 	 * @return All adjacent raster squares below this edge. If the edge is parallel to
 	 * the y-axis, the returned list is empty.
 	 */
-	public final static <T extends RoomRasterSquare> List<T> getSquaresBelowEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+	public final static <T extends RoomRasterSquare> List<T> getSquaresBelowEdge( de.zet_evakuierung.model.PlanEdge edge, RoomRaster<T> raster ) {
 		int rasterX1 = RasterTools.polyCoordToRasterCoord( edge.boundLeft(), raster.getXOffset(), raster );
 		int rasterX2 = RasterTools.polyCoordToRasterCoord( edge.boundRight(), raster.getXOffset(), raster );
 
@@ -179,7 +179,7 @@ public final class RasterTools {
 	 * @return All adjacent raster squares left of this edge. If the edge is parallel to
 	 * the x-axis, the returned list is empty.
 	 */
-	public final static <T extends RoomRasterSquare> List<T> getSquaresLeftOfEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+	public final static <T extends RoomRasterSquare> List<T> getSquaresLeftOfEdge( de.zet_evakuierung.model.PlanEdge edge, RoomRaster<T> raster ) {
 		int rasterX1 = RasterTools.polyCoordToRasterCoord( edge.boundLeft(), raster.getXOffset(), raster );
 		int rasterX2 = RasterTools.polyCoordToRasterCoord( edge.boundRight(), raster.getXOffset(), raster );
 
@@ -212,7 +212,7 @@ public final class RasterTools {
 	 * @return All adjacent raster squares right of this edge. If the edge is parallel to
 	 * the x-axis, the returned list is empty.
 	 */
-	public final static <T extends RoomRasterSquare> List<T> getSquaresRightOfEdge( de.tu_berlin.coga.zet.model.PlanEdge edge, RoomRaster<T> raster ) {
+	public final static <T extends RoomRasterSquare> List<T> getSquaresRightOfEdge( de.zet_evakuierung.model.PlanEdge edge, RoomRaster<T> raster ) {
 		int rasterX1 = RasterTools.polyCoordToRasterCoord( edge.boundLeft(), raster.getXOffset(), raster );
 		int rasterX2 = RasterTools.polyCoordToRasterCoord( edge.boundRight(), raster.getXOffset(), raster );
 

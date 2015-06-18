@@ -1,3 +1,18 @@
+/* zet evacuation tool copyright © 2007-15 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	02110-1301, USA.
+ */
 
 package de.tu_berlin.math.coga.zet.converter.graph;
 
@@ -7,11 +22,12 @@ import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Graph;
 import org.zetool.graph.Node;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.zet_evakuierung.model.BuildingPlan;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import org.zetool.common.datastructure.SimpleTuple;
 
 /**
  *
@@ -45,7 +61,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
     // create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
-    log.info( "Alle Kanten erzeugt." );
+    LOG.info( "Alle Kanten erzeugt." );
 
     // calculate the transit times for all edges
 		computeTransitTimes();
@@ -54,9 +70,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
     createReverseEdges();
 
     // adjust transit times according to stair speed factors
-    log.setLevel( Level.ALL );
+    LOG.setLevel( Level.ALL );
 		multiplyWithUpAndDownSpeedFactors();
-    log.setLevel( Level.FINE );
+    LOG.setLevel( Level.FINE );
 
 		// set this before reverse edges are computed as they modify the model.
 		model.roundTransitTimes();
@@ -65,8 +81,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 		assert checkParallelEdges();
 
-		log.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
-		log.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
+		LOG.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
+		LOG.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
 		return model;
 	}
 
@@ -109,7 +125,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
               factor = mapping.getUpNodeSpeedFactor( edge.end() );
             }
             model.divide( edge, factor );
-            log.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, factor});
+            LOG.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, factor});
             break;
           case Lower:
             factor = 1.0;
@@ -119,7 +135,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
               factor = mapping.getDownNodeSpeedFactor( edge.end() );
             }
             model.divide( edge, factor );
-            log.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, factor});
+            LOG.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, factor});
             break;
         }
       }
@@ -133,20 +149,20 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	 */
 	boolean checkParallelEdges() {
 		int count = 0;
-    log.info( "Check for parallel edges..." );
+    LOG.info( "Check for parallel edges..." );
 
 		HashMap<Tuple<Node,Node>,Edge> usedEdges = new HashMap<>( (int)(model.numberOfEdges()/0.75)+1, 0.75f );
 
 		for( Edge edge :  model.edges() ) {
-			final Tuple<Node,Node> nodePair = new Tuple<>( edge.start(), edge.end() );
+			final Tuple<Node,Node> nodePair = new SimpleTuple<>( edge.start(), edge.end() );
 			if( usedEdges.containsKey( nodePair ) ) {
-				log.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
+				LOG.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
 				//return false;
         count++;
 			}
 			usedEdges.put( nodePair, edge );
 		}
-		log.log( Level.INFO, "No parallel edges found." );
+		LOG.log( Level.INFO, "No parallel edges found." );
     System.err.println( "Parallel edges: " + count );
 		return true;
 	}

@@ -13,17 +13,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package ds.ca.evac;
 
 import algo.ca.framework.EvacuationCellState;
 import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCellularAutomaton;
+import de.zet_evakuierung.model.AbstractFloor;
 import ds.ca.results.CAStateChangedAction;
 import ds.ca.results.DieAction;
 import ds.ca.results.ExitAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecorder;
-import de.tu_berlin.coga.zet.model.Floor;
 import exitdistributions.IndividualToExitMapping;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import statistics.Statistic;
-import util.DebugFlags;
 
 /**
  * This class represents the structure of the cellular automaton. It holds the individuals, the rooms and the floor fields which are
@@ -395,8 +395,6 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 	 * ''to''-EvacCell is already occupied by another individual.
 	 */
 	public void moveIndividual( EvacCell from, EvacCell to ) throws java.lang.IllegalArgumentException {
-		if (DebugFlags.EVAPLANCHECKER)
-			System.out.println( "Individual " + from.getIndividual().id() + " moving from cell (" + from.getX() + "," + from.getX() + ") to cell (" + to.getX() + "," + to.getX() + ")" );
 		if( from.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on the ''from''-Cell!" );
 		if( from.equals( to ) ) {
@@ -419,19 +417,12 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 	}
 
 	public void swapIndividuals( EvacCell cell1, EvacCell cell2 ) {
-		if( DebugFlags.EVAPLANCHECKER )
-			System.out.println( "Individual " + cell1.getIndividual().id() + "from cell (" + cell1.getX() + "," + cell1.getX() + ")" + "and Individual " + cell2.getIndividual().id() + "from cell (" + cell2.getX() + "," + cell2.getX() + ") swap position.");
 		if( cell1.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
 		if( cell2.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #2!" );
 		if( cell1.equals( cell2 ) )
 			throw new IllegalArgumentException( "The cells are equal. Can't swap on equal cells." );
-		if( util.DebugFlags.CA_SWAP ) {
-			System.out.println( "Swap findet statt:" );
-			System.out.println( "Individual " + cell1.getIndividual().id() + " geht auf "+ cell2.coordToString() );
-			System.out.println( "Individual " + cell2.getIndividual().id() + " geht auf "+ cell1.coordToString() );
-		}
 		VisualResultsRecorder.getInstance().recordAction( new SwapAction( cell1, cell2 ) );
 		if( cell1.getRoom().equals( cell2.getRoom() ) ) {
 			cell1.getRoom().swapIndividuals( cell1, cell2 );
@@ -552,7 +543,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 		return notSaveIndividualsCount;
 	}
 
-	final public void addFloor( Floor floor ) {
+	final public void addFloor( AbstractFloor floor ) {
 		addFloor( floor.getName() );
 	}
 
