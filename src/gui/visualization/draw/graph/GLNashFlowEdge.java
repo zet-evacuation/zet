@@ -4,14 +4,14 @@
  */
 package gui.visualization.draw.graph;
 
-import opengl.drawingutils.RainbowGradient;
+import org.zetool.opengl.drawingutils.RainbowGradient;
 import org.zetool.math.Conversion;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLNashFlowEdgeControl;
 import javax.media.opengl.GL;
-import opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLColor;
 
 /**
  * Draws an edge and a Nash flow. The Nash flow is stored in values for the

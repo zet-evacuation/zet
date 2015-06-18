@@ -10,9 +10,9 @@ import gui.visualization.control.graph.GLSimpleNodeControl;
 import java.awt.Color;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import opengl.drawingutils.GLColor;
-import opengl.drawingutils.GLVector;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 
 /**

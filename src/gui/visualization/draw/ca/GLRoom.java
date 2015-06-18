@@ -18,8 +18,8 @@ package gui.visualization.draw.ca;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLRoomControl;
 import javax.media.opengl.GL;
-import opengl.drawingutils.GLVector;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * Draws a room. That is, it draws a ground rectangle for the room.

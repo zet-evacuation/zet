@@ -12,9 +12,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Project;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**

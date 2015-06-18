@@ -9,9 +9,9 @@
  */
 package gui.visualization.control;
 
-import opengl.framework.abs.AbstractControl;
-import opengl.framework.abs.AbstractDrawable;
-import opengl.framework.abs.Controlable;
+import org.zetool.opengl.framework.abs.AbstractControl;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.Controlable;
 
 
 /**

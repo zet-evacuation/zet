@@ -21,9 +21,9 @@
 
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -71,7 +71,7 @@ abstract public class AbstractPolygon<E extends AbstractFloor> extends JComponen
 
 
 	/**
-	 * Returns the {@link de.tu_berlin.coga.zet.model.PlanPolygon} represented by this instance.
+	 * Returns the {@link de.zet_evakuierung.model.PlanPolygon} represented by this instance.
 	 * @return the polygon
 	 */
 	public final PlanPolygon<?> getPlanPolygon () { return myPolygon; }

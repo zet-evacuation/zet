@@ -5,7 +5,7 @@
 package gui;
 
 import org.zetool.common.algorithm.AlgorithmListener;
-import org.zetool.common.util.Quantity;
+import org.zetool.common.util.units.Quantity;
 import org.zetool.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.Project;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.beans.PropertyChangeEvent;

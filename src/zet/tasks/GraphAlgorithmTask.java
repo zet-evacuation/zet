@@ -13,9 +13,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Project;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**

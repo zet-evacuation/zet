@@ -23,23 +23,23 @@ import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
-import ds.ProjectLoader;
+import de.zet_evakuierung.model.ProjectLoader;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
-import de.tu_berlin.coga.zet.model.exception.RoomEdgeInvalidTargetException;
-import de.tu_berlin.coga.zet.model.exception.TooManyPeopleException;
-import de.tu_berlin.coga.zet.template.Door;
-import de.tu_berlin.coga.zet.template.ExitDoor;
-import de.tu_berlin.coga.zet.template.TemplateLoader;
-import de.tu_berlin.coga.zet.template.Templates;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
+import de.zet_evakuierung.model.exception.RoomEdgeInvalidTargetException;
+import de.zet_evakuierung.model.exception.TooManyPeopleException;
+import de.zet_evakuierung.template.Door;
+import de.zet_evakuierung.template.ExitDoor;
+import de.zet_evakuierung.template.TemplateLoader;
+import de.zet_evakuierung.template.Templates;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -75,6 +75,7 @@ import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import de.zet_evakuierung.model.AbstractFloor;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -659,7 +660,7 @@ public class GUIControl implements AlgorithmListener {
 		// Pro Stockwerk:
 		log.info( "Personenverteilung im Gebäude: " );
 		int overall = 0;
-		for( Floor f : zcontrol.getProject().getBuildingPlan() ) {
+		for( AbstractFloor f : zcontrol.getProject().getBuildingPlan() ) {
 			int counter = 0;
 			for( Room r : f )
 				for( AssignmentArea a : r.getAssignmentAreas() )
@@ -671,14 +672,14 @@ public class GUIControl implements AlgorithmListener {
 
 		// Pro Ausgang:
 		log.info( "Personenverteilung pro Ausgang: " );
-		for( Floor f : zcontrol.getProject().getBuildingPlan() )
+		for( AbstractFloor f : zcontrol.getProject().getBuildingPlan() )
 			for( Room r : f )
 				for( EvacuationArea ea : r.getEvacuationAreas() ) {
 					overall = 0;
 					log.info( "" );
 					log.info( ea.getName() );
 					// Suche nach evakuierten pro etage für dieses teil
-					for( Floor f2 : zcontrol.getProject().getBuildingPlan() ) {
+					for( AbstractFloor f2 : zcontrol.getProject().getBuildingPlan() ) {
 						int counter = 0;
 						for( Room r2 : f2 )
 							for( AssignmentArea a : r2.getAssignmentAreas() )
@@ -1246,7 +1247,7 @@ public class GUIControl implements AlgorithmListener {
 		editor.setTitle( titleBarText );
 	}
 
-	public void showFloor( Floor floor ) {
+	public void showFloor( AbstractFloor floor ) {
 		editview.changeFloor( floor );
 	}
 

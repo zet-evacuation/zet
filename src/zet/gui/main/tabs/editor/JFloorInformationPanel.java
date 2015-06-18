@@ -2,8 +2,8 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Room;
 import gui.ZETLoader;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;

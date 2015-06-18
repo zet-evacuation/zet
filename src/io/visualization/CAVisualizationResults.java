@@ -16,13 +16,13 @@
 
 package io.visualization;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.PotentialManager;
 import ds.ca.results.EvacuationRecording;
 import java.util.HashMap;
-import opengl.framework.abs.VisualizationResult;
+import org.zetool.opengl.framework.abs.VisualizationResult;
 import statistic.ca.CAStatistic;
 
 /**
@@ -85,7 +85,7 @@ public class CAVisualizationResults implements VisualizationResult {
 
 	private void convertMapping( ZToCAMapping caMapping ) {
 		for( Integer floorID : caMapping.getCAFloors() ) {
-			de.tu_berlin.coga.zet.model.Floor zFloor = caMapping.get( floorID );
+			de.zet_evakuierung.model.Floor zFloor = caMapping.get( floorID );
 			double xOffset = zFloor.getxOffset();
 			double yOffset = zFloor.getyOffset();
 
@@ -93,7 +93,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 
 		for( ds.ca.evac.Room room : caMapping.getCARooms() ) {
-			de.tu_berlin.coga.zet.model.Room zRoom = caMapping.get( room ).getRoom();
+			de.zet_evakuierung.model.Room zRoom = caMapping.get( room ).getRoom();
 			double xOffset = zRoom.getPolygon().getxOffset();
 			double yOffset = zRoom.getPolygon().getyOffset();
 

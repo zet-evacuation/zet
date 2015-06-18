@@ -16,15 +16,15 @@
 
 package zet.gui.main.menu.popup;
 
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.AssignmentType;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
 import gui.GUIControl;
 import gui.editor.Areas;
-import io.z.ProjectConverter;
+import de.zet_evakuierung.io.z.ProjectConverter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

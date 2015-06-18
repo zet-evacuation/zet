@@ -20,7 +20,7 @@
  */
 package gui.visualization.draw.ca;
 
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import java.util.List;

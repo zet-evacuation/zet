@@ -26,8 +26,8 @@ import gui.visualization.control.graph.GLFlowEdgeControl;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import opengl.drawingutils.GLColor;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.math.vectormath.Vector3;
 
 public class GLFlowEdge extends GLEdge {
 	GLFlowEdgeControl fcontrol;

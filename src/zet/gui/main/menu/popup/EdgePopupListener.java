@@ -16,15 +16,15 @@
 
 package zet.gui.main.menu.popup;
 
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.TeleportEdge;
-import de.tu_berlin.coga.zet.model.ZControl;
-import de.tu_berlin.coga.zet.template.Door;
-import de.tu_berlin.coga.zet.template.ExitDoor;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
+import de.zet_evakuierung.model.TeleportEdge;
+import de.zet_evakuierung.model.ZControl;
+import de.zet_evakuierung.template.Door;
+import de.zet_evakuierung.template.ExitDoor;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;

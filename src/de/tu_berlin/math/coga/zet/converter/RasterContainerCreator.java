@@ -24,23 +24,15 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.Project;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.DelayArea;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.InaccessibleArea;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.SaveArea;
-import de.tu_berlin.coga.zet.model.DelayArea.DelayType;
-import de.tu_berlin.coga.zet.model.exception.RoomEdgeInvalidTargetException;
-import java.util.ArrayList;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
+import de.zet_evakuierung.model.exception.RoomEdgeInvalidTargetException;
 import java.util.Iterator;
 import java.util.List;
-import util.DebugFlags;
 
 public class RasterContainerCreator {
 
@@ -58,9 +50,9 @@ public class RasterContainerCreator {
 
 	public ZToGraphRasterContainer ZToGraphRasterContainer( BuildingPlan buildingPlan ) {
 		ZToGraphRasterContainer container = new ZToGraphRasterContainer();
-		List<Floor> floors = buildingPlan.getFloors();
+		List<AbstractFloor> floors = buildingPlan.getFloors();
 		container.setFloors( floors );
-		for( Floor floor : floors ) {
+		for( AbstractFloor floor : floors ) {
 			List<Room> rooms = floor.getRooms();
 			for( Room room : rooms ) {
 				ZToGraphRoomRaster rasterer = new ZToGraphRoomRaster( room );
@@ -69,15 +61,11 @@ public class RasterContainerCreator {
 			}
 		}
 
-		for( Floor floor : floors ) {
+		for( AbstractFloor floor : floors ) {
 			List<Room> rooms = floor.getRooms();
 			for( Room room : rooms ) {
 				ZToGraphRoomRaster rasterer = container.getRasteredRoom( room );
 				saveListOfDoors( rasterer, container );
-				if( DebugFlags.RASTER ) {
-					System.out.println( "The creator created the raster for a room:" );
-					System.out.println( rasterer.superToString() );
-				}
 			}
 		}
 
@@ -92,11 +80,11 @@ public class RasterContainerCreator {
 
 		// calculate number of rooms
 		int count = 0;
-		for( Floor floor : buildingPlan )
+		for( AbstractFloor floor : buildingPlan )
 			count += floor.roomCount();
 
 		int i = 0;
-		for( Floor floor : buildingPlan.getFloors() )
+		for( AbstractFloor floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
 				ZToCARoomRaster raster = new ZToCARoomRaster( room );
 				raster.rasterize();
@@ -108,9 +96,9 @@ public class RasterContainerCreator {
 		//AlgorithmTask.getInstance().publish( "Konvertiere Türen", "" );
 
 		i = 0;
-		for( Floor floor : buildingPlan.getFloors() )
+		for( AbstractFloor floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
-				for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getPolygon().getEdges() ) {
+				for( de.zet_evakuierung.model.PlanEdge edge : room.getPolygon().getEdges() ) {
 					RoomEdge rEdge = (RoomEdge) edge;
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
@@ -163,8 +151,8 @@ public class RasterContainerCreator {
 	}
 
 	private void saveListOfDoors( ZToGraphRoomRaster roomRaster, ZToGraphRasterContainer container ) {
-		de.tu_berlin.coga.zet.model.Room room = roomRaster.getRoom();
-		for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getPolygon().getEdges() ) {
+		de.zet_evakuierung.model.Room room = roomRaster.getRoom();
+		for( de.zet_evakuierung.model.PlanEdge edge : room.getPolygon().getEdges() ) {
 			RoomEdge rEdge = (RoomEdge) edge;
 			if( (rEdge).isPassable() ) {
 				List<ZToGraphRasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
@@ -184,8 +172,6 @@ public class RasterContainerCreator {
 					ZToGraphRasterSquare nextSquare = myIt.next();
 					ZToGraphRasterSquare test = partnerIt.next();
 					container.addDoor( new ZToGraphRasteredDoor( nextSquare, test ) );
-					if( DebugFlags.GRAPH_DOORS )
-						System.out.println( nextSquare + " " + test );
 				}
 			}
 		}

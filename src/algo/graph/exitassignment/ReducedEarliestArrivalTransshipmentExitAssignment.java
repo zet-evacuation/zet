@@ -144,7 +144,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         return result;
     }
 
-    protected int estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
+    protected long  estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
         IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
         IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>(model.edgeCapacities());
         for (Node s : sinks) {

@@ -4,10 +4,10 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.util.Collections;

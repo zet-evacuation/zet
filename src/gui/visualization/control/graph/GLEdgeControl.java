@@ -5,11 +5,11 @@
 package gui.visualization.control.graph;
 
 import org.zetool.math.Conversion;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import gui.visualization.draw.graph.GLEdge;
-import opengl.framework.abs.AbstractControl;
+import org.zetool.opengl.framework.abs.AbstractControl;
 
 
 /**

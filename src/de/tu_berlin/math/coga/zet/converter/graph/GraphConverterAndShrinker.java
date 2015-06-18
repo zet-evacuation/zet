@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import org.zetool.common.algorithm.Algorithm;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.zet_evakuierung.model.BuildingPlan;
 
 
 /**

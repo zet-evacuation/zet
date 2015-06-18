@@ -3,7 +3,7 @@ package de.tu_berlin.math.coga.batch.output;
 
 import org.zetool.components.batch.output.TreeListItem;
 import org.zetool.components.batch.output.AbstractOutput;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.zet_evakuierung.model.BuildingPlan;
 import ds.GraphVisualizationResults;
 import gui.GUIControl;
 import io.visualization.BuildingResults;

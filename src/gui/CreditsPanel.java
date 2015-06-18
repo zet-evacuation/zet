@@ -31,11 +31,11 @@ import java.nio.file.Paths;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
-import opengl.framework.JMovingEyePanel;
-import opengl.helper.TextureFontStrings;
-import opengl.helper.Texture;
-import opengl.helper.TextureFont;
-import opengl.helper.TextureManager;
+import org.zetool.opengl.framework.JMovingEyePanel;
+import org.zetool.opengl.helper.TextureFontStrings;
+import org.zetool.opengl.helper.Texture;
+import org.zetool.opengl.helper.TextureFont;
+import org.zetool.opengl.helper.TextureManager;
 
 /**
  * An OpenGL-panel displaying some textual copyright information about the zet

@@ -20,10 +20,10 @@
 
 package zet.tasks;
 
-import de.tu_berlin.coga.zet.model.Project;
+import de.zet_evakuierung.model.Project;
 
 /**
- * Performs the rasterization of a {@link de.tu_berlin.coga.zet.model.BuildingPlan}.
+ * Performs the rasterization of a {@link de.zet_evakuierung.model.BuildingPlan}.
  * @author Jan-Philipp Kappmeier
  */
 public class RasterizeTask implements Runnable {

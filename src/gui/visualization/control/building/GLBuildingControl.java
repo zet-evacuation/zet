@@ -28,7 +28,7 @@ import io.visualization.BuildingResults.Wall;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import opengl.framework.abs.Controlable;
+import org.zetool.opengl.framework.abs.Controlable;
 
 /**
  * A control class that allows hiding and showing of walls on different floors.

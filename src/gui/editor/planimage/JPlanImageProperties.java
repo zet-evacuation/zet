@@ -35,7 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import zet.util.ConversionTools;
+import de.zet_evakuierung.util.ConversionTools;
 
 /**
  *

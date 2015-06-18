@@ -6,7 +6,7 @@ package gui.visualization.draw.graph;
 
 import gui.visualization.control.graph.GLGraphControl;
 import javax.media.opengl.GL;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 
 /**

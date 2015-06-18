@@ -44,8 +44,8 @@ import java.util.List;
 import java.util.Collection;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import opengl.helper.Frustum;
-import opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.DrawableControlable;
 import statistic.ca.CAStatistic;
 import zet.gui.main.tabs.JVisualizationView;
 

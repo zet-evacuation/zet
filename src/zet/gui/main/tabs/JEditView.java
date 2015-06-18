@@ -18,17 +18,18 @@ package zet.gui.main.tabs;
 
 import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.components.JRuler;
+import de.zet_evakuierung.model.AbstractFloor;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.DelayArea;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.TeleportArea;
-import de.tu_berlin.coga.zet.model.ZControl;
-import de.tu_berlin.coga.zet.model.ZModelRoomEvent;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.DelayArea;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.StairArea;
+import de.zet_evakuierung.model.TeleportArea;
+import de.zet_evakuierung.model.ZControl;
+import de.zet_evakuierung.model.ZModelRoomEvent;
 import event.EventServer;
 import gui.GUIControl;
 import gui.GUIOptionManager;
@@ -170,10 +171,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
 	private ZControl projectControl;
-	/** The currently visible {@link de.tu_berlin.coga.zet.model.Floor} */
+	/** *  The currently visible {@link de.zet_evakuierung.model.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
-	private FloorComboBox<Floor> floorSelector;
+	private FloorComboBox<AbstractFloor> floorSelector;
 	/** Model for a room-selector combo box. */
 	private RoomComboBoxModel roomSelector;
 	/** A label that shows a string explaining the floor selection combo box. */
@@ -273,8 +274,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				//updateFloorView();
 				getLeftPanel().getTopRuler().setWidth( currentFloor.getWidth() );
 				getLeftPanel().getLeftRuler().setHeight( currentFloor.getHeight() );
-				getLeftPanel().getTopRuler().offset = zet.util.ConversionTools.roundScale3( currentFloor.getxOffset() / 1000.0 - 0.8 );
-				getLeftPanel().getLeftRuler().offset = zet.util.ConversionTools.roundScale3( currentFloor.getyOffset() / 1000.0 - 0.8 );
+				getLeftPanel().getTopRuler().offset = de.zet_evakuierung.util.ConversionTools.roundScale3( currentFloor.getxOffset() / 1000.0 - 0.8 );
+				getLeftPanel().getLeftRuler().offset = de.zet_evakuierung.util.ConversionTools.roundScale3( currentFloor.getyOffset() / 1000.0 - 0.8 );
 
 //				// Title of the window
 				guiControl.setZETWindowTitle( getAdditionalTitleBarText() );
@@ -367,7 +368,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * that it displays the new floor.
 	 * @param floor the new floor that is shown
 	 */
-	public void changeFloor( Floor floor ) {
+	public void changeFloor( AbstractFloor floor ) {
 		floorSelector.setSelectedItem( floor );
 	}
 
@@ -388,7 +389,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	}
 
 	/**
-	 * Sets the z {@link de.tu_berlin.coga.zet.model.Project} that is displayed in the edit view.
+	 * Sets the z {@link de.zet_evakuierung.model.Project} that is displayed in the edit view.
 	 * @param projectControl
 	 */
 	final public void displayProject( ZControl projectControl ) {
@@ -511,8 +512,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		Floor floor = getCurrentFloor();
 		topRuler.setWidth( floor.getWidth() );
 		leftRuler.setHeight( floor.getHeight() );
-		topRuler.offset = zet.util.ConversionTools.roundScale3( floor.getxOffset() / 1000.0 - 0.8 );
-		leftRuler.offset = zet.util.ConversionTools.roundScale3( floor.getyOffset() / 1000.0 - 0.8 );
+		topRuler.offset = de.zet_evakuierung.util.ConversionTools.roundScale3( floor.getxOffset() / 1000.0 - 0.8 );
+		leftRuler.offset = de.zet_evakuierung.util.ConversionTools.roundScale3( floor.getyOffset() / 1000.0 - 0.8 );
 		topRuler.repaint();
 		leftRuler.repaint();
 	}

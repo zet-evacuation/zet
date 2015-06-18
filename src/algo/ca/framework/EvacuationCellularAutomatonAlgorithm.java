@@ -44,7 +44,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm
 
   @Override
   protected void initialize() {
-    log.log( Level.INFO, "{0} wird ausgef\u00fchrt. ", toString() );
+    LOG.log( Level.INFO, "{0} wird ausgef\u00fchrt. ", toString() );
     evacuationSimulationResult = new EvacuationSimulationResult();
 
     getProblem().eca.start();

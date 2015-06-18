@@ -18,7 +18,7 @@ package gui.visualization.draw.graph;
 
 import gui.visualization.control.graph.GLGraphFloorControl;
 import javax.media.opengl.GL;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * <p>This class draws a floor in the graph (which does not explicitly exist

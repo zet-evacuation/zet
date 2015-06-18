@@ -1,8 +1,8 @@
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Component;
 import java.awt.Point;

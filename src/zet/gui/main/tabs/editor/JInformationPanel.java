@@ -7,7 +7,7 @@ package zet.gui.main.tabs.editor;
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import gui.GUIControl;
 import info.clearthought.layout.TableLayout;
 import java.text.NumberFormat;

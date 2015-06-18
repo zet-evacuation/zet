@@ -18,7 +18,7 @@ package gui.visualization.draw.ca;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
 
 import javax.media.opengl.GL;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl> {
 	public GLCA( GLCellularAutomatonControl control ) {

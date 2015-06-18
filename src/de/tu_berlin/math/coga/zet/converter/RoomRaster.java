@@ -14,30 +14,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * RoomRaster.java
- */
 package de.tu_berlin.math.coga.zet.converter;
 
+import de.zet_evakuierung.model.AbstractFloor;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.zetool.common.util.Direction8;
 import org.zetool.common.util.Level;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.StairArea;
+import de.zet_evakuierung.model.Barrier;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.Floor;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.StairArea;
 import java.util.Iterator;
 
 /**
- * The {@code RoomRaster} class provides rasterization of a {@link de.tu_berlin.coga.zet.model.Room}
+ * The {@code RoomRaster} class provides rasterization of a {@link de.zet_evakuierung.model.Room}
  * object. The squares of the raster have to be of the type {@link RoomRaster}
- * which allows to describe the {@link de.tu_berlin.coga.zet.model.Area} in which a square lies.
+ * which allows to describe the {@link de.zet_evakuierung.model.Area} in which a square lies.
  *
  * @param <T> the type of the used raster, have to be at least
  * {@link RoomRasterSquare} objects
@@ -45,9 +41,9 @@ import java.util.Iterator;
  */
 public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 
-	/** The {@link de.tu_berlin.coga.zet.model.Floor} of this room. */
-	Floor floor;
-	/** The {@link de.tu_berlin.coga.zet.model.Room} that is rastered. Redundant save helps avoiding
+	/** The {@link de.zet_evakuierung.model.Floor} of this room. */
+	AbstractFloor floor;
+	/** The {@link de.zet_evakuierung.model.Room} that is rastered. Redundant save helps avoiding
 	 * casts. */
 	Room r;
 	LinkedList<T> accessibleSquares;
@@ -112,7 +108,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 	 *
 	 * @return the {@link Floor} this room belongs to.
 	 */
-	public Floor getFloor() {
+	public AbstractFloor getFloor() {
 		return floor;
 	}
 

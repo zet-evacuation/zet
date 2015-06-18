@@ -23,7 +23,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ShortestPathTreeShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.SpanningTreeShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.SteinerTreeShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.ThinNetworkConverter;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.zet_evakuierung.model.BuildingPlan;
 /**
  * An enumeration of the different converter algorithms for graphs. They provide
  * methods to retrieve the converting algorithm objects.

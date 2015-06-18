@@ -2,7 +2,7 @@
 package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;

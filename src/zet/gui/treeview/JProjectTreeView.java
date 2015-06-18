@@ -4,12 +4,12 @@
  */
 package zet.gui.treeview;
 
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.Project;
+import de.zet_evakuierung.model.Area;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZControl;
 import de.tu_berlin.math.coga.components.framework.Menu;
+import de.zet_evakuierung.model.AbstractFloor;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,7 +84,7 @@ public class JProjectTreeView extends JDialog implements TreeSelectionListener, 
 		root.add( buildingPlanNode );
 
 		// Add floors, rooms, areas recursiveley
-		for( Floor floor : project.getBuildingPlan().getFloors() ) {
+		for( AbstractFloor floor : project.getBuildingPlan().getFloors() ) {
 			FloorNode floorNode = new FloorNode( floor );
 			buildingPlanNode.add( floorNode );
 			for( Room room : floor ) {

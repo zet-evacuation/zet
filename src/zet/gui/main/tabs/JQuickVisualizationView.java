@@ -16,10 +16,11 @@
 
 package zet.gui.main.tabs;
 
+import de.zet_evakuierung.model.AbstractFloor;
 import org.zetool.common.localization.Localization;
-import de.tu_berlin.coga.zet.model.Floor;
+import de.zet_evakuierung.model.Floor;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.ZControl;
+import de.zet_evakuierung.model.ZControl;
 import gui.GUIControl;
 import gui.visualization.control.ZETGLControl;
 import java.awt.event.ActionEvent;
@@ -41,7 +42,7 @@ import zet.tasks.DisplayFloorTask;
  */
 public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
 	Localization loc;
-	private FloorComboBox<Floor> quickfloorSelector;
+	private FloorComboBox<AbstractFloor> quickfloorSelector;
 	private int selectedFloor = 0;
 	private final GUIControl guiControl;
 	private Floor currentFloor;
@@ -64,7 +65,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 		quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}
 
-	public void changeQuickFloor( Floor floor ) {
+	public void changeQuickFloor( AbstractFloor floor ) {
 		quickfloorSelector.setSelectedItem( floor );
 	}
 
@@ -83,7 +84,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 	public void update() {
 		quickfloorSelector.removeAllItems();
-		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
+		for( AbstractFloor f : projectControl.getProject().getBuildingPlan().getFloors() )
 			quickfloorSelector.addItem( f );
 	}
 

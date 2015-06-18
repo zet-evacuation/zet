@@ -54,9 +54,9 @@ public class ZToCAMapping
 	 */
 	private Map<ds.ca.evac.Room, ZToCARoomRaster> zARoomToZRoom;
 	
-	private Map<Integer, de.tu_berlin.coga.zet.model.Floor> zaFloorToZFloor;
+	private Map<Integer, de.zet_evakuierung.model.Floor> zaFloorToZFloor;
 	
-	private Map<de.tu_berlin.coga.zet.model.Floor, Integer> zFloorToZAFloor;
+	private Map<de.zet_evakuierung.model.Floor, Integer> zFloorToZAFloor;
 	
 	/**
 	 * Constructs a new empty ZToCAMapping-Object, which is able to map
@@ -70,8 +70,8 @@ public class ZToCAMapping
 		this.rasterSquareToCell = new HashMap<ZToCARasterSquare, EvacCell>();
 		this.zRoomToZARoom = new HashMap<ZToCARoomRaster, ds.ca.evac.Room>();
 		this.zARoomToZRoom = new HashMap<ds.ca.evac.Room, ZToCARoomRaster>();
-		this.zaFloorToZFloor = new HashMap<Integer, de.tu_berlin.coga.zet.model.Floor>();
-		this.zFloorToZAFloor = new HashMap<de.tu_berlin.coga.zet.model.Floor, Integer>();
+		this.zaFloorToZFloor = new HashMap<Integer, de.zet_evakuierung.model.Floor>();
+		this.zFloorToZAFloor = new HashMap<de.zet_evakuierung.model.Floor, Integer>();
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class ZToCAMapping
 		return overwrite;
 	}
 	
-	public boolean insertTuple(Integer floorID, de.tu_berlin.coga.zet.model.Floor zFloor){
+	public boolean insertTuple(Integer floorID, de.zet_evakuierung.model.Floor zFloor){
        if (floorID == null)
             throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.FloorIDIsNullException"));
         if (zFloor == null)
@@ -157,7 +157,7 @@ public class ZToCAMapping
         boolean overwrite = false;
         if (this.zaFloorToZFloor.containsKey(floorID) || this.zFloorToZAFloor.containsKey(zFloor)) {
             overwrite = true;
-            de.tu_berlin.coga.zet.model.Floor oldFloor = zaFloorToZFloor.get(floorID);
+            de.zet_evakuierung.model.Floor oldFloor = zaFloorToZFloor.get(floorID);
             Integer oldID = zFloorToZAFloor.get(oldFloor);
             this.zaFloorToZFloor.remove(oldID);
             this.zFloorToZAFloor.remove(oldFloor);
@@ -211,11 +211,11 @@ public class ZToCAMapping
 		return this.zARoomToZRoom.get(zARoom);
 	}
 	
-	public de.tu_berlin.coga.zet.model.Floor get(Integer floorID){
+	public de.zet_evakuierung.model.Floor get(Integer floorID){
 	    return zaFloorToZFloor.get(floorID);
 	}
 	
-	public Integer get(de.tu_berlin.coga.zet.model.Floor floor){
+	public Integer get(de.zet_evakuierung.model.Floor floor){
 	    return zFloorToZAFloor.get(floor);
 	}
 	
@@ -302,7 +302,7 @@ public class ZToCAMapping
 	    return this.zaFloorToZFloor.containsKey(floorID);
 	}
 
-	public boolean contains(de.tu_berlin.coga.zet.model.Floor floor){
+	public boolean contains(de.zet_evakuierung.model.Floor floor){
         return this.zFloorToZAFloor.containsKey(floor);
     }
 	

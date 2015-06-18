@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import gui.visualization.draw.graph.GLNashFlowEdge;
-import opengl.drawingutils.RainbowGradient;
+import org.zetool.opengl.drawingutils.RainbowGradient;
 
 
 /**

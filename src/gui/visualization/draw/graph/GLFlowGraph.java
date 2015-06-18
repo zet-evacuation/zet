@@ -15,7 +15,7 @@
  */
 package gui.visualization.draw.graph;
 
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 import gui.visualization.control.graph.GLFlowGraphControl;
 

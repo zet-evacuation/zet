@@ -1,8 +1,6 @@
 
 package gui;
 
-import batch.load.BatchProject;
-import batch.load.BatchProjectEntry;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -10,7 +8,6 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.Annotations;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.localization.Localization;
 import de.tu_berlin.math.coga.components.framework.Menu;
@@ -361,11 +358,8 @@ public class ZETLoader {
 		System.out.println( "Loading file " + string );
 		File batchFile = new File( string );
 		checkFile( batchFile, "Batch task file" );
-		BatchProject loadedBatchProject = null;
 		try {
 			XStream xstream = new XStream();
-			Annotations.configureAliases( xstream, BatchProject.class );
-			Annotations.configureAliases( xstream, BatchProjectEntry.class );
 		} catch( Exception ex ) {
 			exit( "Error loading batch task file." );
 		}

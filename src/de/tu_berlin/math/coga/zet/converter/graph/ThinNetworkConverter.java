@@ -1,8 +1,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import de.zet_evakuierung.model.AbstractFloor;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.util.Level;
-import de.tu_berlin.math.coga.math.vectormath.Vector2;
+import org.zetool.math.vectormath.Vector2;
 import ds.PropertyContainer;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
@@ -11,17 +12,16 @@ import ds.graph.NodeRectangle;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.math.geom.ArbitraryRectangle;
 import org.zetool.math.geom.Rectangle;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.DelayArea;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.InaccessibleArea;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.StairArea;
+import de.zet_evakuierung.model.Area;
+import de.zet_evakuierung.model.AssignmentArea;
+import de.zet_evakuierung.model.DelayArea;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.InaccessibleArea;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
+import de.zet_evakuierung.model.StairArea;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
@@ -96,7 +96,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
   private HashMap<Room, ListSequence<Edge>> EdgesForRoom = new HashMap<>();
   private ListSequence<Edge> RoomEdges;
   //stores all doors that do not get a node (only if one of the corresponding rooms has only one door and is empty)
-  private HashMap<Floor, List<Point>> needsNoConnection = new HashMap<>();
+  private HashMap<AbstractFloor, List<Point>> needsNoConnection = new HashMap<>();
   private Map<Node, Rectangle> coveredArea;
   //stores the associated room according to a connecting edge over floors
   private HashMap<Room, Room> FloorConnection = new HashMap<>();
@@ -367,11 +367,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
             if( debug ) {
               System.out.println( "Create node between 2 evacuation areas for room: " + ZRoom.getName() );
             }
-            Collection<de.tu_berlin.coga.zet.model.PlanEdge> doors1 = MoreDoorRoom.getDoorEdges();
-            Collection<de.tu_berlin.coga.zet.model.PlanEdge> doors2 = ZRoom.getDoorEdges();
+            Collection<de.zet_evakuierung.model.PlanEdge> doors1 = MoreDoorRoom.getDoorEdges();
+            Collection<de.zet_evakuierung.model.PlanEdge> doors2 = ZRoom.getDoorEdges();
             Point p = new Point();
-            for( de.tu_berlin.coga.zet.model.PlanEdge edge : doors1 ) {
-              for( de.tu_berlin.coga.zet.model.PlanEdge edge1 : doors2 ) {
+            for( de.zet_evakuierung.model.PlanEdge edge : doors1 ) {
+              for( de.zet_evakuierung.model.PlanEdge edge1 : doors2 ) {
                 boolean first = edge.getSource().x == edge1.getSource().x;
                 boolean second = edge.getSource().y == edge1.getSource().y;
                 boolean third = edge.getTarget().x == edge1.getTarget().x;
@@ -1332,7 +1332,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
    * rooms for each room.
    */
   private void computeNeighbors() {
-    log.finest( "Finding neighbourrooms started..." );
+    LOG.finest( "Finding neighbourrooms started..." );
     final List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
     for( ZToGraphRoomRaster room : rasteredRooms ) {
@@ -1350,7 +1350,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       }
 
       //gives all dooredges for the first considered room
-      Collection<de.tu_berlin.coga.zet.model.PlanEdge> dooredgesroom1 = room.getRoom().getDoorEdges();
+      Collection<de.zet_evakuierung.model.PlanEdge> dooredgesroom1 = room.getRoom().getDoorEdges();
       //look for all other rooms on the same floor
       for( ZToGraphRoomRaster room2 : rasteredRooms ) {
         if( room == room2 ) {
@@ -1358,11 +1358,11 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
         }
 
         //gives all dooredges for the other considered room
-        Collection<de.tu_berlin.coga.zet.model.PlanEdge> dooredgesroom2 = room2.getRoom().getDoorEdges();
+        Collection<de.zet_evakuierung.model.PlanEdge> dooredgesroom2 = room2.getRoom().getDoorEdges();
 
         if( (room2.getRoom().getAssociatedFloor().equals( room.getRoom().getAssociatedFloor() )) ) {
-          for( de.tu_berlin.coga.zet.model.PlanEdge edge : dooredgesroom1 ) {
-            for( de.tu_berlin.coga.zet.model.PlanEdge edge2 : dooredgesroom2 ) {
+          for( de.zet_evakuierung.model.PlanEdge edge : dooredgesroom1 ) {
+            for( de.zet_evakuierung.model.PlanEdge edge2 : dooredgesroom2 ) {
               //edges do not have the same associated polygon, so only look for same start/end
               //sources and targets are equal in both edges
               boolean first = edge.getSource().x == edge2.getSource().x;
@@ -1755,7 +1755,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
       for( org.zetool.math.geom.Point po : getPoints ) {
         p.add( new PlanPoint( po.getX(), po.getY() ) );
       }
-      PlanPolygon poly = new PlanPolygon( de.tu_berlin.coga.zet.model.PlanEdge.class );
+      PlanPolygon poly = new PlanPolygon( de.zet_evakuierung.model.PlanEdge.class );
       poly.defineByPoints( p );
       //System.out.println("center: " + center);
 

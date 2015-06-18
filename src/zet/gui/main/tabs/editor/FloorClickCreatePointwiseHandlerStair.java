@@ -4,10 +4,10 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.ZControl;
-import de.tu_berlin.coga.zet.model.exception.StairAreaBoundaryException;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.StairArea;
+import de.zet_evakuierung.model.ZControl;
+import de.zet_evakuierung.model.exception.StairAreaBoundaryException;
 import java.awt.Component;
 import java.awt.Point;
 import java.util.List;

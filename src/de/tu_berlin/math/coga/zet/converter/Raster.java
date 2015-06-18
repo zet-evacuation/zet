@@ -17,17 +17,17 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.zet_evakuierung.model.PlanPolygon;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import zet.util.ConversionTools;
+import de.zet_evakuierung.util.ConversionTools;
 
 /**
  * The {@code Raster} class provides basic rasterization of polygonal objects. These
- * object have to be of the type {@link de.tu_berlin.coga.zet.model.PlanPolygon}. The bounding of the polygon is
+ * object have to be of the type {@link de.zet_evakuierung.model.PlanPolygon}. The bounding of the polygon is
  * divided into squares, which can be inside or outside the polygon or intersect, if they
  * are not completely inside or outside.
  * <p>The type of the squares is defined through the generic parameter, which has to be
@@ -44,11 +44,11 @@ public class Raster<T extends RasterSquare > {
 	private Class<T> squareClassType;
 	/** The class-type of the rasterized polygon. */
 	//protected Class<P> polygonClassType;
-	/** Array containing the squares of the rasterized {@link de.tu_berlin.coga.zet.model.PlanPolygon} */
+	/** *  Array containing the squares of the rasterized {@link de.zet_evakuierung.model.PlanPolygon} */
 	protected T[][] rasterSquares;
 	/** A list of squares intersecting the polygon. */
 	private ArrayList<T> insideSquares;
-	/** The rasterized {@link de.tu_berlin.coga.zet.model.PlanPolygon}*/
+	/** *  The rasterized {@link de.zet_evakuierung.model.PlanPolygon}*/
 	protected PlanPolygon p;
 	/** The width of the array for the squares. */
 	private int width = 0;
@@ -64,7 +64,7 @@ public class Raster<T extends RasterSquare > {
 	}
 
 	/**
-	 * Performs the rasterization of a simple polygon defined by {@link de.tu_berlin.coga.zet.model.PlanPolygon} inside the range of a
+	 * Performs the rasterization of a simple polygon defined by {@link de.zet_evakuierung.model.PlanPolygon} inside the range of a
 	 * bounding box of the polygon.
 	 * <p>During the rasterization an array representing the individual squares of the grid is
 	 * created. The array stores {@link RasterSquare}-objects representing all necessary information
@@ -91,7 +91,7 @@ public class Raster<T extends RasterSquare > {
 	}
 
 	/**
-	 * Performs the rasterization of a simple polygon defined by {@link de.tu_berlin.coga.zet.model.PlanPolygon} inside the range of a
+	 * Performs the rasterization of a simple polygon defined by {@link de.zet_evakuierung.model.PlanPolygon} inside the range of a
 	 * bounding box of the polygon.
 	 * <p>During the rasterization an array representing the individual squares of the grid is
 	 * created. The array stores {@link RasterSquare}-objects representing all necessary information
@@ -108,7 +108,7 @@ public class Raster<T extends RasterSquare > {
 	 * @author Jan-Philipp Kappmeier
 	 */
 	public Raster( Class<T> squareClassType, /*Class<P> polygonClassType,*/ PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
-		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
+		if( de.zet_evakuierung.util.ConversionTools.floatToInt( raster ) < 1 ) {
 			throw new java.lang.IllegalArgumentException (ZETLocalization2.loc.getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
@@ -138,7 +138,7 @@ public class Raster<T extends RasterSquare > {
 	 * @return the grid size of the raster
 	 */
 	public double getRasterMeter() {
-		return zet.util.ConversionTools.roundScale3( raster );
+		return de.zet_evakuierung.util.ConversionTools.roundScale3( raster );
 	}
 
 	/**

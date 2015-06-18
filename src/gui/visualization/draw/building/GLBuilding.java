@@ -18,7 +18,7 @@ package gui.visualization.draw.building;
 
 import gui.visualization.control.building.GLBuildingControl;
 import javax.media.opengl.GL;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * @author Daniel R. Schmidt

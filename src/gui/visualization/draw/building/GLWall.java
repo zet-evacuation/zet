@@ -17,7 +17,7 @@
 package gui.visualization.draw.building;
 
 import org.zetool.math.Conversion;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import org.zetool.math.vectormath.Vector3;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.building.GLWallControl;
 import io.visualization.BuildingResults.Wall;
@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import javax.media.opengl.GL;
-import opengl.drawingutils.GLColor;
-import opengl.drawingutils.GLVector;
-import opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * @author Daniel R. Schmidt

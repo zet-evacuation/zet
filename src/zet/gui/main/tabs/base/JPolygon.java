@@ -18,16 +18,16 @@ package zet.gui.main.tabs.base;
 import static org.zetool.common.util.Helper.in;
 import org.zetool.common.util.Selectable;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.PlanEdge;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdge;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.TeleportEdge;
+import de.zet_evakuierung.model.Area;
+import de.zet_evakuierung.model.Barrier;
+import de.zet_evakuierung.model.PlanEdge;
+import de.zet_evakuierung.model.EvacuationArea;
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.PlanPolygon;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.RoomEdge;
+import de.zet_evakuierung.model.StairArea;
+import de.zet_evakuierung.model.TeleportEdge;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.editor.Areas;
@@ -54,7 +54,7 @@ import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.editor.JFloor;
 
 /**
- * Graphical representation of a {@link de.tu_berlin.coga.zet.model.PlanPolygon}. This class has the
+ * Graphical representation of a {@link de.zet_evakuierung.model.PlanPolygon}. This class has the
  * special feature of forwarding mouse events to it's parent component before
  * dealing with them itself. This is different to the java standard behavior,
  * where only the topmost component that has been clicked on is notified of the
@@ -715,7 +715,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 	 * edge.
 	 * @param ed The edge on which the user clicked
 	 * @param click The click coordinates <u>in the coordinate space of the JPolygon</u>
-	 * @return The {@link de.tu_berlin.coga.zet.model.PlanPoint} that the user clicked on, if such a point exists, {@code null} if no point was hit.
+	 * @return The {@link de.zet_evakuierung.model.PlanPoint} that the user clicked on, if such a point exists, {@code null} if no point was hit.
 	 */
 	private PlanPoint clickHitsPlanPoint( EdgeData ed, Point click ) {
 		if( ed.node1.distance( click ) <= NODE_SELECTION_RADIUS )

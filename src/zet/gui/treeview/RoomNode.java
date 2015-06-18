@@ -2,8 +2,8 @@
 package zet.gui.treeview;
 
 import org.zetool.common.localization.LocalizationManager;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZLocalization;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.ZLocalization;
 
 /**
  *
