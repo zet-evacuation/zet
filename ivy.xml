@@ -32,7 +32,7 @@
     <dependency org="org.jfree" name="jfreechart" rev="1.0.19" conf="core->default"/>
     
     <!-- dist dependencies -->
-    <!--<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>-->
+    <dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>
 
     <!-- Global exclusions -->
     <exclude org="org.apache.ant"/>

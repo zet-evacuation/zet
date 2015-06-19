@@ -225,16 +225,6 @@
  
   <target name="jenkins" depends="clean,jacoco,javadoc,dist-rc"/>
 
-  <property name="ivy.install.version" value="2.1.0-rc2" />
-  <condition property="ivy.home" value="${env.IVY_HOME}">
-    <isset property="env.IVY_HOME" />
-  </condition>
-  <property name="ivy.home" location="${dist.lib.dir}/ivy" />
-  <property name="ivy.jar.dir" value="${ivy.home}" />
-  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
-  <property name="ivy.reports.dir"  location="${reports.dir}/ivy-reports"/>
-  <available classname="org.apache.ivy.Main" property="ivy.installed"/>
-  
   <!--
   ==================================================
   Groovy setup
@@ -276,12 +266,22 @@
       </batchtest>
     </junit>
   </target>
-  
+
   <!--
   ==================================================
   Ivy setup
   ==================================================
   -->
+
+  <property name="ivy.install.version" value="2.1.0-rc2" />
+  <condition property="ivy.home" value="${env.IVY_HOME}">
+    <isset property="env.IVY_HOME" />
+  </condition>
+  <property name="ivy.home" location="${dist.lib.dir}/ivy" />
+  <property name="ivy.jar.dir" value="${ivy.home}" />
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+  <property name="ivy.reports.dir"  location="${reports.dir}/ivy-reports"/>
+  <available classname="org.apache.ivy.Main" property="ivy.installed"/>
     
   <target name="download-ivy" unless="offline" description="Download the ivy jar file.">
     <mkdir dir="${ivy.jar.dir}"/>
