@@ -25,6 +25,10 @@
     <dependency org="gov.nist.math" name="jama" rev="1.0.2" conf="core->default"/> <!-- for nash flow only -->
     <dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.8" conf="core->default"/>
     <dependency org="javax.media" name="jmf" rev="2.1.1e" conf="core->default"/>
+    <dependency org="com.martiansoftware" name="jsap" rev="2.1" conf="core->default"/>
+    <dependency org="net.java.dev.jogl" name="jogl" rev="1.1.1-rc6" conf="core->default"/>
+    <!-- For a release, jogl currently must be downloaded manually! -->
+    <!-- <dependency org="net.java.dev.jogl" name="jogl-windows-amd64" rev="1.1.1a" conf="core->default"/> -->
     
     <!-- dist dependencies -->
     <!--<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>-->
