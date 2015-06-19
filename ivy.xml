@@ -29,6 +29,7 @@
     <dependency org="net.java.dev.jogl" name="jogl" rev="1.1.1-rc6" conf="core->default"/>
     <!-- For a release, jogl currently must be downloaded manually! -->
     <!-- <dependency org="net.java.dev.jogl" name="jogl-windows-amd64" rev="1.1.1a" conf="core->default"/> -->
+    <dependency org="org.jfree" name="jfreechart" rev="1.0.19" conf="core->default"/>
     
     <!-- dist dependencies -->
     <!--<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>-->
