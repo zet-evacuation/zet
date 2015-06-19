@@ -360,6 +360,7 @@
     <get dest="lib/core" skipexisting="true">
       <url url="http://zet-evakuierung.de/downloads/lib/jspf.core-1.0.2.jar"/>
       <url url="http://zet-evakuierung.de/downloads/lib/tablelayout-bin-jdk1.5-2007-04-21.jar"/>
+      <url url="http://zet-evakuierung.de/downloads/lib/l2fprod-common-all-7.3.jar"/>
     </get>
   </target>
 </project>
