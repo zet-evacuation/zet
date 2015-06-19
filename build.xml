@@ -20,23 +20,6 @@
     <mkdir dir="${reports.dir}"/>
   </target>
 
-  <target name="download" description="manually downloads stuff">
-    <get dest="lib" skipexisting="true">
-      <url url="https://jspf.googlecode.com/files/jspf-1.0.2.bin.zip"/>
-      <!-- <url url="http://server2/lib2.jar"/> -->
-    </get>
-    <echo message="Extracting zip file" />
-    <unzip src="lib/jspf-1.0.2.bin.zip" dest="lib/tmp" overwrite="true">
-    <patternset>
-        <include name="dist/jspf.core-1.0.2.jar"/>
-    </patternset>
-    <mapper>
-        <globmapper from="dist/*" to="../core/*"/>
-    </mapper>
-    </unzip>
-    <delete dir="lib/tmp" />
-    
-  </target>
   
   <target name="build" depends="init,resolve,download" description="compile the source" >
     <echo>Classpath: ${classpath}</echo>
@@ -354,4 +337,29 @@
         <report todir="${reports.dir}/junit-html"/>
       </junitreport>
     </target>
-  </project>
+
+  <!--
+  <target name="download" description="manually downloads stuff">
+    <get dest="lib" skipexisting="true">
+      <url url="https://jspf.googlecode.com/files/jspf-1.0.2.bin.zip"/>
+    </get>
+    <echo message="Extracting zip file" />
+    <unzip src="lib/jspf-1.0.2.bin.zip" dest="lib/tmp" overwrite="true">
+    <patternset>
+        <include name="dist/jspf.core-1.0.2.jar"/>
+    </patternset>
+    <mapper>
+        <globmapper from="dist/*" to="../core/*"/>
+    </mapper>
+    </unzip>
+    <delete dir="lib/tmp" />    
+  </target>
+  -->
+  <target name="download" depends="init" description="manually downloads stuff">
+    <!-- download core libraries from zet-evakuierung website -->
+    <get dest="lib/core" skipexisting="true">
+      <url url="http://zet-evakuierung.de/downloads/lib/jspf.core-1.0.2.jar"/>
+      <url url="http://zet-evakuierung.de/downloads/lib/tablelayout-bin-jdk1.5-2007-04-21.jar"/>
+    </get>
+  </target>
+</project>
