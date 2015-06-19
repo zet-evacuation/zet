@@ -19,7 +19,7 @@ import org.zetool.common.util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
 	static String nord = IOTools.getNextFreeNumberedFilename( "./", "results_nord", 3 );
-	static String süd = IOTools.getNextFreeNumberedFilename( "./", "results_süd", 3 );
+	static String south = IOTools.getNextFreeNumberedFilename( "./", "results_süd", 3 );
 	// muss VOR der EvacuateIndividualsRule aufgerufen werden!
 	public SaveIndividualsRule() {
 	}
@@ -35,7 +35,7 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 ////			if( savedIndividual.getStaticPotential().getName().equals( "Nordausgang" ) )
 ////				f = new File( "./" + nord + ".txt" );
 ////			else
-////				f = new File( "./" + süd + ".txt" );
+////				f = new File( "./" + south + ".txt" );
 ////			FileWriter w = new FileWriter( f, true );
 ////			Double d = savedIndividual.getStepEndTime() * esp.eca.getSecondsPerStep();
 ////			Double d2 = esp.eca.getTimeStep() * esp.eca.getSecondsPerStep();
