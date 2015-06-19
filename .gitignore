@@ -1,0 +1,5 @@
+.sonar/
+/nbproject/private/
+/build/
+/dist/
+/lib/

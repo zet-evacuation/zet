@@ -1,0 +1,35 @@
+<ivy-module version="2.0">
+  <info organisation="org.zetool" module="zet"/>
+
+  <configurations>
+    <conf name="dist" description="Required to set up the build environment." extends="core" />
+    <conf name="core" description="Required to compile application."/>
+    <conf name="test" description="Required for test only." />
+  </configurations>
+
+  <dependencies>
+    <!-- test dependencies -->
+    <dependency org="junit" name="junit" rev="4.12" conf="test->default"/>
+    <dependency org="org.hamcrest" name="hamcrest-library" rev="1.3" conf="test->default"/>
+    <dependency org="org.jacoco" name="org.jacoco.ant" rev="0.7.4.201502262128" conf="test->default"/>
+    <!--<dependency org="org.jmock" name="jmock" rev="2.8.1" conf="test->default"/>-->
+    <!--<dependency org="org.jmock" name="jmock-junit4" rev="2.8.1" conf="test->default"/>-->
+<!--    <dependency org="org.spockframework" name="spock-core" rev="1.0-groovy-2.4" conf="test->default"/>-->
+    
+    
+    <!-- core dependencies -->
+    
+    <dependency org="ca.umontreal.iro" name="ssj" rev="2.5" conf="core->default">
+      <exclude org="dsol"/><!-- Has now custom location, not necessary for project. -->
+    </dependency>
+    <dependency org="gov.nist.math" name="jama" rev="1.0.2" conf="core->default"/> <!-- for nash flow only -->
+    <dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.8" conf="core->default"/>
+    
+    <!-- dist dependencies -->
+    <!--<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>-->
+
+    <!-- Global exclusions -->
+    <exclude org="org.apache.ant"/>
+
+  </dependencies>
+</ivy-module>

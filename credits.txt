@@ -3,7 +3,7 @@ zet evakuierungs-tool;1
 Version #VERSION;1
 ;1
 (c) 2007-08 Projektgruppe 517, TU-Dortmund;1
-(c) 2008-12 zet development team;1
+(c) 2008-15 zet development team;1
 ;0
 http://www.zet-evakuierung.de;1
 ;0
