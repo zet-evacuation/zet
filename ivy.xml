@@ -24,6 +24,7 @@
     </dependency>
     <dependency org="gov.nist.math" name="jama" rev="1.0.2" conf="core->default"/> <!-- for nash flow only -->
     <dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.8" conf="core->default"/>
+    <dependency org="javax.media" name="jmf" rev="2.1.1e" conf="core->default"/>
     
     <!-- dist dependencies -->
     <!--<dependency org="org.codehaus.groovy" name="groovy-all" rev="2.4.1" conf="dist->default"/>-->
