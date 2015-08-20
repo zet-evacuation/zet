@@ -1,15 +1,10 @@
-/**
- * JProjectTreeView.java
- * Created: 21.01.2011, 10:37:56
- */
 package zet.gui.treeview;
 
 import de.zet_evakuierung.model.Project;
 import de.zet_evakuierung.model.Area;
 import de.zet_evakuierung.model.Room;
 import de.zet_evakuierung.model.ZControl;
-import de.tu_berlin.math.coga.components.framework.Menu;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +24,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import org.zetool.components.framework.Menu;
 
 /**
  *
@@ -84,7 +80,7 @@ public class JProjectTreeView extends JDialog implements TreeSelectionListener, 
 		root.add( buildingPlanNode );
 
 		// Add floors, rooms, areas recursiveley
-		for( AbstractFloor floor : project.getBuildingPlan().getFloors() ) {
+		for( FloorInterface floor : project.getBuildingPlan().getFloors() ) {
 			FloorNode floorNode = new FloorNode( floor );
 			buildingPlanNode.add( floorNode );
 			for( Room room : floor ) {

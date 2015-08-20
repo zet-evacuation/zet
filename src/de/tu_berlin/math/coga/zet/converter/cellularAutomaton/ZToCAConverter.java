@@ -25,7 +25,7 @@ import static org.zetool.common.util.Direction8.*;
 import org.zetool.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
@@ -125,12 +125,12 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		//AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
-		for( AbstractFloor floor : lastContainer.getFloors() )
+		for( FloorInterface floor : lastContainer.getFloors() )
 			createAllRooms( floor, lastContainer.getAllRasteredRooms( floor ), buildingPlan.getFloorID( floor ) );
 
 		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
-		for( AbstractFloor floor : lastContainer.getFloors() ) {
+		for( FloorInterface floor : lastContainer.getFloors() ) {
 			convertedCA.addFloor( floor );
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
 			if( rooms != null )
@@ -258,7 +258,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @return the created {@link ds.ca.Room}
 	 * @throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
-	protected ds.ca.evac.Room convertRoom( ZToCARoomRaster rasteredRoom, AbstractFloor onFloor, int floorID ) throws ConversionNotSupportedException {
+	protected ds.ca.evac.Room convertRoom( ZToCARoomRaster rasteredRoom, FloorInterface onFloor, int floorID ) throws ConversionNotSupportedException {
 		final int width = rasteredRoom.getColumnCount();
 		final int height = rasteredRoom.getRowCount();
 		ds.ca.evac.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
@@ -295,7 +295,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param rooms a collection of rooms on the floor. This is not checked!
 	 * @param floorID the id of the floor
 	 */
-	protected void createAllRooms( AbstractFloor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
+	protected void createAllRooms( FloorInterface onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
 		if( rooms != null ) {
 			for( ZToCARoomRaster rasteredRoom : rooms ) {
 				final int width = rasteredRoom.getColumnCount();

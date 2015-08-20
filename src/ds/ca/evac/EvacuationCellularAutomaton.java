@@ -18,7 +18,7 @@ package ds.ca.evac;
 
 import algo.ca.framework.EvacuationCellState;
 import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCellularAutomaton;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import ds.ca.results.CAStateChangedAction;
 import ds.ca.results.DieAction;
 import ds.ca.results.ExitAction;
@@ -543,7 +543,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCel
 		return notSaveIndividualsCount;
 	}
 
-	final public void addFloor( AbstractFloor floor ) {
+	final public void addFloor( FloorInterface floor ) {
 		addFloor( floor.getName() );
 	}
 

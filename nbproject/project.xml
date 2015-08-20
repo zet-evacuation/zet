@@ -13,6 +13,14 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
+                <foreign-project>zet-components-model-editor</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>nbbuild.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>zet-model</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>nbbuild.xml</script>
@@ -37,9 +45,17 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>zetool-components</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>nbbuild.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>zetool-components-batch</foreign-project>
                 <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
+                <script>nbbuild.xml</script>
                 <target>jar</target>
                 <clean-target>clean</clean-target>
                 <id>jar</id>

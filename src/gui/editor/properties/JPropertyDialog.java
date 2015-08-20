@@ -4,7 +4,6 @@ package gui.editor.properties;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.PropertyContainer;
 import gui.ZETProperties;
-import de.tu_berlin.math.coga.components.framework.Button;
 import gui.propertysheet.JOptionsDialog;
 import gui.propertysheet.PropertyTreeModel;
 import info.clearthought.layout.TableLayout;
@@ -13,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import org.zetool.components.framework.Button;
 
 /**
  *

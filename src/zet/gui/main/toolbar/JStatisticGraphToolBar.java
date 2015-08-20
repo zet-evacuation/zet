@@ -7,7 +7,6 @@ import org.zetool.common.datastructure.NamedIndex;
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.Localized;
 import gui.GUIControl;
-import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
+import org.zetool.components.framework.Button;
 import statistic.graph.Controller;
 import zet.gui.GUILocalization;
 

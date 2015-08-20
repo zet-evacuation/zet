@@ -6,7 +6,6 @@ import batch.BatchResultEntry;
 import org.zetool.common.datastructure.NamedIndex;
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.Localized;
-import de.tu_berlin.math.coga.components.framework.Button;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETLoader;
@@ -26,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
 import zet.gui.components.model.ComboBoxRenderer;
 

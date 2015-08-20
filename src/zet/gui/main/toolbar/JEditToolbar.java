@@ -1,13 +1,8 @@
-/*
- * JEditToolbar.java
- * Created 16.07.2010, 10:24:23
- */
 package zet.gui.main.toolbar;
 
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
-import de.tu_berlin.math.coga.components.framework.Button;
 import gui.GUIControl;
 import gui.ZETLoader;
 import gui.editor.CoordinateTools;
@@ -31,11 +26,11 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.main.tabs.editor.EditModeOld;
-import zet.gui.main.tabs.editor.EditStatus;
 import zet.gui.main.tabs.editor.ZetObjectTypes;
 
 /**
@@ -65,17 +60,15 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	/** The number format used to display the zoom factor in the text field. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	private final GUIControl control;
-	//private EditModeOld.Type creationType = EditModeOld.Type.CreationPointwise;
-	private final EditStatus editStatus;
 
 	/**
 	 * Creates a new instance of {@code JEditToolbar}.
 	 * @param control
 	 * @param editStatus the object storing the current status of the editing
 	 */
-	public JEditToolbar( GUIControl control, EditStatus editStatus ) {
+	public JEditToolbar( GUIControl control ) {
 		this.control = control;
-		this.editStatus = editStatus;
+		
 		createEditToolBar();
 	}
 
@@ -96,14 +89,14 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( btnSave );
 		addSeparator();
 
-		btnEditSelect = Button.newButton( ZETIconSet.EditSelect.icon(), this , "editSelect", loc.getString( "Edit.SelectionMode" ), editStatus.getEditMode() == EditMode.Selection );
+		btnEditSelect = Button.newButton( ZETIconSet.EditSelect.icon(), this , "editSelect", loc.getString( "Edit.SelectionMode" ), false ); //@// editStatus.getEditMode() == EditMode.Selection );
 		add( btnEditSelect );
 		editModeGroup.add( btnEditSelect );
 		btnEditSelect.setSelected( true );
-		btnEditPointwise = Button.newButton( ZETIconSet.EditDrawPointwise.icon(), this, "editPointwise", loc.getString( "Edit.PointSequence" ), editStatus.getEditMode() == EditMode.CreationPointWise );
+		btnEditPointwise = Button.newButton( ZETIconSet.EditDrawPointwise.icon(), this, "editPointwise", loc.getString( "Edit.PointSequence" ), false ); //@// editStatus.getEditMode() == EditMode.CreationPointWise );
 		add( btnEditPointwise );
 		editModeGroup.add( btnEditPointwise );
-		btnEditRectangled = Button.newButton( ZETIconSet.EditDrawRectangled.icon(), this, "editRectangled", loc.getString( "Edit.DragCreate" ), editStatus.getEditMode() == EditMode.CreationRectangle );
+		btnEditRectangled = Button.newButton( ZETIconSet.EditDrawRectangled.icon(), this, "editRectangled", loc.getString( "Edit.DragCreate" ), false ); //@// editStatus.getEditMode() == EditMode.CreationRectangle );
 		add( btnEditRectangled );
 		editModeGroup.add( btnEditRectangled );
 
@@ -111,10 +104,10 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		lblAreaType = new JLabel( loc.getString( "Edit.AreaTypeLabel" ) );
 		add( lblAreaType );
 
-		editSelector = new EditComboBoxModel( editStatus );
+		//editSelector = new EditComboBoxModel( null );
 		cbxEdit = new JComboBox<>();
 		cbxEdit.setToolTipText( loc.getString( "Edit.AreaType" ) );
-		cbxEdit.setModel( editSelector );
+		//@cbxEdit.setModel( editSelector );
 		cbxEdit.setMaximumSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
 		cbxEdit.setPreferredSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
 		cbxEdit.setMaximumRowCount( 25 );
@@ -178,13 +171,13 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 				control.newProject();
 				break;
 			case "editSelect":
-				editStatus.setEditMode( EditMode.Selection );
+				//editStatus.setEditMode( EditMode.Selection );
 				break;
 			case "editPointwise":
-				editStatus.setEditMode( EditMode.CreationPointWise );
+				//editStatus.setEditMode( EditMode.CreationPointWise );
 				break;
 			case "editRectangled":
-				editStatus.setEditMode( EditMode.CreationRectangle );
+				//editStatus.setEditMode( EditMode.CreationRectangle );
 				break;
 			case "zoomIn":
 				control.setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
@@ -346,16 +339,16 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	}
 
 	private static class EditComboBoxModel extends DefaultComboBoxModel<ZetObjectTypes> {
-		private EditStatus editStatus;
-		private EditComboBoxModel( EditStatus editStatus ) {
-			this.editStatus = editStatus;
-			for( ZetObjectTypes e : ZetObjectTypes.values() )
-				addElement( e );
-		}
+		//private EditStatus editStatus;
+		//private EditComboBoxModel( EditStatus editStatus ) {
+		//	this.editStatus = editStatus;
+		//	for( ZetObjectTypes e : ZetObjectTypes.values() )
+		//		addElement( e );
+		//}
 		@Override
 		public void setSelectedItem( Object object ) {
 			super.setSelectedItem( object );
-			editStatus.setZetObjectType( (ZetObjectTypes)object );
+		//	editStatus.setZetObjectType( (ZetObjectTypes)object );
 		}
 
 	}

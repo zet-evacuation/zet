@@ -898,6 +898,14 @@ is divided into following sections:
         </propertyfile>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-jar.properties}"/>
+            <param location="${project.zet-components-model-editor}" name="call.subproject"/>
+            <param location="${project.zet-components-model-editor}/nbbuild.xml" name="call.script"/>
+            <param name="call.target" value="jar"/>
+            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
+            <param name="transfer.not.archive.disabled" value="true"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-jar.properties}"/>
             <param location="${project.zet-model}" name="call.subproject"/>
             <param location="${project.zet-model}/nbbuild.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
@@ -922,8 +930,16 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-jar.properties}"/>
+            <param location="${project.zetool-components}" name="call.subproject"/>
+            <param location="${project.zetool-components}/nbbuild.xml" name="call.script"/>
+            <param name="call.target" value="jar"/>
+            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
+            <param name="transfer.not.archive.disabled" value="true"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-jar.properties}"/>
             <param location="${project.zetool-components-batch}" name="call.subproject"/>
-            <param location="${project.zetool-components-batch}/build.xml" name="call.script"/>
+            <param location="${project.zetool-components-batch}/nbbuild.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
             <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>
@@ -1455,6 +1471,14 @@ is divided into following sections:
         </propertyfile>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-clean.properties}"/>
+            <param location="${project.zet-components-model-editor}" name="call.subproject"/>
+            <param location="${project.zet-components-model-editor}/nbbuild.xml" name="call.script"/>
+            <param name="call.target" value="clean"/>
+            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
+            <param name="transfer.not.archive.disabled" value="true"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-clean.properties}"/>
             <param location="${project.zet-model}" name="call.subproject"/>
             <param location="${project.zet-model}/nbbuild.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
@@ -1479,8 +1503,16 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-clean.properties}"/>
+            <param location="${project.zetool-components}" name="call.subproject"/>
+            <param location="${project.zetool-components}/nbbuild.xml" name="call.script"/>
+            <param name="call.target" value="clean"/>
+            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
+            <param name="transfer.not.archive.disabled" value="true"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-clean.properties}"/>
             <param location="${project.zetool-components-batch}" name="call.subproject"/>
-            <param location="${project.zetool-components-batch}/build.xml" name="call.script"/>
+            <param location="${project.zetool-components-batch}/nbbuild.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
             <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>

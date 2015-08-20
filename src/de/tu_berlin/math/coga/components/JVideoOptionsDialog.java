@@ -20,7 +20,6 @@ import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.util.units.BinaryUnits;
 import org.zetool.common.util.Formatter;
-import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import de.tu_berlin.coga.util.movies.MovieWriter;
 import de.tu_berlin.coga.util.movies.ImageFormat;
@@ -52,6 +51,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import org.zetool.components.framework.Button;
 import org.zetool.opengl.helper.TextureFontStrings;
 
 /**
@@ -61,7 +61,7 @@ import org.zetool.opengl.helper.TextureFontStrings;
  * @author  Jan-Philipp Kappmeier
  */
 public class JVideoOptionsDialog extends javax.swing.JDialog {
-	public final static String COMPONENT_LOCALIZATION = "de.tu_berlin.math.coga.components.ComponentLocalization";
+	public final static String COMPONENT_LOCALIZATION = "de.tu_berlin.math.coga.components.VODLocalization";
 	private static final int COL_TEXT = 0;
 	private static final int COL_Y = COL_TEXT + 1;
 	private static final int COL_BOLD = COL_Y + 1;

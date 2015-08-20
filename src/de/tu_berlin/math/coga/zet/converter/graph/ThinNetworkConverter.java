@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.util.Level;
 import org.zetool.math.vectormath.Vector2;
@@ -96,7 +96,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
   private HashMap<Room, ListSequence<Edge>> EdgesForRoom = new HashMap<>();
   private ListSequence<Edge> RoomEdges;
   //stores all doors that do not get a node (only if one of the corresponding rooms has only one door and is empty)
-  private HashMap<AbstractFloor, List<Point>> needsNoConnection = new HashMap<>();
+  private HashMap<FloorInterface, List<Point>> needsNoConnection = new HashMap<>();
   private Map<Node, Rectangle> coveredArea;
   //stores the associated room according to a connecting edge over floors
   private HashMap<Room, Room> FloorConnection = new HashMap<>();

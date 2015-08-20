@@ -2,13 +2,13 @@
 package zet.gui.main.menu.popup;
 
 import org.zetool.common.localization.Localization;
-import de.tu_berlin.math.coga.components.framework.Menu;
 import de.zet_evakuierung.model.PlanEdge;
 import de.zet_evakuierung.model.PlanPoint;
 import gui.GUIControl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPopupMenu;
+import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
 
 /**

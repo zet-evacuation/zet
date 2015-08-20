@@ -33,6 +33,7 @@
     <!-- For a release, jogl currently must be downloaded manually! -->
     <!-- <dependency org="net.java.dev.jogl" name="jogl-windows-amd64" rev="1.1.1a" conf="core->default"/> -->
     <dependency org="org.jfree" name="jfreechart" rev="1.0.19" conf="core->default"/>
+    <dependency org="org.swinglabs" name="swingx" rev="1.6.1" conf="core"/>
     
     <!-- Global exclusions -->
     <exclude org="org.apache.ant"/>

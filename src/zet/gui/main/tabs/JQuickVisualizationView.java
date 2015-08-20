@@ -16,7 +16,7 @@
 
 package zet.gui.main.tabs;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import org.zetool.common.localization.Localization;
 import de.zet_evakuierung.model.Floor;
 import ds.PropertyContainer;
@@ -33,7 +33,9 @@ import zet.gui.main.tabs.base.JFloorScrollPane;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.FloorComboBox;
+import zet.gui.components.model.FloorComboBoxModel;
+import zet.gui.components.model.NamedComboBox;
+import zet.gui.main.tabs.editor.control.FloorViewModel;
 import zet.tasks.DisplayFloorTask;
 
 /**
@@ -42,10 +44,11 @@ import zet.tasks.DisplayFloorTask;
  */
 public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
 	Localization loc;
-	private FloorComboBox<AbstractFloor> quickfloorSelector;
+	//private FloorComboBox<FloorInterface> quickfloorSelector;
+        private NamedComboBox<FloorViewModel> quickfloorSelector;
 	private int selectedFloor = 0;
 	private final GUIControl guiControl;
-	private Floor currentFloor;
+	private FloorViewModel currentFloor;
 	private Collections ProjectFloors;
 	public ZETGLControl control;
 	private JLabel lblFloorSelector;
@@ -61,19 +64,19 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	}
 
 	public void updateQuickFloorlist() {
-		quickfloorSelector.clear();
-		quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		//@//quickfloorSelector.clear();
+		//@//quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}
 
-	public void changeQuickFloor( AbstractFloor floor ) {
-		quickfloorSelector.setSelectedItem( floor );
+	public void changeQuickFloor( FloorInterface floor ) {
+		//@//quickfloorSelector.setSelectedItem( floor );
 	}
 
 	public void updateQuickFloorView() {
 		if( this.disableUpdate )
 			return;
 		// todo better. do not repaint everything if update is called
-		displayFloor( currentFloor );
+		//displayFloor( currentFloor );
 	}
 
 	public void displayFloor( Floor floor ) {
@@ -83,9 +86,10 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	}
 
 	public void update() {
-		quickfloorSelector.removeAllItems();
-		for( AbstractFloor f : projectControl.getProject().getBuildingPlan().getFloors() )
-			quickfloorSelector.addItem( f );
+		//@//quickfloorSelector.removeAllItems();
+		for( FloorInterface f : projectControl.getProject().getBuildingPlan().getFloors() ) {
+			//quickfloorSelector.addItem( f );
+                }
 	}
 
 	/**
@@ -96,7 +100,9 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	protected JPanel createEastBar() {
 		JPanel panel = new JPanel();
 		control = new ZETGLControl();
-		quickfloorSelector = new FloorComboBox<>();
+                
+                quickfloorSelector = new NamedComboBox<>( new FloorComboBoxModel( guiControl.getViewModel() ) );
+		//quickfloorSelector = new FloorComboBox<>();
 		//quickfloorSelector.setModel( quickfloorSelectorModel );
 
 		quickfloorSelector.addActionListener( new ActionListener() {
@@ -107,7 +113,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
 
-				Floor dspFloor = (Floor) quickfloorSelector.getSelectedItem();
+				FloorViewModel dspFloor = (FloorViewModel) quickfloorSelector.getSelectedItem();
 				currentFloor = dspFloor;
 				updateQuickFloorView();
 			}
@@ -181,12 +187,8 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 		displayProject( projectControl );
 	}
 
-	public Floor getCurrentFloor() {
+	public FloorViewModel getCurrentFloor() {
 		return currentFloor;
-	}
-
-	public void setFloor( int id ) {
-		quickfloorSelector.setSelectedIndex( id );
 	}
 
 }

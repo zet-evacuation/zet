@@ -18,7 +18,6 @@ package gui.editor.planimage;
 
 import org.zetool.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -36,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import de.zet_evakuierung.util.ConversionTools;
+import org.zetool.components.framework.Button;
 
 /**
  *

@@ -15,7 +15,7 @@
  */
 package io.visualization;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import org.zetool.opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
@@ -27,6 +27,7 @@ import java.util.List;
 import de.zet_evakuierung.model.PlanPoint;
 import de.zet_evakuierung.model.RelativePosition;
 import de.zet_evakuierung.model.Room;
+import java.awt.Rectangle;
 import java.util.Vector;
 
 /**
@@ -116,7 +117,7 @@ public class BuildingResults implements VisualizationResult {
 		}
 	}
 
-	public static class Floor implements AbstractFloor {
+	public static class Floor implements FloorInterface {
 		/** The id of the floor. Normally this is the floor number in the z-format.*/
 		private int id;
 		/** The getName of the floor. */
@@ -149,6 +150,11 @@ public class BuildingResults implements VisualizationResult {
     public Iterator<Room> iterator() {
       throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
     }
+
+        @Override
+        public Rectangle getLocation() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
 	}
 	private LinkedList<Wall> walls;
 	private HashMap<Integer, Floor> floors;
@@ -157,7 +163,7 @@ public class BuildingResults implements VisualizationResult {
 		walls = new LinkedList<>();
 		floors = new HashMap<>();
 
-		for( AbstractFloor zFloor : buildingPlan.getFloors() ) {
+		for( FloorInterface zFloor : buildingPlan.getFloors() ) {
 			Floor buildingFloor = new Floor( buildingPlan.getFloorID( zFloor ), zFloor.getName() );
 
 			if( zFloor.getRooms().size() >= 0 ) { // TODO: remove as not necessary

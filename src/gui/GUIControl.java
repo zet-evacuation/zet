@@ -7,7 +7,6 @@ import batch.BatchResultEntry;
 import batch.plugins.AlgorithmPlugin;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.VisualizationDataStructureTask;
-import org.zetool.coponents.batch.gui.JBatch;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
@@ -15,9 +14,7 @@ import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.localization.LocalizationManager;
-import de.tu_berlin.math.coga.components.Localizer;
 import org.zetool.common.util.IOTools;
-import de.tu_berlin.math.coga.components.JLogPane;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -75,7 +72,7 @@ import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -103,6 +100,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 import org.xml.sax.SAXException;
+import org.zetool.components.JLogPane;
+import org.zetool.components.Localizer;
+import org.zetool.components.batch.gui.JBatch;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import zet.gui.GUILocalization;
@@ -112,12 +112,13 @@ import zet.gui.main.menu.JZETMenuBar;
 import zet.gui.main.menu.popup.EdgePopup;
 import zet.gui.main.menu.popup.PointPopup;
 import zet.gui.main.menu.popup.PolygonPopup;
+import zet.gui.main.tabs.EditViewControl;
+import zet.gui.main.tabs.EditViewModel;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.RasterPaintStyle;
-import zet.gui.main.tabs.editor.EditStatus;
-import zet.gui.main.tabs.editor.SelectedFloorElements;
+import zet.gui.main.tabs.editor.floor.SelectedFloorElements;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -169,7 +170,7 @@ public class GUIControl implements AlgorithmListener {
 	private EdgePopup edgePopup;
 	private PointPopup pointPopup;
 	private SelectedFloorElements selection = new SelectedFloorElements();
-
+    private EditViewControl evc;
 	/**
 	 *
 	 */
@@ -193,10 +194,10 @@ public class GUIControl implements AlgorithmListener {
 		pointPopup = new PointPopup( this );
 
 
-		EditStatus editStatus = new EditStatus( zcontrol, selection );
+		//EditStatus editStatus = new EditStatus( zcontrol, selection );
 
 		// Tool bars
-		editToolBar = Localizer.instance().registerNewComponent( new JEditToolbar( this, editStatus ) );
+		editToolBar = Localizer.instance().registerNewComponent( new JEditToolbar( this ) );
 		//guiControl.setEditToolbar( toolBarEdit );
 		JBatchToolBar toolBarBatch = Localizer.instance().registerNewComponent( new JBatchToolBar( this ) );
 		JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization = Localizer.instance().registerNewComponent( new JQuickVisualizationToolBar( this ) );
@@ -206,7 +207,10 @@ public class GUIControl implements AlgorithmListener {
 		JLogToolBar toolBarLog = Localizer.instance().registerNewComponent( new JLogToolBar( this ) );
 
 		// Components in tabs
-		editview = Localizer.instance().registerNewComponent( new JEditView( editStatus, this, selection ) );
+                evc = new EditViewControl(zcontrol, zcontrol.getProject().getBuildingPlan().getFloors());
+                JEditView editView = evc.getView();
+                
+		editview = Localizer.instance().registerNewComponent(editView );
     selection.addObserver( editview );
     caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
     JBatch batchView = new JBatch();
@@ -660,7 +664,7 @@ public class GUIControl implements AlgorithmListener {
 		// Pro Stockwerk:
 		log.info( "Personenverteilung im Gebäude: " );
 		int overall = 0;
-		for( AbstractFloor f : zcontrol.getProject().getBuildingPlan() ) {
+		for( FloorInterface f : zcontrol.getProject().getBuildingPlan() ) {
 			int counter = 0;
 			for( Room r : f )
 				for( AssignmentArea a : r.getAssignmentAreas() )
@@ -672,14 +676,14 @@ public class GUIControl implements AlgorithmListener {
 
 		// Pro Ausgang:
 		log.info( "Personenverteilung pro Ausgang: " );
-		for( AbstractFloor f : zcontrol.getProject().getBuildingPlan() )
+		for( FloorInterface f : zcontrol.getProject().getBuildingPlan() )
 			for( Room r : f )
 				for( EvacuationArea ea : r.getEvacuationAreas() ) {
 					overall = 0;
 					log.info( "" );
 					log.info( ea.getName() );
 					// Suche nach evakuierten pro etage für dieses teil
-					for( AbstractFloor f2 : zcontrol.getProject().getBuildingPlan() ) {
+					for( FloorInterface f2 : zcontrol.getProject().getBuildingPlan() ) {
 						int counter = 0;
 						for( Room r2 : f2 )
 							for( AssignmentArea a : r2.getAssignmentAreas() )
@@ -786,7 +790,9 @@ public class GUIControl implements AlgorithmListener {
 		// Reset GUI components
 		//if( tabPane.getSelectedIndex() > 1 )
 		//	tabPane.setSelectedIndex( 0 );
-		editview.displayProject( zcontrol );
+                Floor f = zcontrol.getProject().getBuildingPlan().getFloors().get(1);
+                evc.setCurrentFloor(f);
+		//editview.displayProject( zcontrol );
 		caView.displayProject( zcontrol );
 		// Löschen eingestellter parameter
 //		ZToCAConverter.getInstance().clear();
@@ -991,19 +997,6 @@ public class GUIControl implements AlgorithmListener {
 
 	}
 
-	public void moveFloorUp() {
-		final int oldIndex = editview.getFloorID();
-		zcontrol.moveFloorUp( editview.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
-		editview.setFloor( oldIndex + 1 );
-	}
-
-	public void moveFloorDown() {
-		final int oldIndex = editview.getFloorID();
-		zcontrol.moveFloorDown( editview.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
-		editview.setFloor( oldIndex - 1 );
-
-	}
-
 	/**
 	 * Removes a floor from the z format,updates the list of floors and shows a
 	 * another floor in the edit area. If the default evacuation floor is to be
@@ -1110,7 +1103,8 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintStyle ) {
-		editview.getFloor().setRasterPaintStyle( rasterPaintStyle );
+		//editview.getFloor().setRasterPaintStyle( rasterPaintStyle );
+                System.err.println("TODO: pass new rasterpaint style to edit view" );
 		menuBar.setSelectedGridLines( rasterPaintStyle == RasterPaintStyle.Lines );
 		menuBar.setSelectedGridPoints( rasterPaintStyle == RasterPaintStyle.Points );
 		menuBar.setSelectedGridNotVisible( rasterPaintStyle == RasterPaintStyle.Nothing );
@@ -1247,7 +1241,7 @@ public class GUIControl implements AlgorithmListener {
 		editor.setTitle( titleBarText );
 	}
 
-	public void showFloor( AbstractFloor floor ) {
+	public void showFloor( FloorInterface floor ) {
 		editview.changeFloor( floor );
 	}
 
@@ -1632,5 +1626,17 @@ public class GUIControl implements AlgorithmListener {
 	public JEditView getEditView() {
 		return editview;
 	}
+
+    public EditViewModel getViewModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void moveFloorUp() {
+        System.err.print("Implement move floor up");
+    }
+
+    public void moveFloorDown() {
+        System.err.print("Implement move floor up");
+    }
 
 }

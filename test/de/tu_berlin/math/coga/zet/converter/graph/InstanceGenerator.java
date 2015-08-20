@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.AssignmentArea;
 import de.zet_evakuierung.model.EvacuationArea;
 import de.zet_evakuierung.model.PlanPoint;
@@ -21,7 +21,7 @@ import org.junit.Test;
 public class InstanceGenerator {
 		ZControl zControl;
 		private Room r;
-		private AbstractFloor fl;
+		private FloorInterface fl;
 		private AssignmentArea a;
 		private EvacuationArea e;
 

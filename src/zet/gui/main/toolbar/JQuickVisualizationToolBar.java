@@ -1,17 +1,13 @@
-/**
- * JQuickVisualizationToolBar.java
- * Created: 22.07.2010 12:18:04
- */
 package zet.gui.main.toolbar;
 
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.Localized;
 import gui.GUIControl;
-import de.tu_berlin.math.coga.components.framework.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
 
 

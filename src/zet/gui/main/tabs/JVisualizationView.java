@@ -20,7 +20,6 @@ import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import ds.PropertyContainer;
 import gui.GUIControl;
-import de.tu_berlin.math.coga.components.JArrayPanel;
 import gui.ZETLoader;
 import gui.visualization.AbstractVisualizationView;
 import gui.visualization.VisualizationPanel;
@@ -29,7 +28,6 @@ import zet.gui.components.model.PotentialSelectionModel;
 import gui.visualization.control.ZETGLControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import info.clearthought.layout.TableLayout;
-import io.visualization.BuildingResults;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,8 +45,11 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.zetool.components.JArrayPanel;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.FloorComboBox;
+import zet.gui.components.model.FloorComboBoxModel;
+import zet.gui.components.model.NamedComboBox;
+import zet.gui.main.tabs.editor.control.FloorViewModel;
 
 /**
  *
@@ -60,7 +61,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	/** The visualization panel. */
 	private ZETVisualization visualization;
 	/** A combo box that allows selecting the visible floor (if not all are visible) */
-	private FloorComboBox<BuildingResults.Floor> floorSelector;
+	private NamedComboBox<FloorViewModel> floorSelector;
 	/** A combo box selecting the currently visible potential */
 	private JComboBox potentialSelector;
 	/** A combo box for selecting the information displayed on the head of the individuals. */
@@ -186,7 +187,8 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		};
 		final JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
-		floorSelector = new FloorComboBox<>();
+                floorSelector = new NamedComboBox<>( new FloorComboBoxModel( guiControl.getViewModel() ) );
+		//floorSelector = new FloorComboBox<>();
 
 		floorSelector.addActionListener( new ActionListener() {
 			@Override
@@ -206,8 +208,9 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		} );
 		int row = 1;
 
-		if( loc == null )
-			loc = GUILocalization.loc;
+		if (loc == null) {
+                    loc = GUILocalization.loc;
+                }
 
 
 		lblFloorSelector = new JLabel( loc.getString( "gui.EditPanel.Default.Floors" ) + ":" );
@@ -325,6 +328,10 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 * Updates the camera position information in the text fields.
 	 */
 	public void updateCameraInformation() {
+            System.err.println("TODO: correctly initialize visualization view!");
+            if( txtCameraPosition == null) {
+                return;
+            }
 		this.txtCameraPosition.setText( visualization.getCamera().getPos().toString() );
 		this.txtCameraView.setText( visualization.getCamera().getView().toString() );
 		this.txtCameraUp.setText( visualization.getCamera().getUp().toString() );
@@ -335,7 +342,9 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 * @param val decides whether the floor selector is enabled or disabled
 	 */
 	public final void setFloorSelectorEnabled( boolean val ) {
+            if( floorSelector != null ) {
 		floorSelector.setEnabled( val );
+            }
 	}
 
 	/**
@@ -346,7 +355,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	}
 
 	public void updateFloorSelector( int floor ) {
-		floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		//floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 		if( floor > -1 )
 			floorSelector.setSelectedIndex( floor );
 		selectedFloor = floorSelector.getSelectedIndex();

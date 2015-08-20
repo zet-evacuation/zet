@@ -16,7 +16,7 @@
 
 package io;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class DXFWriter {
 		String output = "0\nSECTION\n2\n";
 		output += "ENTITIES\n";
 		int floorNr = 0;
-		for( AbstractFloor floor : buildingPlan.getFloors() ) {
+		for( FloorInterface floor : buildingPlan.getFloors() ) {
 			for( Room room : floor.getRooms() ) {
 				for( RoomEdge edge : room.getPolygon().getEdges() ) {
 					if( edge.isPassable() ) {

@@ -24,14 +24,16 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.Project;
 import ds.PropertyContainer;
 import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.Floor;
 import de.zet_evakuierung.model.Room;
 import de.zet_evakuierung.model.RoomEdge;
 import de.zet_evakuierung.model.exception.RoomEdgeInvalidTargetException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RasterContainerCreator {
@@ -50,9 +52,13 @@ public class RasterContainerCreator {
 
 	public ZToGraphRasterContainer ZToGraphRasterContainer( BuildingPlan buildingPlan ) {
 		ZToGraphRasterContainer container = new ZToGraphRasterContainer();
-		List<AbstractFloor> floors = buildingPlan.getFloors();
+		List<Floor> floorsOriginal = buildingPlan.getFloors();
+                List<FloorInterface> floors = new LinkedList<>();
+                for(Floor f : floorsOriginal) {
+                    floors.add(f);
+                }
 		container.setFloors( floors );
-		for( AbstractFloor floor : floors ) {
+		for( FloorInterface floor : floors ) {
 			List<Room> rooms = floor.getRooms();
 			for( Room room : rooms ) {
 				ZToGraphRoomRaster rasterer = new ZToGraphRoomRaster( room );
@@ -61,7 +67,7 @@ public class RasterContainerCreator {
 			}
 		}
 
-		for( AbstractFloor floor : floors ) {
+		for( FloorInterface floor : floors ) {
 			List<Room> rooms = floor.getRooms();
 			for( Room room : rooms ) {
 				ZToGraphRoomRaster rasterer = container.getRasteredRoom( room );
@@ -74,17 +80,20 @@ public class RasterContainerCreator {
 
 	public ZToCARasterContainer ZToCARasterContainer( BuildingPlan buildingPlan ) {
 		ZToCARasterContainer container = new ZToCARasterContainer();
-		container.setFloors( buildingPlan.getFloors() );
+		
+                List<FloorInterface> floorList = new LinkedList<>();
+                buildingPlan.getFloors().forEach((f) -> { floorList.add(f); });
+                container.setFloors(floorList);
 
 		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
 		// calculate number of rooms
 		int count = 0;
-		for( AbstractFloor floor : buildingPlan )
+		for( FloorInterface floor : buildingPlan )
 			count += floor.roomCount();
 
 		int i = 0;
-		for( AbstractFloor floor : buildingPlan.getFloors() )
+		for( FloorInterface floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
 				ZToCARoomRaster raster = new ZToCARoomRaster( room );
 				raster.rasterize();
@@ -96,7 +105,7 @@ public class RasterContainerCreator {
 		//AlgorithmTask.getInstance().publish( "Konvertiere Türen", "" );
 
 		i = 0;
-		for( AbstractFloor floor : buildingPlan.getFloors() )
+		for( FloorInterface floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
 				for( de.zet_evakuierung.model.PlanEdge edge : room.getPolygon().getEdges() ) {
 					RoomEdge rEdge = (RoomEdge) edge;

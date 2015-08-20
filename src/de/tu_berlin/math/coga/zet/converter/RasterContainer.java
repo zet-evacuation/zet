@@ -17,7 +17,7 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.Floor;
 import de.zet_evakuierung.model.Room;
 import java.util.ArrayList;
@@ -33,9 +33,9 @@ import java.util.Set;
  */
 public class RasterContainer<T extends RoomRaster<?>> {
   /** A hash map that maps rooms to their rastered versions. */
-  protected HashMap<AbstractFloor, HashMap<Room, T>> map;
+  protected HashMap<FloorInterface, HashMap<Room, T>> map;
   /** A list containing all floors. */
-  protected List<AbstractFloor> floors;
+  protected List<FloorInterface> floors;
   /** An array list containing all rastered rooms contained in the hash map. */
   protected ArrayList<T> rasteredRooms;
 
@@ -56,7 +56,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     if( room == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.RoomIsNullException" ) );
     }
-    AbstractFloor floor = room.getAssociatedFloor();
+    FloorInterface floor = room.getAssociatedFloor();
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -81,7 +81,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
    * @param floor A floor in the Z-Format.
    * @return All rooms (in Z-Format) for which the container has rastered versions.
    */
-  public Set<Room> getRooms( AbstractFloor floor ) {
+  public Set<Room> getRooms( FloorInterface floor ) {
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -100,7 +100,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     if( room == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.RoomIsNullException" ) );
     }
-    AbstractFloor floor = room.getAssociatedFloor();
+    FloorInterface floor = room.getAssociatedFloor();
     if( floor == null ) {
       throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NoAssociatedRoomException" ) );
     }
@@ -127,7 +127,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
    * @return all an unmodifiable collection of all rastered versions of rooms contained in this
    * {@code ZToGraphRasterContainer} that lie in the floor {@code floor}.
    */
-  public Collection<T> getAllRasteredRooms( AbstractFloor floor ) {
+  public Collection<T> getAllRasteredRooms( FloorInterface floor ) {
     if( map.containsKey( floor ) ) {
       return Collections.unmodifiableCollection( ((map.get( floor )).values()) );
     } else {
@@ -135,11 +135,11 @@ public class RasterContainer<T extends RoomRaster<?>> {
     }
   }
 
-  public void setFloors( List<AbstractFloor> floors ) {
+  public void setFloors( List<FloorInterface> floors ) {
     this.floors = floors;
   }
 
-  public List<AbstractFloor> getFloors() {
+  public List<FloorInterface> getFloors() {
     return Collections.unmodifiableList( floors );
   }
 }

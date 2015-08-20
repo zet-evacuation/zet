@@ -42,6 +42,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import statistic.ca.CAStatistic;
+import zet.gui.main.tabs.editor.control.FloorViewModel;
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size
@@ -57,13 +58,15 @@ public class JRasterFloor extends AbstractFloor {
 	private ZToCARasterContainer container;
 	private CAStatistic cas;
 	private ZControl zcontrol;
+        
 
 	public void setCAStatistic(CAStatistic cas){
 		this.cas = cas;
 	}
 
 	public JRasterFloor() {
-		super();
+		super(new FloorViewModel(null));
+                
 		setLayout( null );
 		setBackground( Color.black );
 	}
@@ -131,7 +134,8 @@ public class JRasterFloor extends AbstractFloor {
 			return;
 		}
 
-		updateOffsets( floor );
+                
+		updateOffsets( getFloorModel() ); //@// floor
 		
 		// TODO: Provide better implementation - Do not recreate everything each time
 		PotentialManager pm = ca.getPotentialManager();

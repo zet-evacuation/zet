@@ -14,19 +14,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * JEventStatusBar.java
- * Created: 16.03.2010, 11:04:02
- */
-
 package de.tu_berlin.math.coga.zet.viewer;
 
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.util.Formatter;
-import de.tu_berlin.math.coga.components.JStatusBar;
 import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+import org.zetool.components.JStatusBar;
 
 /**
  * @author Jan-Philipp Kappmeier

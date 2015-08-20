@@ -14,21 +14,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * JEventStatusBar.java
- * Created on 19.12.2007, 02:16:58
- */
-
 package zet.gui.components;
 
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
-import de.tu_berlin.math.coga.components.JStatusBar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
+import org.zetool.components.JStatusBar;
 
 /**
  * The status bar for the Z-Editor. Consisting (basically) of 3 fields used to

@@ -8,7 +8,6 @@ import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.swing.plaf.ButtonBarUI;
 import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.components.framework.Button;
 import zet.gui.main.toolbar.ZETIconSet;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
@@ -23,6 +22,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import org.zetool.components.framework.Button;
 
 /**
  *

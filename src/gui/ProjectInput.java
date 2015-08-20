@@ -3,15 +3,14 @@ package gui;
 
 import org.zetool.container.util.SingleIterator;
 import de.zet_evakuierung.model.Project;
-import org.zetool.coponents.batch.gui.JBatch;
 import org.zetool.components.batch.input.Input;
 import de.zet_evakuierung.model.ProjectLoader;
-import gui.GUIControl;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.zetool.components.batch.gui.JBatch;
 
 /**
  *

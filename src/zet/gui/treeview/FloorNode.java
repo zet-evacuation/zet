@@ -1,16 +1,16 @@
 
 package zet.gui.treeview;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class FloorNode extends ProjectTreeNode<AbstractFloor> {
+public class FloorNode extends ProjectTreeNode<FloorInterface> {
 
-	public FloorNode( AbstractFloor zFormatData ) {
+	public FloorNode( FloorInterface zFormatData ) {
 		super( zFormatData );
 	}
 

@@ -2,7 +2,6 @@
 package zet.gui.main.menu.popup;
 
 import org.zetool.common.localization.Localization;
-import de.tu_berlin.math.coga.components.framework.Menu;
 import de.zet_evakuierung.model.Assignment;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.PlanPolygon;
@@ -12,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
+import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
 
 /**

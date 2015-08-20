@@ -16,7 +16,7 @@
 
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +42,7 @@ import java.util.Iterator;
 public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 
 	/** The {@link de.zet_evakuierung.model.Floor} of this room. */
-	AbstractFloor floor;
+	FloorInterface floor;
 	/** The {@link de.zet_evakuierung.model.Room} that is rastered. Redundant save helps avoiding
 	 * casts. */
 	Room r;
@@ -108,7 +108,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 	 *
 	 * @return the {@link Floor} this room belongs to.
 	 */
-	public AbstractFloor getFloor() {
+	public FloorInterface getFloor() {
 		return floor;
 	}
 

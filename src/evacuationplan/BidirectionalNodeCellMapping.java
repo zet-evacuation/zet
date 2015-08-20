@@ -23,7 +23,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
-import de.zet_evakuierung.model.AbstractFloor;
+import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.Room;
 import ds.ca.evac.EvacCell;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class BidirectionalNodeCellMapping {
 		HashMap<Node, ArrayList<ZToGraphRasterSquare>> nodeToGraphSquareMapping = new HashMap<Node, ArrayList<ZToGraphRasterSquare>>();
 		HashMap<ZToGraphRasterSquare,ZToCARasterSquare> graphToCARasterSquare = new HashMap<ZToGraphRasterSquare,ZToCARasterSquare>();
 		
-		for( AbstractFloor floor:graphRaster.getFloors()){
+		for( FloorInterface floor:graphRaster.getFloors()){
 			if (floor.getRooms().size() > 0){
 				for (Room room:graphRaster.getRooms(floor)){
 					ZToGraphRoomRaster graphRasteredRoom = graphRaster.getRasteredRoom(room);
