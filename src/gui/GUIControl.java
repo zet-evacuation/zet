@@ -73,6 +73,8 @@ import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import de.zet_evakuierung.model.FloorInterface;
+import de.zet_evakuierung.model.ZModelRoomEvent;
+import event.EventServer;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -118,10 +120,14 @@ import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.RasterPaintStyle;
+import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.ZetObjectTypes;
 import zet.gui.main.tabs.editor.floor.SelectedFloorElements;
+import zet.gui.main.tabs.editor.panel.ChangeListener;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
+import zet.gui.main.toolbar.JEditToolbar.ToolbarEvent;
 import zet.gui.main.toolbar.JLogToolBar;
 import zet.gui.main.toolbar.JQuickVisualizationToolBar;
 import zet.gui.main.toolbar.JStatisticCellularAutomatonToolbar;
@@ -208,7 +214,34 @@ public class GUIControl implements AlgorithmListener {
 
 		// Components in tabs
                 evc = new EditViewControl(zcontrol, zcontrol.getProject().getBuildingPlan().getFloors());
+                EventServer.getInstance().registerListener(evc.getView(), ZModelRoomEvent.class);
                 JEditView editView = evc.getView();
+                
+                
+                // Add listener to toolbar
+                ChangeListener<JEditToolbar.ToolbarEvent> tcl = new ChangeListener<JEditToolbar.ToolbarEvent>() {
+
+                    @Override
+                    public void changed(ToolbarEvent c) {
+                        switch(c.getChangeType()) {
+                            case Selection:
+                                evc.setEditMode(EditMode.Selection);
+                                break;
+                            case CreatePointwise:
+                                evc.setEditMode(EditMode.CreationPointWise);
+                                break;
+                            case CreateRectangle:
+                                evc.setEditMode(EditMode.CreationRectangle);
+                                break;
+                            case SelectZetObjectType:
+                                evc.setZetObjectType(editToolBar.getZetObjectType());
+                                break;
+                            default:
+                                throw new AssertionError();
+                        }
+                    }
+                };
+                editToolBar.addChangeListener( tcl );
                 
 		editview = Localizer.instance().registerNewComponent(editView );
     selection.addObserver( editview );
@@ -791,7 +824,7 @@ public class GUIControl implements AlgorithmListener {
 		//if( tabPane.getSelectedIndex() > 1 )
 		//	tabPane.setSelectedIndex( 0 );
                 Floor f = zcontrol.getProject().getBuildingPlan().getFloors().get(1);
-                evc.setCurrentFloor(f);
+                evc.setControlledProject(zcontrol.getProject().getBuildingPlan().getFloors());
 		//editview.displayProject( zcontrol );
 		caView.displayProject( zcontrol );
 		// Löschen eingestellter parameter
