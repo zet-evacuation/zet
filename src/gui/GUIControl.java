@@ -121,7 +121,6 @@ import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.RasterPaintStyle;
 import zet.gui.main.tabs.editor.EditMode;
-import zet.gui.main.tabs.editor.ZetObjectTypes;
 import zet.gui.main.tabs.editor.floor.SelectedFloorElements;
 import zet.gui.main.tabs.editor.panel.ChangeListener;
 import zet.gui.main.tabs.visualization.ZETVisualization;
@@ -173,8 +172,8 @@ public class GUIControl implements AlgorithmListener {
 	private Templates<Door> doorTemplates = new Templates<>("empty");
 	private Templates<ExitDoor> exitDoorTemplates = new Templates<>("empty");
 	private PolygonPopup polygonPopup;
-	private EdgePopup edgePopup;
-	private PointPopup pointPopup;
+	//private EdgePopup edgePopup;
+	//private PointPopup pointPopup;
 	private SelectedFloorElements selection = new SelectedFloorElements();
     private EditViewControl evc;
 	/**
@@ -195,9 +194,9 @@ public class GUIControl implements AlgorithmListener {
 		editor.setJMenuBar( menuBar );
 
 		// Popups
-		polygonPopup = new PolygonPopup( this );
-		edgePopup = new EdgePopup( this );
-		pointPopup = new PointPopup( this );
+		//polygonPopup = new PolygonPopup( this );
+		//edgePopup = new EdgePopup( this );
+		//pointPopup = new PointPopup( this );
 
 
 		//EditStatus editStatus = new EditStatus( zcontrol, selection );
@@ -672,20 +671,6 @@ public class GUIControl implements AlgorithmListener {
 	public void setMenuBar( JZETMenuBar aThis ) {
 		menuBar = aThis;
 	}
-
-	public PolygonPopup getPolygonPopup() {
-		return polygonPopup;
-	}
-
-	public EdgePopup getEdgePopup() {
-		return edgePopup;
-	}
-
-	public PointPopup getPointPopup() {
-		return pointPopup;
-	}
-
-
 
 	public void showAbout() {
 		CreditsDialog credits = new CreditsDialog( editor );
