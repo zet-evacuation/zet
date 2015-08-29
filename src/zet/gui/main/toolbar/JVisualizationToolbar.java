@@ -27,7 +27,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.ComboBoxRenderer;
+import org.zet.components.model.editor.selectors.ComboBoxRenderer;
 
 
 /**

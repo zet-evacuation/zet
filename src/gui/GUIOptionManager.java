@@ -17,7 +17,7 @@
 package gui;
 
 import ds.PropertyContainer;
-import gui.editor.Areas;
+import org.zet.components.model.editor.Areas;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;

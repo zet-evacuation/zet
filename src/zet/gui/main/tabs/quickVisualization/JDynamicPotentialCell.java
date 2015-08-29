@@ -22,7 +22,7 @@ package zet.gui.main.tabs.quickVisualization;
 
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import zet.gui.main.tabs.base.AbstractFloor;
+import org.zet.components.model.editor.floor.AbstractFloor;
 import java.awt.Color;
 
 /**

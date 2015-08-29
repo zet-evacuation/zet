@@ -29,13 +29,13 @@ import java.util.Collections;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import statistic.ca.CAStatistic;
-import zet.gui.main.tabs.base.JFloorScrollPane;
-import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
+import org.zet.components.model.editor.floor.JFloorScrollPane;
+import org.zet.components.model.editor.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.FloorComboBoxModel;
-import zet.gui.components.model.NamedComboBox;
-import zet.gui.main.tabs.editor.control.FloorViewModel;
+import org.zet.components.model.editor.FloorComboBoxModel;
+import org.zet.components.model.editor.selectors.NamedComboBox;
+import org.zet.components.model.editor.floor.FloorViewModel;
 import zet.tasks.DisplayFloorTask;
 
 /**

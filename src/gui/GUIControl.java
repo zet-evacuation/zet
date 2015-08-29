@@ -39,8 +39,8 @@ import de.zet_evakuierung.template.TemplateLoader;
 import de.zet_evakuierung.template.Templates;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
-import gui.editor.Areas;
-import gui.editor.CoordinateTools;
+import org.zet.components.model.editor.Areas;
+import org.zet.components.model.editor.CoordinateTools;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JPropertyDialog;
@@ -111,18 +111,18 @@ import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JZetWindow;
 import zet.gui.main.menu.JZETMenuBar;
-import zet.gui.main.menu.popup.EdgePopup;
-import zet.gui.main.menu.popup.PointPopup;
-import zet.gui.main.menu.popup.PolygonPopup;
-import zet.gui.main.tabs.EditViewControl;
-import zet.gui.main.tabs.EditViewModel;
-import zet.gui.main.tabs.JEditView;
+import org.zet.components.model.editor.floor.popup.EdgePopup;
+import org.zet.components.model.editor.floor.popup.PointPopup;
+import org.zet.components.model.editor.floor.popup.PolygonPopup;
+import org.zet.components.model.editor.EditViewControl;
+import org.zet.components.model.editor.EditViewModel;
+import org.zet.components.model.editor.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
-import zet.gui.main.tabs.base.RasterPaintStyle;
-import zet.gui.main.tabs.editor.EditMode;
-import zet.gui.main.tabs.editor.floor.SelectedFloorElements;
-import zet.gui.main.tabs.editor.panel.ChangeListener;
+import org.zet.components.model.editor.floor.RasterPaintStyle;
+import org.zet.components.model.editor.EditMode;
+import org.zet.components.model.editor.floor.SelectedFloorElements;
+import org.zet.components.model.editor.panel.ChangeListener;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -224,13 +224,13 @@ public class GUIControl implements AlgorithmListener {
                     public void changed(ToolbarEvent c) {
                         switch(c.getChangeType()) {
                             case Selection:
-                                evc.setEditMode(EditMode.Selection);
+                                evc.setEditMode(EditMode.SELECTION);
                                 break;
                             case CreatePointwise:
-                                evc.setEditMode(EditMode.CreationPointWise);
+                                evc.setEditMode(EditMode.CREATE_POINTWISE);
                                 break;
                             case CreateRectangle:
-                                evc.setEditMode(EditMode.CreationRectangle);
+                                evc.setEditMode(EditMode.CREATE_RECTANGLE);
                                 break;
                             case SelectZetObjectType:
                                 evc.setZetObjectType(editToolBar.getZetObjectType());
@@ -1123,9 +1123,9 @@ public class GUIControl implements AlgorithmListener {
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintStyle ) {
 		//editview.getFloor().setRasterPaintStyle( rasterPaintStyle );
                 System.err.println("TODO: pass new rasterpaint style to edit view" );
-		menuBar.setSelectedGridLines( rasterPaintStyle == RasterPaintStyle.Lines );
-		menuBar.setSelectedGridPoints( rasterPaintStyle == RasterPaintStyle.Points );
-		menuBar.setSelectedGridNotVisible( rasterPaintStyle == RasterPaintStyle.Nothing );
+		menuBar.setSelectedGridLines( rasterPaintStyle == RasterPaintStyle.LINES );
+		menuBar.setSelectedGridPoints( rasterPaintStyle == RasterPaintStyle.POINTS );
+		menuBar.setSelectedGridNotVisible( rasterPaintStyle == RasterPaintStyle.NOTHING );
 	}
 
 	public void showDefaultFloor( boolean b ) {

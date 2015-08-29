@@ -8,7 +8,7 @@ import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
-import gui.editor.Areas;
+import org.zet.components.model.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;
 import gui.editor.properties.PropertyLoadException;
@@ -27,7 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
-import zet.gui.main.tabs.base.RasterPaintStyle;
+import org.zet.components.model.editor.floor.RasterPaintStyle;
 import zet.gui.treeview.JProjectTreeView;
 import zet.tasks.CellularAutomatonAlgorithms;
 
@@ -351,11 +351,11 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
 		} else if( e.getActionCommand().equals( "gridLine" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Lines );
+			control.setRasterPaintStyle(RasterPaintStyle.LINES );
 		} else if( e.getActionCommand().equals( "gridPoint" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Points );
+			control.setRasterPaintStyle(RasterPaintStyle.POINTS );
 		} else if( e.getActionCommand().equals( "gridNo" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Nothing );
+			control.setRasterPaintStyle(RasterPaintStyle.NOTHING );
 		} else if( e.getActionCommand().equals( "defaultFloor" ) ) {
 			control.showDefaultFloor( mnuHideDefaultFloor.isSelected() );
 		} else if( e.getActionCommand().equals( "loadBuildingPlan" ) ) {

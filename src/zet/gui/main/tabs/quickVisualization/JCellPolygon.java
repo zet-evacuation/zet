@@ -13,17 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package zet.gui.main.tabs.quickVisualization;
 
 import org.zetool.common.localization.LocalizationManager;
-import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import org.zetool.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.PlanPolygon;
-import gui.editor.CoordinateTools;
+import org.zet.components.model.editor.CoordinateTools;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -32,147 +30,161 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.EnumSet;
-import zet.gui.main.tabs.base.AbstractFloor;
-import zet.gui.main.tabs.base.AbstractPolygon;
+import org.zet.components.model.editor.floor.AbstractFloor;
+import org.zet.components.model.editor.polygon.AbstractPolygon;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 
-	private Color fillColor;
-	EnumSet<Direction8> borders = EnumSet.noneOf( Direction8.class );
-	private EvacCell cell;
-	private final boolean showIndividualNames;
-	private static final NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
-	private EvacuationCellularAutomaton ca;
+    private Color fillColor;
+    EnumSet<Direction8> borders = EnumSet.noneOf(Direction8.class);
+    private EvacCell cell;
+    private final boolean showIndividualNames;
+    private static final NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
+    private EvacuationCellularAutomaton ca;
 
-	/**
-	 * @param cell
-	 * @param myFloor the JFloor on which this polygon is displayed.
-	 * @param fillColor the border color
-	 * @param ca
-	 */
-	public JCellPolygon( EvacCell cell, AbstractFloor myFloor, Color fillColor, EvacuationCellularAutomaton ca ) {
-		this( cell, myFloor, fillColor, Color.black, ca );
-	}
+    /**
+     * @param cell
+     * @param fillColor the border color
+     * @param ca
+     */
+    public JCellPolygon(EvacCell cell, Color fillColor, EvacuationCellularAutomaton ca) {
+        this(cell, fillColor, Color.black, ca);
+    }
 
-	/**
-	 * @param cell
-	 * @param myFloor the JFloor on which this polygon is displayed.
-	 * @param fillColor the border color
-	 * @param lineColor
-	 * @param ca
-	 */
-	public JCellPolygon( EvacCell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, EvacuationCellularAutomaton ca ) {
-		super( lineColor );
-		this.ca = ca;
-		this.cell = cell;
-		this.parentFloor = myFloor;
-		this.fillColor = fillColor;
-		setOpaque( false );
-		showIndividualNames = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.showIndividualNames" );
-		setUpToolTipText();
-	}
+    /**
+     * @param cell
+     * @param fillColor the border color
+     * @param lineColor
+     * @param ca
+     */
+    public JCellPolygon(EvacCell cell, Color fillColor, Color lineColor, EvacuationCellularAutomaton ca) {
+        super(lineColor);
+        this.ca = ca;
+        this.cell = cell;
+        this.fillColor = fillColor;
+        setOpaque(false);
+        showIndividualNames = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.showIndividualNames");
+        setUpToolTipText();
+    }
 
-	protected void setFillColor( Color fillColor ) {
-		this.fillColor = fillColor;
-	}
+    protected void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+    }
 
-	/**
-	 * Only call this after the component has been added to a container. Otherwise
-	 * operations like setBounds, which are called herein, will fail.
-	 * @param p the polygon
-	 */
-	@Override
-	public void displayPolygon( PlanPolygon p ) {
-		myPolygon = p;
+    /**
+     * Only call this after the component has been added to a container. Otherwise operations like setBounds, which are
+     * called herein, will fail.
+     *
+     * @param p the polygon
+     */
+    @Override
+    public void displayPolygon(PlanPolygon p) {
+        myPolygon = p;
 
-		if( p != null ) {
-			// Contains absolute bounds
-			Rectangle areabounds = CoordinateTools.translateToScreen( p.bounds() );
-			setBounds( areabounds );
+        if (p != null) {
+            // Contains absolute bounds
+            Rectangle areabounds = CoordinateTools.translateToScreen(p.bounds());
+            setBounds(areabounds);
 
-			// This already copies the polygon
-			drawingPolygon = CoordinateTools.translateToScreen( getAWTPolygon() );
-			drawingPolygon.translate( -areabounds.x, -areabounds.y);
-		}
-		if( drawingPolygon == null )
-			throw new IllegalStateException( "Drawing polygon is null" );
-	}
+            // This already copies the polygon
+            drawingPolygon = CoordinateTools.translateToScreen(getAWTPolygon());
+            drawingPolygon.translate(-areabounds.x, -areabounds.y);
+        }
+        if (drawingPolygon == null) {
+            throw new IllegalStateException("Drawing polygon is null");
+        }
+    }
 
-	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
-		Graphics2D g2 = (Graphics2D) g;
-		if( cell.getIndividual() == null )
-			paintCell( g2 );
-		else
-			paintIndividual( g2 );
-	}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        if (cell.getIndividual() == null) {
+            paintCell(g2);
+        } else {
+            paintIndividual(g2);
+        }
+    }
 
-	public void paintCell( Graphics2D g2 ) {
-		fill( g2, getForeground(), getBackground(), fillColor );
-	}
+    public void paintCell(Graphics2D g2) {
+        fill(g2, getForeground(), getBackground(), fillColor);
+    }
 
-	public void paintIndividual( Graphics2D g2 ) {
-		if( !showIndividualNames )
-			return;
-		fill( g2, getForeground(), getBackground(), Color.green );
-		drawName( Integer.toString( cell.getIndividual().getNumber() ), g2, Color.black );
-	}
+    public void paintIndividual(Graphics2D g2) {
+        if (!showIndividualNames) {
+            return;
+        }
+        fill(g2, getForeground(), getBackground(), Color.green);
+        drawName(Integer.toString(cell.getIndividual().getNumber()), g2, Color.black);
+    }
 
-	private void fill( Graphics2D g2, Color foreground, Color background, Color fill ) {
-		g2.setPaint( fill	);
-		if( drawingPolygon.npoints > 0 )
-			g2.fillPolygon( drawingPolygon );
+    private void fill(Graphics2D g2, Color foreground, Color background, Color fill) {
+        g2.setPaint(fill);
+        if (drawingPolygon.npoints > 0) {
+            g2.fillPolygon(drawingPolygon);
+        }
 
-		g2.setPaint( foreground );
-		g2.drawPolygon( drawingPolygon );
+        g2.setPaint(foreground);
+        g2.drawPolygon(drawingPolygon);
 
-		g2.setPaint( background );
-		Rectangle bounds = drawingPolygon.getBounds();
-		BasicStroke thick = new BasicStroke ( 5 );
-		g2.setStroke( thick );
-		if( borders.contains( Direction8.Top ) )
-			g2.drawLine( bounds.x, bounds.y, bounds.x + bounds.width, bounds.y );
-		if( borders.contains( Direction8.Down ) )
-			g2.drawLine( bounds.x, bounds.y + bounds.height, bounds.x + bounds.width, bounds.y + bounds.height );
-		if( borders.contains( Direction8.Left ) )
-			g2.drawLine( bounds.x, bounds.y, bounds.x, bounds.y + bounds.height );
-		if( borders.contains( Direction8.Right ) )
-			g2.drawLine( bounds.x + bounds.width, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height );
-	}
+        g2.setPaint(background);
+        Rectangle bounds = drawingPolygon.getBounds();
+        BasicStroke thick = new BasicStroke(5);
+        g2.setStroke(thick);
+        if (borders.contains(Direction8.Top)) {
+            g2.drawLine(bounds.x, bounds.y, bounds.x + bounds.width, bounds.y);
+        }
+        if (borders.contains(Direction8.Down)) {
+            g2.drawLine(bounds.x, bounds.y + bounds.height, bounds.x + bounds.width, bounds.y + bounds.height);
+        }
+        if (borders.contains(Direction8.Left)) {
+            g2.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+        }
+        if (borders.contains(Direction8.Right)) {
+            g2.drawLine(bounds.x + bounds.width, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height);
+        }
+    }
 
-	public void addWall( Direction8 direction ) {
-   borders.add( direction );
-	}
+    public void addWall(Direction8 direction) {
+        borders.add(direction);
+    }
 
-	/**
-	 * This function does nothing. Overwrite this function in derived components
-	 * to automatically set an appropriate tool tip.
-	 */
-	protected void setToolTipText() { }
+    /**
+     * This function does nothing. Overwrite this function in derived components to automatically set an appropriate
+     * tool tip.
+     */
+    protected void setToolTipText() {
+    }
 
-	void update() {
-		setUpToolTipText();
-	}
+    void update() {
+        setUpToolTipText();
+    }
 
-	private void setUpToolTipText() {
-		if( cell.getIndividual() != null ) {
-			String s = "<html>";
-			s += "Alter: " + Integer.toString( cell.getIndividual().getAge() ) + "<br>";
-			nfFloat.setMaximumFractionDigits( 2 );
-			s += "Wunschgeschwindigkeit: " + nfFloat.format( ca.absoluteSpeed( cell.getIndividual().getMaxSpeed() ) ) + "m/s";
-			s += "</html>";
-			setToolTipText( s );
-		} else
-			setToolTipText();
-	}
-	/** Prohibits serialization. */
-	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
-		throw new UnsupportedOperationException( "Serialization not supported" );
-	}
+    private void setUpToolTipText() {
+        if (cell.getIndividual() != null) {
+            String s = "<html>";
+            s += "Alter: " + Integer.toString(cell.getIndividual().getAge()) + "<br>";
+            nfFloat.setMaximumFractionDigits(2);
+            s += "Wunschgeschwindigkeit: " + nfFloat.format(ca.absoluteSpeed(cell.getIndividual().getMaxSpeed())) + "m/s";
+            s += "</html>";
+            setToolTipText(s);
+        } else {
+            setToolTipText();
+        }
+    }
+
+    /** Prohibits serialization. */
+    private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+        throw new UnsupportedOperationException("Serialization not supported");
+    }
+    
+    /** Prohibits serialization. */
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("Serialization not supported");
+    }
 }

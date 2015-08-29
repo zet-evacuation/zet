@@ -5,7 +5,7 @@ import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETLoader;
-import gui.editor.CoordinateTools;
+import org.zet.components.model.editor.CoordinateTools;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,10 +28,10 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.ComboBoxRenderer;
-import zet.gui.main.tabs.editor.ZetObjectTypes;
-import zet.gui.main.tabs.editor.panel.AbstractChangeEvent;
-import zet.gui.main.tabs.editor.panel.ChangeListener;
+import org.zet.components.model.editor.selectors.ComboBoxRenderer;
+import org.zet.components.model.editor.ZetObjectTypes;
+import org.zet.components.model.editor.panel.AbstractChangeEvent;
+import org.zet.components.model.editor.panel.ChangeListener;
 
 /**
  * The class {@code JEditToolbar} ...
