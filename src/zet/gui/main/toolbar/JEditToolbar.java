@@ -29,7 +29,6 @@ import javax.swing.event.PopupMenuListener;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
 import zet.gui.components.model.ComboBoxRenderer;
-import zet.gui.main.tabs.editor.EditModeOld;
 import zet.gui.main.tabs.editor.ZetObjectTypes;
 import zet.gui.main.tabs.editor.panel.AbstractChangeEvent;
 import zet.gui.main.tabs.editor.panel.ChangeListener;
@@ -100,7 +99,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
     /**
      * The number format used to display the zoom factor in the text field.
      */
-    private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
+    private NumberFormat nfZoom = NumberFormat.getPercentInstance();    // Main window components
     private final GUIControl control;
 
     /**
@@ -166,19 +165,19 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
         });
         add(cbxEdit);
 
-//		editSelector1 = new EditComboBoxModel1();
-//		cbxEdit1 = new JComboBox<>();
-//		cbxEdit1.setMaximumRowCount( 25 );
-//		cbxEdit1.setMaximumSize( new Dimension( 250, cbxEdit1.getPreferredSize().height ) );
-//		cbxEdit1.setPreferredSize( new Dimension( 250, cbxEdit1.getPreferredSize().height ) );
-//		cbxEdit1.setAlignmentX( 0 );
-//		cbxEdit1.setToolTipText( loc.getString( "Edit.AreaType" ) );
-//		cbxEdit1.setModel( editSelector1 );
-//		cbxEdit1.setRenderer( new EditComboBoxRenderer1() );
+//        editSelector1 = new EditComboBoxModel1();
+//        cbxEdit1 = new JComboBox<>();
+//        cbxEdit1.setMaximumRowCount( 25 );
+//        cbxEdit1.setMaximumSize( new Dimension( 250, cbxEdit1.getPreferredSize().height ) );
+//        cbxEdit1.setPreferredSize( new Dimension( 250, cbxEdit1.getPreferredSize().height ) );
+//        cbxEdit1.setAlignmentX( 0 );
+//        cbxEdit1.setToolTipText( loc.getString( "Edit.AreaType" ) );
+//        cbxEdit1.setModel( editSelector1 );
+//        cbxEdit1.setRenderer( new EditComboBoxRenderer1() );
         // Don't use an item/change listener here, because then we can't capture the event
         // that the user re-selects the same entry as before
-//		cbxEdit1.addPopupMenuListener( this );
-//		add( cbxEdit1 );
+//        cbxEdit1.addPopupMenuListener( this );
+//        add( cbxEdit1 );
         addSeparator();
 
         btnZoomIn = Button.newButton(ZETIconSet.ZoomIn.icon(), this, "zoomIn", loc.getString("Edit.ZoomIn"));
@@ -259,49 +258,49 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
     public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
         ZetObjectTypes currentEditMode = (ZetObjectTypes) editSelector.getSelectedItem();
 
-		//control.showArea( currentEditMode.);
+        //control.showArea( currentEditMode.);
         // Einblenden der gewählten Area, falls ausgeblendet
         switch (currentEditMode) {
-//			case AssignmentAreaCreation:
-//			case AssignmentAreaCreationPointwise:
-//				control.showArea( Areas.Assignment );
-//				break;
-//			case DelayAreaCreation:
-//			case DelayAreaCreationPointwise:
-//				control.showArea( Areas.Delay );
-//				break;
-//			case StairAreaCreation:
-//			case StairAreaCreationPointwise:
-//				control.showArea( Areas.Stair );
-//				break;
-//			case EvacuationAreaCreation:
-//			case EvacuationAreaCreationPointwise:
-//				control.showArea( Areas.Evacuation );
-//				break;
-//			case InaccessibleAreaCreation:
-//			case InaccessibleAreaCreationPointwise:
-//				control.showArea( Areas.Inaccessible );
-//				break;
-//			case SaveAreaCreation:
-//			case SaveAreaCreationPointwise:
-//				control.showArea( Areas.Save );
-//				break;
-//			case TeleportAreaCreation:
-//			case TeleportAreaCreationPointwise:
-//				control.showArea( Areas.Teleportation );
-//				break;
-//			default:
-//				break;
+//            case AssignmentAreaCreation:
+//            case AssignmentAreaCreationPointwise:
+//                control.showArea( Areas.Assignment );
+//                break;
+//            case DelayAreaCreation:
+//            case DelayAreaCreationPointwise:
+//                control.showArea( Areas.Delay );
+//                break;
+//            case StairAreaCreation:
+//            case StairAreaCreationPointwise:
+//                control.showArea( Areas.Stair );
+//                break;
+//            case EvacuationAreaCreation:
+//            case EvacuationAreaCreationPointwise:
+//                control.showArea( Areas.Evacuation );
+//                break;
+//            case InaccessibleAreaCreation:
+//            case InaccessibleAreaCreationPointwise:
+//                control.showArea( Areas.Inaccessible );
+//                break;
+//            case SaveAreaCreation:
+//            case SaveAreaCreationPointwise:
+//                control.showArea( Areas.Save );
+//                break;
+//            case TeleportAreaCreation:
+//            case TeleportAreaCreationPointwise:
+//                control.showArea( Areas.Teleportation );
+//                break;
+//            default:
+//                break;
         }
-//		updateAreaVisiblity();
-//		if( editView != null && lastEditMode == currentEditMode ) {
-//			editView.setEditMode( currentEditMode );
-//			btnEditSelect.setSelected( false );
-//			btnEditPointwise.setSelected( creationType == EditModeOld.Type.CREATION_POINTWISE );
-//			btnEditRectangled.setSelected( creationType == EditModeOld.Type.CREATION_RECTANGLED );
+//        updateAreaVisiblity();
+//        if( editView != null && lastEditMode == currentEditMode ) {
+//            editView.setEditMode( currentEditMode );
+//            btnEditSelect.setSelected( false );
+//            btnEditPointwise.setSelected( creationType == EditModeOld.Type.CREATION_POINTWISE );
+//            btnEditRectangled.setSelected( creationType == EditModeOld.Type.CREATION_RECTANGLED );
 //
-//		}
-//		lastEditMode = currentEditMode;
+//        }
+//        lastEditMode = currentEditMode;
     }
 
     @Override
@@ -353,7 +352,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
     }
 
     public void setZoomFactorText(double zoomFactor) {
-		// Pretend a smaller Zoom factor, so that the user is actually only zomming
+        // Pretend a smaller Zoom factor, so that the user is actually only zomming
         // in the range [0,0.25]. This is still close enough for the user.
         txtZoomFactor.setText(nfZoom.format(zoomFactor * 2.5d));
     }
@@ -394,17 +393,17 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
     }
 
     private static class EditComboBoxModel extends DefaultComboBoxModel<ZetObjectTypes> {
-	//private EditStatus editStatus;
+    //private EditStatus editStatus;
         private EditComboBoxModel() {
-        //	this.editStatus = editStatus;
-        	for( ZetObjectTypes e : ZetObjectTypes.values() )
-        		addElement( e );
+        //    this.editStatus = editStatus;
+            for( ZetObjectTypes e : ZetObjectTypes.values() )
+                addElement( e );
         }
 
         @Override
         public void setSelectedItem(Object object) {
             super.setSelectedItem(object);
-            //	editStatus.setZetObjectType( (ZetObjectTypes)object );
+            //    editStatus.setZetObjectType( (ZetObjectTypes)object );
         }
 
     }
@@ -435,66 +434,4 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
             return this;
         }
     }
-
-    /**
-     * This class serves as a model for the JComboBox that contains the EditModes.
-     */
-    @SuppressWarnings("serial")
-    private class EditComboBoxModel1 extends DefaultComboBoxModel<EditModeOld> {
-
-        /**
-         * Creates a new combo box model containing edit types that are of a specified type.
-         *
-         * @param type the type of the displayed edit modes
-         */
-        public EditComboBoxModel1() {
-            rebuild();
-        }
-
-        final public void rebuild() {
-			// In case that the creationType really changed we must restore the partner edit mode.
-            // If we change to the same creation type as before, we must restore the old selection itself.
-//			boolean restore_partner = getSelectedItem() != null
-//							&& creationType != ((EditModeOld)getSelectedItem()).getType();
-//			EditModeOld next_selection = restore_partner ? ((EditModeOld)getSelectedItem()).getPartnerMode() : (EditModeOld)getSelectedItem();
-
-            // Build new edit mode list
-            this.removeAllElements();
-			//for( EditModeOld e : EditModeOld.getCreationModes( creationType ) )
-            //	addElement( e );
-            //
-
-            // Restore the selection with the associated partner editmode if neccessary
-//			if( next_selection != null )
-//				setSelectedItem( next_selection );
-        }
-
-		// This was moved to a change listener too, to be able to capture selections that
-        // dont change the selected value, but only re-select it. In any other case this part
-        // of the code is used (that is also needed, because the popuplistener can't deal with
-        // other selection types)
-        @Override
-        public void setSelectedItem(Object object) {
-            super.setSelectedItem(object);
-            //control.setEditMode( (EditModeOld) object );
-        }
-    }
-
-    private class EditComboBoxRenderer1 extends ComboBoxRenderer<EditModeOld> {
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends EditModeOld> list, EditModeOld value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel me = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            setHorizontalAlignment(LEFT);
-
-            if (value != null) {
-                if (value.getEditorColor() != null && !value.getEditorColor().equals(Color.BLACK)) {
-                    setBackground(value.getEditorColor());
-                }
-                setText(value.toString());
-            }
-            return this;
-        }
-    }
-
 }

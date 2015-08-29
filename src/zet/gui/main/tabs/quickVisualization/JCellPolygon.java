@@ -70,7 +70,7 @@ public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 		super( lineColor );
 		this.ca = ca;
 		this.cell = cell;
-		this.myFloor = myFloor;
+		this.parentFloor = myFloor;
 		this.fillColor = fillColor;
 		setOpaque( false );
 		showIndividualNames = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.showIndividualNames" );
@@ -96,7 +96,7 @@ public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 			setBounds( areabounds );
 
 			// This already copies the polygon
-			drawingPolygon = CoordinateTools.translateToScreen( getAWTPolygon( myPolygon ) );
+			drawingPolygon = CoordinateTools.translateToScreen( getAWTPolygon() );
 			drawingPolygon.translate( -areabounds.x, -areabounds.y);
 		}
 		if( drawingPolygon == null )
