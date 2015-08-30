@@ -1,6 +1,7 @@
 
 package zet.gui.main.menu;
 
+import de.zet_evakuierung.model.AreaType;
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
@@ -8,7 +9,6 @@ import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
-import org.zet.components.model.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;
 import gui.editor.properties.PropertyLoadException;
@@ -27,7 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
-import org.zet.components.model.editor.floor.RasterPaintStyle;
+import org.zet.components.model.editor.style.RasterPaintStyle;
 import zet.gui.treeview.JProjectTreeView;
 import zet.tasks.CellularAutomatonAlgorithms;
 
@@ -337,17 +337,17 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuAssignmentArea.setSelected( false );
 			control.updateVisibility( false );
 		} else if( e.getActionCommand().equals( "delayArea" ) ) {
-			control.updateVisibility( Areas.Delay, mnuDelayArea.isSelected() );
+			control.updateVisibility( AreaType.Delay, mnuDelayArea.isSelected() );
 		} else if( e.getActionCommand().equals( "stairArea" ) ) {
-			control.updateVisibility( Areas.Stair, mnuStairArea.isSelected() );
+			control.updateVisibility( AreaType.Stair, mnuStairArea.isSelected() );
 		} else if( e.getActionCommand().equals( "evacuationArea" ) ) {
-			control.updateVisibility( Areas.Evacuation, mnuEvacuationArea.isSelected() );
+			control.updateVisibility( AreaType.Evacuation, mnuEvacuationArea.isSelected() );
 		} else if( e.getActionCommand().equals( "inaccessibleArea" ) ) {
-			control.updateVisibility( Areas.Inaccessible, mnuInaccessibleArea.isSelected() );
+			control.updateVisibility( AreaType.Inaccessible, mnuInaccessibleArea.isSelected() );
 		} else if( e.getActionCommand().equals( "saveArea" ) ) {
-			control.updateVisibility( Areas.Save, mnuSaveArea.isSelected() );
+			control.updateVisibility( AreaType.Save, mnuSaveArea.isSelected() );
 		} else if( e.getActionCommand().equals( "assignmentArea" ) ) {
-			control.updateVisibility( Areas.Assignment, mnuAssignmentArea.isSelected() );
+			control.updateVisibility( AreaType.Assignment, mnuAssignmentArea.isSelected() );
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
 		} else if( e.getActionCommand().equals( "gridLine" ) ) {

@@ -39,7 +39,6 @@ import de.zet_evakuierung.template.TemplateLoader;
 import de.zet_evakuierung.template.Templates;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
-import org.zet.components.model.editor.Areas;
 import org.zet.components.model.editor.CoordinateTools;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
@@ -72,6 +71,7 @@ import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import de.zet_evakuierung.model.AreaType;
 import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.ZModelRoomEvent;
 import event.EventServer;
@@ -114,13 +114,13 @@ import zet.gui.main.menu.JZETMenuBar;
 import org.zet.components.model.editor.floor.popup.EdgePopup;
 import org.zet.components.model.editor.floor.popup.PointPopup;
 import org.zet.components.model.editor.floor.popup.PolygonPopup;
-import org.zet.components.model.editor.EditViewControl;
-import org.zet.components.model.editor.EditViewModel;
-import org.zet.components.model.editor.JEditView;
+import org.zet.components.model.editor.editview.EditViewControl;
+import org.zet.components.model.editor.editview.EditViewModel;
+import org.zet.components.model.editor.editview.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
-import org.zet.components.model.editor.floor.RasterPaintStyle;
-import org.zet.components.model.editor.EditMode;
+import org.zet.components.model.editor.style.RasterPaintStyle;
+import org.zet.components.model.editor.floor.EditMode;
 import org.zet.components.model.editor.floor.SelectedFloorElements;
 import org.zet.components.model.editor.panel.ChangeListener;
 import zet.gui.main.tabs.visualization.ZETVisualization;
@@ -167,7 +167,7 @@ public class GUIControl implements AlgorithmListener {
   private JStatisticPanel caStatisticView;
   
 	private AlgorithmControl algorithmControl;
-	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
+	private ArrayList<AreaType> mode = new ArrayList<>( Arrays.asList( AreaType.values() ) );
 	private ZETGLControl control;
 	private Templates<Door> doorTemplates = new Templates<>("empty");
 	private Templates<ExitDoor> exitDoorTemplates = new Templates<>("empty");
@@ -366,7 +366,7 @@ public class GUIControl implements AlgorithmListener {
 	 * menu entry is set correct, too.
 	 * @param areaType the are type
 	 */
-	public void showArea( Areas areaType ) {
+	public void showArea( AreaType areaType ) {
 		updateVisibility( areaType, true );
 		// TODO make them visible!
 //		switch( areaType ) {
@@ -1083,13 +1083,13 @@ public class GUIControl implements AlgorithmListener {
 	 * @param areaVisibility the type of area that should be hidden or shown
 	 * @param value shows the specified type of area if {@code true}, hides it otherwise
 	 */
-	public void updateVisibility( Areas areaVisibility, boolean value ) {
+	public void updateVisibility( AreaType areaVisibility, boolean value ) {
 		if( value && !mode.contains( areaVisibility ) )
 			mode.add( areaVisibility );
 		else if( !value )
 			mode.remove( areaVisibility );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != AreaType.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 
@@ -1101,9 +1101,9 @@ public class GUIControl implements AlgorithmListener {
 	public void updateVisibility( boolean b ) {
 		mode.clear();
 		if( b )
-			mode.addAll( Arrays.asList( Areas.values() ) );
+			mode.addAll( Arrays.asList( AreaType.values() ) );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != AreaType.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 

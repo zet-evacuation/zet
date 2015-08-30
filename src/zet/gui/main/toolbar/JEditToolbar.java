@@ -29,9 +29,10 @@ import javax.swing.event.PopupMenuListener;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
 import org.zet.components.model.editor.selectors.ComboBoxRenderer;
-import org.zet.components.model.editor.ZetObjectTypes;
+import org.zet.components.model.editor.floor.ZetObjectTypes;
 import org.zet.components.model.editor.panel.AbstractChangeEvent;
 import org.zet.components.model.editor.panel.ChangeListener;
+import org.zet.components.model.editor.style.GraphicsStyle;
 
 /**
  * The class {@code JEditToolbar} ...
@@ -413,14 +414,16 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
      */
     @SuppressWarnings("serial")
     private class EditComboBoxRenderer extends ComboBoxRenderer<ZetObjectTypes> {
-
+        private GraphicsStyle graphicsStyle = new GraphicsStyle() {
+        };
         @Override
         public Component getListCellRendererComponent(JList<? extends ZetObjectTypes> list, ZetObjectTypes value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel me = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             setHorizontalAlignment(LEFT);
 
             if (value != null) {
-                Color background = value.getEditorColor().equals(Color.BLACK) ? getBackground() : value.getEditorColor();
+                Color drawColor = value.isArea() ? graphicsStyle.getColorForArea(value.area) : graphicsStyle.getWallColor();
+                Color background = drawColor.equals(Color.BLACK) ? getBackground() : drawColor;
                 Color foreground = getForeground();
                 if (!isSelected) {
                     setBackground(background);

@@ -47,7 +47,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.zetool.components.JArrayPanel;
 import zet.gui.GUILocalization;
-import org.zet.components.model.editor.FloorComboBoxModel;
+import org.zet.components.model.editor.editview.FloorComboBoxModel;
 import org.zet.components.model.editor.selectors.NamedComboBox;
 import org.zet.components.model.editor.floor.FloorViewModel;
 

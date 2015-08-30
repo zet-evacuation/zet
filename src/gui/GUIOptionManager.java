@@ -16,8 +16,8 @@
 
 package gui;
 
+import de.zet_evakuierung.model.AreaType;
 import ds.PropertyContainer;
-import org.zet.components.model.editor.Areas;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;
@@ -128,32 +128,32 @@ public abstract class GUIOptionManager {
         }
     }
 
-    public static EnumSet<Areas> getAreaVisibility() {
+    public static EnumSet<AreaType> getAreaVisibility() {
         /** The currently selected visible areas. */
-        EnumSet<Areas> areaVisibility = EnumSet.noneOf( Areas.class );
+        EnumSet<AreaType> areaVisibility = EnumSet.noneOf( AreaType.class );
         if( propertyContainer.getAsBoolean( "gui.optionManager.AssignmentAreaVisibility" ) )
-            areaVisibility.add( Areas.Assignment );
+            areaVisibility.add( AreaType.Assignment );
         if( propertyContainer.getAsBoolean( "gui.optionManager.DelayAreaVisibility" ) )
-            areaVisibility.add( Areas.Delay );
+            areaVisibility.add( AreaType.Delay );
         if( propertyContainer.getAsBoolean( "gui.optionManager.EvacuationAreaVisibility" ) )
-            areaVisibility.add( Areas.Evacuation );
+            areaVisibility.add( AreaType.Evacuation );
         if( propertyContainer.getAsBoolean( "gui.optionManager.InaccessibleAreaVisibility" ) )
-            areaVisibility.add( Areas.Inaccessible );
+            areaVisibility.add( AreaType.Inaccessible );
         if( propertyContainer.getAsBoolean( "gui.optionManager.SaveAreaVisibility" ) )
-            areaVisibility.add( Areas.Save );
+            areaVisibility.add( AreaType.Save );
         if( propertyContainer.getAsBoolean( "gui.optionManager.StairAreaVisibility" ) )
-            areaVisibility.add( Areas.Stair );
-        areaVisibility.add( Areas.Teleportation );
+            areaVisibility.add( AreaType.Stair );
+        areaVisibility.add( AreaType.Teleport);
         return areaVisibility;
     }
 
-    public static void setAreaVisibility( EnumSet<Areas> av ) {
-        propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( Areas.Assignment ) );
-        propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( Areas.Delay ) );
-        propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( Areas.Evacuation ) );
-        propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( Areas.Inaccessible ) );
-        propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( Areas.Save ) );
-        propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( Areas.Stair ) );
+    public static void setAreaVisibility( EnumSet<AreaType> av ) {
+        propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( AreaType.Assignment ) );
+        propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( AreaType.Delay ) );
+        propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( AreaType.Evacuation ) );
+        propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( AreaType.Inaccessible ) );
+        propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( AreaType.Save ) );
+        propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( AreaType.Stair ) );
     }
 
     public static String getSavePath() {

@@ -30,7 +30,6 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.EnumSet;
-import org.zet.components.model.editor.floor.AbstractFloor;
 import org.zet.components.model.editor.polygon.AbstractPolygon;
 
 /**
@@ -38,7 +37,7 @@ import org.zet.components.model.editor.polygon.AbstractPolygon;
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings("serial")
-public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
+public class JCellPolygon extends AbstractPolygon {
 
     private Color fillColor;
     EnumSet<Direction8> borders = EnumSet.noneOf(Direction8.class);

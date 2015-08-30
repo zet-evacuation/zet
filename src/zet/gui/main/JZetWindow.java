@@ -59,7 +59,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
-import org.zet.components.model.editor.JEditView;
+import org.zet.components.model.editor.editview.JEditView;
 import de.zet_evakuierung.util.ConversionTools;
 
 /**
