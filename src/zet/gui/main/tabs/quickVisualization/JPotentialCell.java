@@ -38,7 +38,7 @@ public class JPotentialCell extends JCellPolygon {
         this.potential = potential;
         this.maxPotential = maxPotential;
         setToolTipText();
-        showPotentialValue = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.showIndividualNames");
+        showPotentialValue = PropertyContainer.getGlobal().getAsBoolean("editor.options.cavis.showIndividualNames");
     }
 
     /**
@@ -56,7 +56,7 @@ public class JPotentialCell extends JCellPolygon {
         this.potential = potential;
         this.maxPotential = maxPotential;
         setToolTipText();
-        showPotentialValue = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.showPotentialValue");
+        showPotentialValue = PropertyContainer.getGlobal().getAsBoolean("editor.options.cavis.showPotentialValue");
     }
 
     @Override

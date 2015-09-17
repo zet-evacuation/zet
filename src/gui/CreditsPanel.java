@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * Class CreditsPanel
- * Erstellt 18.05.2008, 20:05:12
- */
 package gui;
 
 import org.zetool.math.Conversion;

@@ -33,7 +33,7 @@ import javax.swing.UIManager;
  */
 public abstract class GUIOptionManager {
     /** The instance of the PropertyContainer. */
-    private static final PropertyContainer propertyContainer = PropertyContainer.getInstance();
+    private static final PropertyContainer propertyContainer = PropertyContainer.getGlobal();
     /** Global initialization of the GUIOptionManager. */
 
     static {
@@ -157,43 +157,43 @@ public abstract class GUIOptionManager {
     }
 
     public static String getSavePath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastProject" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastProject" );
     }
 
     public static void setSavePath( String path ) {
-        PropertyContainer.getInstance().set( "information.directory.lastProject", path );
+        PropertyContainer.getGlobal().set( "information.directory.lastProject", path );
     }
 
     public static String getImportPath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.importProject" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.importProject" );
     }
 
     public static void setImportPath( String importPath ) {
-        PropertyContainer.getInstance().set( "information.directory.importProject", importPath );
+        PropertyContainer.getGlobal().set( "information.directory.importProject", importPath );
     }
 
     public static String getSavePathResults() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastResult" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastResult" );
     }
 
     public static void setSavePathResults( String resultsPath ) {
-        PropertyContainer.getInstance().set( "information.directory.lastResult", resultsPath );
+        PropertyContainer.getGlobal().set( "information.directory.lastResult", resultsPath );
     }
 
     public static String getBuildingPlanPath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastPlan" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastPlan" );
     }
 
     public static void setBuildingPlanPath( String planPath ) {
-        PropertyContainer.getInstance().set( "information.directory.lastPlan", planPath );
+        PropertyContainer.getGlobal().set( "information.directory.lastPlan", planPath );
     }
 
     public static void setLastFile( int i, String filename ) {
-        PropertyContainer.getInstance().set( "information.file.lastFile" + Integer.toString( i ), filename );
+        PropertyContainer.getGlobal().set( "information.file.lastFile" + Integer.toString( i ), filename );
     }
 
     public static String getLastFile( int i ) {
-        return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
+        return PropertyContainer.getGlobal().getAsString( "information.file.lastFile" + Integer.toString( i ) );
     }
 
     public static String getDoorTemplateFile() {

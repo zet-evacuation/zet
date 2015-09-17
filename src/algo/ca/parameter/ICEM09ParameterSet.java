@@ -50,21 +50,21 @@ public class ICEM09ParameterSet extends AbstractParameterSet {
 	 */
 	public ICEM09ParameterSet() {
 		/* im AbstractParameterSet:
-		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
-		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
-		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
-		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
-		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
-		ABSOLUTE_MAX_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
+		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
+		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
+		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
+		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
+		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
+		ABSOLUTE_MAX_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
 		 */
-		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
-		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
-		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
-		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
-		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
-		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
-		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
-		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
+		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
+		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getGlobal().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
+		PANIC_DECREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_DECREASE" );
+		PANIC_INCREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_INCREASE" );
+		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
+		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
+		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
+		PANIC_THRESHOLD = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
 	}
 
 	////* Some constants*////

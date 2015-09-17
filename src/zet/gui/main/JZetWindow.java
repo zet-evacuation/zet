@@ -61,6 +61,8 @@ import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
 import org.zet.components.model.editor.editview.JEditView;
 import de.zet_evakuierung.util.ConversionTools;
+import java.io.FileWriter;
+import org.zetool.components.property.PropertyTreeModelWriter;
 
 /**
  * The main window of the ZET application.
@@ -122,11 +124,11 @@ public class JZetWindow extends JFrame implements Localized {
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 		// set size and location, move to visible area if otherwise hidden
-		int x = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.x" );
-		int y = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.y" );
-		int width = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.width" );
-		int height = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.height" );
-		boolean maximized = PropertyContainer.getInstance().getAsBoolean( "settings.editor.window.position.maximized" );
+		int x = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.x" );
+		int y = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.y" );
+		int width = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.width" );
+		int height = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.height" );
+		boolean maximized = PropertyContainer.getGlobal().getAsBoolean( "settings.editor.window.position.maximized" );
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		if( width < 0 || width > d.width )
 			width = d.width/2;
@@ -171,8 +173,9 @@ public class JZetWindow extends JFrame implements Localized {
 				try {
 					ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
 					ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
-					PropertyContainer.saveConfigFile( ZETLoader.ptmInformation, new File( ZETLoader.informationFilename ) );
-					PropertyContainer.saveConfigFile( ZETLoader.ptmOptions, new File( ZETLoader.optionFilename ) );
+                                        PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
+					writer.saveConfigFile( ZETLoader.ptmInformation, new FileWriter( ZETLoader.informationFilename ) );
+					writer.saveConfigFile( ZETLoader.ptmOptions, new FileWriter( ZETLoader.optionFilename ) );
 				} catch( IOException ex ) {
 					System.err.println( "Error saving information file." );
 				}
@@ -185,13 +188,13 @@ public class JZetWindow extends JFrame implements Localized {
 			public void componentMoved( ComponentEvent e ) {
 				boolean maximized = (getExtendedState() & JFrame.MAXIMIZED_BOTH) != 0;
 				if( maximized ) {
-					PropertyContainer.getInstance().set( "settings.editor.window.position.maximized", true );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.maximized", true );
 				} else {
-					PropertyContainer.getInstance().set( "settings.editor.window.position.maximized", false );
-					PropertyContainer.getInstance().set( "settings.editor.window.position.x", getX() );
-					PropertyContainer.getInstance().set( "settings.editor.window.position.y", getY() );
-					PropertyContainer.getInstance().set( "settings.editor.window.position.width", getWidth() );
-					PropertyContainer.getInstance().set( "settings.editor.window.position.height", getHeight() );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.maximized", false );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.x", getX() );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.y", getY() );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.width", getWidth() );
+					PropertyContainer.getGlobal().set( "settings.editor.window.position.height", getHeight() );
 				}
 			}
 		} );

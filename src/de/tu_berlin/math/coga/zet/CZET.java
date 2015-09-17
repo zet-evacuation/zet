@@ -37,16 +37,17 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Project;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import org.zetool.components.property.PropertyLoadException;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
 import gui.ZETMain;
-import gui.editor.properties.PropertyLoadException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -61,6 +62,7 @@ import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
+import org.zetool.components.property.PropertyTreeModelLoader;
 
 
 /**
@@ -424,11 +426,12 @@ public class CZET {
 	private void computeZET() throws IOException {
 		// Try to load some properties
 		File propertyFile = new File( "./properties/properties.xml" );
-		try {
-			PropertyContainer.getInstance().applyParameters( propertyFile );
-		} catch( PropertyLoadException ex ) {
-			ZETLoader.exit( ex.getMessage() );
-		}
+            try {
+                PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+                loader.applyParameters(new FileReader(propertyFile), PropertyContainer.getGlobal());
+            } catch (PropertyLoadException ex) {
+                ZETLoader.exit(ex.getMessage());
+            }
 
 		ZETProjectFileReader fr;
 		fr = new ZETProjectFileReader();

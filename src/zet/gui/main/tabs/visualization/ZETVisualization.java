@@ -48,16 +48,16 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();
 
-		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
-		mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
-		scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
+		noRotate = !PropertyContainer.getGlobal().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
+		mouseInvert = PropertyContainer.getGlobal().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
+		scrollInvert = PropertyContainer.getGlobal().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
 
 		// this will create errors!
-//		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
+//		if( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.2d" ) )
 //			set2DView();
 //		else
 //			set3DView();
-//		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
+//		if( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.isometric" ) )
 //			this.setParallelViewMode( ParallelViewMode.Isometric );
 //		else
 //			this.setParallelViewMode( ParallelViewMode.Orthogonal );
@@ -71,10 +71,10 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 	@Override
 	public void display( GLAutoDrawable drawable ) {
 		// TODO improve option handling
-		//showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-		//showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
-		//showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
-		//showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+		//showEye = PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.eye" );
+		//showFPS = PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.fps" );
+		//showTimestepGraph = PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.timestepGraph" );
+		//showTimestepCellularAutomaton = PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.timestepCA" );
 		//System.out.println( "display" );
 		super.display( drawable );
 	}

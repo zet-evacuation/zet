@@ -6,9 +6,12 @@
 package gui;
 
 import ds.PropertyContainer;
-import gui.editor.properties.PropertyLoadException;
+import org.zetool.components.property.PropertyLoadException;
 import gui.propertysheet.PropertyTreeModel;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.nio.file.Path;
+import org.zetool.components.property.PropertyTreeModelLoader;
 
 /**
  * The class {@codeZETProperties} is a central point to ask for properties used by the program. It hides calls
@@ -35,8 +38,9 @@ public final class ZETProperties {
 		return currentPropertyFile;
 	}
 
-	public static void setCurrentProperty( Path path ) throws PropertyLoadException {
-		currentPropertyTreeModel = PropertyContainer.getInstance().applyParameters( path.toFile() );
+	public static void setCurrentProperty( Path path ) throws PropertyLoadException, FileNotFoundException {
+            PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+		currentPropertyTreeModel = loader.applyParameters( new FileReader(path.toFile()), PropertyContainer.getGlobal());
 		currentPropertyFile = path;
 	}
 	
@@ -57,7 +61,7 @@ public final class ZETProperties {
 	 * @return {@code true} if the default floor in the editor is hidden. {@code false} otherwise
 	 */
 	public static boolean isDefaultFloorHidden() {
-		return PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" );
+		return PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" );
 	}
 
 	/**
@@ -65,7 +69,7 @@ public final class ZETProperties {
 	 * @param defaultFloorHidden the status of the floor visibility
 	 */
 	public static void setDefaultFloorHidden( boolean defaultFloorHidden ) {
-		PropertyContainer.getInstance().set( "editor.options.view.hideDefaultFloor", defaultFloorHidden );
+		PropertyContainer.getGlobal().set( "editor.options.view.hideDefaultFloor", defaultFloorHidden );
 	}
 	
 	/*****************************************************************************
@@ -79,7 +83,7 @@ public final class ZETProperties {
 	 * @return {@code true} if the location of the camera (the eye) is visible in 2d-view of visualization
 	 */
 	public static boolean isShowEye() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
+		return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.eye" );
 	}
 	
 	/**
@@ -87,7 +91,7 @@ public final class ZETProperties {
 	 * @param showEye should the eye be hidden or visible
 	 */
 	public static void setShowEye( boolean showEye ) {
-		PropertyContainer.getInstance().set( "options.visualization.elements.eye", showEye );
+		PropertyContainer.getGlobal().set( "options.visualization.elements.eye", showEye );
 	}
 	
 	/**
@@ -95,7 +99,7 @@ public final class ZETProperties {
 	 * @return {@code true} if the current frame rate is drawn on the lower left edge, {@code false} otherwise
 	 */
 	public static boolean isShowFPS() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
+		return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.fps" );
 	}
 	
 	/**
@@ -103,7 +107,7 @@ public final class ZETProperties {
 	 * @param showFPS the value of the visibility of the frame rate
 	 */
 	public static void setShowFPS( boolean showFPS ) {
-		PropertyContainer.getInstance().set( "options.visualization.elements.fps", showFPS );
+		PropertyContainer.getGlobal().set( "options.visualization.elements.fps", showFPS );
 	}
 	
 	/**
@@ -111,7 +115,7 @@ public final class ZETProperties {
 	 * @return {@code true} if the current time step of the graph is drawn, {@code false} otherwise
 	 */
 	public static boolean isShowTimestepGraph() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
+		return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.timestepGraph" );
 	}
 	
 	/**
@@ -119,7 +123,7 @@ public final class ZETProperties {
 	 * @param showTimestepGraph decides if the time step should be visible
 	 */
 	public static void setShowTimestepGraph( boolean showTimestepGraph ) {
-		PropertyContainer.getInstance().set( "options.visualization.elements.eye", showTimestepGraph );
+		PropertyContainer.getGlobal().set( "options.visualization.elements.eye", showTimestepGraph );
 	}
 
 	/**
@@ -127,7 +131,7 @@ public final class ZETProperties {
 	 * @return {@code true} if the current time step of the cellular automaton is drawn, {@code false} otherwise
 	 */
 	public static boolean isShowTimestepCellularAutomaton() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+		return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.elements.timestepCA" );
 	}
 	
 	/**
@@ -135,14 +139,14 @@ public final class ZETProperties {
 	 * @param showTimestepCellularAutomaton decides if the time step should be visible
 	 */
 	public static void setShowTimestepCellularAutomaton( boolean showTimestepCellularAutomaton ) {
-		PropertyContainer.getInstance().set( "options.visualization.elements.eye", showTimestepCellularAutomaton );
+		PropertyContainer.getGlobal().set( "options.visualization.elements.eye", showTimestepCellularAutomaton );
 	}
 
 	/**
 	 * Returns the raster size for the helping raster on the background of any floor.
 	 * @return the raster size for the helping raster on the background of any floor
 	 */public static int getRasterSize() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.editRasterSize" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.editRasterSize" );
 	}
 
 	 /**
@@ -152,7 +156,7 @@ public final class ZETProperties {
 		* @return the size of an smaller helping raster
 		*/
 	public static int getRasterSizeSmall() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.editSmallRasterSize" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.editSmallRasterSize" );
 	}
 
 	/**
@@ -161,26 +165,26 @@ public final class ZETProperties {
 	 * @return the current raster size (as stored in the property container)
 	 */
 	public static int getRasterSizeSnap() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.editRasterSizeSnap" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.editRasterSizeSnap" );
 	}
 //public static void setRasterSize( int rasterSize ) {
-	//	PropertyContainer.getInstance().set( "editor.options.view.editRasterSize", rasterSize );
+	//	PropertyContainer.getGlobal().set( "editor.options.view.editRasterSize", rasterSize );
 	//}
 
 	public static int getDefaultFloorSizeMinX() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.minx" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.size.minx" );
 	}
 
 	public static int getDefaultFloorSizeMaxX() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.maxx" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.size.maxx" );
 	}
 
 	public static int getDefaultFloorSizeMinY() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.miny" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.size.miny" );
 	}
 
 	public static int getDefaultFloorSizeMaxY() {
-		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.maxy" );
+		return PropertyContainer.getGlobal().getAsInt( "editor.options.view.size.maxy" );
 	}
 
 }

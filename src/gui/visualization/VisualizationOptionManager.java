@@ -34,24 +34,24 @@ public class VisualizationOptionManager {
 	}
 
 	public static double getGraphHeight() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.graphHeight" );
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.graphHeight" );
 	}
 
 	//TODO: rename, as sthis is not visualization option but zet option!
 	public static double getFloorDistance() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.floorDistance" )*10;
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.floorDistance" )*10;
 	}
 
 	public static double getIndividualHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" );
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.individualHeight" );
 	}
 
 	public static double getIndividualRadius() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" );
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.individualRadius" );
 	}
 
 	public static double getWallHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.wallHeight" )*10;
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.wallHeight" )*10;
 	}
 
 	public static boolean animateMovements() {
@@ -59,36 +59,36 @@ public class VisualizationOptionManager {
 	}
 
 	public static Color getBackground() {
-		return PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.backgroundColor" );
+		return PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.backgroundColor" );
 	}
 
 	public static GLColor getIndividualColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.individualColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.individualColor" ) );
 	}
 
 	public static GLColor getCellFloorColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.floorColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.floorColor" ) );
 	}
 
 	public static GLColor getSaveCellFloorColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.safeAreaColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.safeAreaColor" ) );
 	}
 
 	public static GLColor getEvacuationCellFloorColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
 	}
 
 
 	public static double getNodeRadius() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.nodeRadius" );
+		return PropertyContainer.getGlobal().getAsDouble( "options.visualization.appearance.nodeRadius" );
 	}
 
 	public static GLColor getEvacuationNodeColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
 	}
 
 	public static GLColor getSourceNodeColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.sourceColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.sourceColor" ) );
 	}
 
 	public static GLColor getDeletedSourceNodeColor() {
@@ -101,18 +101,18 @@ public class VisualizationOptionManager {
 
 	public static GLColor getNodeColor() {
 		 //return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.nodeColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.nodeColor" ) );
 	}
 
 	public static GLColor getEdgeColor() {
 		//return new GLColor( 240, 240, 190, 140 ); // original zet-color
 		//return new GLColor( 75, 77, 73, 255);
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.edgeColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.edgeColor" ) );
 		//return new GLColor( Color.darkGray );
 	}
 
 	public static GLColor getFlowNodeColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.flowColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.flowColor" ) );
 	}
 
 	public static GLColor getFlowUnitColor() {
@@ -135,15 +135,15 @@ public class VisualizationOptionManager {
 	}
 
 	public static GLColor getStairCellFloorColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.stairAreaColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.stairAreaColor" ) );
 	}
 
 	public static GLColor getDelayCellFloorColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.delayAreaColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.delayAreaColor" ) );
 	}
 
 	public static GLColor getCellWallColor() {
-		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.wallColor" ) );
+		return new GLColor( PropertyContainer.getGlobal().getAsColor( "options.visualization.appeareance.colors.wallColor" ) );
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class VisualizationOptionManager {
 	 * @return true if the grid is visible, otherwise false
 	 */
 	public static boolean showSpaceBetweenCells() {
-		//return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.grid" );
+		//return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.view.grid" );
 		return false;
 	}
 
@@ -215,7 +215,7 @@ public class VisualizationOptionManager {
 	 * @return true if the cells are drawn smooth, false otherwise
 	 */
 	public static boolean smoothCellVisualization() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.smooth" );
+		return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.view.smooth" );
 	}
 
 	public static GLColor getCellSeperationColor() {
@@ -227,6 +227,6 @@ public class VisualizationOptionManager {
 	 * @return the currenly active quality preset
 	 */
 	public static QualityPreset getQualityPreset() {
-		return PropertyContainer.getInstance().getAs( "options.visualization.qualitySetting", QualityPreset.class);
+		return PropertyContainer.getGlobal().getAs( "options.visualization.qualitySetting", QualityPreset.class);
 	}
 }

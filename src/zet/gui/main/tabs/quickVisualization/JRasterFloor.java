@@ -111,8 +111,8 @@ public class JRasterFloor extends AbstractFloor {
      */
     public void displayFloor(Floor floor) {
         loaded = false;    // disable painting of children during display. would end up in exceptions due to the multi-thread approach
-        boolean showPotentialValue = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.staticPotential");
-        boolean showDynamicPotential = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.dynamicPotential");
+        boolean showPotentialValue = PropertyContainer.getGlobal().getAsBoolean("editor.options.cavis.staticPotential");
+        boolean showDynamicPotential = PropertyContainer.getGlobal().getAsBoolean("editor.options.cavis.dynamicPotential");
         boolean showCellUtilization = false;
         showPotentialValue = true;
         showDynamicPotential = false;

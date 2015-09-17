@@ -39,12 +39,12 @@ public abstract class AbstractParameterSet implements ParameterSet {
 	 * Initializes the default parameter set and loads some constants from the property container.
 	 */
 	public AbstractParameterSet() {
-		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
-		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
-		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
-		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
-		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
-		ABSOLUTE_MAX_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
+		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
+		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
+		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
+		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
+		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
+		ABSOLUTE_MAX_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
 	}
 
 	/**

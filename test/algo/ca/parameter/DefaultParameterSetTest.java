@@ -7,10 +7,13 @@ package algo.ca.parameter;
 
 import org.zetool.rndutils.RandomUtils;
 import org.zetool.rndutils.distribution.continuous.NormalDistribution;
-import gui.editor.properties.PropertyLoadException;
 import junit.framework.TestCase;
 import ds.PropertyContainer;
+import org.zetool.components.property.PropertyLoadException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import org.zetool.components.property.PropertyTreeModelLoader;
 import umontreal.iro.lecuyer.charts.XYLineChart;
 import umontreal.iro.lecuyer.stat.TallyStore;
 
@@ -26,9 +29,10 @@ public class DefaultParameterSetTest extends TestCase {
 	public DefaultParameterSetTest() {
 		File propertyFile = new File( "./properties/rimea.xml" );
 		try {
-			PropertyContainer.getInstance().applyParameters( propertyFile );
-		} catch( PropertyLoadException ex ) {
-			System.err.println( "Property loading error" );
+                    PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+                    loader.applyParameters(new FileReader(propertyFile), PropertyContainer.getGlobal());
+		} catch( PropertyLoadException | FileNotFoundException ex ) {
+		    System.err.println( "Property loading error" );
 		}
 	}
 

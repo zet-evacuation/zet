@@ -88,7 +88,7 @@ public class DefaultRuleSet extends RuleSet {
 	 */
 	@Override
 	protected void selfInit() {
-		PropertyContainer pc = PropertyContainer.getInstance();
+		PropertyContainer pc = PropertyContainer.getGlobal();
 		ArrayList<String> initRules = (ArrayList<String>) pc.get( "algo.ca.defaultRuleSet.init" );
 		ArrayList<String> loopRules = (ArrayList<String>) pc.get( "algo.ca.defaultRuleSet.loop" );
 		for( String ruleName : initRules )

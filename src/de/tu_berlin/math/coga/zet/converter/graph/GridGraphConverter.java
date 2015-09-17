@@ -59,7 +59,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 		mappingLocal.setFloorForNode( supersink, -1 );
 
 		// get attribute from property container
-		PropertyContainer propertyContainer = PropertyContainer.getInstance();
+		PropertyContainer propertyContainer = PropertyContainer.getGlobal();
 		boolean accurateDelayAreaCreation = propertyContainer.getAsBoolean( "converter.AccurateDelayAreaCreation" );
 		boolean accurateAssignmentAreaCration = propertyContainer.getAsBoolean( "converter.accurateAssignmentAreaCreation" );
 		if( debug ) {

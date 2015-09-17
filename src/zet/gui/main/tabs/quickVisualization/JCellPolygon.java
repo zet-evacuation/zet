@@ -67,7 +67,7 @@ public class JCellPolygon extends AbstractPolygon {
         this.cell = cell;
         this.fillColor = fillColor;
         setOpaque(false);
-        showIndividualNames = PropertyContainer.getInstance().getAsBoolean("editor.options.cavis.showIndividualNames");
+        showIndividualNames = PropertyContainer.getGlobal().getAsBoolean("editor.options.cavis.showIndividualNames");
         setUpToolTipText();
     }
 

@@ -872,7 +872,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
         double endy = mapping.getNodeRectangles().get( edge.end() ).getCenterY();
 
         double time = Math.sqrt( Math.pow( (startx - endx), 2 ) + Math.pow( (starty - endy), 2 ) );
-        PropertyContainer propertyContainer = PropertyContainer.getInstance();
+        PropertyContainer propertyContainer = PropertyContainer.getGlobal();
         int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
         time = time * precision / 400.0d;
         model.setExactTransitTime( edge, time );
@@ -1161,7 +1161,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
                     Path1 = 1;
                     Path2 = 1;
                   }
-                  PropertyContainer propertyContainer = PropertyContainer.getInstance();
+                  PropertyContainer propertyContainer = PropertyContainer.getGlobal();
                   int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
                   //System.out.println("Ergebnis: " + Path1*precision/400.0d + " " + Path2*precision/400.0d);
                   double PathLength = (0.5 * Path1 + 0.5 * Path2) * precision / 400.0d;

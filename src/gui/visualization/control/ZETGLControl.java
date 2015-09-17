@@ -238,7 +238,7 @@ public class ZETGLControl implements DrawableControlable {
 		buildingControl = new GLBuildingControl( buildingResults );
 		buildingControl.setScaling( sizeMultiplicator );
 		buildingControl.build();
-		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
+		showWalls( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.walls" ) );
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class ZETGLControl implements DrawableControlable {
 			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
 			caControl.build();
 		estimatedTime = 0;
-		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		showCellularAutomaton( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 		if( visibleFloor == -1 )
 			showAllFloors();
 		else
@@ -283,8 +283,8 @@ public class ZETGLControl implements DrawableControlable {
 
 			// TODO OpenGL equal-flow-arrival, see
 			estimatedTime = Math.max( estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep() );
-			showGraph( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
-			showNodeRectangles( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+			showGraph( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.graph" ) );
+			showNodeRectangles( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
 		} else {
 			hasGraph = false;
 		}
@@ -309,16 +309,16 @@ public class ZETGLControl implements DrawableControlable {
 	 * {@link PropertyContainer}.
 	 */
 	private void initSettings() {
-		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
-		showGraph( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
-		showNodeRectangles( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
-		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) )
+		showWalls( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.walls" ) );
+		showGraph( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.graph" ) );
+		showNodeRectangles( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+		showCellularAutomaton( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		if( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.floors" ) )
 			showAllFloors();
 		else
 			showFirstFloor();
 
-		switch( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) ) {
+		switch( PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" ) ) {
 			case 1:
 				showPotential( CellInformationDisplay.StaticPotential );
 				break;
@@ -347,7 +347,7 @@ public class ZETGLControl implements DrawableControlable {
 	 */
 	private void secondsPerStepGraph() {
 		// Set speed such that it arrives when the last individual is evacuated.
-		if( hasCellularAutomaton && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) )
+		if( hasCellularAutomaton && PropertyContainer.getGlobal().getAsBoolean( "options.visualization.flow.equalArrival" ) )
 			graphControl.setNanoSecondsPerStep( graphControl.getStepCount() == 0 ? 0 : (caControl.getNanoSecondsPerStep() * caControl.getStepCount()) / graphControl.getStepCount() );
 		else {
 			if( ca == null ) {

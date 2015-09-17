@@ -35,7 +35,7 @@ public class RandomOrderPlugin implements AlgorithmPlugin<EvacuationSimulationPr
   @Override
   public Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> getAlgorithm() {
     EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
-    //double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+    //double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
     //algo.setMaxTimeInSeconds( caMaxTime );
     return algo;
   }

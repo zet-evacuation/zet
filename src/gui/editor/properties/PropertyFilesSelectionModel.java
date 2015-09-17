@@ -14,16 +14,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class PropertyFilesSelectionModel.java
- * Created 03.07.2008, 19:22:25
- */
-
 package gui.editor.properties;
 
 import gui.propertysheet.PropertyTreeModel;
-import ds.PropertyContainer;
+import org.zetool.components.property.PropertyLoadException;
+import org.zetool.components.property.PropertyTreeModelLoader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -67,11 +64,12 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel<PropertyLi
 		try (DirectoryStream<Path> files = Files.newDirectoryStream( path, "*.xml" )) {
 			for( Path p : files ) {
 				System.out.println( "Property file found: " + p.getFileName() );
-				PropertyTreeModel ptm = PropertyContainer.loadConfigFile( p.toFile() );
+                                PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+				PropertyTreeModel ptm = loader.loadConfigFile( new FileReader(p.toFile()) );
 				properties.add( new PropertyListEntry( ptm.getPropertyName(), p ) );
 			}
 		} catch( PropertyLoadException ex ) {
-			System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile().getName() + "' ") + "wird übersprungen." );
+			System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile() + "' ") + "wird übersprungen." );
 		} catch( IOException ex ) {
 			System.err.println( "ERROR: " + ex.toString() );
 		}
@@ -86,10 +84,12 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel<PropertyLi
 		ArrayList<PropertyListEntry> prop = new ArrayList<>();
 
 		try (DirectoryStream<Path> files = Files.newDirectoryStream( path, "*.xml" )) {
-			for( Path p : files )
-				prop.add( new PropertyListEntry( PropertyContainer.loadConfigFile( p.toFile() ).getPropertyName(), p ) );
+                    for (Path p : files) {
+                                PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+                        prop.add(new PropertyListEntry(loader.loadConfigFile(new FileReader(p.toFile())).getPropertyName(), p));
+                    }
 		} catch( PropertyLoadException ex ) {
-			System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile().getName() + "' ") + "wird übersprungen." );
+			System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile() + "' ") + "wird übersprungen." );
 		} catch( IOException ex ) {
 			System.err.println( "ERROR: " + ex.toString() );
 		}

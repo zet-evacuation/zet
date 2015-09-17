@@ -269,7 +269,7 @@ public class JCAStatisticPanel extends JPanel {
 			}
 
 			for( Integer i : assignmentIndexToShow )
-				diagramCategoryListModel.addElement( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? "" : " - " + assignmentGroups.get( i ).toString()) );
+				diagramCategoryListModel.addElement( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? "" : " - " + assignmentGroups.get( i ).toString()) );
 			calculateStatistic( statisticType.getSelectedItem().toString() );
 		}
 	}
@@ -412,7 +412,7 @@ public class JCAStatisticPanel extends JPanel {
 			double income = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
 				dataset = new XYSeries( selectedBatchResultEntry.getName() +
-								(PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " +
+								(PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " +
 								assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 
 				for( int c = 0; c <= maxTimeStep; c++ ) {
@@ -451,7 +451,7 @@ public class JCAStatisticPanel extends JPanel {
 				categoryDatasetValues.add( new Double( waitedTime / currentAverageStepsPerSeconds ) );
 
 
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -465,7 +465,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( waitedTime / currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -479,7 +479,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( waitedTime / currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -493,7 +493,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( coveredDistance ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -508,7 +508,7 @@ public class JCAStatisticPanel extends JPanel {
 
 
 				categoryDatasetValues.add( distanceToPlannedExit);
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -522,7 +522,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( distanceToNearestExit);
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -536,7 +536,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( safe / currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -550,7 +550,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( safe / currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -564,7 +564,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( safe / currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -572,7 +572,7 @@ public class JCAStatisticPanel extends JPanel {
 			ArrayList<Double> coveredDistance = new ArrayList<>();
 			HashSet<Individual> tmp = new HashSet<>();
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
-				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 				coveredDistance = new ArrayList<>();
 				try {
 					coveredDistance = mccas.calculateAverageCoveredDistanceForGroupInTimeSteps( IndividualPerAssignmentIndexToShow.get( i ), 0, maxTimeStep );
@@ -591,7 +591,7 @@ public class JCAStatisticPanel extends JPanel {
 		if( diagrammName.equals( "maximale Geschwindigkeit über Zeit" ) ) {
 			double speed = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
-				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 				speed = 0.0;
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {
@@ -610,7 +610,7 @@ public class JCAStatisticPanel extends JPanel {
 		if( diagrammName.equals( "durschnittliche Geschwindigkeit über Zeit" ) ) {
 			double speed = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
-				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {
 					try {
@@ -635,7 +635,7 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( maxSpeed * currentAverageStepsPerSeconds );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
@@ -649,14 +649,14 @@ public class JCAStatisticPanel extends JPanel {
 				}
 
 				categoryDatasetValues.add( new Double( avSpeed * currentAverageStepsPerSeconds ) );
-				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				categoryDatasetAssignments.add( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 			}
 		}
 
 		if( diagrammName.equals( "Panik über Zeit" ) ) {
 			double panic = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
-				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {
 					try {
@@ -674,7 +674,7 @@ public class JCAStatisticPanel extends JPanel {
 		if( diagrammName.equals( "Erschöpfung über Zeit" ) ) {
 			double exhaustion = 0.0;
 			for( int i = 0; i < assignmentIndexToShow.size(); i++ ) {
-				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getInstance().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
+				dataset = new XYSeries( selectedBatchResultEntry.getName() + (PropertyContainer.getGlobal().getAsBoolean( "statistic.showAssignmentNamesInDiagrams" ) ? " - " + assignmentGroups.get( assignmentIndexToShow.get( i ) ).toString() : "") );
 				exhaustion = 0.0;
 				dataset.add( 0, 0 );
 				for( int c = 1; c <= maxTimeStep; c++ ) {

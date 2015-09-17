@@ -414,7 +414,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
      */
     @SuppressWarnings("serial")
     private class EditComboBoxRenderer extends ComboBoxRenderer<ZetObjectTypes> {
-        private GraphicsStyle graphicsStyle = new GraphicsStyle() {
+        private final GraphicsStyle graphicsStyle = new GraphicsStyle() {
         };
         @Override
         public Component getListCellRendererComponent(JList<? extends ZetObjectTypes> list, ZetObjectTypes value, int index, boolean isSelected, boolean cellHasFocus) {

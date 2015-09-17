@@ -157,7 +157,7 @@ public class AlgorithmControlCellularAutomaton {
 	void setUpSimulationAlgorithm() {
 		EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm = simulationAlgorithm.getAlgorithm();
 		cellularAutomatonAlgorithm.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
-		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		cellularAutomatonAlgorithm.setMaxTimeInSeconds( caMaxTime );
 	}
 

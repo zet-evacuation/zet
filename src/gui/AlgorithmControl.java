@@ -294,7 +294,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithms.InOrder.getAlgorithm();
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
-		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		ca.startRecording ();
 

@@ -167,7 +167,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );
 		slider.setLabelTable( table );
 		this.getLeftPanel().add( slider, BorderLayout.SOUTH );
-		setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
+		setFloorSelectorEnabled( !PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.floors" ) );
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		floorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) )
+				if( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.floors" ) )
 					return;
 				if( floorSelector.getSelectedIndex() >= 0 ) {
 					System.out.println( "Ausgewählter Floor:" + floorSelector.getSelectedItem() );
@@ -355,7 +355,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	}
 
 	public void updateFloorSelector( int floor ) {
-		//floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		//floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 		if( floor > -1 )
 			floorSelector.setSelectedIndex( floor );
 		selectedFloor = floorSelector.getSelectedIndex();

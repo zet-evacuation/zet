@@ -65,7 +65,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 	public void updateQuickFloorlist() {
 		//@//quickfloorSelector.clear();
-		//@//quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		//@//quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}
 
 	public void changeQuickFloor( FloorInterface floor ) {
@@ -111,7 +111,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 				if( quickfloorSelector.getSelectedItem() == null )
 					return;
 
-				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
+				final int add = PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
 
 				FloorViewModel dspFloor = (FloorViewModel) quickfloorSelector.getSelectedItem();
 				currentFloor = dspFloor;
@@ -172,7 +172,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 		updateQuickFloorlist();
 
-		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+		if( PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
 			if( projectControl.getProject().getBuildingPlan().getFloors().size() >= 2 )
 				changeQuickFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
 			else

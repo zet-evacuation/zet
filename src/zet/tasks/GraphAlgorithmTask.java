@@ -51,7 +51,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 
 		// call the graph algorithm
-		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		int maxTime = (int) PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
 		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
 		gt.setProblem( cav.getSolution() );
