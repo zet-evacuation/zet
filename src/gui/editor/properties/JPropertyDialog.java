@@ -28,11 +28,11 @@ public class JPropertyDialog extends JOptionsDialog {
     private static final String PATH = "./icons/";
     private static final String NAME = "open.png";
     Icon icon = new ImageIcon(PATH + NAME);
-    //ZETIconSet.Open.icon() );
+    //ZETIconSet.Open.icon();
     
     public JPropertyDialog(PropertyTreeModel ptm) {
         super(ptm);
-
+        
         int space = 10;
         JPanel buttonPanel = new JPanel();
         JButton btnOK = Button.newButton(ZETLocalization2.loc.getString("gui.OK"), getDefaultButtonsListener(), "ok");

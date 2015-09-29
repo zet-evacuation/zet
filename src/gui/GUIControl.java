@@ -76,6 +76,8 @@ import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.ZModelRoomEvent;
 import org.zetool.components.property.PropertyTreeModelWriter;
 import event.EventServer;
+import gui.editor.properties.ZETOptionsLocalization;
+import gui.propertysheet.PropertyTreeNode;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
@@ -89,16 +91,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import net.xeoh.plugins.base.PluginManager;
@@ -132,6 +138,7 @@ import zet.gui.main.toolbar.JQuickVisualizationToolBar;
 import zet.gui.main.toolbar.JStatisticCellularAutomatonToolbar;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
 import zet.gui.main.toolbar.JVisualizationToolbar;
+import zet.gui.main.toolbar.ZETIconSet;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.RasterizeTask;
 
@@ -286,8 +293,8 @@ public class GUIControl implements AlgorithmListener {
     batchView.registerOperationAction( new ConversionOnly(), "Conversion" );
 
     batchView.registerOutputAction( new OutputVisualization( this ), "Generate Visualization", new ImageIcon( "./icons/dropbox-icon-24.png" ) );
-    batchView.registerOutputAction( new OutputText(), "Commandline Output", new ImageIcon( "./icons/document-24.png" ) );
-    batchView.registerOutputAction( new TikZOut(), "TikZ Output", new ImageIcon( "./icons/document-24.png" ) );
+    batchView.registerOutputAction( new OutputText(), "Commandline Output", new ImageIcon( "./icons/document_24.png" ) );
+    batchView.registerOutputAction( new TikZOut(), "TikZ Output", new ImageIcon( "./icons/document_24.png" ) );
 
 		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
 		caStatisticView = new JStatisticPanel();
@@ -1204,10 +1211,25 @@ public class GUIControl implements AlgorithmListener {
 			editview.getFloor().getPlanImage().setAlpha( ip.getAlpha() );
 	}
 
+    private Function<PropertyTreeNode,Icon> iconSupplier = (PropertyTreeNode p) -> {
+        HashMap<String,Icon> iconMapping = new HashMap<>();
+        iconMapping.put("options.view.editor", ZETIconSet.OptionsEditor.icon());
+        iconMapping.put("options.filehandling", ZETIconSet.OptionsFileHandling.icon());
+        iconMapping.put("options.quickvisualization", ZETIconSet.OptionsQuickVisualization.icon());
+        iconMapping.put("options.visualization", ZETIconSet.OptionsVisualization.icon());
+        iconMapping.put("options.statistic", ZETIconSet.OptionsStatistic.icon());
+
+        System.out.println(p.getDisplayNameTag());
+        return iconMapping.get(p.getDisplayNameTag());
+    };
+    
 	public void showOptionsDialog() {
 		ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
 
-		JOptionsDialog opt = new JOptionsDialog( ZETLoader.ptmOptions );
+                
+                ZETLoader.ptmOptions.setLoc(ZETOptionsLocalization.loc);
+		JOptionsDialog opt = new JOptionsDialog( ZETLoader.ptmOptions, iconSupplier );
+                //opt.setIconSupplier(iconSupplier);
 		opt.setModal( true );
 		opt.setVisible( true );
 

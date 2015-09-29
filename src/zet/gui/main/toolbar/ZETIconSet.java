@@ -13,59 +13,71 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-/*
- * IconSet.java
- * Created on 19.12.2007, 00:29:35
- */
-
 package zet.gui.main.toolbar;
 
+import java.awt.MediaTracker;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 /**
  * Stores a list of default Icons with filename.
+ *
  * @author Jan-Philipp Kappmeier
  */
 public enum ZETIconSet {
-	EditDrawPointwise( "draw_polygon_pointwise.png" ),
-	EditDrawRectangled( "draw_polygon_rectangled.png" ),
-	EditSelect( "selection.png" ),
-	Exit( "exit.png" ),
-	Open( "open.png" ),
-	Play( "play.png" ),
-	PlayEnd( "end.png" ),
-	PlayPause( "pause.png" ),
-	PlayStart( "start.png" ),
-	PlayLoop( "loop.png" ),
-	PlayStop( "stop.png" ),
-	Rasterize( "rasterize.png" ),
-	Run( "run_algorithms.png" ),
-	Save( "save.png" ),
-	ShowAllFloors( "all_floors.png" ),
-	ShowCellularAutomaton( "show_ca.png" ),
-	ShowDynamicPotential( "show_potential_dyn.png" ),
-	ShowGraph( "show_graph.png" ),
-	ShowGraphGrid( "show_graph_grid.png" ),
-	ShowPotential( "show_potential.png" ),
-	ShowUsage( "show_usage.png" ),
-	ShowWaiting( "show_waiting.png" ),
-	ShowWalls( "show_walls.png" ),
-	Toggle2D3D( "viewmode_toggle.png" ),
-	ToggleOrthogonalIsometric( "orthogonal_isometric.png" ),
-	Video( "video.png" ),
-	ZoomIn( "zoom_in.png" ),
-	ZoomOut( "zoom_out.png" );
-	
-	private final static String path = "./icons/";
-	private Icon icon;
-	
-	ZETIconSet( String name ) {
-		this.icon = new ImageIcon( path + name );
-	}
-	
-	public Icon icon() {
-		return icon;
-	}
+
+    EditDrawPointwise("draw_polygon_pointwise.png"),
+    EditDrawRectangled("draw_polygon_rectangled.png"),
+    EditSelect("selection.png"),
+    Exit("exit.png"),
+    Open("open.png"),
+    Play("play.png"),
+    PlayEnd("end.png"),
+    PlayPause("pause.png"),
+    PlayStart("start.png"),
+    PlayLoop("loop.png"),
+    PlayStop("stop.png"),
+    Rasterize("rasterize.png"),
+    Run("run_algorithms.png"),
+    Save("save.png"),
+    ShowAllFloors("all_floors.png"),
+    ShowCellularAutomaton("show_ca.png"),
+    ShowDynamicPotential("show_potential_dyn.png"),
+    ShowGraph("show_graph.png"),
+    ShowGraphGrid("show_graph_grid.png"),
+    ShowPotential("show_potential.png"),
+    ShowUsage("show_usage.png"),
+    ShowWaiting("show_waiting.png"),
+    ShowWalls("show_walls.png"),
+    Toggle2D3D("viewmode_toggle.png"),
+    ToggleOrthogonalIsometric("orthogonal_isometric.png"),
+    Video("video.png"),
+    ZoomIn("zoom_in.png"),
+    ZoomOut("zoom_out.png"),
+    // Icons used in the options dialog
+    OptionsEditor("draw_polygon_rectangled.png"),
+    OptionsFileHandling("document_24.png"),
+    OptionsQuickVisualization("show_potential.png"),
+    OptionsVisualization("dropbox-icon-24.png"),
+    OptionsStatistic("video.png");
+
+    private final static String path = "./icons/";
+    private final Icon icon;
+
+    ZETIconSet(String name) {
+        ImageIcon imageIcon = new ImageIcon(path + name);
+        if( imageIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
+            Logger.getGlobal().log(Level.WARNING, "Loading of {0} failed. File not found? Fall back to error icon.", name);
+            this.icon = UIManager.getIcon("OptionPane.errorIcon");
+        } else {
+            this.icon = imageIcon;
+        }
+    }
+
+    public Icon icon() {
+        return icon;
+    }
 }
