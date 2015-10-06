@@ -10,12 +10,14 @@ import com.thoughtworks.xstream.XStream;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.localization.Localization;
 import ds.PropertyContainer;
+import org.zetool.components.property.PropertyLoadException;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.editor.properties.PropertyLoadException;
 import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +30,7 @@ import javax.swing.UIManager;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import org.zetool.components.framework.Menu;
+import org.zetool.components.property.PropertyTreeModelLoader;
 import zet.gui.GUILocalization;
 
 /**
@@ -215,7 +218,7 @@ public class ZETLoader {
             if (config.contains("property")) {
                 try {
                     ZETProperties.setCurrentProperty(Paths.get(config.getString("property")));
-                } catch (PropertyLoadException ex) {
+                } catch (PropertyLoadException | FileNotFoundException ex) {
                     log.log(Level.SEVERE, "Property file ''{0}'' cound not be loaded. Continuing with default.", config.getString("property"));
                 }
             }
@@ -291,34 +294,38 @@ public class ZETLoader {
                     if (ZETProperties.getCurrentPropertyTreeModel() == null) {
                         ZETProperties.setCurrentProperty(Paths.get(propertiesFile));
                     }
-                } catch (PropertyLoadException ex) {
+                } catch (PropertyLoadException | FileNotFoundException ex) {
                     Path p = Paths.get(propertiesFile).toAbsolutePath();
                     exit("Property file at '" + p + "' could not be loaded");
                 }
                 // Load default values
+                PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
                 try {
-                    ptmOptions = PropertyContainer.getInstance().applyParameters(optionFile);
-                } catch (PropertyLoadException ex1) {
+                    ptmOptions = loader.applyParameters(new FileReader(optionFile), PropertyContainer.getGlobal());
+                } catch (PropertyLoadException | FileNotFoundException ex1) {
+                    Logger.getLogger(ZETLoader.class.getName()).log(Level.SEVERE, null, ex1);
                     exit(ex1.getMessage());
                 }
-
                 try { // Load from default-file if no user-specific is available
-                    ptmInformation = PropertyContainer.getInstance().applyParameters(informationFile);
-                } catch (PropertyLoadException ex1) {
+                    ptmInformation = loader.applyParameters(new FileReader(informationFile), PropertyContainer.getGlobal());
+                } catch (PropertyLoadException | FileNotFoundException ex1) {
+                    Logger.getLogger(ZETLoader.class.getName()).log(Level.SEVERE, null, ex1);
                     exit(ex1.getMessage());
                 }
                 // Load user defined parameters, do not check if they exist
                 optionFile = new File(optionFilename);
                 informationFile = new File(informationFilename);
                 try {
-                    PropertyContainer.getInstance().applyParameters(optionFile);
-                } catch (PropertyLoadException ex) {
+                    loader.applyParameters(new FileReader(optionFile), PropertyContainer.getGlobal());
+                } catch (PropertyLoadException | FileNotFoundException ex) {
+                    Logger.getLogger(ZETLoader.class.getName()).log(Level.SEVERE, null, ex);
                     Path p = Paths.get(optionFilename).toAbsolutePath();
                     exit("Property file at '" + p + "' could not be loaded");
                 }
                 try {
-                    PropertyContainer.getInstance().applyParameters(informationFile);
-                } catch (PropertyLoadException ex) {
+                    loader.applyParameters(new FileReader(informationFile), PropertyContainer.getGlobal());
+                } catch (PropertyLoadException | FileNotFoundException ex) {
+                    Logger.getLogger(ZETLoader.class.getName()).log(Level.SEVERE, null, ex);
                     Path p = Paths.get(informationFilename).toAbsolutePath();
                     exit("Property file at '" + p + "' could not be loaded");
                 }
@@ -349,7 +356,7 @@ public class ZETLoader {
 
                 // load last used file, if necessary
                 if (loadLast) {
-                    loadedProject = PropertyContainer.getInstance().getAsString("information.file.lastFile1");
+                    loadedProject = PropertyContainer.getGlobal().getAsString("information.file.lastFile1");
                 }
 
                 if (!loadedProject.equals("")) {

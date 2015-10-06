@@ -27,7 +27,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.ComboBoxRenderer;
+import org.zet.components.model.editor.selectors.ComboBoxRenderer;
 
 
 /**
@@ -108,10 +108,10 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener, L
 		addSeparator();
 		add( new JLabel( " " ) );
 
-		btn2d3dSwitch = Button.newButton( ZETIconSet.Toggle2D3D.icon(), this, "2d3dSwitch", loc.getString( "Visualization.Switch2d3d" ), !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
+		btn2d3dSwitch = Button.newButton( ZETIconSet.Toggle2D3D.icon(), this, "2d3dSwitch", loc.getString( "Visualization.Switch2d3d" ), !PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2d3dSwitch );
-		btn2dSwitch = Button.newButton( ZETIconSet.ToggleOrthogonalIsometric.icon(), this, "2dSwitch", loc.getString( "Visualization.SwitchIso" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) );
-		btn2dSwitch.setEnabled( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
+		btn2dSwitch = Button.newButton( ZETIconSet.ToggleOrthogonalIsometric.icon(), this, "2dSwitch", loc.getString( "Visualization.SwitchIso" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.isometric" ) );
+		btn2dSwitch.setEnabled( PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2dSwitch );
 		addSeparator();
 		btnVideo = Button.newButton( ZETIconSet.Video.icon(), this, "video", loc.getString( "Visualization.SaveVideo" ) );
@@ -130,26 +130,26 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener, L
 		//btnPlayEnd = Button.newButton( IconSet.PlayEnd, this, "end", loc.getString( "playToEnd" ) );
 		//add( btnPlayEnd );
 		addSeparator();
-		btnShowWalls = Button.newButton( ZETIconSet.ShowWalls.icon(), this, "walls", loc.getString( "Visualization.ShowWalls" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
+		btnShowWalls = Button.newButton( ZETIconSet.ShowWalls.icon(), this, "walls", loc.getString( "Visualization.ShowWalls" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.walls" ) );
 		add( btnShowWalls );
-		btnShowGraph = Button.newButton( ZETIconSet.ShowGraph.icon(), this, "graph", loc.getString( "Visualization.ShowGraph" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
+		btnShowGraph = Button.newButton( ZETIconSet.ShowGraph.icon(), this, "graph", loc.getString( "Visualization.ShowGraph" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.graph" ) );
 		add( btnShowGraph );
-		btnShowGraphGrid = Button.newButton( ZETIconSet.ShowGraphGrid.icon(), this, "graphgrid", loc.getString( "Visualization.ShowGridRectangles" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+		btnShowGraphGrid = Button.newButton( ZETIconSet.ShowGraphGrid.icon(), this, "graphgrid", loc.getString( "Visualization.ShowGridRectangles" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
 		add( btnShowGraphGrid );
-		btnShowCellularAutomaton = Button.newButton( ZETIconSet.ShowCellularAutomaton.icon(), this, "ca", loc.getString( "Visualization.ShowCellularAutomaton" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		btnShowCellularAutomaton = Button.newButton( ZETIconSet.ShowCellularAutomaton.icon(), this, "ca", loc.getString( "Visualization.ShowCellularAutomaton" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 		add( btnShowCellularAutomaton );
 		addSeparator();
-		btnShowAllFloors = Button.newButton( ZETIconSet.ShowAllFloors.icon(), this, "floors", loc.getString( "Visualization.ShowAllFloors" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
+		btnShowAllFloors = Button.newButton( ZETIconSet.ShowAllFloors.icon(), this, "floors", loc.getString( "Visualization.ShowAllFloors" ), PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.floors" ) );
 		add( btnShowAllFloors );
 		addSeparator();
 
-		btnShowPotential = Button.newButton( ZETIconSet.ShowPotential.icon(), this, "potential", loc.getString( "Visualization.ShowPotential" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
+		btnShowPotential = Button.newButton( ZETIconSet.ShowPotential.icon(), this, "potential", loc.getString( "Visualization.ShowPotential" ), PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
 		add( btnShowPotential );
-		btnShowDynamicPotential = Button.newButton( ZETIconSet.ShowDynamicPotential.icon(), this, "dynamic", loc.getString( "Visualization.ShowDynamicPotential" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
+		btnShowDynamicPotential = Button.newButton( ZETIconSet.ShowDynamicPotential.icon(), this, "dynamic", loc.getString( "Visualization.ShowDynamicPotential" ), PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
 		add( btnShowDynamicPotential );
-		btnShowUtilization = Button.newButton( ZETIconSet.ShowUsage.icon(), this, "utilization", loc.getString( "Visualization.ShowUtilization" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
+		btnShowUtilization = Button.newButton( ZETIconSet.ShowUsage.icon(), this, "utilization", loc.getString( "Visualization.ShowUtilization" ), PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
 		add( btnShowUtilization );
-		btnShowWaiting = Button.newButton( ZETIconSet.ShowWaiting.icon(), this, "waiting", loc.getString( "Visualization.ShowWaitingTime" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
+		btnShowWaiting = Button.newButton( ZETIconSet.ShowWaiting.icon(), this, "waiting", loc.getString( "Visualization.ShowWaitingTime" ), PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
 		add( btnShowWaiting );
 		addSeparator();
 

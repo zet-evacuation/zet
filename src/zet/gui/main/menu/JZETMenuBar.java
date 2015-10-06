@@ -1,21 +1,23 @@
 
 package zet.gui.main.menu;
 
+import de.zet_evakuierung.model.AreaType;
 import org.zetool.common.localization.Localization;
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.localization.Localized;
 import ds.PropertyContainer;
+import org.zetool.components.property.PropertyLoadException;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
-import gui.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;
-import gui.editor.properties.PropertyLoadException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +29,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
-import zet.gui.main.tabs.base.RasterPaintStyle;
+import org.zet.components.model.editor.style.RasterPaintStyle;
+import org.zetool.components.property.PropertyTreeModelLoader;
 import zet.gui.treeview.JProjectTreeView;
 import zet.tasks.CellularAutomatonAlgorithms;
 
@@ -132,7 +135,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuGridPoints = Menu.addRadioButtonMenuItem( mGrid, "gui.menu.View.GridstylePoints", true, this, "gridPoint" );
 		mnuGridNotVisible = Menu.addRadioButtonMenuItem( mGrid, "gui.menu.View.GridstyleNone", false, this, "gridNo" );
 		mnuPaintRasterized = Menu.addCheckMenuItem( mView, "gui.menu.View.DrawOnGrid", true, this, "grid" );
-		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, "gui.menu.View.HideDefaultEvacuationFloor", PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor") , this, "defaultFloor" );
+		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, "gui.menu.View.HideDefaultEvacuationFloor", PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor") , this, "defaultFloor" );
 		mView.addSeparator();
 		Menu.addMenuItem( mView, "gui.menu.View.Screenshot", KeyEvent.VK_F12, this, "screenshot", 0 );
 
@@ -337,25 +340,25 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuAssignmentArea.setSelected( false );
 			control.updateVisibility( false );
 		} else if( e.getActionCommand().equals( "delayArea" ) ) {
-			control.updateVisibility( Areas.Delay, mnuDelayArea.isSelected() );
+			control.updateVisibility( AreaType.Delay, mnuDelayArea.isSelected() );
 		} else if( e.getActionCommand().equals( "stairArea" ) ) {
-			control.updateVisibility( Areas.Stair, mnuStairArea.isSelected() );
+			control.updateVisibility( AreaType.Stair, mnuStairArea.isSelected() );
 		} else if( e.getActionCommand().equals( "evacuationArea" ) ) {
-			control.updateVisibility( Areas.Evacuation, mnuEvacuationArea.isSelected() );
+			control.updateVisibility( AreaType.Evacuation, mnuEvacuationArea.isSelected() );
 		} else if( e.getActionCommand().equals( "inaccessibleArea" ) ) {
-			control.updateVisibility( Areas.Inaccessible, mnuInaccessibleArea.isSelected() );
+			control.updateVisibility( AreaType.Inaccessible, mnuInaccessibleArea.isSelected() );
 		} else if( e.getActionCommand().equals( "saveArea" ) ) {
-			control.updateVisibility( Areas.Save, mnuSaveArea.isSelected() );
+			control.updateVisibility( AreaType.Save, mnuSaveArea.isSelected() );
 		} else if( e.getActionCommand().equals( "assignmentArea" ) ) {
-			control.updateVisibility( Areas.Assignment, mnuAssignmentArea.isSelected() );
+			control.updateVisibility( AreaType.Assignment, mnuAssignmentArea.isSelected() );
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
 		} else if( e.getActionCommand().equals( "gridLine" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Lines );
+			control.setRasterPaintStyle(RasterPaintStyle.LINES );
 		} else if( e.getActionCommand().equals( "gridPoint" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Points );
+			control.setRasterPaintStyle(RasterPaintStyle.POINTS );
 		} else if( e.getActionCommand().equals( "gridNo" ) ) {
-			control.setRasterPaintStyle( RasterPaintStyle.Nothing );
+			control.setRasterPaintStyle(RasterPaintStyle.NOTHING );
 		} else if( e.getActionCommand().equals( "defaultFloor" ) ) {
 			control.showDefaultFloor( mnuHideDefaultFloor.isSelected() );
 		} else if( e.getActionCommand().equals( "loadBuildingPlan" ) ) {
@@ -448,19 +451,20 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.outputGraph();
 		} else if( e.getActionCommand().equals( "about" ) ) {
 			control.showAbout(); // show the about screen
-		} else if( e.getActionCommand().startsWith( "property") ) {
-			int p = Integer.parseInt( e.getActionCommand().substring( 8 ) );
-				PropertyListEntry entry = properties.get( p );
-				try {
-					System.out.println( "Loading property " + entry.getName() );
-					PropertyContainer.getInstance().applyParameters( entry.getFile() );
-					//init( ptm2 );
-				} catch( PropertyLoadException ex ) {
-					ex.printStackTrace( System.err );
-				}
-
-		} else
-			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+		} else if (e.getActionCommand().startsWith("property")) {
+                    int p = Integer.parseInt(e.getActionCommand().substring(8));
+                    PropertyListEntry entry = properties.get(p);
+                    try {
+                        PropertyTreeModelLoader loader = new PropertyTreeModelLoader();
+                        System.out.println("Loading property " + entry.getName());
+                        loader.applyParameters(new FileReader(entry.getFile()), PropertyContainer.getGlobal());
+                        //init( ptm2 );
+                    } catch (PropertyLoadException | FileNotFoundException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                } else {
+                    ZETLoader.sendError(loc.getString("gui.UnknownCommand") + " '" + e.getActionCommand() + "'. " + loc.getString("gui.ContactDeveloper"));
+                }
 	}
 
 	public void setEnabledShowAllAreas( boolean b ) {

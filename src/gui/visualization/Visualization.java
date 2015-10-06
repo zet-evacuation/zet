@@ -645,8 +645,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 
 	public void update() {
 		// TODO update weiterleiten an den MovieManager
-		//moviePath = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
-		//movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
+		//moviePath = PropertyContainer.getGlobal().getAsString( "options.filehandling.moviePath" );
+		//movieFrameName = PropertyContainer.getGlobal().getAsString( "options.filehandling.movieFrameName" );
 		repaint();
 	}
 

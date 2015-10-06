@@ -42,14 +42,14 @@ public class RectangleConverter extends BaseZToGraphConverter {
 	final static int FACTOR = 1;
 
 	static {
-		if( !PropertyContainer.getInstance().isDefined( "converter.AccurateDelayAreaCreation" ) )
-			PropertyContainer.getInstance().define( "converter.AccurateDelayAreaCreation", Boolean.class, true );
-		if( !PropertyContainer.getInstance().isDefined( "converter.accurateAssignmentAreaCreation" ) )
-			PropertyContainer.getInstance().define( "converter.accurateAssignmentAreaCreation", Boolean.class, true );
-		if( !PropertyContainer.getInstance().isDefined( "converter.Imbalance" ) )
-			PropertyContainer.getInstance().define( "converter.Imbalance", Integer.class, 1 );
-		if( !PropertyContainer.getInstance().isDefined( "converter.GraphPrecision" ) )
-			PropertyContainer.getInstance().define( "converter.GraphPrecision", Integer.class, 1 );
+		if( !PropertyContainer.getGlobal().isDefined( "converter.AccurateDelayAreaCreation" ) )
+			PropertyContainer.getGlobal().define( "converter.AccurateDelayAreaCreation", Boolean.class, true );
+		if( !PropertyContainer.getGlobal().isDefined( "converter.accurateAssignmentAreaCreation" ) )
+			PropertyContainer.getGlobal().define( "converter.accurateAssignmentAreaCreation", Boolean.class, true );
+		if( !PropertyContainer.getGlobal().isDefined( "converter.Imbalance" ) )
+			PropertyContainer.getGlobal().define( "converter.Imbalance", Integer.class, 1 );
+		if( !PropertyContainer.getGlobal().isDefined( "converter.GraphPrecision" ) )
+			PropertyContainer.getGlobal().define( "converter.GraphPrecision", Integer.class, 1 );
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
     mapping.setRoomForNode(supersink, null);
 
 		// get attribute from property container
-		PropertyContainer propertyContainer = PropertyContainer.getInstance();
+		PropertyContainer propertyContainer = PropertyContainer.getGlobal();
 		boolean accurateDelayAreaCreation = propertyContainer.getAsBoolean( "converter.AccurateDelayAreaCreation" );
 		boolean accurateAssignmentAreaCration = propertyContainer.getAsBoolean( "converter.accurateAssignmentAreaCreation" );
 		if( accurateDelayAreaCreation )
@@ -507,7 +507,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							double transitTimeStartEnd = startPath + endPath;
 
 							// getting the graph precision factor, defining the exactness of the distances
-							PropertyContainer propertyContainer = PropertyContainer.getInstance();
+							PropertyContainer propertyContainer = PropertyContainer.getGlobal();
 							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
 
 							// adjusting the transit time according to the graph precision value
@@ -584,7 +584,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 							transitTimeAB = transitTimeA + transitTimeB;
 
 							// getting the graph precision factor, defining the exactness of the distances
-							PropertyContainer propertyContainer = PropertyContainer.getInstance();
+							PropertyContainer propertyContainer = PropertyContainer.getGlobal();
 							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
 
 							// adjusting the transit time according to the graph precision value

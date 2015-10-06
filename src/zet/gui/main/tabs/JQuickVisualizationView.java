@@ -29,13 +29,13 @@ import java.util.Collections;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import statistic.ca.CAStatistic;
-import zet.gui.main.tabs.base.JFloorScrollPane;
-import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
+import org.zet.components.model.editor.floor.JFloorScrollPane;
+import org.zet.components.model.editor.editview.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.FloorComboBoxModel;
-import zet.gui.components.model.NamedComboBox;
-import zet.gui.main.tabs.editor.control.FloorViewModel;
+import org.zet.components.model.editor.editview.FloorComboBoxModel;
+import org.zet.components.model.editor.selectors.NamedComboBox;
+import org.zet.components.model.editor.floor.FloorViewModel;
 import zet.tasks.DisplayFloorTask;
 
 /**
@@ -65,7 +65,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 	public void updateQuickFloorlist() {
 		//@//quickfloorSelector.clear();
-		//@//quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		//@//quickfloorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}
 
 	public void changeQuickFloor( FloorInterface floor ) {
@@ -111,7 +111,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 				if( quickfloorSelector.getSelectedItem() == null )
 					return;
 
-				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
+				final int add = PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
 
 				FloorViewModel dspFloor = (FloorViewModel) quickfloorSelector.getSelectedItem();
 				currentFloor = dspFloor;
@@ -172,7 +172,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 		updateQuickFloorlist();
 
-		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+		if( PropertyContainer.getGlobal().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
 			if( projectControl.getProject().getBuildingPlan().getFloors().size() >= 2 )
 				changeQuickFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
 			else

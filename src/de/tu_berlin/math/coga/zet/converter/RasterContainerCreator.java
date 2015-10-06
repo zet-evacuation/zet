@@ -745,7 +745,7 @@ public class RasterContainerCreator {
 	}
 
 	public static void main( String args[] ) {
-		PropertyContainer propertyContainer = PropertyContainer.getInstance();
+		PropertyContainer propertyContainer = PropertyContainer.getGlobal();
 		propertyContainer.define( "converter.Imbalance", Integer.class, 1 );
 		propertyContainer.define( "converter.GraphPrecision", Integer.class, 2 );
 		propertyContainer.define( "converter.AccurateDelayAreaCreation", Boolean.class, false );

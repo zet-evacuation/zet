@@ -16,8 +16,8 @@
 
 package gui;
 
+import de.zet_evakuierung.model.AreaType;
 import ds.PropertyContainer;
-import gui.editor.Areas;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;
@@ -33,7 +33,7 @@ import javax.swing.UIManager;
  */
 public abstract class GUIOptionManager {
     /** The instance of the PropertyContainer. */
-    private static final PropertyContainer propertyContainer = PropertyContainer.getInstance();
+    private static final PropertyContainer propertyContainer = PropertyContainer.getGlobal();
     /** Global initialization of the GUIOptionManager. */
 
     static {
@@ -128,72 +128,72 @@ public abstract class GUIOptionManager {
         }
     }
 
-    public static EnumSet<Areas> getAreaVisibility() {
+    public static EnumSet<AreaType> getAreaVisibility() {
         /** The currently selected visible areas. */
-        EnumSet<Areas> areaVisibility = EnumSet.noneOf( Areas.class );
+        EnumSet<AreaType> areaVisibility = EnumSet.noneOf( AreaType.class );
         if( propertyContainer.getAsBoolean( "gui.optionManager.AssignmentAreaVisibility" ) )
-            areaVisibility.add( Areas.Assignment );
+            areaVisibility.add( AreaType.Assignment );
         if( propertyContainer.getAsBoolean( "gui.optionManager.DelayAreaVisibility" ) )
-            areaVisibility.add( Areas.Delay );
+            areaVisibility.add( AreaType.Delay );
         if( propertyContainer.getAsBoolean( "gui.optionManager.EvacuationAreaVisibility" ) )
-            areaVisibility.add( Areas.Evacuation );
+            areaVisibility.add( AreaType.Evacuation );
         if( propertyContainer.getAsBoolean( "gui.optionManager.InaccessibleAreaVisibility" ) )
-            areaVisibility.add( Areas.Inaccessible );
+            areaVisibility.add( AreaType.Inaccessible );
         if( propertyContainer.getAsBoolean( "gui.optionManager.SaveAreaVisibility" ) )
-            areaVisibility.add( Areas.Save );
+            areaVisibility.add( AreaType.Save );
         if( propertyContainer.getAsBoolean( "gui.optionManager.StairAreaVisibility" ) )
-            areaVisibility.add( Areas.Stair );
-        areaVisibility.add( Areas.Teleportation );
+            areaVisibility.add( AreaType.Stair );
+        areaVisibility.add( AreaType.Teleport);
         return areaVisibility;
     }
 
-    public static void setAreaVisibility( EnumSet<Areas> av ) {
-        propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( Areas.Assignment ) );
-        propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( Areas.Delay ) );
-        propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( Areas.Evacuation ) );
-        propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( Areas.Inaccessible ) );
-        propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( Areas.Save ) );
-        propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( Areas.Stair ) );
+    public static void setAreaVisibility( EnumSet<AreaType> av ) {
+        propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( AreaType.Assignment ) );
+        propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( AreaType.Delay ) );
+        propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( AreaType.Evacuation ) );
+        propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( AreaType.Inaccessible ) );
+        propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( AreaType.Save ) );
+        propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( AreaType.Stair ) );
     }
 
     public static String getSavePath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastProject" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastProject" );
     }
 
     public static void setSavePath( String path ) {
-        PropertyContainer.getInstance().set( "information.directory.lastProject", path );
+        PropertyContainer.getGlobal().set( "information.directory.lastProject", path );
     }
 
     public static String getImportPath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.importProject" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.importProject" );
     }
 
     public static void setImportPath( String importPath ) {
-        PropertyContainer.getInstance().set( "information.directory.importProject", importPath );
+        PropertyContainer.getGlobal().set( "information.directory.importProject", importPath );
     }
 
     public static String getSavePathResults() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastResult" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastResult" );
     }
 
     public static void setSavePathResults( String resultsPath ) {
-        PropertyContainer.getInstance().set( "information.directory.lastResult", resultsPath );
+        PropertyContainer.getGlobal().set( "information.directory.lastResult", resultsPath );
     }
 
     public static String getBuildingPlanPath() {
-        return PropertyContainer.getInstance().getAsString( "information.directory.lastPlan" );
+        return PropertyContainer.getGlobal().getAsString( "information.directory.lastPlan" );
     }
 
     public static void setBuildingPlanPath( String planPath ) {
-        PropertyContainer.getInstance().set( "information.directory.lastPlan", planPath );
+        PropertyContainer.getGlobal().set( "information.directory.lastPlan", planPath );
     }
 
     public static void setLastFile( int i, String filename ) {
-        PropertyContainer.getInstance().set( "information.file.lastFile" + Integer.toString( i ), filename );
+        PropertyContainer.getGlobal().set( "information.file.lastFile" + Integer.toString( i ), filename );
     }
 
     public static String getLastFile( int i ) {
-        return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
+        return PropertyContainer.getGlobal().getAsString( "information.file.lastFile" + Integer.toString( i ) );
     }
 
     public static String getDoorTemplateFile() {

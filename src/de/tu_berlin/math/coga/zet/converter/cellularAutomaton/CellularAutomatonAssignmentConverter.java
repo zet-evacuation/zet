@@ -114,7 +114,7 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 	 * @return Returns an individual of type Individual
 	 */
 	private static Individual generateIndividual( Person p ) {
-		String parameterName = PropertyContainer.getInstance().getAsString( "algo.ca.parameterSet" );
+		String parameterName = PropertyContainer.getGlobal().getAsString( "algo.ca.parameterSet" );
 		AbstractParameterSet.createParameterSet( "DefaultParameterSet" );
 		ParameterSet ps = AbstractParameterSet.createParameterSet( parameterName );
 

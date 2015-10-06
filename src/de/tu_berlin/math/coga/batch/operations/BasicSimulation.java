@@ -122,7 +122,7 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
 
     caAlgo.setProblem( new EvacuationSimulationProblem( (ca) ) );
     if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {
-      double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+      double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
       ((EvacuationCellularAutomatonAlgorithm)caAlgo).setMaxTimeInSeconds( caMaxTime );
     }
     ca.startRecording();

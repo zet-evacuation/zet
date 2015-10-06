@@ -45,7 +45,7 @@ public class EvacuationSimulationProblem extends CellularAutomatonSimulationProb
 		super( ca );
 		eca = ca;
 
-			PropertyContainer props = PropertyContainer.getInstance();
+			PropertyContainer props = PropertyContainer.getGlobal();
 
 		ruleSet = RuleSet.createRuleSet( props.getAsString( "algo.ca.ruleSet" ) );
 		for( Rule rule : ruleSet ) {

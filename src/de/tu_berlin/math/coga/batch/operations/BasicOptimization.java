@@ -136,7 +136,7 @@ public class BasicOptimization extends AbstractOperation<Project,GraphVisualizat
  		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
 
     gt.setProblem( eafp );
-		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		int maxTime = (int) PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		//Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
 		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
 

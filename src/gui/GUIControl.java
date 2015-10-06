@@ -39,8 +39,7 @@ import de.zet_evakuierung.template.TemplateLoader;
 import de.zet_evakuierung.template.Templates;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
-import gui.editor.Areas;
-import gui.editor.CoordinateTools;
+import org.zet.components.model.editor.CoordinateTools;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JPropertyDialog;
@@ -72,8 +71,10 @@ import de.tu_berlin.math.coga.batch.output.OutputText;
 import de.tu_berlin.math.coga.batch.output.OutputVisualization;
 import de.tu_berlin.math.coga.batch.output.TikZOut;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import de.zet_evakuierung.model.AreaType;
 import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.ZModelRoomEvent;
+import org.zetool.components.property.PropertyTreeModelWriter;
 import event.EventServer;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
@@ -83,6 +84,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,18 +113,16 @@ import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JZetWindow;
 import zet.gui.main.menu.JZETMenuBar;
-import zet.gui.main.menu.popup.EdgePopup;
-import zet.gui.main.menu.popup.PointPopup;
-import zet.gui.main.menu.popup.PolygonPopup;
-import zet.gui.main.tabs.EditViewControl;
-import zet.gui.main.tabs.EditViewModel;
-import zet.gui.main.tabs.JEditView;
+import org.zet.components.model.editor.floor.popup.PolygonPopup;
+import org.zet.components.model.editor.editview.EditViewControl;
+import org.zet.components.model.editor.editview.EditViewModel;
+import org.zet.components.model.editor.editview.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
-import zet.gui.main.tabs.base.RasterPaintStyle;
-import zet.gui.main.tabs.editor.EditMode;
-import zet.gui.main.tabs.editor.floor.SelectedFloorElements;
-import zet.gui.main.tabs.editor.panel.ChangeListener;
+import org.zet.components.model.editor.style.RasterPaintStyle;
+import org.zet.components.model.editor.floor.EditMode;
+import org.zet.components.model.editor.floor.SelectedFloorElements;
+import org.zet.components.model.editor.panel.ChangeListener;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -167,7 +167,7 @@ public class GUIControl implements AlgorithmListener {
   private JStatisticPanel caStatisticView;
   
 	private AlgorithmControl algorithmControl;
-	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
+	private ArrayList<AreaType> mode = new ArrayList<>( Arrays.asList( AreaType.values() ) );
 	private ZETGLControl control;
 	private Templates<Door> doorTemplates = new Templates<>("empty");
 	private Templates<ExitDoor> exitDoorTemplates = new Templates<>("empty");
@@ -224,13 +224,13 @@ public class GUIControl implements AlgorithmListener {
                     public void changed(ToolbarEvent c) {
                         switch(c.getChangeType()) {
                             case Selection:
-                                evc.setEditMode(EditMode.Selection);
+                                evc.setEditMode(EditMode.SELECTION);
                                 break;
                             case CreatePointwise:
-                                evc.setEditMode(EditMode.CreationPointWise);
+                                evc.setEditMode(EditMode.CREATE_POINTWISE);
                                 break;
                             case CreateRectangle:
-                                evc.setEditMode(EditMode.CreationRectangle);
+                                evc.setEditMode(EditMode.CREATE_RECTANGLE);
                                 break;
                             case SelectZetObjectType:
                                 evc.setZetObjectType(editToolBar.getZetObjectType());
@@ -366,7 +366,7 @@ public class GUIControl implements AlgorithmListener {
 	 * menu entry is set correct, too.
 	 * @param areaType the are type
 	 */
-	public void showArea( Areas areaType ) {
+	public void showArea( AreaType areaType ) {
 		updateVisibility( areaType, true );
 		// TODO make them visible!
 //		switch( areaType ) {
@@ -414,18 +414,18 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void visualizationToggle2D3D() {
-		PropertyContainer.getInstance().toggle( "settings.gui.visualization.2d" );
+		PropertyContainer.getGlobal().toggle( "settings.gui.visualization.2d" );
 		updateVisualizationElements();
 	}
 
 	public void visualizationToggle2D() {
-		PropertyContainer.getInstance().toggle( "settings.gui.visualization.isometric" );
+		PropertyContainer.getGlobal().toggle( "settings.gui.visualization.isometric" );
 		updateVisualizationElements();
 	}
 
 	public void updateVisualizationElements() {
-		final boolean visualization3D = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" );
-		final boolean visualization2D = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" );
+		final boolean visualization3D = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.2d" );
+		final boolean visualization2D = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.isometric" );
 		visualizationToolBar.setSelected2d3d( visualization3D );
 		visualizationToolBar.setEnabled2d( visualization2D );
 		visualizationToolBar.setSelected2d( visualization2D );
@@ -438,7 +438,7 @@ public class GUIControl implements AlgorithmListener {
 	public void createVideo() {
 		if( visualization.isAnimating() )
 			visualization.stopAnimation();
-		String path = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
+		String path = PropertyContainer.getGlobal().getAsString( "options.filehandling.moviePath" );
 		JVideoOptionsDialog vo = new JVideoOptionsDialog( editor );
 		// Setze die erwartete Laufzeit
 		vo.setEstimatedTime( visualization.getControl().getEstimatedTime() );
@@ -452,7 +452,7 @@ public class GUIControl implements AlgorithmListener {
 		if( vo.getRetVal() == JOptionPane.OK_OPTION ) {
 			visualization.setTexts( vo.getTextureFontStrings() );
 			zcontrol.getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
-			String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
+			String movieFrameName = PropertyContainer.getGlobal().getAsString( "options.filehandling.movieFrameName" );
 			// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 			String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
 			MovieManager movieCreator = visualization.getMovieCreator();
@@ -461,13 +461,13 @@ public class GUIControl implements AlgorithmListener {
 			else
 				movieCreator.setFramename( movieFrameName );
 			path = vo.getMoviePath();
-			PropertyContainer.getInstance().set( "options.filehandling.moviePath", path );
+			PropertyContainer.getGlobal().set( "options.filehandling.moviePath", path );
 			if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
 				path += "/";
 			String movieFileName = IOTools.getNextFreeNumberedFilename( path, projectName, 3 );
 			movieCreator.setFilename( movieFileName );
-			movieCreator.setPath( PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" ) );
-			movieCreator.setFramename( PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" ) );
+			movieCreator.setPath( PropertyContainer.getGlobal().getAsString( "options.filehandling.moviePath" ) );
+			movieCreator.setFramename( PropertyContainer.getGlobal().getAsString( "options.filehandling.movieFrameName" ) );
 			movieCreator.setMovieWriter( vo.getMovieWriter() );
 			visualization.setRecording( RecordingMode.Recording, vo.getResolution() );
 			movieCreator.setWidth( vo.getResolution().width );
@@ -486,7 +486,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void takeScreenshot() {
-		String path = PropertyContainer.getInstance().getAsString( "options.filehandling.screenshotPath" );
+		String path = PropertyContainer.getGlobal().getAsString( "options.filehandling.screenshotPath" );
 		if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
 			path += "/";
 		String projectName;
@@ -548,48 +548,48 @@ public class GUIControl implements AlgorithmListener {
 		// repaint once
 		visualization.repaint();
 	}
-	private boolean showWalls = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" );
+	private boolean showWalls = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.walls" );
 
 	public void visualizationShowWalls() {
 		showWalls = !showWalls;
 		visualizationToolBar.setSelectedShowWalls( showWalls );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.walls", showWalls );
+		PropertyContainer.getGlobal().set( "settings.gui.visualization.walls", showWalls );
 		visualization.getControl().showWalls( showWalls );
 		visualization.repaint();
 	}
 
-	private boolean showGraph = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" );
+	private boolean showGraph = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.graph" );
 
 	public void visualizationShowGraph() {
 		showGraph = !showGraph;
 		visualizationToolBar.setSelectedShowGraph( showGraph );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.graph", showGraph );
+		PropertyContainer.getGlobal().set( "settings.gui.visualization.graph", showGraph );
 		visualization.getControl().showGraph( showGraph );
 		visualization.repaint();
 	}
-	public boolean showGraphGrid = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" );
+	public boolean showGraphGrid = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.nodeArea" );
 
 	public void visualizationShowGraphGrid() {
 		showGraphGrid = !showGraphGrid;
 		visualizationToolBar.setSelectedShowGraphGrid( showGraphGrid );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.nodeArea", showGraphGrid );
+		PropertyContainer.getGlobal().set( "settings.gui.visualization.nodeArea", showGraphGrid );
 		visualization.getControl().showNodeRectangles( showGraphGrid );
 		visualization.repaint();
 
 	}
-	public boolean showCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" );
+	public boolean showCellularAutomaton = PropertyContainer.getGlobal().getAsBoolean( "settings.gui.visualization.cellularAutomaton" );
 
 	public void visualizationShowCellularAutomaton() {
 		showCellularAutomaton = !showCellularAutomaton;
 		visualizationToolBar.setSelectedShowCellularAutomaton( showCellularAutomaton );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.cellularAutomaton", showCellularAutomaton );
+		PropertyContainer.getGlobal().set( "settings.gui.visualization.cellularAutomaton", showCellularAutomaton );
 		visualization.getControl().showCellularAutomaton( showCellularAutomaton );
 		visualization.repaint();
 
 	}
 
 	public void visualizationShowAllFloors() {
-		final boolean showAllFloors = PropertyContainer.getInstance().toggle( "settings.gui.visualization.floors" );
+		final boolean showAllFloors = PropertyContainer.getGlobal().toggle( "settings.gui.visualization.floors" );
 		visualizationToolBar.setSelectedAllFloors( showAllFloors );
 		visualizationView.setFloorSelectorEnabled( !showAllFloors );
 		if( showAllFloors )
@@ -600,17 +600,17 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 //	public void visualizationShowStaticPotential() {
-//		final int oldValue = PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" );
+//		final int oldValue = PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" );
 //				if( oldValue == 1 ) {
 //					btnShowPotential.setSelected( false );
 //					control.showPotential( CellInformationDisplay.NoPotential );
-//					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 0 );
+//					PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 0 );
 //				} else {
 //					btnShowPotential.setSelected( true );
 //					btnShowDynamicPotential.setSelected( false );
 //					btnShowUtilization.setSelected( false );
 //					btnShowWaiting.setSelected( false );
-//					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 1 );
+//					PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 1 );
 //					visualizationView.unselectPotentialSelector();
 //					control.activateMergedPotential();
 //					control.showPotential( CellInformationDisplay.StaticPotential );
@@ -619,15 +619,15 @@ public class GUIControl implements AlgorithmListener {
 //
 //	}
 	public void visualizationShowCellInformation( CellInformationDisplay cid ) {
-		final int oldValue = PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" );
+		final int oldValue = PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" );
 		if( oldValue == cid.id() ) {
 			// die werte waren gleich. schalte aus.
 			visualizationToolBar.setSelectedCellInformationDisplay( CellInformationDisplay.NoPotential );
-			PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", CellInformationDisplay.NoPotential.id() );
+			PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", CellInformationDisplay.NoPotential.id() );
 			visualization.getControl().showPotential( CellInformationDisplay.NoPotential );
 		} else {
 			visualizationToolBar.setSelectedCellInformationDisplay( cid );
-			PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", cid.id() );
+			PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", cid.id() );
 			visualizationView.unselectPotentialSelector();
 			if( cid == CellInformationDisplay.StaticPotential )
 				visualization.getControl().activateMergedPotential();
@@ -868,7 +868,7 @@ public class GUIControl implements AlgorithmListener {
 			}
 		};
 	}
-	private boolean createCopy = PropertyContainer.getInstance().getAsBoolean( "options.filehandling.createBackup" );
+	private boolean createCopy = PropertyContainer.getGlobal().getAsBoolean( "options.filehandling.createBackup" );
 
 	public void saveProjectAs() {
 		if( jfcProject.showSaveDialog( editor ) == JFileChooser.APPROVE_OPTION ) {
@@ -1083,13 +1083,13 @@ public class GUIControl implements AlgorithmListener {
 	 * @param areaVisibility the type of area that should be hidden or shown
 	 * @param value shows the specified type of area if {@code true}, hides it otherwise
 	 */
-	public void updateVisibility( Areas areaVisibility, boolean value ) {
+	public void updateVisibility( AreaType areaVisibility, boolean value ) {
 		if( value && !mode.contains( areaVisibility ) )
 			mode.add( areaVisibility );
 		else if( !value )
 			mode.remove( areaVisibility );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != AreaType.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 
@@ -1101,9 +1101,9 @@ public class GUIControl implements AlgorithmListener {
 	public void updateVisibility( boolean b ) {
 		mode.clear();
 		if( b )
-			mode.addAll( Arrays.asList( Areas.values() ) );
+			mode.addAll( Arrays.asList( AreaType.values() ) );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != AreaType.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 
@@ -1123,14 +1123,14 @@ public class GUIControl implements AlgorithmListener {
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintStyle ) {
 		//editview.getFloor().setRasterPaintStyle( rasterPaintStyle );
                 System.err.println("TODO: pass new rasterpaint style to edit view" );
-		menuBar.setSelectedGridLines( rasterPaintStyle == RasterPaintStyle.Lines );
-		menuBar.setSelectedGridPoints( rasterPaintStyle == RasterPaintStyle.Points );
-		menuBar.setSelectedGridNotVisible( rasterPaintStyle == RasterPaintStyle.Nothing );
+		menuBar.setSelectedGridLines( rasterPaintStyle == RasterPaintStyle.LINES );
+		menuBar.setSelectedGridPoints( rasterPaintStyle == RasterPaintStyle.POINTS );
+		menuBar.setSelectedGridNotVisible( rasterPaintStyle == RasterPaintStyle.NOTHING );
 	}
 
 	public void showDefaultFloor( boolean b ) {
 		ZETProperties.isDefaultFloorHidden();
-		PropertyContainer.getInstance().set( "editor.options.view.hideDefaultFloor", b );
+		PropertyContainer.getGlobal().set( "editor.options.view.hideDefaultFloor", b );
 		editview.displayProject();
 
 	}
@@ -1212,7 +1212,8 @@ public class GUIControl implements AlgorithmListener {
 		opt.setVisible( true );
 
 		try {	// Save results in options file
-			PropertyContainer.saveConfigFile( ZETLoader.ptmOptions, new File( ZETLoader.optionFilename ) );
+                    PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
+			writer.saveConfigFile( ZETLoader.ptmOptions, new FileWriter( ZETLoader.optionFilename ) );
 		} catch( IOException ex ) {
 			ZETLoader.sendError( "Error saving config file!" ); // TODO loc
 		}
@@ -1227,7 +1228,8 @@ public class GUIControl implements AlgorithmListener {
 		opt.setVisible( true );
 
 		try {	// Save results in settings file
-			PropertyContainer.saveConfigFile( ZETLoader.ptmInformation, new File( ZETLoader.informationFilename ) );
+                    PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
+			writer.saveConfigFile( ZETLoader.ptmInformation, new FileWriter( ZETLoader.informationFilename ) );
 		} catch( IOException ex ) {
 			ZETLoader.sendError( "Error saving settings file!" ); // TODO loc
 		}

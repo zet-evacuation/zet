@@ -71,7 +71,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.zetool.components.framework.Button;
-import zet.gui.components.model.ComboBoxRenderer;
+import org.zet.components.model.editor.selectors.ComboBoxRenderer;
 import zet.gui.GUILocalization;
 
 /**

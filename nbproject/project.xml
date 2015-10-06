@@ -61,6 +61,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>zetool-components-property</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>nbbuild.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>zetool-graph</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build-nb.xml</script>

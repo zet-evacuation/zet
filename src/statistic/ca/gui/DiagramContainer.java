@@ -128,7 +128,7 @@ public class DiagramContainer extends JPanel {
 		jcp.setMaximumSize (jcp.getPreferredSize ());
 		jcp.setChart (chart);
 		
-		if (PropertyContainer.getInstance().getAsBoolean( "statistic.blackAndWhiteDiagrams") && chart.getPlot () instanceof XYPlot) {
+		if (PropertyContainer.getGlobal().getAsBoolean( "statistic.blackAndWhiteDiagrams") && chart.getPlot () instanceof XYPlot) {
 			chart.getXYPlot().setRenderer (new ChartRenderer ());
 		}
 		

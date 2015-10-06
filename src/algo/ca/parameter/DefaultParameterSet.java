@@ -47,14 +47,14 @@ public class DefaultParameterSet extends AbstractParameterSet {
 	 * Creates a new instance with some static values stored in the {@code PropertyContainer}.
 	 */
 	public DefaultParameterSet() {
-		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
-		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
-		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
-		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
-		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
-		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
-		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
-		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
+		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
+		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getGlobal().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
+		PANIC_DECREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_DECREASE" );
+		PANIC_INCREASE = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_INCREASE" );
+		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
+		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
+		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getGlobal().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
+		PANIC_THRESHOLD = PropertyContainer.getGlobal().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
 	}
 
 	/**
