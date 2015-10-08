@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.BuildingPlan;
 
 
@@ -12,11 +12,11 @@ import de.zet_evakuierung.model.BuildingPlan;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphConverterAndShrinker extends Algorithm<BuildingPlan, NetworkFlowModel> {
-	private final Algorithm<BuildingPlan, NetworkFlowModel> converter;
-	private final Algorithm<NetworkFlowModel, NetworkFlowModel> shrinker;
+public class GraphConverterAndShrinker extends AbstractAlgorithm<BuildingPlan, NetworkFlowModel> {
+	private final AbstractAlgorithm<BuildingPlan, NetworkFlowModel> converter;
+	private final AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> shrinker;
 
-	public GraphConverterAndShrinker( Algorithm<BuildingPlan,NetworkFlowModel> converter, Algorithm<NetworkFlowModel,NetworkFlowModel> shrinker ) {
+	public GraphConverterAndShrinker( AbstractAlgorithm<BuildingPlan,NetworkFlowModel> converter, AbstractAlgorithm<NetworkFlowModel,NetworkFlowModel> shrinker ) {
 		this.converter = converter;
 		this.shrinker = shrinker;
 	}

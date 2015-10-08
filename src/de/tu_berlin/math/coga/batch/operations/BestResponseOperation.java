@@ -9,7 +9,7 @@ import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -78,7 +78,7 @@ public class BestResponseOperation extends AbstractOperation<Project, Evacuation
     // step 1: compute an exit assignment
     // here we use plugins to select type of exit assignment
 
-    final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
+    final AbstractAlgorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
     conv.setProblem( project.getBuildingPlan() );
 		conv.run();
     NetworkFlowModel networkFlowModel = conv.getSolution();
@@ -170,7 +170,7 @@ public class BestResponseOperation extends AbstractOperation<Project, Evacuation
 
     // step 3: simulate
     //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
-    Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
+    AbstractAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
     //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
     //selected = cellularAutomatonAlgorithm;
 

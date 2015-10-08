@@ -27,13 +27,13 @@ import org.zetool.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 
 /**
  *
  * @author Martin Groß
  */
-public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestArrivalAugmentingPathProblem, EarliestArrivalAugmentingPath> {
+public class EarliestArrivalAugmentingPathAlgorithm extends AbstractAlgorithm<EarliestArrivalAugmentingPathProblem, EarliestArrivalAugmentingPath> {
 
     private static final Logger LOGGER = Logger.getLogger(EarliestArrivalAugmentingPathAlgorithm.class.getCanonicalName());
 

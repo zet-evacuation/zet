@@ -3,7 +3,7 @@ package batch.plugins.impl.eat;
 import batch.plugins.AlgorithmPlugin;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -30,9 +30,9 @@ public class Tjandra implements AlgorithmPlugin<EarliestArrivalFlowProblem, Path
   }
 
   @Override
-  public Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> getAlgorithm() {
+  public AbstractAlgorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> getAlgorithm() {
 
-    Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> algo = new Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime>() {
+    AbstractAlgorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> algo = new AbstractAlgorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime>() {
       @Override
       protected PathBasedFlowOverTime runAlgorithm( EarliestArrivalFlowProblem problem ) {
         System.err.println( "Running the plugin for Tjandras SEAAP-Algorithm with an estimated time horizon of "

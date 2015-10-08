@@ -4,7 +4,7 @@
  */
 package zet.tasks;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
@@ -20,7 +20,7 @@ import javax.swing.SwingWorker;
 public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements AlgorithmListener {
 	private static Logger log = Logger.getGlobal();
 
-	ArrayList<Algorithm<?,?>> algorithms;
+	ArrayList<AbstractAlgorithm<?,?>> algorithms;
 
 	public SerialTask() {
 		algorithms = new ArrayList<>();
@@ -39,19 +39,19 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 		return error != null;
 	}
 
-	public SerialTask( Algorithm<?,?> algorithm ) {
+	public SerialTask( AbstractAlgorithm<?,?> algorithm ) {
 		algorithms = new ArrayList<>();
 		algorithms.add( algorithm );
 	}
 
-	public void add( Algorithm<?,?> algorithm ) {
+	public void add( AbstractAlgorithm<?,?> algorithm ) {
 		algorithms.add( algorithm );
 	}
 
 	@Override
 	protected Void doInBackground() throws Exception {
 		try {
-			for( Algorithm<?,?> algorithm : algorithms ) {
+			for( AbstractAlgorithm<?,?> algorithm : algorithms ) {
 				algorithm.addAlgorithmListener( this );
 				algorithm.run();
 			}

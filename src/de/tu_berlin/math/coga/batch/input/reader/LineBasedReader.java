@@ -1,5 +1,17 @@
-/**
- * LineBasedReader.java Created: 18.07.2014, 17:49:04
+/* zet evacuation tool copyright © 2007-15 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	02110-1301, USA.
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
@@ -12,6 +24,7 @@ import java.io.IOException;
 /**
  * An implementation of an {@link InputFileReader} that reads line by line.
  * @author Jan-Philipp Kappmeier
+ * @param <T> the type that is read
  */
 public abstract class LineBasedReader<T> extends InputFileReader<T> {
   private boolean stop = false;
@@ -73,13 +86,14 @@ public abstract class LineBasedReader<T> extends InputFileReader<T> {
     }
   }
 
-  /**
-   * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are required.
-   * @param file the file which contains the maximum flow problem.
-   * @param propertiesOnly whether only the number of nodes and edges should be read. Much faster than reading the whole
-   * file.
-   * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for storage.
-   */
+    /**
+     * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are required. 4n + 8m + O(1) Bytes required for
+     * storage.
+     *
+     * @param file the file which contains the maximum flow problem.
+     * @param propertiesOnly whether only the number of nodes and edges should be read. Much faster than reading the
+     * whole file.
+     */
   protected void runAlgorithmMemory( File file, boolean propertiesOnly ) {
     String line = null;
     int lineIndex = 1;

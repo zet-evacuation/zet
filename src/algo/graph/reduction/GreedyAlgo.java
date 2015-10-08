@@ -5,7 +5,7 @@
 package algo.graph.reduction;
 
 import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author schwengf
  */
-public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree> {
+public class GreedyAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree> {
 
   double t = 3;
   int[][] used;

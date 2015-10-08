@@ -13,7 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package algo.graph.exitassignment;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -21,7 +20,7 @@ import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.graph.Edge;
 import org.zetool.graph.structure.Forest;
@@ -42,7 +41,8 @@ import org.zetool.netflow.dynamic.TimeHorizonBounds;
  *
  * @author Martin Groß
  */
-public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends Algorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
+public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment
+        extends AbstractAlgorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
@@ -52,7 +52,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null);
-        IdentifiableObjectMapping<Edge, Boolean> shortestEdges = new IdentifiableObjectMapping<>(model.graph().edges() );
+        IdentifiableObjectMapping<Edge, Boolean> shortestEdges = new IdentifiableObjectMapping<>(model.graph().edges());
         for (Node source : model.getSources()) {
             dijkstra.setSource(source);
             dijkstra.run();
@@ -75,14 +75,14 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
         }
 
         EarliestArrivalFlowProblem problem;// = new EarliestArrivalFlowProblem(reducedCapacities, model.graph(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
-				problem = model.getEAFP();
-        Algorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
+        problem = model.getEAFP();
+        AbstractAlgorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
 
         //problem = new EarliestArrivalFlowProblem(reducedCapacities, model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-				problem = model.getEAFP( estimator.getSolution().getUpperBound() );
-        Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
+        problem = model.getEAFP(estimator.getSolution().getUpperBound());
+        AbstractAlgorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
         PathBasedFlowOverTime paths = algorithm.getSolution().getPathBased();
@@ -117,7 +117,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
             }
         }
         MaximumFlowProblem problem = new MaximumFlowProblem(model.graph(), newCapacities, model.getSources(), sink);
-        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
+        AbstractAlgorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();
         return algorithm.getSolution().getFlowValue();
@@ -125,9 +125,10 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
 
     /**
      * Returns the calculated exit assignment.
+     *
      * @return the calculated exit assignment.
      */
-	@Override
+    @Override
     public ExitAssignment getExitAssignment() {
         return getSolution();
     }

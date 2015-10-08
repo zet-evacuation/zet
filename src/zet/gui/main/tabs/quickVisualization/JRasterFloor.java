@@ -63,7 +63,7 @@ public class JRasterFloor extends AbstractFloor {
     }
 
     public JRasterFloor() {
-        super(new FloorViewModel(null));
+        super(new FloorViewModel(null, null));
 
         setLayout(null);
         setBackground(Color.black);

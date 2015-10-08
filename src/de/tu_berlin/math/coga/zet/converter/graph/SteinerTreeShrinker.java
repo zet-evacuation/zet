@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.MSTSteiner;
 import algo.graph.spanningtree.Prim;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
@@ -21,7 +21,7 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
  *
  * @author schwengf
  */
-public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel> {
+public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel,NetworkFlowModel> {
 
     private NetworkFlowModel minspanmodel;
     public IdentifiableCollection<Node> SteinerNodes = new ListSequence<Node>();

@@ -7,7 +7,7 @@ package zet.tasks;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
@@ -21,13 +21,13 @@ import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
  *
  * @author schwengf
  */
-public class CompareTask extends Algorithm<Project, CompareVisualizationResults>{
+public class CompareTask extends AbstractAlgorithm<Project, CompareVisualizationResults>{
     
     NetworkFlowModel OrigNetwork;
     NetworkFlowModel ThinNetwork;
     GraphAlgorithmEnumeration algo;
-    Algorithm<BuildingPlan,NetworkFlowModel> convOrig;
-    Algorithm<BuildingPlan,NetworkFlowModel> convThinNet;
+    AbstractAlgorithm<BuildingPlan,NetworkFlowModel> convOrig;
+    AbstractAlgorithm<BuildingPlan,NetworkFlowModel> convThinNet;
     int TimeHorizonGlobal;
     
     public CompareTask (NetworkFlowModel OriginNetwork, NetworkFlowModel ThinNet, GraphAlgorithmEnumeration graphalgo, BaseZToGraphConverter ConvOrig, BaseZToGraphConverter ConvThin)
@@ -130,11 +130,11 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
     {
         this.ThinNetwork = Thin;
     }
-    public void setConvOriginal(Algorithm<BuildingPlan,NetworkFlowModel> Orig)
+    public void setConvOriginal(AbstractAlgorithm<BuildingPlan,NetworkFlowModel> Orig)
     {
         this.convOrig = Orig;
     }
-    public void setConvThinNet(Algorithm<BuildingPlan,NetworkFlowModel> Thin)
+    public void setConvThinNet(AbstractAlgorithm<BuildingPlan,NetworkFlowModel> Thin)
     {
         this.convThinNet = Thin;
     }

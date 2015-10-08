@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.YenKShortestPaths;
 import algo.graph.reduction.YenPath;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
 import org.zetool.graph.structure.Forest;
@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * @author schwengf
  */
-public class RepeatedShortestPathsShrinker extends Algorithm<NetworkFlowModel, NetworkFlowModel> {
+public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> {
 
   public NetworkFlowModel minspanmodel;
   public MinSpanningTreeProblem minspanprob;

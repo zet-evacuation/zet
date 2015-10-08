@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.graph.Node;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Person;
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, NetworkFlowModel> {
+public class GraphAssignmentConverter extends AbstractAlgorithm<ConcreteAssignment, NetworkFlowModel> {
 
 	private NetworkFlowModel model;
 

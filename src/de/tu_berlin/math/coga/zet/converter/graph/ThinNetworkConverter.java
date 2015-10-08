@@ -1332,7 +1332,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter {
    * rooms for each room.
    */
   private void computeNeighbors() {
-    LOG.finest( "Finding neighbourrooms started..." );
+    log.finest( "Finding neighbourrooms started..." );
     final List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
     for( ZToGraphRoomRaster room : rasteredRooms ) {

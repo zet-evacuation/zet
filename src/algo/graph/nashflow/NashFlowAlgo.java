@@ -18,7 +18,7 @@ package algo.graph.nashflow;
 import algo.graph.thinflow.ThinFlowAlgo;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import ds.graph.problem.NashFlowProblem;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
@@ -37,7 +37,7 @@ import org.zetool.graph.DynamicNetwork;
  *
  * @author Sebastian Schenker
  */
-public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
+public class NashFlowAlgo extends AbstractAlgorithm<NashFlowProblem, NashFlow> {
 
 	private static final double EPSILON = 0.00001;
 	private static final double FIXPOINTACCURACY = 0.001;

@@ -18,7 +18,7 @@ package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import org.zetool.common.util.Direction8;
 import static org.zetool.common.util.Direction8.*;
@@ -48,7 +48,7 @@ import java.util.logging.Logger;
  * @author Jan-Philipp Kappmeier
  *
  */
-public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAutomaton> {
+public class ZToCAConverter extends AbstractAlgorithm<BuildingPlan,ConvertedCellularAutomaton> {
 	/** The latest created mapping of the z-format to the cellular automaton. */
 	private ZToCAMapping lastMapping = null;
 	/** The latest created container of rastered elements. */

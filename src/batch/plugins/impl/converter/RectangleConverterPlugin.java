@@ -1,7 +1,7 @@
 package batch.plugins.impl.converter;
 
 import batch.plugins.AlgorithmPlugin;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.zet_evakuierung.model.BuildingPlan;
@@ -31,7 +31,7 @@ public class RectangleConverterPlugin implements AlgorithmPlugin<BuildingPlan, N
 	}
 
 	@Override
-	public Algorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
+	public AbstractAlgorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
 		return new RectangleConverter();
 	}
 

@@ -2,7 +2,7 @@
 package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AbstractOperation;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Project;
@@ -73,7 +73,7 @@ public class ConversionOnly extends AbstractOperation<Project,GraphVisualization
 			System.out.println( " done." );
 		}
 
-    final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
+    final AbstractAlgorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
 		System.out.println( "Selected algorithm: " + conv );
 
     conv.setProblem( project.getBuildingPlan() );

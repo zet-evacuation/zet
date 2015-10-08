@@ -4,7 +4,7 @@ package batch.plugins.impl.exitassignment;
 import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.plugins.AlgorithmPlugin;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -37,7 +37,7 @@ public class ShortestPathsExitAssignmentPlugin extends ShortestPathExitAssignmen
   }
 
   @Override
-	public Algorithm<NetworkFlowModel, ExitAssignment> getAlgorithm() {  
+	public AbstractAlgorithm<NetworkFlowModel, ExitAssignment> getAlgorithm() {  
     return new ShortestPathExitAssignment();
 	}
 }

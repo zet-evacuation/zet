@@ -1,4 +1,3 @@
-
 package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AtomicOperation;
@@ -9,7 +8,7 @@ import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -32,156 +31,152 @@ import ds.ca.results.VisualResultsRecorder;
 import evacuationplan.BidirectionalNodeCellMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.EvacuationSimulationResults;
+import org.zetool.common.algorithm.Algorithm;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class ExitAssignmentOperation extends AbstractOperation<Project, EvacuationSimulationResults> {
-	InputFileReader<Project> input;
-  EvacuationSimulationResults visResults;
 
-  // Currently unused, we use default converter and algorithms
-	AtomicOperation<NetworkFlowModel, ExitAssignment> assignmentOperation;
+    InputFileReader<Project> input;
+    EvacuationSimulationResults visResults;
 
-  public ExitAssignmentOperation() {
-  	assignmentOperation = new AtomicOperation<>( "Assignment computation", NetworkFlowModel.class, ExitAssignment.class );
-		this.addOperation( assignmentOperation );
-}
+    // Currently unused, we use default converter and algorithms
+    AtomicOperation<NetworkFlowModel, ExitAssignment> assignmentOperation;
 
-  
-  @Override
-  public boolean consume( InputFileReader<?> o ) {
-		if( o.getTypeClass() == Project.class ) {
-			input = (InputFileReader<Project>)o;
-			return true;
-		}
-		return false;
-  }
+    public ExitAssignmentOperation() {
+        assignmentOperation = new AtomicOperation<>("Assignment computation", NetworkFlowModel.class, ExitAssignment.class);
+        this.addOperation(assignmentOperation);
+    }
 
-  @Override
-  public Class<EvacuationSimulationResults> produces() {
-    return EvacuationSimulationResults.class;
-  }
+    @Override
+    public boolean consume(InputFileReader<?> o) {
+        if (o.getTypeClass() == Project.class) {
+            input = (InputFileReader<Project>) o;
+            return true;
+        }
+        return false;
+    }
 
-  @Override
-  public EvacuationSimulationResults getProduced() {
-    return visResults;
-  }
+    @Override
+    public Class<EvacuationSimulationResults> produces() {
+        return EvacuationSimulationResults.class;
+    }
 
-  @Override
-  public void run() {
-		Project project = input.getSolution();
+    @Override
+    public EvacuationSimulationResults getProduced() {
+        return visResults;
+    }
+
+    @Override
+    public void run() {
+        Project project = input.getSolution();
     //todo
-    // step 1: compute an exit assignment
-    // here we use plugins to select type of exit assignment
+        // step 1: compute an exit assignment
+        // here we use plugins to select type of exit assignment
 
-    final Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
-    conv.setProblem( project.getBuildingPlan() );
-		conv.run();
-    NetworkFlowModel networkFlowModel = conv.getSolution();
+        final AbstractAlgorithm<BuildingPlan, NetworkFlowModel> conv = new RectangleConverter();
+        conv.setProblem(project.getBuildingPlan());
+        conv.run();
+        NetworkFlowModel networkFlowModel = conv.getSolution();
 
-		// convert and create the concrete assignment
-		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
-		
-    GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
-		cav.setProblem( concreteAssignment );
-		cav.run();
-		networkFlowModel = cav.getSolution();
+        // convert and create the concrete assignment
+        ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment(project.getCurrentAssignment(), 400);
 
-    
-    if( assignmentOperation.getSelectedAlgorithm() == null ) {
-			System.out.println( "No algorithm selected!");
-			return;
-		}
-    final Algorithm<NetworkFlowModel,ExitAssignment> assignmentAlgorithm = assignmentOperation.getSelectedAlgorithm();
-    System.out.println( "Selected algorithm: " + assignmentAlgorithm );
+        GraphAssignmentConverter cav = new GraphAssignmentConverter(networkFlowModel);
+        cav.setProblem(concreteAssignment);
+        cav.run();
+        networkFlowModel = cav.getSolution();
 
-    assignmentAlgorithm.setProblem( networkFlowModel );
-    assignmentAlgorithm.run();
-    ExitAssignment exitAssignment = assignmentAlgorithm.getSolution();
+        if (assignmentOperation.getSelectedAlgorithm() == null) {
+            System.out.println("No algorithm selected!");
+            return;
+        }
+        final Algorithm<NetworkFlowModel, ExitAssignment> assignmentAlgorithm = assignmentOperation.getSelectedAlgorithm();
+        System.out.println("Selected algorithm: " + assignmentAlgorithm);
 
-    System.out.println( "Exit Assignment: " );
-    System.out.println( exitAssignment );
+        assignmentAlgorithm.setProblem(networkFlowModel);
+        assignmentAlgorithm.run();
+        ExitAssignment exitAssignment = assignmentAlgorithm.getSolution();
+
+        System.out.println("Exit Assignment: ");
+        System.out.println(exitAssignment);
 
     // step 2: put the exit assingment into a cellular automaton
-
     // We now have to create a cellular automaton, assign the concrete assignment and have to map the exits to the
-    // chosen exits in our above exit computation
-    EvacuationCellularAutomaton ca;
-    ZToCAMapping mapping;
-    ZToCARasterContainer container;
+        // chosen exits in our above exit computation
+        EvacuationCellularAutomaton ca;
+        ZToCAMapping mapping;
+        ZToCARasterContainer container;
 
-    final ZToCAConverter caConv = new ZToCAConverter();
-    //final ExitDistributionZToCAConverter caConv = new ExitDistributionZToCAConverter();
-    caConv.setProblem( project.getBuildingPlan() );
-    caConv.run();
+        final ZToCAConverter caConv = new ZToCAConverter();
+        //final ExitDistributionZToCAConverter caConv = new ExitDistributionZToCAConverter();
+        caConv.setProblem(project.getBuildingPlan());
+        caConv.run();
 
-    ca = caConv.getCellularAutomaton();
+        ca = caConv.getCellularAutomaton();
 
-    System.out.println( "The converted CA:\n" + ca );
+        System.out.println("The converted CA:\n" + ca);
 
-    mapping = caConv.getMapping();
-    container = caConv.getContainer();
-    ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
+        mapping = caConv.getMapping();
+        container = caConv.getContainer();
+        ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton(ca, mapping, container);
 
     // here we have to assign the concrete assignment
-    // create and convert concrete assignment
-    System.out.println( "Creating concrete Assignment." );
-    for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() ) {
-      ca.setAssignmentType( at.getName(), at.getUid() );
-    }
-    //ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-    final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
-    cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
-    cac.run();
+        // create and convert concrete assignment
+        System.out.println("Creating concrete Assignment.");
+        for (AssignmentType at : project.getCurrentAssignment().getAssignmentTypes()) {
+            ca.setAssignmentType(at.getName(), at.getUid());
+        }
+        //ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+        final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
+        cac.setProblem(new AssignmentApplicationInstance(cca, concreteAssignment));
+        cac.run();
 
+        ZToGraphRasterContainer graphRaster = networkFlowModel.getZToGraphMapping().getRaster();
 
-    ZToGraphRasterContainer graphRaster = networkFlowModel.getZToGraphMapping().getRaster();
+        cca = cac.getSolution();
 
-    cca = cac.getSolution();
+        BidirectionalNodeCellMapping.CAPartOfMapping caPartOfMapping = caConv.getLatestCAPartOfNodeCellMapping();
 
-		BidirectionalNodeCellMapping.CAPartOfMapping caPartOfMapping = caConv.getLatestCAPartOfNodeCellMapping();
+        BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
 
-
-		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
-
-    GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
-    graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(
-            ca, nodeCellMapping, exitAssignment );
-    graphBasedIndividualToExitMaping.calculate();
-    System.out.println( "Graph based individual to exit mapping:" );
-    System.out.println( graphBasedIndividualToExitMaping );
-		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
-
+        GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping;
+        graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(
+                ca, nodeCellMapping, exitAssignment);
+        graphBasedIndividualToExitMaping.calculate();
+        System.out.println("Graph based individual to exit mapping:");
+        System.out.println(graphBasedIndividualToExitMaping);
+        ca.setIndividualToExitMapping(graphBasedIndividualToExitMaping);
 
     // step 3: simulate
-    //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
-    Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
+        //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
+        AbstractAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
     //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
-    //selected = cellularAutomatonAlgorithm;
+        //selected = cellularAutomatonAlgorithm;
 
-    SwapCellularAutomaton swapAlgo = new SwapCellularAutomaton();
+        SwapCellularAutomaton swapAlgo = new SwapCellularAutomaton();
 
-    caAlgo = swapAlgo;
+        caAlgo = swapAlgo;
 
-    caAlgo.setProblem( new EvacuationSimulationProblem( (ca) ) );
-    if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {
-      double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
-      ((EvacuationCellularAutomatonAlgorithm)caAlgo).setMaxTimeInSeconds( caMaxTime );
+        caAlgo.setProblem(new EvacuationSimulationProblem((ca)));
+        if (caAlgo instanceof EvacuationCellularAutomatonAlgorithm) {
+            double caMaxTime = PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime");
+            ((EvacuationCellularAutomatonAlgorithm) caAlgo).setMaxTimeInSeconds(caMaxTime);
+        }
+        ca.startRecording();
+
+        caAlgo.run();
+        ca.stopRecording();
+
+        System.out.println("Recording stopped.");
+
+        visResults = new EvacuationSimulationResults(VisualResultsRecorder.getInstance().getRecording(), mapping, ca);
     }
-    ca.startRecording();
 
-    caAlgo.run();
-    ca.stopRecording();
-
-    System.out.println( "Recording stopped." );
-
-    visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
-  }
-
-  @Override
-  public String toString() {
-    return "Exit Assignment";
-  }
+    @Override
+    public String toString() {
+        return "Exit Assignment";
+    }
 }

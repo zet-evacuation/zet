@@ -15,7 +15,7 @@
  */
 package ds;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
@@ -24,6 +24,6 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
  * useful to access the graph algorithms in a generic way.
  * @author Martin Groß
  */
-public abstract class NetworkFlowModelAlgorithm extends Algorithm<NetworkFlowModel, PathBasedFlowOverTime> {
+public abstract class NetworkFlowModelAlgorithm extends AbstractAlgorithm<NetworkFlowModel, PathBasedFlowOverTime> {
 
 }

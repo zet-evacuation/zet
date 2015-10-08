@@ -5,7 +5,6 @@ import org.zetool.components.batch.operations.AbstractOperation;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import org.zetool.common.algorithm.Algorithm;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -24,6 +23,7 @@ import ds.ca.results.VisualResultsRecorder;
 import io.visualization.EvacuationSimulationResults;
 import java.util.Arrays;
 import java.util.List;
+import org.zetool.common.algorithm.Algorithm;
 
 /**
  *

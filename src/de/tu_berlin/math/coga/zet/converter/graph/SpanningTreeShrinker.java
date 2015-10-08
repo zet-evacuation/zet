@@ -39,9 +39,9 @@ public class SpanningTreeShrinker extends GraphShrinker {
 		//using Prims algorithm
 		Prim primalgo = new Prim();
 		primalgo.setProblem( minimumSpanningTreeProblem );
-		LOG.info( "Compute minimum spanning tree using Prim... " );
+		log.info( "Compute minimum spanning tree using Prim... " );
 		primalgo.run();
-		LOG.log( Level.INFO, "done in {0}", primalgo.getRuntimeAsString());
+		log.log( Level.INFO, "done in {0}", primalgo.getRuntimeAsString());
 		UndirectedTree minspantree = primalgo.getSolution();
 		return minspantree.getEdges();
 	}

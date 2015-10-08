@@ -4,7 +4,7 @@
  */
 package zet.tasks;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -22,11 +22,11 @@ import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationResults> implements AlgorithmListener {
+public class GraphAlgorithmTask extends AbstractAlgorithm<Project, GraphVisualizationResults> implements AlgorithmListener {
 
 	GraphAlgorithmEnumeration graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
-	Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
+	AbstractAlgorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
 
 	public GraphAlgorithmTask( GraphAlgorithmEnumeration graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;
@@ -52,7 +52,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 		// call the graph algorithm
 		int maxTime = (int) PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
-		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
+		AbstractAlgorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
 		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
 		gt.setProblem( cav.getSolution() );
 		gt.addAlgorithmListener( this );
@@ -67,7 +67,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		return networkFlowModel;
 	}
 
-	public void setConv( Algorithm<BuildingPlan,NetworkFlowModel> conv ) {
+	public void setConv( AbstractAlgorithm<BuildingPlan,NetworkFlowModel> conv ) {
 		this.conv = conv;
 	}
 	

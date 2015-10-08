@@ -18,7 +18,7 @@ package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.parameter.AbstractParameterSet;
 import algo.ca.parameter.ParameterSet;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.PropertyContainer;
@@ -40,7 +40,7 @@ import statistics.Statistic;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentApplicationInstance, ConvertedCellularAutomaton> {
+public class CellularAutomatonAssignmentConverter extends AbstractAlgorithm<AssignmentApplicationInstance, ConvertedCellularAutomaton> {
 
 	@Override
 	protected ConvertedCellularAutomaton runAlgorithm( AssignmentApplicationInstance problem ) {

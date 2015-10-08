@@ -27,6 +27,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import org.zet.components.model.editor.editview.EditViewControl;
 import org.zetool.components.framework.Menu;
 import zet.gui.GUILocalization;
 import org.zet.components.model.editor.style.RasterPaintStyle;
@@ -45,6 +46,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	static final Localization loc = GUILocalization.loc;
 	private JMenuItem mnuFileSaveResultAs;
 	private JMenuItem mnuFileLoadResult;
+        private JMenuItem mnuEditMoveFloorUp;
+        private JMenuItem mnuEditMoveFloorDown;
 	private JMenuItem mnuShowAllAreas;
 	private JMenuItem mnuHideAllAreas;
 	private JCheckBoxMenuItem mnuDelayArea;
@@ -66,11 +69,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenuItem mnuPlanImageLocate;
 	private JMenuItem mnuPlanImageTransparency;
 	static JProjectTreeView ptv;
+        private EditViewControl evc;
 
-	public JZETMenuBar( GUIControl control ) {
+	public JZETMenuBar( GUIControl control, EditViewControl evc ) {
 		this.control = control;
+                this.evc = evc;
 		createMenuBar();
-		control.setMenuBar( this );
 	}
 
 	/**
@@ -104,8 +108,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		// Bearbeiten menue
 		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorNew", this, "new" );
-		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorUp", this, "up" );
-		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorDown", this, "down" );
+            mnuEditMoveFloorUp = Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorUp", this, "up" );
+            mnuEditMoveFloorDown = Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorDown", this, "down" );
 		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorDelete", this, "delete" );
 		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorCopy", this, "copy" );
 		Menu.addMenuItem( mEdit, "gui.menu.Edit.FloorImport", this, "import" );
@@ -283,6 +287,15 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 				throw new AssertionError();
 		}
 	};
+        
+        ActionListener floorChanged = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mnuEditMoveFloorUp.setEnabled(evc.getView().getCurrentFloor().canMoveUp());
+                mnuEditMoveFloorDown.setEnabled(evc.getView().getCurrentFloor().canMoveDown());
+            }
+        };
 
 	@Override
 	public void actionPerformed( ActionEvent e ) {
@@ -304,11 +317,11 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "saveAsDXF" ) ) {
 			control.saveAsDXF();
 		} else if( e.getActionCommand().equals( "new" ) ) {
-			control.newFloor();
+                    evc.createNewFloor();
 		} else if( e.getActionCommand().equals( "up" ) ) {
-			control.moveFloorUp();
+			evc.moveCurrentFloorUp();
 		} else if( e.getActionCommand().equals( "down" ) ) {
-			control.moveFloorDown();
+			evc.moveCurrentFloorDown();
 		} else if( e.getActionCommand().equals( "delete" ) ) {
 			control.deleteFloor();
 		} else if( e.getActionCommand().equals( "import" ) ) {

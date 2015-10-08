@@ -4,7 +4,7 @@
  */
 package algo.graph.reduction;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Graph;
@@ -20,7 +20,7 @@ import java.util.Random;
  *
  * @author schwengf
  */
-public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, UndirectedTree>{
+public class ClusterAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree>{
     
     IdentifiableCollection<Edge> solEdges = new ListSequence();
     IdentifiableCollection<Node> centerNodes = new ListSequence();

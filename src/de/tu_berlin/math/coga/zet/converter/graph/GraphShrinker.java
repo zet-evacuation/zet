@@ -3,7 +3,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;
@@ -15,7 +15,7 @@ import java.util.logging.Level;
  *
  * @author Jan-Philipp Kappmeier
  */
-public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkFlowModel> {
+public abstract class GraphShrinker extends AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> {
   protected NetworkFlowModel newModel;
 	protected ZToGraphMapping newMapping;
 	private IdentifiableCollection<Edge> shrinkedEdges;
@@ -27,7 +27,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	
 	@Override
 	protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
-		LOG.log( Level.INFO, "Shrinking a Graph with {0} nodes and {1} edges.", new Object[]{problem.numberOfNodes(), problem.numberOfEdges()} );
+		log.log( Level.INFO, "Shrinking a Graph with {0} nodes and {1} edges.", new Object[]{problem.numberOfNodes(), problem.numberOfEdges()} );
 
 		// create a new model
 		newModel = new NetworkFlowModel( problem );
@@ -51,7 +51,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 		// copy the remaining information into the new mapping
 		copyMappingInformation();
 
-		LOG.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
+		log.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
 		
 		checkPlausibility();
 
@@ -125,7 +125,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	}
 
 	private void checkPlausibility() {
-		LOG.info( "Check plausibility" );
+		log.info( "Check plausibility" );
 		
 		NetworkFlowModel oldModel = getProblem();
 		
@@ -137,7 +137,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 			int oldTransit = oldModel.getTransitTime( oldEdge );
 			
 			if( newTransit != oldTransit )
-				LOG.log( Level.WARNING, "newTransit = {0} = {1} = {2}", new Object[]{ newTransit, oldTransit, oldTransit });
+				log.log( Level.WARNING, "newTransit = {0} = {1} = {2}", new Object[]{ newTransit, oldTransit, oldTransit });
 			
 			assert newTransit == oldTransit;
 		}

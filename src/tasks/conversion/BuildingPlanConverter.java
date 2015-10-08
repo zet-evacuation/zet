@@ -4,7 +4,7 @@
  */
 package tasks.conversion;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.BuildingPlan;
 import io.visualization.BuildingResults;
 
@@ -13,7 +13,7 @@ import io.visualization.BuildingResults;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BuildingPlanConverter extends Algorithm<BuildingPlan, BuildingResults> {
+public class BuildingPlanConverter extends AbstractAlgorithm<BuildingPlan, BuildingResults> {
 
 	@Override
 	protected BuildingResults runAlgorithm( BuildingPlan problem ) {

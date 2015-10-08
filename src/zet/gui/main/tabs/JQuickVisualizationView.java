@@ -149,7 +149,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 		loc.setPrefix( "gui.EditPanel." );
 		// Localization of own components
-		lblFloorSelector.setText( loc.getString( "Etagen" ) + ":" );
+		//lblFloorSelector.setText( loc.getString( "Etagen" ) + ":" );
 
 		loc.clearPrefix();
 

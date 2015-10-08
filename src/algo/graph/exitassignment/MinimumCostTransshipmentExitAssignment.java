@@ -18,9 +18,8 @@ package algo.graph.exitassignment;
 
 import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.netflow.classic.maxflow.PathDecomposition;
-import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import org.zetool.netflow.classic.mincost.SuccessiveShortestPath;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
@@ -40,7 +39,7 @@ import java.util.List;
  *
  * @author Martin Groß
  */
-public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
+public class MinimumCostTransshipmentExitAssignment extends AbstractAlgorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
 
   @Override
   protected ExitAssignment runAlgorithm( NetworkFlowModel model ) {
@@ -152,7 +151,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     }
     MaximumFlowProblem problem = new MaximumFlowProblem( model.graph(), newCapacities, model.getSources(), sink );
     //Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
-    Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new FordFulkerson();
+    AbstractAlgorithm<MaximumFlowProblem, MaximumFlow> algorithm = new FordFulkerson();
     algorithm.setProblem( problem );
     algorithm.run();
     return algorithm.getSolution().getFlowValue();

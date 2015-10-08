@@ -1,7 +1,7 @@
 
 package algo.graph.spanningtree;
 
-import org.zetool.common.algorithm.Algorithm; 
+import org.zetool.common.algorithm.AbstractAlgorithm; 
 import org.zetool.graph.Node;
 import java.util.Random;
 import org.zetool.graph.Edge;
@@ -19,7 +19,7 @@ import org.zetool.graph.DynamicNetwork;
  *
  * @author schwengf
  */
-public class Prim extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
+public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem,UndirectedTree> {
     
     
     IdentifiableIntegerMapping<Edge> currentEdgesTransit;

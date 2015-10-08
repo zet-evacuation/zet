@@ -3,7 +3,7 @@ package algo.graph.reduction;
 
 import algo.graph.spanningtree.PrimForNetwork;
 import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import org.zetool.container.collection.ListSequence;
@@ -24,7 +24,7 @@ import org.zetool.graph.DynamicNetwork;
  *
  * @author Marlen Schwengfelder
  */
-public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>{
+public class MSTSteiner extends AbstractAlgorithm<MinSpanningTreeProblem,MinSteinerTree>{
     
     int overalldist = 0;
     NetworkFlowModel OriginNetwork;

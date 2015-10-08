@@ -6,7 +6,7 @@ package zet.tasks;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -28,7 +28,7 @@ import statistic.ca.CAStatistic;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonTask extends Algorithm<Project, EvacuationSimulationResults> {
+public class CellularAutomatonTask extends AbstractAlgorithm<Project, EvacuationSimulationResults> {
 	EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
 	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;

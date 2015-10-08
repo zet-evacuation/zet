@@ -1,6 +1,6 @@
 package ds.graph.problem;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import org.zetool.graph.DefaultDirectedGraph;
@@ -14,7 +14,7 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
  *
  * @author Martin Groß
  */
-public class RawToFullMinimumFlowProblemConverter extends Algorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem> {
+public class RawToFullMinimumFlowProblemConverter extends AbstractAlgorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem> {
 
     /**
      * {@inheritDoc}

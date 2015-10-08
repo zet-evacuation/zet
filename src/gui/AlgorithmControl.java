@@ -9,7 +9,7 @@ import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import algo.graph.exitassignment.ExitAssignment;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.util.Formatter;
 import org.zetool.common.util.units.Quantity;
@@ -145,7 +145,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 			project.getBuildingPlan().rasterize();
 			System.out.println( " done." );
 		}
-		final Algorithm<BuildingPlan,NetworkFlowModel> conv = Algo.converter();
+		final AbstractAlgorithm<BuildingPlan,NetworkFlowModel> conv = Algo.converter();
 		last = Algo;
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );

@@ -9,7 +9,7 @@
  */
 package gui;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.APSPGraphShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.ClusterShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphConverterAndShrinker;
@@ -32,7 +32,7 @@ import de.zet_evakuierung.model.BuildingPlan;
 public enum GraphConverterAlgorithms {
 	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid, ShortestPathGraphNonGrid, ShortestPathGraphGrid, APSPGraphNonGrid, RepeatedShortestPaths, ThinNetwork;
 
-	public Algorithm<BuildingPlan,NetworkFlowModel> converter() {
+	public AbstractAlgorithm<BuildingPlan,NetworkFlowModel> converter() {
 		switch( this ) {
 			case GridGraph:
 				return new GridGraphConverter();

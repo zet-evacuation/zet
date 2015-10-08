@@ -1,7 +1,7 @@
 
 package algo.graph.spanningtree;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.DisjointSet;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.collection.ListSequence;
@@ -16,7 +16,7 @@ import java.util.PriorityQueue;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class Kruskal extends Algorithm<MinSpanningTreeProblem,UndirectedTree> {
+public class Kruskal extends AbstractAlgorithm<MinSpanningTreeProblem,UndirectedTree> {
   UndirectedTree tree;
   
   @Override

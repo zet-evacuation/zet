@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.debug.Debug;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.zet_evakuierung.model.BuildingPlan;
@@ -112,7 +112,7 @@ public class ShrinkerTest {
 
 	}
 
-	private void performTest( Algorithm<BuildingPlan, NetworkFlowModel> conv, int targetNodes, int targetEdges ) {
+	private void performTest( AbstractAlgorithm<BuildingPlan, NetworkFlowModel> conv, int targetNodes, int targetEdges ) {
 		InstanceGenerator ig = new InstanceGenerator();
 		ig.setUpInstance();
 
@@ -128,7 +128,7 @@ public class ShrinkerTest {
 		cav.run();
 
 		// call the graph algorithm
-		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized.createTask( cav.getSolution(), 600 );
+		AbstractAlgorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized.createTask( cav.getSolution(), 600 );
 		gt.setProblem( cav.getSolution() );
 		gt.run();
 	}

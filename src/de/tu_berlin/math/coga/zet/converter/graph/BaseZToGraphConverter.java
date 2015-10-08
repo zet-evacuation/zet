@@ -16,7 +16,7 @@
 
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import org.zetool.graph.Edge;
@@ -34,7 +34,7 @@ import org.zetool.common.datastructure.SimpleTuple;
  * @author Jan-Philipp Kappmeier
  * @author Martin Groß
  */
-public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, NetworkFlowModel> {
+public abstract class BaseZToGraphConverter extends AbstractAlgorithm<BuildingPlan, NetworkFlowModel> {
 	protected ZToGraphMapping mapping;
 	protected NetworkFlowModel model;
 	protected ZToGraphRasterContainer raster;
@@ -61,7 +61,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
     // create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
-    LOG.info( "Alle Kanten erzeugt." );
+    log.info( "Alle Kanten erzeugt." );
 
     // calculate the transit times for all edges
 		computeTransitTimes();
@@ -70,9 +70,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
     createReverseEdges();
 
     // adjust transit times according to stair speed factors
-    LOG.setLevel( Level.ALL );
+    log.setLevel( Level.ALL );
 		multiplyWithUpAndDownSpeedFactors();
-    LOG.setLevel( Level.FINE );
+    log.setLevel( Level.FINE );
 
 		// set this before reverse edges are computed as they modify the model.
 		model.roundTransitTimes();
@@ -81,8 +81,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 		assert checkParallelEdges();
 
-		LOG.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
-		LOG.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
+		log.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
+		log.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
 		return model;
 	}
 
@@ -125,7 +125,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
               factor = mapping.getUpNodeSpeedFactor( edge.end() );
             }
             model.divide( edge, factor );
-            LOG.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, factor});
+            log.log( Level.FINEST, "Multiplying edge {0} with up speed factor {1}", new Object[]{edge, factor});
             break;
           case Lower:
             factor = 1.0;
@@ -135,7 +135,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
               factor = mapping.getDownNodeSpeedFactor( edge.end() );
             }
             model.divide( edge, factor );
-            LOG.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, factor});
+            log.log( Level.FINEST, "Multiplying edge {0} with down speed factor {1}", new Object[]{edge, factor});
             break;
         }
       }
@@ -149,20 +149,20 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	 */
 	boolean checkParallelEdges() {
 		int count = 0;
-    LOG.info( "Check for parallel edges..." );
+    log.info( "Check for parallel edges..." );
 
 		HashMap<Tuple<Node,Node>,Edge> usedEdges = new HashMap<>( (int)(model.numberOfEdges()/0.75)+1, 0.75f );
 
 		for( Edge edge :  model.edges() ) {
 			final Tuple<Node,Node> nodePair = new SimpleTuple<>( edge.start(), edge.end() );
 			if( usedEdges.containsKey( nodePair ) ) {
-				LOG.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
+				log.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
 				//return false;
         count++;
 			}
 			usedEdges.put( nodePair, edge );
 		}
-		LOG.log( Level.INFO, "No parallel edges found." );
+		log.log( Level.INFO, "No parallel edges found." );
     System.err.println( "Parallel edges: " + count );
 		return true;
 	}

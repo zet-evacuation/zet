@@ -1,7 +1,7 @@
 
 package algo.graph.spanningtree;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
@@ -16,7 +16,7 @@ import java.util.Random;
  *
  * @author schwengf
  */
-public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
+public class PrimForNetwork extends AbstractAlgorithm<NetworkMSTProblem, NetworkMST>{
     
     DynamicNetwork OriginNetwork;
     Node startNode;

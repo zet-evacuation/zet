@@ -13,15 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package algo.graph.exitassignment;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.netflow.dynamic.TimeHorizonBounds;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.common.algorithm.Algorithm;
 import org.zetool.graph.Node;
 import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
@@ -31,20 +31,20 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
  *
  * @author Martin Groß
  */
-public class EarliestArrivalTransshipmentExitAssignment extends Algorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
+public class EarliestArrivalTransshipmentExitAssignment extends AbstractAlgorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.graph().nodes());
 
         EarliestArrivalFlowProblem problem;// = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
-				problem = model.getEAFP();
+        problem = model.getEAFP();
         Algorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
 
         //problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-				problem = model.getEAFP(estimator.getSolution().getUpperBound());
+        problem = model.getEAFP(estimator.getSolution().getUpperBound());
         Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
@@ -60,12 +60,13 @@ public class EarliestArrivalTransshipmentExitAssignment extends Algorithm<Networ
         return solution;
     }
 
-	/**
-	 * Returns the calculated exit assignment.
-	 * @return the calculated exit assignment.
-	 */
-	@Override
-	public ExitAssignment getExitAssignment() {
-		return getSolution();
-	}
+    /**
+     * Returns the calculated exit assignment.
+     *
+     * @return the calculated exit assignment.
+     */
+    @Override
+    public ExitAssignment getExitAssignment() {
+        return getSolution();
+    }
 }

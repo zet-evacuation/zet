@@ -6,7 +6,7 @@ import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import batch.plugins.AlgorithmPlugin;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 /**
@@ -33,7 +33,7 @@ public class RandomOrderPlugin implements AlgorithmPlugin<EvacuationSimulationPr
   }
 
   @Override
-  public Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> getAlgorithm() {
+  public AbstractAlgorithm<EvacuationSimulationProblem,EvacuationSimulationResult> getAlgorithm() {
     EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
     //double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
     //algo.setMaxTimeInSeconds( caMaxTime );

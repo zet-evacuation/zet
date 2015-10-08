@@ -2,7 +2,7 @@
 package batch.plugins.impl.maxflow;
 
 import batch.plugins.AlgorithmPlugin;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.netflow.classic.maxflow.EdmondsKarp;
 import org.zetool.netflow.ds.flow.MaximumFlow;
 import ds.graph.problem.RawToFullMaximumFlowProblemConverter;
@@ -32,9 +32,9 @@ public class EdmondsKarpPlugin implements AlgorithmPlugin<RawMaximumFlowProblem,
 	}
 
 	@Override
-	public Algorithm<RawMaximumFlowProblem, MaximumFlow> getAlgorithm() {
+	public AbstractAlgorithm<RawMaximumFlowProblem, MaximumFlow> getAlgorithm() {
 		
-		Algorithm<RawMaximumFlowProblem, MaximumFlow> algo = new Algorithm<RawMaximumFlowProblem, MaximumFlow>() {
+		AbstractAlgorithm<RawMaximumFlowProblem, MaximumFlow> algo = new AbstractAlgorithm<RawMaximumFlowProblem, MaximumFlow>() {
 
       @Override
       protected MaximumFlow runAlgorithm( RawMaximumFlowProblem problem ) {

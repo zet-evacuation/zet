@@ -1,11 +1,24 @@
-
+/* zet evacuation tool copyright © 2007-15 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	02110-1301, USA.
+ */
 package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.components.batch.operations.AbstractOperation;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.components.batch.input.reader.InputFileReader;
-import org.zetool.common.algorithm.Algorithm;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.Edge;
@@ -24,183 +37,176 @@ import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import org.zetool.algorithm.shortestpath.Dijkstra;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.zetool.common.algorithm.Algorithm;
 import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BasicOptimization extends AbstractOperation<Project,GraphVisualizationResults> {
-	private static final Logger log = Logger.getGlobal();
-	InputFileReader<Project> input;
-	AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
-	AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
-  GraphVisualizationResults gvr;
+public class BasicOptimization extends AbstractOperation<Project, GraphVisualizationResults> {
 
-	public BasicOptimization() {
+    private static final Logger log = Logger.getGlobal();
+    InputFileReader<Project> input;
+    AtomicOperation<BuildingPlan, NetworkFlowModel> transformationOperation;
+    AtomicOperation<EarliestArrivalFlowProblem, PathBasedFlowOverTime> eafAlgorithm;
+    GraphVisualizationResults gvr;
+
+    public BasicOptimization() {
 		// First, we go from zet to network flow model
-		// then, we go from nfm to path based flow
-    // therefore, we need two algorithms
+        // then, we go from nfm to path based flow
+        // therefore, we need two algorithms
 
-		transformationOperation = new AtomicOperation<>( "Transformation", BuildingPlan.class, NetworkFlowModel.class );
+        transformationOperation = new AtomicOperation<>("Transformation", BuildingPlan.class, NetworkFlowModel.class);
 
-		this.addOperation( transformationOperation );
+        this.addOperation(transformationOperation);
 
-		eafAlgorithm = new AtomicOperation<>( "Flow Computation", EarliestArrivalFlowProblem.class, PathBasedFlowOverTime.class );
+        eafAlgorithm = new AtomicOperation<>("Flow Computation", EarliestArrivalFlowProblem.class, PathBasedFlowOverTime.class);
 
-		this.addOperation( eafAlgorithm );
-	}
+        this.addOperation(eafAlgorithm);
+    }
 
-	@Override
-	@SuppressWarnings( "unchecked" )
-	public boolean consume( InputFileReader<?> o ) {
-		if( o.getTypeClass() == Project.class ) {
-			input = (InputFileReader<Project>)o;
-			return true;
-		}
-		return false;
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean consume(InputFileReader<?> o) {
+        if (o.getTypeClass() == Project.class) {
+            input = (InputFileReader<Project>) o;
+            return true;
+        }
+        return false;
+    }
 
-  @Override
-  public Class<GraphVisualizationResults> produces() {
-    return GraphVisualizationResults.class;
-  }
+    @Override
+    public Class<GraphVisualizationResults> produces() {
+        return GraphVisualizationResults.class;
+    }
 
-  @Override
-  public GraphVisualizationResults getProduced() {
-    return gvr;
-  }
+    @Override
+    public GraphVisualizationResults getProduced() {
+        return gvr;
+    }
 
-	@Override
-	public String toString() {
-		return "Basic Optimization";
-	}
+    @Override
+    public String toString() {
+        return "Basic Optimization";
+    }
 
-	@Override
-	public void run() {
-		Project project = input.getSolution();
+    @Override
+    public void run() {
+        Project project = input.getSolution();
 
-		System.out.println( project );
+        System.out.println(project);
 
-		if( !project.getBuildingPlan().isRastered() ) {
-			System.out.print( "Building is not rasterized. Rastering... " );
-			project.getBuildingPlan().rasterize();
-			System.out.println( " done." );
-		}
+        if (!project.getBuildingPlan().isRastered()) {
+            System.out.print("Building is not rasterized. Rastering... ");
+            project.getBuildingPlan().rasterize();
+            System.out.println(" done.");
+        }
 
-		if( transformationOperation.getSelectedAlgorithm() == null ) {
-			System.out.println( "No algorithm selected!");
-			return;
-		}
-		System.out.println( "Selected algorithm: " + transformationOperation.getSelectedAlgorithm() );
+        if (transformationOperation.getSelectedAlgorithm() == null) {
+            System.out.println("No algorithm selected!");
+            return;
+        }
+        System.out.println("Selected algorithm: " + transformationOperation.getSelectedAlgorithm());
 
-		// Convert
-		final Algorithm<BuildingPlan,NetworkFlowModel> conv = transformationOperation.getSelectedAlgorithm();
-		conv.setProblem( project.getBuildingPlan() );
-		conv.run();
-		NetworkFlowModel networkFlowModel;
+        // Convert
+        final Algorithm<BuildingPlan, NetworkFlowModel> conv = transformationOperation.getSelectedAlgorithm();
+        conv.setProblem(project.getBuildingPlan());
+        conv.run();
+        NetworkFlowModel networkFlowModel;
 
+        networkFlowModel = conv.getSolution();
 
-    networkFlowModel = conv.getSolution();
+        // convert and create the concrete assignment
+        ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment(project.getCurrentAssignment(), 400);
 
-		// convert and create the concrete assignment
-		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
+        GraphAssignmentConverter cav = new GraphAssignmentConverter(networkFlowModel);
 
-		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
+        cav.setProblem(concreteAssignment);
+        cav.run();
+        networkFlowModel = cav.getSolution();
 
-		cav.setProblem( concreteAssignment );
-		cav.run();
-		networkFlowModel = cav.getSolution();
+        // call the graph algorithm
+        Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> gt = eafAlgorithm.getSelectedAlgorithm();
 
-		// call the graph algorithm
-    Algorithm<EarliestArrivalFlowProblem, PathBasedFlowOverTime> gt = eafAlgorithm.getSelectedAlgorithm();
+        EarliestArrivalFlowProblem eafp = networkFlowModel.getEAFP();
 
- 		EarliestArrivalFlowProblem eafp = networkFlowModel.getEAFP();
-    
-    
-    System.out.println( "Transforming transit times." );
-    EarliestArrivalFlowProblem oldEafp = eafp;
-    eafp = transformTransitTimes( eafp );
-    IdentifiableIntegerMapping<Edge> newTransitTimes = eafp.getTransitTimes();
-    
+        System.out.println("Transforming transit times.");
+        EarliestArrivalFlowProblem oldEafp = eafp;
+        eafp = transformTransitTimes(eafp);
+        IdentifiableIntegerMapping<Edge> newTransitTimes = eafp.getTransitTimes();
 
-		System.out.println( "Earliest arrival transshipment calculation starts" );
-		LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-		estimator.setProblem( eafp );
-		estimator.run();
-		System.out.println( "Geschätzte Lösung:" + estimator.getSolution() );
+        System.out.println("Earliest arrival transshipment calculation starts");
+        LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+        estimator.setProblem(eafp);
+        estimator.run();
+        System.out.println("Geschätzte Lösung:" + estimator.getSolution());
 //		eafp = networkFlowModel.getEAFP( estimator.getSolution().getUpperBound() );
-    eafp = networkFlowModel.getEAFP( estimator.getSolution().getLowerBound()+1 );
-    
-    // The latest call to getEAFP takes the old transit times again! Set them again
- 		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
+        eafp = networkFlowModel.getEAFP(estimator.getSolution().getLowerBound() + 1);
 
-    gt.setProblem( eafp );
-		int maxTime = (int) PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
-		//Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
-		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
+        // The latest call to getEAFP takes the old transit times again! Set them again
+        eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies());
+
+        gt.setProblem(eafp);
+        int maxTime = (int) PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime");
+        //Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
+        GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
 
 		//gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
-		//gt.setProblem( cav.getSolution() );
-		//gt.addAlgorithmListener( this );
-		gt.run();
+        //gt.setProblem( cav.getSolution() );
+        //gt.addAlgorithmListener( this );
+        gt.run();
 
-		// create graph vis result
-		gvr = new GraphVisualizationResults( cav.getSolution(), gt.getSolution() );
-	}
-  
-  private EarliestArrivalFlowProblem transformTransitTimes( EarliestArrivalFlowProblem eafp ) {
- 
+        // create graph vis result
+        gvr = new GraphVisualizationResults(cav.getSolution(), gt.getSolution());
+    }
+
+    private EarliestArrivalFlowProblem transformTransitTimes(EarliestArrivalFlowProblem eafp) {
+
 		// transform the transit times
-		// compute shortest paths
+        // compute shortest paths
+        Dijkstra dijkstra;
+        DefaultDirectedGraph n = (DefaultDirectedGraph) eafp.getNetwork();
 
-		Dijkstra dijkstra;
-		DefaultDirectedGraph n = (DefaultDirectedGraph)eafp.getNetwork();
+        IdentifiableIntegerMapping<Edge> transitTimes;
 
+        transitTimes = eafp.getTransitTimes();
 
-		IdentifiableIntegerMapping<Edge> transitTimes;
+        ExtendedGraph ex = new ExtendedGraph(n, 1, eafp.getSources().size());
+        Node superNode = ex.getFirstNewNode();
 
-		transitTimes = eafp.getTransitTimes();
+        transitTimes.setDomainSize(ex.edgeCount()); // reserve space
 
-		ExtendedGraph ex = new ExtendedGraph( n, 1, eafp.getSources().size() );
-		Node superNode = ex.getFirstNewNode();
+        for (Node source : eafp.getSources()) {
+            Edge newEdge = ex.createAndSetEdge(superNode, source);
+            transitTimes.set(newEdge, 0);
+        }
 
-		transitTimes.setDomainSize( ex.edgeCount() ); // reserve space
+        dijkstra = new Dijkstra(ex, eafp.getTransitTimes(), superNode);
+        dijkstra.run();
 
-		for( Node source : eafp.getSources() ) {
-			Edge newEdge = ex.createAndSetEdge( superNode, source );
-			transitTimes.set( newEdge, 0 );
-		}
+        dijkstra.getShortestPathTree();
+        log.log(Level.INFO, "Solution: {0}", dijkstra.getShortestPathTree());
 
+        transitTimes = eafp.getTransitTimes();
+        IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>(transitTimes);
 
+        for (Edge e : eafp.getNetwork().edges()) {
+            // We have a value of Integer.MAX_VALUE (= infinity) at e.start()) if the node is not reachable.
+            int newTransit = transitTimes.get(e) + dijkstra.getDistance(e.start()) - dijkstra.getDistance(e.end());
+            if (dijkstra.getDistance(e.start()) == Integer.MAX_VALUE) {
+                //if( newTransit == 2147483318 ) {
+                newTransit = 0; // the transit time does not matter, the start node is not reachable anyway
+            }
+            log.log(Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get(e), dijkstra.getDistance(e.start()), dijkstra.getDistance(e.end()), newTransit});
+            newTransitTimes.set(e, newTransit);
+        }
 
-		dijkstra = new Dijkstra( ex, eafp.getTransitTimes(), superNode );
-		dijkstra.run();
+        log.log(Level.INFO, "Old transit: {0}", transitTimes);
+        log.log(Level.INFO, "new transit: {0}", newTransitTimes);
 
-		dijkstra.getShortestPathTree();
-		log.log(Level.INFO, "Solution: {0}", dijkstra.getShortestPathTree());
+        EarliestArrivalFlowProblem neweafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies());
 
-
-
-		transitTimes = eafp.getTransitTimes();
-		IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>( transitTimes );
-
-		for( Edge e : eafp.getNetwork().edges() ) {
-      // We have a value of Integer.MAX_VALUE (= infinity) at e.start()) if the node is not reachable.
-			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
-      if( dijkstra.getDistance( e.start() ) == Integer.MAX_VALUE ) {
-      //if( newTransit == 2147483318 ) {
-       newTransit = 0; // the transit time does not matter, the start node is not reachable anyway
-      }
-			log.log( Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
-			newTransitTimes.set( e, newTransit );
-		}
-    
-		log.log( Level.INFO, "Old transit: {0}", transitTimes);
-		log.log( Level.INFO, "new transit: {0}", newTransitTimes);
-
-		EarliestArrivalFlowProblem neweafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
-
-    return neweafp;
-  }
+        return neweafp;
+    }
 }

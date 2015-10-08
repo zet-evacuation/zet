@@ -16,7 +16,7 @@
 
 package algo.graph.thinflow;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 
@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Set;
 
-public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
+public class ThinFlowAlgo extends AbstractAlgorithm<ThinFlowProblem,ThinFlow> {
 
 
      private static final double EPSILON = 0.001;

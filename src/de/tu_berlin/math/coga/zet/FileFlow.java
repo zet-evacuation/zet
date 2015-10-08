@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
@@ -162,7 +162,7 @@ public class FileFlow implements AlgorithmListener {
 		return new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
 	}
 
-	public Algorithm computeFlow( EarliestArrivalFlowProblem eat ) throws FileNotFoundException, IOException {
+	public AbstractAlgorithm computeFlow( EarliestArrivalFlowProblem eat ) throws FileNotFoundException, IOException {
 
 		//SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();

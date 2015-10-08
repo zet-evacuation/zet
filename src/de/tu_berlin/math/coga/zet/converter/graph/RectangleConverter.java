@@ -395,7 +395,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 	protected void computeTransitTimes() {
 		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms();
 		final long startTT = System.currentTimeMillis();
-		LOG.log( java.util.logging.Level.FINE, "Computing transit times..." );
+		log.log( java.util.logging.Level.FINE, "Computing transit times..." );
 
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 

@@ -7,7 +7,7 @@ package gui;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.framework.StepByStepAutomaton;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.AlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
@@ -173,8 +173,8 @@ public class AlgorithmControlCellularAutomaton {
 	EvacuationCellularAutomatonAlgorithm eca = null;
 	EvacuationCellularAutomatonAlgorithm ecasbs = null;
 	class BackgroundTask<S> extends SwingWorker<S, AlgorithmEvent> {
-		Algorithm<?,S> algo;
-		private BackgroundTask( Algorithm<?,S> algorithm ) {
+		AbstractAlgorithm<?,S> algo;
+		private BackgroundTask( AbstractAlgorithm<?,S> algorithm ) {
 			this.algo = algorithm;
 		}
 

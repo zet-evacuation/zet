@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-15 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,7 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package algo.graph.exitassignment;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
@@ -34,6 +33,7 @@ import org.zetool.netflow.ds.flow.MaximumFlow;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.Algorithm;
 import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.DirectedGraph;
@@ -43,7 +43,7 @@ import org.zetool.netflow.dynamic.TimeHorizonBounds;
  *
  * @author Martin Groß
  */
-public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
+public class ReducedEarliestArrivalTransshipmentExitAssignment extends AbstractAlgorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
@@ -107,12 +107,12 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         reducedBalances.set(supersink, -totalSupplies);
 
         EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, 0, reducedTransitTimes, reducedBalances);
-        Algorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
+        AbstractAlgorithm<EarliestArrivalFlowProblem, TimeHorizonBounds> estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
 
         problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, estimator.getSolution().getUpperBound(), reducedTransitTimes, reducedBalances);
-        Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
+        AbstractAlgorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
 

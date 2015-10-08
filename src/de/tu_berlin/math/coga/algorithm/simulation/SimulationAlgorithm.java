@@ -16,7 +16,7 @@
 
 package de.tu_berlin.math.coga.algorithm.simulation;
 
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 
 /**
  *
@@ -24,7 +24,7 @@ import org.zetool.common.algorithm.Algorithm;
  * @param <T> the simulation result
  * @author Jan-Philipp Kappmeier
  */
-public abstract class SimulationAlgorithm<S,T> extends Algorithm<S,T> {
+public abstract class SimulationAlgorithm<S,T> extends AbstractAlgorithm<S,T> {
   /* Counter for the current simulation step. **/
   private int stepCount;
 

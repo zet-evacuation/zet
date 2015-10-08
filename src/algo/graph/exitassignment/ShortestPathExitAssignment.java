@@ -17,7 +17,7 @@
 package algo.graph.exitassignment;
 
 import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import org.zetool.container.collection.IdentifiableCollection;
@@ -29,7 +29,7 @@ import org.zetool.graph.DirectedGraph;
  *
  * @author Martin Groß
  */
-public class ShortestPathExitAssignment extends Algorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
+public class ShortestPathExitAssignment extends AbstractAlgorithm<NetworkFlowModel, ExitAssignment> implements Assignable {
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
