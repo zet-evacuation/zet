@@ -12,7 +12,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.Project;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;

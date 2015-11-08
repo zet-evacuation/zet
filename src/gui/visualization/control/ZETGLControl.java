@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package gui.visualization.control;
@@ -21,9 +21,9 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.CompareVisualizationResults;
 import ds.PropertyContainer;
 import ds.GraphVisualizationResults;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.PotentialManager;
-import ds.ca.evac.StaticPotential;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.PotentialManager;
+import org.zet.cellularautomaton.StaticPotential;
 import gui.visualization.control.building.GLBuildingControl;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLCAFloorControl;
@@ -46,7 +46,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import org.zetool.opengl.helper.Frustum;
 import org.zetool.opengl.framework.abs.DrawableControlable;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 import zet.gui.main.tabs.JVisualizationView;
 
 /**

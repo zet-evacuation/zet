@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.zet;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import org.zetool.common.algorithm.AlgorithmTerminatedEvent;
@@ -20,7 +20,6 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.Node;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.graph.DefaultDirectedGraph;
-import org.zetool.graph.DirectedGraph;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -189,13 +188,13 @@ public class FileFlow implements AlgorithmListener {
 	}
 
 	@Override
-	public void eventOccurred( AlgorithmEvent event ) {
+	public void eventOccurred( AbstractAlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent )
 			System.out.println( ((AlgorithmProgressEvent)event).getProgress() );
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
-			System.out.println( "Laufzeit Flussalgorithmus: " + event.getAlgorithm().getRuntime() );
+			System.out.println( "Laufzeit Flussalgorithmus: " + ((AlgorithmTerminatedEvent)event).getRuntime() );
 		else
 			System.out.println( event.toString() );
 	}

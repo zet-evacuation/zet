@@ -11,19 +11,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package io.visualization;
 
 import org.zetool.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.PotentialManager;
-import ds.ca.results.EvacuationRecording;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.PotentialManager;
+import org.zet.cellularautomaton.results.EvacuationRecording;
 import java.util.HashMap;
 import org.zetool.opengl.framework.abs.VisualizationResult;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 
 /**
  * A data structure containing all information about a run of the cellular
@@ -39,12 +39,12 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * A mapping from a cell to its offset relative to the room containing it.
 	 * (The offset of the room is NOT included!).
 	 */
-	private HashMap<ds.ca.evac.EvacCell, Vector3> caCellToZOffsetMapping;
+	private HashMap<org.zet.cellularautomaton.EvacCell, Vector3> caCellToZOffsetMapping;
 	/**
 	 * A mapping from a room to its offset relative to the floor containing it.
 	 * (The offset of the floor is NOT included!).
 	 */
-	private HashMap<ds.ca.evac.Room, Vector3> caRoomToZOffsetMapping;
+	private HashMap<org.zet.cellularautomaton.Room, Vector3> caRoomToZOffsetMapping;
 	/**
 	 * A mapping from a floor (given by ID) to its offset relative to the
 	 * origin of the z-project.
@@ -92,7 +92,7 @@ public class CAVisualizationResults implements VisualizationResult {
 			caFloorToZOffsetMapping.put( floorID, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
-		for( ds.ca.evac.Room room : caMapping.getCARooms() ) {
+		for( org.zet.cellularautomaton.Room room : caMapping.getCARooms() ) {
 			de.zet_evakuierung.model.Room zRoom = caMapping.get( room ).getRoom();
 			double xOffset = zRoom.getPolygon().getxOffset();
 			double yOffset = zRoom.getPolygon().getyOffset();
@@ -100,7 +100,7 @@ public class CAVisualizationResults implements VisualizationResult {
 			caRoomToZOffsetMapping.put( room, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
-		for( ds.ca.evac.EvacCell cell : caMapping.getCACells() ) {
+		for( org.zet.cellularautomaton.EvacCell cell : caMapping.getCACells() ) {
 			de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
 
 			double xOffset = zRasterSquare.getRelativeX();
@@ -110,13 +110,13 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 	}
 
-	public Vector3 get( ds.ca.evac.EvacCell cell ) {
+	public Vector3 get( org.zet.cellularautomaton.EvacCell cell ) {
 		if( caCellToZOffsetMapping.get( cell ) == null )
 			return new Vector3( 0.0d, 0.0d, 0.0d );
 		return caCellToZOffsetMapping.get( cell );
 	}
 
-	public Vector3 get( ds.ca.evac.Room room ) {
+	public Vector3 get( org.zet.cellularautomaton.Room room ) {
 		if( caRoomToZOffsetMapping.get( room ) == null )
 			return new Vector3( 0.0d, 0.0d, 0.0d );
 

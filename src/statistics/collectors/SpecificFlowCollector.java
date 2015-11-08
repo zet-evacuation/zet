@@ -5,7 +5,7 @@
 package statistics.collectors;
 
 import org.zetool.common.datastructure.Triple;
-import ds.ca.evac.EvacCell;
+import org.zet.cellularautomaton.EvacCell;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;

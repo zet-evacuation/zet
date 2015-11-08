@@ -11,30 +11,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-/*
- * StatisticsCollection.java
- *
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package statistic.graph;
 
+import org.zetool.statistic.Statistics;
 import java.util.LinkedList;
 import java.util.List;
-
-import statistic.common.Data;
 
 /**
  *
  * @author Martin Groß
  */
-public class StatisticsCollection<D extends Data> extends LinkedList<Statistics<D>> {
+public class StatisticsCollection<D> extends LinkedList<Statistics<D>> {
 
-    private List<String> names;
+    private final List<String> names;
 
     public StatisticsCollection() {
         super();
-        names = new LinkedList<String>();
+        names = new LinkedList<>();
     }
 
     @Override

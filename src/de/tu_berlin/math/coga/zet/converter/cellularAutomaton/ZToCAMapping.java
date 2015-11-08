@@ -11,14 +11,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,13 +46,13 @@ public class ZToCAMapping
 	 * A Map that maps Room-Objects of the Z-Datastructure to
 	 * Room-Objects of the ZA-Datastructure
 	 */
-	private Map<ZToCARoomRaster, ds.ca.evac.Room> zRoomToZARoom;
+	private Map<ZToCARoomRaster, org.zet.cellularautomaton.Room> zRoomToZARoom;
 	
 	/**
 	 * A Map that maps Room-Objects of the ZA-Datastructure to
 	 * Room-Objects of the Z-Datastructure
 	 */
-	private Map<ds.ca.evac.Room, ZToCARoomRaster> zARoomToZRoom;
+	private Map<org.zet.cellularautomaton.Room, ZToCARoomRaster> zARoomToZRoom;
 	
 	private Map<Integer, de.zet_evakuierung.model.Floor> zaFloorToZFloor;
 	
@@ -68,8 +68,8 @@ public class ZToCAMapping
 	{
 		this.cellToRasterSquare = new HashMap<EvacCell, ZToCARasterSquare>();
 		this.rasterSquareToCell = new HashMap<ZToCARasterSquare, EvacCell>();
-		this.zRoomToZARoom = new HashMap<ZToCARoomRaster, ds.ca.evac.Room>();
-		this.zARoomToZRoom = new HashMap<ds.ca.evac.Room, ZToCARoomRaster>();
+		this.zRoomToZARoom = new HashMap<ZToCARoomRaster, org.zet.cellularautomaton.Room>();
+		this.zARoomToZRoom = new HashMap<org.zet.cellularautomaton.Room, ZToCARoomRaster>();
 		this.zaFloorToZFloor = new HashMap<Integer, de.zet_evakuierung.model.Floor>();
 		this.zFloorToZAFloor = new HashMap<de.zet_evakuierung.model.Floor, Integer>();
 	}
@@ -98,7 +98,7 @@ public class ZToCAMapping
 		if(this.cellToRasterSquare.containsKey(cell) || this.rasterSquareToCell.containsKey(rasterSquare)){
 		    overwrite = true;
 		    ZToCARasterSquare oldSquare = this.cellToRasterSquare.get(cell);
-		    ds.ca.evac.EvacCell oldCell = this.rasterSquareToCell.get(rasterSquare);
+		    org.zet.cellularautomaton.EvacCell oldCell = this.rasterSquareToCell.get(rasterSquare);
 		    
 		    cellToRasterSquare.remove(oldCell);
 		    rasterSquareToCell.remove(oldSquare);		    
@@ -126,7 +126,7 @@ public class ZToCAMapping
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException" if at
 	 * least one of the two parameter-values is a null-pointer. 
 	 */
-	public boolean insertTuple(ZToCARoomRaster roomRaster, ds.ca.evac.Room zARoom) throws IllegalArgumentException {
+	public boolean insertTuple(ZToCARoomRaster roomRaster, org.zet.cellularautomaton.Room zARoom) throws IllegalArgumentException {
 		if (roomRaster == null)
 			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.zRoomIsNullException"));
 		if (zARoom == null)
@@ -137,7 +137,7 @@ public class ZToCAMapping
 			overwrite = true;
 			
 			ZToCARoomRaster oldRaster = this.zARoomToZRoom.get(zARoom);
-			ds.ca.evac.Room oldRoom = this.zRoomToZARoom.get(roomRaster);
+			org.zet.cellularautomaton.Room oldRoom = this.zRoomToZARoom.get(roomRaster);
 			
 			this.zARoomToZRoom.remove(oldRoom);
 			this.zRoomToZARoom.remove(oldRaster);
@@ -205,7 +205,7 @@ public class ZToCAMapping
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException", if
 	 * the parameter "zARoom" is a null-pointer.
 	 */
-	public ZToCARoomRaster get(ds.ca.evac.Room zARoom) throws IllegalArgumentException {
+	public ZToCARoomRaster get(org.zet.cellularautomaton.Room zARoom) throws IllegalArgumentException {
 		if (zARoom == null)
 			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZARoomParameterException"));
 		return this.zARoomToZRoom.get(zARoom);
@@ -229,7 +229,7 @@ public class ZToCAMapping
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException", if
 	 * the parameter "zRoom" is a null-pointer.
 	 */
-	public ds.ca.evac.Room get(ZToCARoomRaster rasteredRoom) throws IllegalArgumentException {
+	public org.zet.cellularautomaton.Room get(ZToCARoomRaster rasteredRoom) throws IllegalArgumentException {
 		if (rasteredRoom == null)
 			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZRoomParameterIsNullException"));
 		return this.zRoomToZARoom.get(rasteredRoom);
@@ -293,7 +293,7 @@ public class ZToCAMapping
 	 * of the ZA-Datastructure to an arbitrary Room of the Z-Datastructure, 
 	 * "false" if not.
 	 */
-	public boolean contains(ds.ca.evac.Room zARoom) {
+	public boolean contains(org.zet.cellularautomaton.Room zARoom) {
 		return this.zARoomToZRoom.containsKey(zARoom);
 	}
 	
@@ -306,7 +306,7 @@ public class ZToCAMapping
         return this.zFloorToZAFloor.containsKey(floor);
     }
 	
-	public Set<ds.ca.evac.Room> getCARooms(){
+	public Set<org.zet.cellularautomaton.Room> getCARooms(){
 	    return this.zARoomToZRoom.keySet();
 	}
 	
@@ -314,7 +314,7 @@ public class ZToCAMapping
 	    return this.zaFloorToZFloor.keySet();
 	}
 	
-	public Set<ds.ca.evac.EvacCell> getCACells(){
+	public Set<org.zet.cellularautomaton.EvacCell> getCACells(){
 	    return this.cellToRasterSquare.keySet();
 	}
 	
@@ -325,13 +325,13 @@ public class ZToCAMapping
 	        adoptedMapping.insertTuple(floor, zaFloorToZFloor.get(floor));
 	    }
 	    
-	    for(ds.ca.evac.Room room : getCARooms()){
+	    for(org.zet.cellularautomaton.Room room : getCARooms()){
 	        adoptedMapping.insertTuple(zARoomToZRoom.get(room), ca.getRoom(room.getID()));
 	    }
 	    
-	    for(ds.ca.evac.EvacCell cell : getCACells()){
-	        ds.ca.evac.Room newRoom = ca.getRoom(cell.getRoom().getID());
-	        ds.ca.evac.EvacCell adoptedCell = newRoom.getCell(cell.getX(), cell.getY());	        
+	    for(org.zet.cellularautomaton.EvacCell cell : getCACells()){
+	        org.zet.cellularautomaton.Room newRoom = ca.getRoom(cell.getRoom().getID());
+	        org.zet.cellularautomaton.EvacCell adoptedCell = newRoom.getCell(cell.getX(), cell.getY());	        
 	        
 	        adoptedMapping.insertTuple(adoptedCell, cellToRasterSquare.get(cell));
 	    }

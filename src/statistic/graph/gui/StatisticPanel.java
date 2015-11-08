@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
  * StatisticPanel.java
@@ -50,10 +50,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import statistic.graph.DynamicOperation;
-import statistic.graph.IntegerDoubleMapping;
-import statistic.graph.Operation;
+import org.zetool.container.mapping.IntegerDoubleMapping;
+import org.zetool.statistic.Operation;
 import statistic.graph.DoubleOperation;
-import statistic.graph.Statistic;
+import org.zetool.statistic.Statistic;
 import statistic.graph.gui.event.DiagramAddedEvent;
 import statistic.graph.gui.event.DiagramRemovedEvent;
 import statistic.graph.gui.event.DiagramSequenceChangedEvent;

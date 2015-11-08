@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
  * ComplexStatistic.java
@@ -19,18 +19,19 @@
  */
 package statistic.graph;
 
+import org.zetool.statistic.Operation;
+import org.zetool.statistic.Statistics;
+import org.zetool.statistic.Statistic;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import statistic.common.Data;
-
 /**
  *
  * @author Martin Groß
  */
-public class ComplexStatistic<O, R, D extends Data> {
+public class ComplexStatistic<O, R, D> {
 
     private Operation<R> objectOperation;
     private Object[] objectParameters;

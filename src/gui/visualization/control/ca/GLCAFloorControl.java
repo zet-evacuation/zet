@@ -11,11 +11,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package gui.visualization.control.ca;
 
-import ds.ca.evac.Room;
+import org.zet.cellularautomaton.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCAFloor;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor, GLCellularAutomatonControl> {
-	private HashMap<ds.ca.evac.Room, GLRoomControl> roomControls;
+	private HashMap<org.zet.cellularautomaton.Room, GLRoomControl> roomControls;
     
   private double xPosition = 0.0d;
 	private double yPosition = 0.0d;
@@ -77,7 +77,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 		return floorNumber;
 	}
 	
-	GLRoomControl getRoomControl( ds.ca.evac.Room room ) {
+	GLRoomControl getRoomControl( org.zet.cellularautomaton.Room room ) {
 		return roomControls.get(room);
 	}
 	

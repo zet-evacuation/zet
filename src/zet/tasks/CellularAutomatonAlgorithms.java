@@ -11,17 +11,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package zet.tasks;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonFrontToBack;
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
-import algo.ca.algorithm.evac.SwapCellularAutomaton;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonBackToFront;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonFrontToBack;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonInOrder;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonRandom;
+import org.zet.cellularautomaton.algorithm.SwapCellularAutomaton;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 
 /**

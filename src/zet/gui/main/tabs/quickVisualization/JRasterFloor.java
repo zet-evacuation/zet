@@ -11,12 +11,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package zet.gui.main.tabs.quickVisualization;
 
-import algo.ca.PotentialController;
-import algo.ca.SPPotentialController;
+import org.zet.cellularautomaton.algorithm.PotentialController;
+import org.zet.cellularautomaton.algorithm.SPPotentialController;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
@@ -25,14 +25,14 @@ import org.zetool.common.util.Direction8;
 import ds.PropertyContainer;
 import de.zet_evakuierung.model.Floor;
 import de.zet_evakuierung.model.Room;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.DynamicPotential;
-import ds.ca.evac.ExitCell;
-import ds.ca.evac.PotentialManager;
-import ds.ca.evac.SaveCell;
-import ds.ca.evac.StairCell;
-import ds.ca.evac.StaticPotential;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.DynamicPotential;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.PotentialManager;
+import org.zet.cellularautomaton.SaveCell;
+import org.zet.cellularautomaton.StairCell;
+import org.zet.cellularautomaton.StaticPotential;
 import de.zet_evakuierung.model.ZControl;
 import org.zet.components.model.editor.floor.AbstractFloor;
 import java.awt.Color;
@@ -40,7 +40,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zet.components.model.editor.floor.FloorViewModel;
 
 /**

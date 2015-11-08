@@ -16,16 +16,16 @@
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import algo.ca.parameter.AbstractParameterSet;
-import algo.ca.parameter.ParameterSet;
+import org.zet.cellularautomaton.algorithm.parameter.AbstractParameterSet;
+import org.zet.cellularautomaton.algorithm.parameter.ParameterSet;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.ExitCell;
-import ds.ca.evac.Individual;
-import ds.ca.evac.TargetCell;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.Individual;
+import org.zet.cellularautomaton.TargetCell;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Person;
 import de.zet_evakuierung.model.PlanPoint;

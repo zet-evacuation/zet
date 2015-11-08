@@ -1,10 +1,10 @@
 
 package batch.plugins.impl.simulation;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
-import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import algo.ca.algorithm.evac.EvacuationSimulationResult;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonBackToFront;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import net.xeoh.plugins.base.annotations.PluginImplementation;

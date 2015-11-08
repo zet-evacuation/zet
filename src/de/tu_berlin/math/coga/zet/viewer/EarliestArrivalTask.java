@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.zet.viewer;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import event.ProcessUpdateMessage;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
@@ -62,7 +62,7 @@ public class EarliestArrivalTask extends SwingWorker<PathBasedFlowOverTime, Proc
 
 	}
 
-	public void eventOccurred( AlgorithmEvent event ) {
+	public void eventOccurred( AbstractAlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			int progress = ((int)(((AlgorithmProgressEvent)event).getProgress()*100));
 			publish( new ProcessUpdateMessage( progress, "Flow Computation", "", "" ) );

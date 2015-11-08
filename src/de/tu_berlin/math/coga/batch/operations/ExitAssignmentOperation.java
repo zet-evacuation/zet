@@ -2,11 +2,11 @@ package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.components.batch.operations.AbstractOperation;
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
-import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import algo.ca.algorithm.evac.EvacuationSimulationResult;
-import algo.ca.algorithm.evac.SwapCellularAutomaton;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonRandom;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
+import org.zet.cellularautomaton.algorithm.SwapCellularAutomaton;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
@@ -26,11 +26,12 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.results.VisualResultsRecorder;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.results.VisualResultsRecorder;
 import evacuationplan.BidirectionalNodeCellMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.EvacuationSimulationResults;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
 import org.zetool.common.algorithm.Algorithm;
 
 /**
@@ -160,7 +161,7 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
 
         caAlgo = swapAlgo;
 
-        caAlgo.setProblem(new EvacuationSimulationProblem((ca)));
+        caAlgo.setProblem(new EvacuationSimulationProblemImpl((ca)));
         if (caAlgo instanceof EvacuationCellularAutomatonAlgorithm) {
             double caMaxTime = PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime");
             ((EvacuationCellularAutomatonAlgorithm) caAlgo).setMaxTimeInSeconds(caMaxTime);

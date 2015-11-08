@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /**
  * Class PotentialSelectionModel
@@ -19,8 +19,8 @@
  */
 
 package zet.gui.components.model;
-import ds.ca.evac.PotentialManager;
-import ds.ca.evac.StaticPotential;
+import org.zet.cellularautomaton.PotentialManager;
+import org.zet.cellularautomaton.StaticPotential;
 import javax.swing.DefaultComboBoxModel;
 
 /**

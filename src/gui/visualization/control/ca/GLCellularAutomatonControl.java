@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 /**
@@ -22,12 +22,12 @@
 package gui.visualization.control.ca;
 
 import org.zetool.math.Conversion;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.Individual;
-import ds.ca.results.DieAction;
-import ds.ca.results.MoveAction;
-import ds.ca.results.SwapAction;
-import ds.ca.results.EvacuationRecording;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.Individual;
+import org.zet.cellularautomaton.results.DieAction;
+import org.zet.cellularautomaton.results.MoveAction;
+import org.zet.cellularautomaton.results.SwapAction;
+import org.zet.cellularautomaton.results.EvacuationRecording;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.ca.GLCA;
@@ -176,7 +176,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		return this.allFloorsByID.get( floorID );
 	}
 
-	private GLCellControl getCellControl( ds.ca.evac.EvacCell cell ) {
+	private GLCellControl getCellControl( org.zet.cellularautomaton.EvacCell cell ) {
 		GLCAFloorControl floor = getFloorControl( cell.getRoom().getFloorID() );
 		GLRoomControl room = floor.getRoomControl( cell.getRoom() );
 		return room.getCellControl( cell );

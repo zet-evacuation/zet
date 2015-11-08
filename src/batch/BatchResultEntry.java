@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package batch;
 
@@ -20,7 +20,7 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
 import java.io.BufferedInputStream;
@@ -31,8 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import statistic.ca.CAStatistic;
-import statistic.ca.MultipleCycleCAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
+import org.zet.cellularautomaton.statistic.MultipleCycleCAStatistic;
 
 /** A set of results that were computed for a single BatchEntry. For every CA
  * cycle a new CA datastructure, a new CA statistic and a new CA visual result is

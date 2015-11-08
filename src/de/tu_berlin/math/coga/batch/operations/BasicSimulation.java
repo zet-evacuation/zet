@@ -2,9 +2,9 @@ package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.components.batch.operations.AbstractOperation;
-import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import algo.ca.algorithm.evac.EvacuationSimulationResult;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -18,11 +18,12 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.results.VisualResultsRecorder;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.results.VisualResultsRecorder;
 import io.visualization.EvacuationSimulationResults;
 import java.util.Arrays;
 import java.util.List;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
 import org.zetool.common.algorithm.Algorithm;
 
 /**
@@ -120,7 +121,7 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
     //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
     //selected = cellularAutomatonAlgorithm;
 
-    caAlgo.setProblem( new EvacuationSimulationProblem( (ca) ) );
+    caAlgo.setProblem( new EvacuationSimulationProblemImpl( (ca) ) );
     if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {
       double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
       ((EvacuationCellularAutomatonAlgorithm)caAlgo).setMaxTimeInSeconds( caMaxTime );

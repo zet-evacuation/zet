@@ -11,14 +11,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-/*
- * Controller.java
- *
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package statistic.graph;
 
+import org.zetool.statistic.Statistics;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
 import org.zetool.graph.Edge;
@@ -100,12 +97,12 @@ public class Controller implements DiagramListener, ProfileListener, StatisticLi
     private List<Node> nodes;
 
     private Controller() {
-        chartPanels = new HashMap<DiagramData, ChartPanel>();
-        statistics = new HashMap<DiagramData, List<DisplayableStatistic>>();
-        tableScrollPanes = new HashMap<DiagramData, JScrollPane>();
-        edges = new LinkedList<Edge>();
-        flows = new LinkedList<FlowOverTimePath>();
-        nodes = new LinkedList<Node>();
+        chartPanels = new HashMap<>();
+        statistics = new HashMap<>();
+        tableScrollPanes = new HashMap<>();
+        edges = new LinkedList<>();
+        flows = new LinkedList<>();
+        nodes = new LinkedList<>();
     }
 
     public void setFlow(NetworkFlowModel model, PathBasedFlowOverTime flow) {
@@ -114,9 +111,9 @@ public class Controller implements DiagramListener, ProfileListener, StatisticLi
         // flows.clear();  // This led to a null pointer exception - Replaced by Timon
         // nodes.clear();    // This led to a null pointer exception - Replaced by Timon
 		runs = new StatisticsCollection ();
-        edges = new LinkedList<Edge>();
-        flows = new LinkedList<FlowOverTimePath>();
-        nodes = new LinkedList<Node>();
+        edges = new LinkedList<>();
+        flows = new LinkedList<>();
+        nodes = new LinkedList<>();
 		
         if (model != null) {
             GraphData data = new GraphData(model, flow);

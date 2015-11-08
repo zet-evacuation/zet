@@ -5,11 +5,12 @@
 package zet.tasks;
 
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
@@ -17,7 +18,7 @@ import javax.swing.SwingWorker;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements AlgorithmListener {
+public class SerialTask extends SwingWorker<Void, AbstractAlgorithmEvent> implements AlgorithmListener {
 	private static Logger log = Logger.getGlobal();
 
 	ArrayList<AbstractAlgorithm<?,?>> algorithms;
@@ -72,15 +73,15 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 	 * @param event
 	 */
 	@Override
-	public void eventOccurred( AlgorithmEvent event ) {
+	public void eventOccurred( AbstractAlgorithmEvent event ) {
 		publish( event );
 	}
 
 	@Override
-	protected void process( List<AlgorithmEvent> chunks ) {
-		for( AlgorithmEvent event : chunks ) {
+	protected void process( List<AbstractAlgorithmEvent> chunks ) {
+		for( AbstractAlgorithmEvent event : chunks ) {
 			if( event instanceof AlgorithmStartedEvent ) {
-				Logger.getGlobal().fine( "Gestartet: " + ((AlgorithmStartedEvent)event).getAlgorithm().getName() );
+				Logger.getGlobal().log(Level.FINE, "Gestartet: {0}", ((AlgorithmStartedEvent)event).getAlgorithm());
 			}
 		}
 	}

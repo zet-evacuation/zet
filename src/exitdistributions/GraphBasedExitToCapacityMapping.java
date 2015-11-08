@@ -11,16 +11,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package exitdistributions;
 
 import algo.graph.exitassignment.ExitCapacityEstimator;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.StaticPotential;
-import ds.ca.evac.TargetCell;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.StaticPotential;
+import org.zet.cellularautomaton.TargetCell;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;

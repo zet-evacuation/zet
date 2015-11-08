@@ -11,14 +11,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-/*
- * JChart.java
- *
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package statistic.graph;
 
+import org.zetool.container.mapping.IntegerDoubleMapping;
 import java.awt.Color;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -32,8 +29,7 @@ import org.jfree.chart.renderer.xy.XYStepRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleInsets;
-import statistic.graph.gui.DisplayProfile;
-import statistic.graph.gui.DisplayableStatistic;
+import org.zetool.container.mapping.TimeValuePair;
 
 /**
  *
@@ -65,7 +61,7 @@ public class JChartPanel extends ChartPanel {
         } else {
             stepDataset.addSeries(series);
         }
-        for (IntegerDoubleMapping.TimeValuePair tvp : data) {
+        for (TimeValuePair tvp : data) {
             series.add(tvp.time(), tvp.value());
         }
     }

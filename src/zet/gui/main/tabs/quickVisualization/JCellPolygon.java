@@ -11,15 +11,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package zet.gui.main.tabs.quickVisualization;
 
 import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.util.Direction8;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.PlanPolygon;
 import org.zet.components.model.editor.CoordinateTools;
 import java.awt.BasicStroke;

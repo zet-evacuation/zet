@@ -7,7 +7,7 @@ import batch.plugins.AlgorithmPlugin;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.VisualizationDataStructureTask;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
@@ -21,7 +21,7 @@ import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import de.zet_evakuierung.model.ProjectLoader;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.AssignmentArea;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -111,8 +111,8 @@ import org.xml.sax.SAXException;
 import org.zetool.components.JLogPane;
 import org.zetool.components.Localizer;
 import org.zetool.components.batch.gui.JBatch;
-import statistic.ca.CAStatistic;
-import statistic.ca.MultipleCycleCAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
+import org.zet.cellularautomaton.statistic.MultipleCycleCAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JZetWindow;
@@ -1538,7 +1538,7 @@ public class GUIControl implements AlgorithmListener {
     boolean firstProgress = false;
     AlgorithmListener stepByStepListener = new AlgorithmListener() {
         @Override
-        public synchronized void eventOccurred(AlgorithmEvent event) {
+        public synchronized void eventOccurred(AbstractAlgorithmEvent event) {
             if (event instanceof AlgorithmStartedEvent) {
                 while (algorithmControl.getCellularAutomaton() == null) // the algorithm was started. we have to wait, until the
                 {
@@ -1568,7 +1568,7 @@ public class GUIControl implements AlgorithmListener {
     };
 
     @Override
-    public synchronized void eventOccurred(AlgorithmEvent event) {
+    public synchronized void eventOccurred(AbstractAlgorithmEvent event) {
         if (event instanceof AlgorithmProgressEvent) {
             AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
             log.log(Level.INFO, "Progress: {0}", ape.getProgress());

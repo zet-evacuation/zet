@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
  * PieChartCreator.java
@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import statistic.graph.IntegerDoubleMapping;
-import statistic.graph.Operation;
+import org.zetool.container.mapping.IntegerDoubleMapping;
+import org.zetool.statistic.Operation;
 import statistic.graph.gui.Charts;
 import statistic.graph.gui.DiagramData;
 import statistic.graph.gui.DisplayableStatistic;

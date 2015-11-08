@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package evacuationplan;
@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.Room;
-import ds.ca.evac.EvacCell;
+import org.zet.cellularautomaton.EvacCell;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.zetool.graph.Node;

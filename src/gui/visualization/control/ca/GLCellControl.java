@@ -11,20 +11,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package gui.visualization.control.ca;
 
-import algo.ca.util.PotentialUtils;
-import ds.ca.evac.PotentialManager;
-import ds.ca.evac.Room;
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.DoorCell;
-import ds.ca.evac.ExitCell;
-import ds.ca.evac.RoomCell;
-import ds.ca.evac.SaveCell;
-import ds.ca.evac.StairCell;
-import ds.ca.evac.StaticPotential;
+import org.zet.algo.ca.util.PotentialUtils;
+import org.zet.cellularautomaton.PotentialManager;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.DoorCell;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.RoomCell;
+import org.zet.cellularautomaton.SaveCell;
+import org.zet.cellularautomaton.StairCell;
+import org.zet.cellularautomaton.StaticPotential;
 import io.visualization.EvacuationSimulationResults;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
@@ -37,10 +36,10 @@ import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.common.util.Direction8;
-import ds.ca.evac.TeleportCell;
+import org.zet.cellularautomaton.TeleportCell;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 
 public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCellularAutomatonControl> implements StepUpdateListener {
 

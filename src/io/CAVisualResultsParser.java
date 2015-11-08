@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package io;
 
@@ -24,17 +24,17 @@ import java.io.IOException;
 
 import com.thoughtworks.xstream.XStream;
 
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.DoorCell;
-import ds.ca.evac.ExitCell;
-import ds.ca.evac.InitialConfiguration;
-import ds.ca.evac.Room;
-import ds.ca.evac.RoomCell;
-import ds.ca.evac.SaveCell;
-import ds.ca.evac.StairCell;
-import ds.ca.results.ExitAction;
-import ds.ca.results.MoveAction;
-import ds.ca.results.EvacuationRecording;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.DoorCell;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.InitialConfiguration;
+import org.zet.cellularautomaton.Room;
+import org.zet.cellularautomaton.RoomCell;
+import org.zet.cellularautomaton.SaveCell;
+import org.zet.cellularautomaton.StairCell;
+import org.zet.cellularautomaton.results.ExitAction;
+import org.zet.cellularautomaton.results.MoveAction;
+import org.zet.cellularautomaton.results.EvacuationRecording;
 
 /**
  * This class serializes and deserializes {@code EvacuationRecording}

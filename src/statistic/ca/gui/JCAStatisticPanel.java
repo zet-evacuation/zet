@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package statistic.ca.gui;
@@ -53,22 +53,24 @@ import batch.BatchResult;
 import batch.BatchResultEntry;
 import org.zetool.common.datastructure.NamedIndex;
 import ds.PropertyContainer;
-import statistic.ca.MultipleCycleCAStatistic;
-import statistic.ca.exception.GroupOfIndsNoPotentialException;
-import statistic.ca.exception.OneIndNoPotentialException;
+import org.zet.cellularautomaton.statistic.MultipleCycleCAStatistic;
+import org.zet.cellularautomaton.statistic.exception.GroupOfIndsNoPotentialException;
+import org.zet.cellularautomaton.statistic.exception.OneIndNoPotentialException;
 import ds.GraphVisualizationResults;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.Individual;
-import ds.ca.evac.DeathCause;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.Individual;
+import org.zet.cellularautomaton.DeathCause;
 import gui.ZETLoader;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
-import statistic.ca.exception.AllCyclesNoValueBecauseAlreadySafeException;
-import statistic.ca.exception.AllCyclesNoValueBecauseNotSafeException;
+import org.zet.cellularautomaton.statistic.exception.AllCyclesNoValueBecauseAlreadySafeException;
+import org.zet.cellularautomaton.statistic.exception.AllCyclesNoValueBecauseNotSafeException;
 
 /**
  *
@@ -184,7 +186,7 @@ public class JCAStatisticPanel extends JPanel {
 		return pane;
 	}
 
-	public void fillAssignmentTypeList( HashMap<String, UUID> mapping ) {
+	public void fillAssignmentTypeList( Map<String, UUID> mapping ) {
 		assignmentListModel.clear();
 		assignmentTypeToUUID.clear();
 		assignmentGroups.clear();
@@ -362,7 +364,7 @@ public class JCAStatisticPanel extends JPanel {
 			for( int j = 0; j < selectedBatchResultEntry.getCa().length; j++ ) {
 				tmpIndividualsPerCycle = new ArrayList<>();
 				for( String s : assignmentGroups.get( i ).getAssignmentTypes() ) {
-					HashSet<Individual> temp = selectedBatchResultEntry.getCa()[j].getIndividualsInAssignmentType( selectedBatchResultEntry.getCa()[j].getAssignmentUUIS( s ) );
+					Set<Individual> temp = selectedBatchResultEntry.getCa()[j].getIndividualsInAssignmentType( selectedBatchResultEntry.getCa()[j].getAssignmentUUIS( s ) );
 					if( temp == null )
 						continue;
 					tmpIndividualsPerCycle.addAll( temp );

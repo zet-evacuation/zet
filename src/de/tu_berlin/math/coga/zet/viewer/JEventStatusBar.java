@@ -11,12 +11,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package de.tu_berlin.math.coga.zet.viewer;
 
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmProgressEvent;
 import org.zetool.common.util.Formatter;
@@ -46,7 +46,7 @@ public class JEventStatusBar extends JStatusBar implements AlgorithmListener {
 	 * updates itself during the runtime.
 	 * @param event the event thrown. not only progress events. take care.
 	 */
-	public void eventOccurred( AlgorithmEvent event ) {
+	public void eventOccurred( AbstractAlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			final double progress = ((AlgorithmProgressEvent) event).getProgress();
 			progressBar.setValue( (int)(progress*100) );

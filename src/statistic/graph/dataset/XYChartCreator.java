@@ -11,13 +11,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-/*
- * XYChartCreator.java
- *
- */
-
 package statistic.graph.dataset;
 
 import java.util.HashMap;
@@ -28,8 +23,9 @@ import java.util.logging.Logger;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import statistic.graph.IntegerDoubleMapping;
-import statistic.graph.Operation;
+import org.zetool.container.mapping.IntegerDoubleMapping;
+import org.zetool.container.mapping.TimeValuePair;
+import org.zetool.statistic.Operation;
 import statistic.graph.gui.Charts;
 import statistic.graph.gui.DiagramData;
 import statistic.graph.gui.DiagramType;
@@ -191,8 +187,8 @@ public class XYChartCreator {
         } else if (data instanceof IntegerDoubleMapping) {
             IntegerDoubleMapping idm = (IntegerDoubleMapping) data;
             if (diagram.getType() == DiagramType.BAR_CHART) {
-                IntegerDoubleMapping.TimeValuePair start = idm.getFirst();
-                IntegerDoubleMapping.TimeValuePair end = idm.getLast();                
+                TimeValuePair start = idm.getFirst();
+                TimeValuePair end = idm.getLast();                
                 if (start.time() > end.time()) {
                     return series;
                 }
@@ -200,7 +196,7 @@ public class XYChartCreator {
                     series.add(i, idm.get(i));
                 }
             } else {
-                for (IntegerDoubleMapping.TimeValuePair tvp : idm) {
+                for (TimeValuePair tvp : idm) {
                     series.add(tvp.time(), tvp.value());
                 }
             }

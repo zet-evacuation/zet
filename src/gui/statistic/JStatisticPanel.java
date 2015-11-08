@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package gui.statistic;
 
@@ -20,10 +20,10 @@ import io.visualization.CAVisualizationResults;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import batch.BatchResult;
-import statistic.ca.MultipleCycleCAStatistic;
+import org.zet.cellularautomaton.statistic.MultipleCycleCAStatistic;
 import statistic.ca.gui.JCAStatisticPanel;
 import ds.GraphVisualizationResults;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Dimension;
 import javax.swing.JTextArea;

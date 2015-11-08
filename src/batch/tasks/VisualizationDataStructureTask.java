@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /**
  * Class VisualizationDataStructureTask
@@ -25,7 +25,7 @@ import ds.GraphVisualizationResults;
 import gui.visualization.control.ZETGLControl;
 import io.visualization.BuildingResults;
 import io.visualization.EvacuationSimulationResults;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 
 /**
  * A task that starts creation of the visualization data structure used for the

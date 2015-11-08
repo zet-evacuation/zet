@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 
 
 /**

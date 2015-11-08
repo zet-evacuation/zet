@@ -4,8 +4,8 @@
  */
 package gui;
 
-import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import algo.graph.exitassignment.ExitAssignment;
@@ -26,8 +26,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.results.VisualResultsRecorder;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.results.VisualResultsRecorder;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Project;
@@ -42,7 +42,8 @@ import java.beans.PropertyChangeListener;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import statistic.ca.CAStatistic;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
+import org.zet.cellularautomaton.statistic.CAStatistic;
 import tasks.conversion.BuildingPlanConverter;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.CompareTask;
@@ -293,7 +294,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		log.info( "Performing Simulation..." );
 
 		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithms.InOrder.getAlgorithm();
-		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
+		caAlgo.setProblem( new EvacuationSimulationProblemImpl( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		ca.startRecording ();
@@ -310,7 +311,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
     
     //caAlgo.getProblem().caStatisticWriter.getStoredCAStatisticResults().
-    visResults.statistic = new CAStatistic (caAlgo.getProblem().caStatisticWriter.getStoredCAStatisticResults ());
+    visResults.statistic = new CAStatistic (caAlgo.getProblem().getStatisticWriter().getStoredCAStatisticResults ());
     
     EvacuationCellularAutomaton cellularAutomaton = ca;
     //mapping = mapping;

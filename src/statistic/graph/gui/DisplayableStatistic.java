@@ -11,19 +11,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-/*
- * DisplayableStatistic.java
- *
- */
-
 package statistic.graph.gui;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import statistic.common.Data;
 import statistic.graph.ComplexStatistic;
 
 /**
@@ -31,13 +23,13 @@ import statistic.graph.ComplexStatistic;
  * @author Martin Groß
  */
 @XStreamAlias("statistic")
-public class DisplayableStatistic<O, R, D extends Data> {
+public class DisplayableStatistic<O, R, D> {
 
     private ComplexStatistic<O, R, D> statistic;
     private StatisticAttributes attributes;
 
     public DisplayableStatistic() {
-        statistic = new ComplexStatistic<O, R, D>();
+        statistic = new ComplexStatistic<>();
         attributes = new StatisticAttributes();
     }
 
@@ -104,7 +96,7 @@ public class DisplayableStatistic<O, R, D extends Data> {
 
     @Override
     public DisplayableStatistic<O, R, D> clone() {
-        DisplayableStatistic<O, R, D> clone = new DisplayableStatistic<O, R, D>();
+        DisplayableStatistic<O, R, D> clone = new DisplayableStatistic<>();
         clone.setAttributes(attributes.clone());
         clone.setStatistic(statistic.clone());
         return clone;

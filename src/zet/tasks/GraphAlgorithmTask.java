@@ -5,7 +5,7 @@
 package zet.tasks;
 
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
@@ -76,7 +76,7 @@ public class GraphAlgorithmTask extends AbstractAlgorithm<Project, GraphVisualiz
 	}
 
 	@Override
-	public void eventOccurred( AlgorithmEvent event ) {
+	public void eventOccurred( AbstractAlgorithmEvent event ) {
 
 	}
 }

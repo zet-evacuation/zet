@@ -4,11 +4,11 @@
  */
 package gui;
 
-import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.framework.StepByStepAutomaton;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.common.algorithm.AlgorithmEvent;
+import org.zetool.common.algorithm.AbstractAlgorithmEvent;
 import org.zetool.common.algorithm.AlgorithmListener;
 import org.zetool.common.algorithm.AlgorithmStartedEvent;
 import org.zetool.common.util.Formatter;
@@ -20,7 +20,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import ds.PropertyContainer;
-import ds.ca.evac.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.CellularAutomatonTask;
 import zet.tasks.SerialTask;
@@ -156,7 +157,7 @@ public class AlgorithmControlCellularAutomaton {
 
 	void setUpSimulationAlgorithm() {
 		EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm = simulationAlgorithm.getAlgorithm();
-		cellularAutomatonAlgorithm.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
+		cellularAutomatonAlgorithm.setProblem( new EvacuationSimulationProblemImpl( ( cellularAutomaton) ) );
 		double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
 		cellularAutomatonAlgorithm.setMaxTimeInSeconds( caMaxTime );
 	}
@@ -172,7 +173,7 @@ public class AlgorithmControlCellularAutomaton {
 
 	EvacuationCellularAutomatonAlgorithm eca = null;
 	EvacuationCellularAutomatonAlgorithm ecasbs = null;
-	class BackgroundTask<S> extends SwingWorker<S, AlgorithmEvent> {
+	class BackgroundTask<S> extends SwingWorker<S, AbstractAlgorithmEvent> {
 		AbstractAlgorithm<?,S> algo;
 		private BackgroundTask( AbstractAlgorithm<?,S> algorithm ) {
 			this.algo = algorithm;
@@ -210,7 +211,7 @@ public class AlgorithmControlCellularAutomaton {
 			 */
 			final AlgorithmListener al = new AlgorithmListener() {
 				@Override
-				public void eventOccurred( AlgorithmEvent event ) {
+				public void eventOccurred( AbstractAlgorithmEvent event ) {
 					if( event instanceof AlgorithmStartedEvent ) {
 						cellularAutomaton = cat.getCa();
 						mapping = cat.getMapping();

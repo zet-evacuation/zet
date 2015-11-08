@@ -11,43 +11,39 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package evacuationplan;
-
-import java.util.List;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.Individual;
-import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 
 public class FlowBasedCAFactory extends ZToCAConverter {
-	
-	private static FlowBasedCAFactory instance=null;
-	private static CAPathPassabilityChecker lastChecker=null; 
-	
-	protected FlowBasedCAFactory(){
-		
-	}
-	
-	/**
-	 * Creates a new cellular automaton from a building plan, 
-	 * a transshipment and a concrete assignment. Within the cellular automaton,
-	 * each individual gets its own potential that is conform to one of the
-	 * dynamic path flows in the transshipment.
-	 * @param buildingPlan The building in Z-Format.
-	 * @param transshipment A transshipment calculated for the graph in the same 
-	 * building with the same concrete assignment.
-	 * @param concreteAssignment All individuals and their positions.
-	 * @return A cellular automation realizing evacuation plans according to the transshipment.
-	 * @throws ConversionNotSupportedException
-	 */
-	public EvacuationCellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, PathBasedFlowOverTime transshipment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws ConversionNotSupportedException {
+
+    private static FlowBasedCAFactory instance = null;
+    private static CAPathPassabilityChecker lastChecker = null;
+
+    protected FlowBasedCAFactory() {
+
+    }
+
+    /**
+     * Creates a new cellular automaton from a building plan, a transshipment and a concrete assignment. Within the
+     * cellular automaton, each individual gets its own potential that is conform to one of the dynamic path flows in
+     * the transshipment.
+     *
+     * @param buildingPlan The building in Z-Format.
+     * @param transshipment A transshipment calculated for the graph in the same building with the same concrete
+     * assignment.
+     * @param concreteAssignment All individuals and their positions.
+     * @return A cellular automation realizing evacuation plans according to the transshipment.
+     * @throws ConversionNotSupportedException
+     */
+    public EvacuationCellularAutomaton convertAndApplyConcreteAssignment(BuildingPlan buildingPlan, PathBasedFlowOverTime transshipment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster) throws ConversionNotSupportedException {
 //		//CellularAutomaton ca = super.convert(buildingPlan);
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		//applyConcreteAssignment(concreteAssignment);
@@ -60,41 +56,41 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 //			//ca.getPotentialManager().addStaticPotential(ep);
 //			ind.setStaticPotential(ep);
 //		}
-		//return ca;
-		return new EvacuationCellularAutomaton();
-	}
-	
-	/**
-	 * The usual convert method may not be used because a transshipment is also needed.
-	 */
+        //return ca;
+        return new EvacuationCellularAutomaton();
+    }
+
+    /**
+     * The usual convert method may not be used because a transshipment is also needed.
+     */
 //	@Override
 //	public EvacuationCellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
 //		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
 //	}
 //
-	/**
-	 * Empty method to stop the converter from calculating static potentials. 
-	 * Potentials are added separately.
-	 */
-	@Override
-	protected void computeAndAddStaticPotentials(EvacuationCellularAutomaton convertedCA ){
-	}
+    /**
+     * Empty method to stop the converter from calculating static potentials. Potentials are added separately.
+     */
+    @Override
+    protected void computeAndAddStaticPotentials(EvacuationCellularAutomaton convertedCA) {
+    }
 
-	public static FlowBasedCAFactory getFlowBasedCAFactoryInstance(){
-		if (instance==null){
-			instance = new FlowBasedCAFactory();
-		}
-		return instance;
-	}
-	
-	/**
-	 * Returns the {@code CAPathPassabilityChecker} object created
-	 * during the last call of {@code convertAndApplyConcreteAssignment}.
-	 * @return the {@code CAPathPassabilityChecker} object created
-	 * during the last call of {@code convertAndApplyConcreteAssignment}.
-	 */
-	public CAPathPassabilityChecker getLatestCheckerInstance(){
-		return lastChecker;
-	}
-	
+    public static FlowBasedCAFactory getFlowBasedCAFactoryInstance() {
+        if (instance == null) {
+            instance = new FlowBasedCAFactory();
+        }
+        return instance;
+    }
+
+    /**
+     * Returns the {@code CAPathPassabilityChecker} object created during the last call of
+     * {@code convertAndApplyConcreteAssignment}.
+     *
+     * @return the {@code CAPathPassabilityChecker} object created during the last call of
+     * {@code convertAndApplyConcreteAssignment}.
+     */
+    public CAPathPassabilityChecker getLatestCheckerInstance() {
+        return lastChecker;
+    }
+
 }

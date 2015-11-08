@@ -4,7 +4,7 @@
  */
 package statistics;
 
-import algo.ca.parameter.DefaultParameterSet;
+import org.zet.cellularautomaton.algorithm.parameter.DefaultParameterSet;
 import org.zetool.rndutils.RandomUtils;
 import org.zetool.rndutils.distribution.continuous.NormalDistribution;
 import ds.PropertyContainer;

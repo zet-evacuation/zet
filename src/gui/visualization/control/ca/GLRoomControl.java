@@ -11,12 +11,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package gui.visualization.control.ca;
 
-import ds.ca.evac.EvacCell;
-import ds.ca.evac.Room;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
@@ -24,7 +24,7 @@ import io.visualization.EvacuationSimulationResults;
 import java.util.HashMap;
 
 public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
-	private HashMap<ds.ca.evac.EvacCell, GLCellControl> cellControls;
+	private HashMap<org.zet.cellularautomaton.EvacCell, GLCellControl> cellControls;
 	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
 	private double xPosition;
 	private double yPosition;
@@ -32,7 +32,6 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 
 	public GLRoomControl( EvacuationSimulationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
-		System.out.println( "Create room " + room.getIdentificationForStatistic() );
 		controlled = room;
 		xPosition = caVisResults.get( room ).x * mainControl.scaling;
 		yPosition = caVisResults.get( room ).y * mainControl.scaling;
@@ -65,7 +64,7 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 		return -yPosition;
 	}
 
-	GLCellControl getCellControl( ds.ca.evac.EvacCell cell ) {
+	GLCellControl getCellControl( org.zet.cellularautomaton.EvacCell cell ) {
 		return cellControls.get( cell );
 	}
 

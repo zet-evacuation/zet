@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 /*
  * StaticFlowStatistic.java
@@ -19,6 +19,8 @@
  */
 package statistic.graph;
 
+import org.zetool.statistic.Statistics;
+import org.zetool.statistic.Statistic;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
 import org.zetool.graph.Edge;
 import org.zetool.netflow.ds.structure.FlowOverTimeEdge;
