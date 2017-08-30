@@ -75,9 +75,11 @@ import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.ZModelRoomEvent;
 import org.zetool.components.property.PropertyTreeModelWriter;
 import event.EventServer;
+import event.MessageEvent;
 import gui.editor.properties.ZETOptionsLocalization;
 import gui.propertysheet.PropertyTreeNode;
 import io.visualization.BuildingResults;
+import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -187,7 +189,7 @@ public class GUIControl implements AlgorithmListener {
     private Templates<Door> doorTemplates = new Templates<>("empty");
     private Templates<ExitDoor> exitDoorTemplates = new Templates<>("empty");
     private PolygonPopup polygonPopup;
-	//private EdgePopup edgePopup;
+    //private EdgePopup edgePopup;
     //private PointPopup pointPopup;
     private SelectedFloorElements selection = new SelectedFloorElements();
     private EditViewControl editViewControl;
@@ -323,8 +325,8 @@ public class GUIControl implements AlgorithmListener {
         TemplateLoader tl = new TemplateLoader();
         tl.parse(new File(GUIOptionManager.getDoorTemplateFile()));
         doorTemplates = tl.getDoors();
-//		tl.parse( new File( GUIOptionManager.getExitDoorTemplateFile() ) );
-//		exitDoorTemplates = tl.getExitDoors();
+//        tl.parse( new File( GUIOptionManager.getExitDoorTemplateFile() ) );
+//        exitDoorTemplates = tl.getExitDoors();
         exitDoorTemplates = new Templates<>("empty");
     }
 
@@ -343,7 +345,7 @@ public class GUIControl implements AlgorithmListener {
         oldView.x *= zoomChange;
         oldView.y *= zoomChange;
         if (zoomChange > 1) {
-			// If we are zooming in, then we have to move our window to the "middle"
+            // If we are zooming in, then we have to move our window to the "middle"
             // of what the user previously saw. Right now we are in the upper left edge
             // of what he previously saw, and now we are doing this "move"
             int widthIncrement = (int) (oldView.width * zoomChange) - oldView.width;
@@ -356,12 +358,12 @@ public class GUIControl implements AlgorithmListener {
         // TODO give direct access to the left edit panel
         CoordinateTools.setZoomFactor(zoomFactor);
         editview.setZoomFactor(zoomFactor);
-		//editview.getFloor().getPlanImage().update();
+        //editview.getFloor().getPlanImage().update();
         //editview.updateFloorView();
-//		if( worker != null ) {
-//			 caView.getLeftPanel().setZoomFactor( zoomFactor );
-//			caView.updateFloorView();
-//		}
+//        if( worker != null ) {
+//             caView.getLeftPanel().setZoomFactor( zoomFactor );
+//            caView.updateFloorView();
+//        }
 
         //if( editToolBar != null )
         editToolBar.setZoomFactorText(zoomFactor);
@@ -377,33 +379,33 @@ public class GUIControl implements AlgorithmListener {
      */
     public void showArea(AreaType areaType) {
         updateVisibility(areaType, true);
-		// TODO make them visible!
-//		switch( areaType ) {
-//			case Delay:
-//				//TODO Menu
-//				//editor.mnuDelayArea.setSelected( true );
-//				break;
-//			case Stair:
-//				//editor.mnuStairArea.setSelected( true );
-//				break;
-//			case Evacuation:
-//				//editor.mnuEvacuationArea.setSelected( true );
-//				break;
-//			case Inaccessible:
-//				//editor.mnuInaccessibleArea.setSelected( true );
-//				break;
-//			case Save:
-//				//editor.mnuSaveArea.setSelected( true );
-//				break;
-//			case Assignment:
-//				//editor.mnuAssignmentArea.setSelected( true );
-//				break;
-//			case Teleport:
-//				// TODO
-//				break;
-//			default:
-//				JZetWindow.showErrorMessage("Error", "Dieser Area-Typ wird nicht unterstützt.");
-//		}
+        // TODO make them visible!
+//        switch( areaType ) {
+//            case Delay:
+//                //TODO Menu
+//                //editor.mnuDelayArea.setSelected( true );
+//                break;
+//            case Stair:
+//                //editor.mnuStairArea.setSelected( true );
+//                break;
+//            case Evacuation:
+//                //editor.mnuEvacuationArea.setSelected( true );
+//                break;
+//            case Inaccessible:
+//                //editor.mnuInaccessibleArea.setSelected( true );
+//                break;
+//            case Save:
+//                //editor.mnuSaveArea.setSelected( true );
+//                break;
+//            case Assignment:
+//                //editor.mnuAssignmentArea.setSelected( true );
+//                break;
+//            case Teleport:
+//                // TODO
+//                break;
+//            default:
+//                JZetWindow.showErrorMessage("Error", "Dieser Area-Typ wird nicht unterstützt.");
+//        }
         //editor.updateAreaVisiblity();
     }
 
@@ -618,25 +620,25 @@ public class GUIControl implements AlgorithmListener {
         visualization.repaint();
     }
 
-//	public void visualizationShowStaticPotential() {
-//		final int oldValue = PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" );
-//				if( oldValue == 1 ) {
-//					btnShowPotential.setSelected( false );
-//					control.showPotential( CellInformationDisplay.NoPotential );
-//					PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 0 );
-//				} else {
-//					btnShowPotential.setSelected( true );
-//					btnShowDynamicPotential.setSelected( false );
-//					btnShowUtilization.setSelected( false );
-//					btnShowWaiting.setSelected( false );
-//					PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 1 );
-//					visualizationView.unselectPotentialSelector();
-//					control.activateMergedPotential();
-//					control.showPotential( CellInformationDisplay.StaticPotential );
-//				}
-//				visualizationView.getGLContainer().repaint();
+//    public void visualizationShowStaticPotential() {
+//        final int oldValue = PropertyContainer.getGlobal().getAsInt( "settings.gui.visualization.floorInformation" );
+//                if( oldValue == 1 ) {
+//                    btnShowPotential.setSelected( false );
+//                    control.showPotential( CellInformationDisplay.NoPotential );
+//                    PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 0 );
+//                } else {
+//                    btnShowPotential.setSelected( true );
+//                    btnShowDynamicPotential.setSelected( false );
+//                    btnShowUtilization.setSelected( false );
+//                    btnShowWaiting.setSelected( false );
+//                    PropertyContainer.getGlobal().set( "settings.gui.visualization.floorInformation", 1 );
+//                    visualizationView.unselectPotentialSelector();
+//                    control.activateMergedPotential();
+//                    control.showPotential( CellInformationDisplay.StaticPotential );
+//                }
+//                visualizationView.getGLContainer().repaint();
 //
-//	}
+//    }
     public void visualizationShowCellInformation(CellInformationDisplay cid) {
         final int oldValue = PropertyContainer.getGlobal().getAsInt("settings.gui.visualization.floorInformation");
         if (oldValue == cid.id()) {
@@ -663,6 +665,7 @@ public class GUIControl implements AlgorithmListener {
 
         ds.GraphVisualizationResults graphRes = e.getGraphVis();
 
+        Logger.getGlobal().info("Building visualization data structure");
         VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask(caRes, graphRes, e.getBuildingResults(), caStatistic);
         JProgressBarDialog pbd = new JProgressBarDialog(editor, GUILocalization.loc.getStringWithoutPrefix("batch.tasks.buildVisualizationDatastructure"), true, visualizationDataStructure);
         pbd.executeTask();
@@ -675,10 +678,10 @@ public class GUIControl implements AlgorithmListener {
 
         visualizationToolBar.setEnabledVisibleElements(visualizationDataStructure.getControl());
 
-		//control.showCellularWa( btnShowCellularAutomaton.isSelected() );
+        //control.showCellularWa( btnShowCellularAutomaton.isSelected() );
         //control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
         //control.showGraph( btnShowGraph.isSelected() );
-//		control.showFloor( visualizationView.getSelectedFloorID() );
+//        control.showFloor( visualizationView.getSelectedFloorID() );
         visualizationView.updateFloorSelector();
         visualizationView.updatePotentialSelector();
     }
@@ -694,7 +697,7 @@ public class GUIControl implements AlgorithmListener {
     }
 
     public void outputInformation() {
-		// TODO move to another class
+        // TODO move to another class
         // Pro Stockwerk:
         log.info("Personenverteilung im Gebäude: ");
         int overall = 0;
@@ -745,16 +748,16 @@ public class GUIControl implements AlgorithmListener {
         conv.setProblem(zcontrol.getProject().getBuildingPlan());
 
         conv.run();
-		//final SerialTask st = new SerialTask( conv );
+        //final SerialTask st = new SerialTask( conv );
         //st.addPropertyChangeListener( new PropertyChangeListener() {
-        //	@Override
-        //	public void propertyChange( PropertyChangeEvent pce ) {
-        //		if( st.isDone() )
+        //    @Override
+        //    public void propertyChange( PropertyChangeEvent pce ) {
+        //        if( st.isDone() )
         NetworkFlowModel originalProblem = conv.getSolution();
-		//	}
+        //    }
         //} );
         //if( propertyChangeListener != null )
-        //	st.addPropertyChangeListener( propertyChangeListener );
+        //    st.addPropertyChangeListener( propertyChangeListener );
         //st.execute();
 
         ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment(zcontrol.getProject().getCurrentAssignment(), 400);
@@ -765,7 +768,7 @@ public class GUIControl implements AlgorithmListener {
         cav.run();
         originalProblem = cav.getSolution();
 
-		//BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( zcontrol.getProject().getBuildingPlan() ) );
+        //BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( zcontrol.getProject().getBuildingPlan() ) );
         //ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
         //Assignment assignment = zcontrol.getProject().getCurrentAssignment();
         //concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
@@ -807,8 +810,8 @@ public class GUIControl implements AlgorithmListener {
     public void loadProject() {
         if (jfcProject.showOpenDialog(editor) == JFileChooser.APPROVE_OPTION) {
             loadProject(jfcProject.getSelectedFile());
-			//zcontrol.loadProject( jfcProject.getSelectedFile() );
-            //editor.loadProject();	// Load the currently loaded project by the control file
+            //zcontrol.loadProject( jfcProject.getSelectedFile() );
+            //editor.loadProject();    // Load the currently loaded project by the control file
             //algorithmControl.setProject( zcontrol.getProject() );
             GUIOptionManager.setSavePath(jfcProject.getCurrentDirectory().getPath());
             GUIOptionManager.setLastFile(1, jfcProject.getSelectedFile().getAbsolutePath());
@@ -828,15 +831,15 @@ public class GUIControl implements AlgorithmListener {
      * Loads the project that is currently stored in zcontrol.
      */
     private void loadProjectInternal() {
-		// Reset GUI components
+        // Reset GUI components
         //if( tabPane.getSelectedIndex() > 1 )
-        //	tabPane.setSelectedIndex( 0 );
+        //    tabPane.setSelectedIndex( 0 );
         Floor f = zcontrol.getProject().getBuildingPlan().getFloors().get(1);
         editViewControl.setControlledProject(zcontrol.getProject().getBuildingPlan().getFloors());
         //editview.displayProject( zcontrol );
         caView.displayProject(zcontrol);
-		// Löschen eingestellter parameter
-//		ZToCAConverter.getInstance().clear();
+        // Löschen eingestellter parameter
+//        ZToCAConverter.getInstance().clear();
         //firstSwitch = true;
         // Updaten der gui
         editview.update();
@@ -957,7 +960,7 @@ public class GUIControl implements AlgorithmListener {
         switch (res) {
             case 2:
             case -1:
-                return;	// exit, do nothing
+                return;    // exit, do nothing
             case 0:
                 // save
                 if (zcontrol.getProject().getProjectFile() == null) {
@@ -1002,8 +1005,8 @@ public class GUIControl implements AlgorithmListener {
                 status = GUILocalization.loc.getString("gui.editor.JEditor.status.newProjectDiscard");
         }
         loadProject(null);
-		//zcontrol.newProject();
-        //editor.loadProject();	// Load the currently loaded project by the control file
+        //zcontrol.newProject();
+        //editor.loadProject();    // Load the currently loaded project by the control file
         //algorithmControl.setProject( zcontrol.getProject() );
         ZETLoader.sendMessage(status);
     }
@@ -1135,7 +1138,7 @@ public class GUIControl implements AlgorithmListener {
     }
 
     public void setRasterizedPaintMode(boolean selected) {
-//		editview.getFloor().setRasterizedPaintMode( select );
+//        editview.getFloor().setRasterizedPaintMode( select );
     }
 
     public void setRasterPaintStyle(RasterPaintStyle rasterPaintStyle) {
@@ -1242,7 +1245,7 @@ public class GUIControl implements AlgorithmListener {
         opt.setModal(true);
         opt.setVisible(true);
 
-        try {	// Save results in options file
+        try {    // Save results in options file
             PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
             writer.saveConfigFile(ZETLoader.ptmOptions, new FileWriter(ZETLoader.optionFilename));
         } catch (IOException ex) {
@@ -1258,7 +1261,7 @@ public class GUIControl implements AlgorithmListener {
         opt.setModal(true);
         opt.setVisible(true);
 
-        try {	// Save results in settings file
+        try {    // Save results in settings file
             PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
             writer.saveConfigFile(ZETLoader.ptmInformation, new FileWriter(ZETLoader.informationFilename));
         } catch (IOException ex) {
@@ -1308,7 +1311,7 @@ public class GUIControl implements AlgorithmListener {
     }
 
     public void setSelectedPolygon(PlanPolygon<?> poly) {
-//		editview.getFloor().setSelectedPolygon( poly );
+//        editview.getFloor().setSelectedPolygon( poly );
     }
 
     public void createBuildingDataStructure() {
@@ -1341,11 +1344,16 @@ public class GUIControl implements AlgorithmListener {
         visualization.getControl().setGraphControl(gvr);
     }
 
-    public void addVisualization(EvacuationSimulationResults cav) {
+    public void addVisualization(CellularAutomatonVisualizationResults cav) {
         visualization.getControl().setCellularAutomatonControl(cav);
     }
 
+    public void addVisualization(EvacuationSimulationResults esr) {
+        visualization.getControl().setEvacuationResults(esr);
+    }
+
     public void createCellularAutomaton() {
+        log.warning("Converting a cellular automaton");
         algorithmControl.convertCellularAutomaton(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent pce) {
@@ -1375,11 +1383,11 @@ public class GUIControl implements AlgorithmListener {
                                     throw new IllegalStateException("A selection that is not supported has been made.");
                             }
                         }
-                        EvacuationSimulationResults caVis = new EvacuationSimulationResults(algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager(), algorithmControl.getCellularAutomaton());
-
+                    } else {
+                        CellularAutomatonVisualizationResults caVis = new CellularAutomatonVisualizationResults(algorithmControl.getMapping(), algorithmControl.getCellularAutomaton());
                         visualization.getControl().setCellularAutomatonControl(caVis);
                         visualizationView.updatePotentialSelector();
-//						visualizationView.updateFloorSelector();
+//                        visualizationView.updateFloorSelector();
                         caView.getLeftPanel().getMainComponent().setSimulationData(algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping());
                         //caView.displayFloor(editview.getCurrentFloor());
                         firstProgress = true;
@@ -1391,11 +1399,11 @@ public class GUIControl implements AlgorithmListener {
 
     public void createConcreteAssignment() {
         throw new UnsupportedOperationException("Cannot create concrete assignments for fun.");
-//		try {
-//			algorithmControl.createConcreteAssignment();
-//		} catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
-//			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
-//		}
+//        try {
+//            algorithmControl.createConcreteAssignment();
+//        } catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
+//            Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
+//        }
     }
 
     public void performSimulation() {
@@ -1410,8 +1418,19 @@ public class GUIControl implements AlgorithmListener {
                         //Debug.printException( algorithmControl.getError() );
                         algorithmControl.getError().printStackTrace(System.err);
                     } else {
-                        log.log(Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
-                        visualization.getControl().setCellularAutomatonControl(algorithmControl.getCaVisResults());
+                        log.info("visr: " + algorithmControl.getCaVisResults());
+                        log.info("es: " + algorithmControl.getCaVisResults().getEs());
+                        log.info("count: " + algorithmControl.getCaVisResults().getEs().getRemainingIndividualCount());
+                        int remainingIndividuals = algorithmControl.getCaVisResults().getEs().getRemainingIndividualCount();
+                        log.log(Level.INFO, "Remaining individuals: {0}", remainingIndividuals);
+
+                        CellularAutomatonVisualizationResults caVis = new CellularAutomatonVisualizationResults(algorithmControl.getMapping(), algorithmControl.getCellularAutomaton());
+                        visualization.getControl().setCellularAutomatonControl(caVis);
+
+                        EvacuationSimulationResults visResult = algorithmControl.getCaVisResults();
+                        
+                        visualization.getControl().setEvacuationResults(visResult);
+
                         visualizationView.updatePotentialSelector();
                         visualizationToolBar.setEnabledPlayback(true);
                         caView.getLeftPanel().getMainComponent().setSimulationData(algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping());
@@ -1419,35 +1438,35 @@ public class GUIControl implements AlgorithmListener {
                         ZETLoader.sendMessage("Simulation beendet");
 
                         // Send data to statistic
-                        caStatisticView.setCellularAutomaton(algorithmControl.getCellularAutomaton());
-                        caStatisticView.setCA(algorithmControl.getCaVisResults());
+                        //caStatisticView.setCellularAutomaton(algorithmControl.getCellularAutomaton());
+                        //caStatisticView.setCA(algorithmControl.getCaVisResults());
 
-                        BatchResult result = new BatchResult(false);
+                        //BatchResult result = new BatchResult(false);
 
                         // Assume, building results are available here. Should be the case.
-                        BatchResultEntry entry = new BatchResultEntry("Simulation Result", algorithmControl.getBuildingResults());
+                        //BatchResultEntry entry = new BatchResultEntry("Simulation Result", algorithmControl.getBuildingResults());
 
-                        entry.setCellularAutomatonStatistic(0, algorithmControl.getCaVisResults().statistic);
-                        entry.setCellularAutomatonVisualization(0, algorithmControl.getCaVisResults());
-                        entry.setCellularAutomaton(0, algorithmControl.getCellularAutomaton());
+                        //entry.setCellularAutomatonStatistic(0, algorithmControl.getCaVisResults().statistic);
+                        //entry.setCellularAutomatonVisualization(0, algorithmControl.getCaVisResults());
+                        //entry.setCellularAutomaton(0, algorithmControl.getCellularAutomaton());
 
-                        MultipleCycleCAStatistic mcc = new MultipleCycleCAStatistic(1);
-                        mcc.addCycle(algorithmControl.getCaVisResults().statistic);
-                        entry.setMultipleCycleCAStatistic(mcc);
-                        try {
+                        //MultipleCycleCAStatistic mcc = new MultipleCycleCAStatistic(1);
+                        //mcc.addCycle(algorithmControl.getCaVisResults().statistic);
+                        //entry.setMultipleCycleCAStatistic(mcc);
+                        //try {
               //algorithmControl.getCaVisResults().statistic;
 
               //CAStatistic cas = new CAStatistic(null );
               ///entry.setCellularAutomatonStatistic( 1, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
                             //new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().getStoredCAStatisticResults ());
-                            result.addResult(entry);
-                        } catch (IOException ex) {
-                            Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
-                            throw new IllegalStateException("WTF???");
-                        }
-                        caStatisticView.setResult(result);
+                        //    result.addResult(entry);
+                        //} catch (IOException ex) {
+                        //    Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
+                        //    throw new IllegalStateException("WTF???");
+                        //}
+                        //caStatisticView.setResult(result);
 
-                        //EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+                        EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
                     }
                 }
             }
@@ -1503,15 +1522,17 @@ public class GUIControl implements AlgorithmListener {
             @Override
             public void propertyChange(PropertyChangeEvent pce) {
                 if (isDone(pce)) {
-					//GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
+                    //GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
                     //visualization.getControl().setGraphControl( gvr );
                     log.info("ExitAssignmentEAT is done.");
                 }
             }
         }, this);
 
-        log.log(Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
-        visualization.getControl().setCellularAutomatonControl(algorithmControl.getCaVisResults());
+        log.severe("Individual count not correct");
+        // algorithmControl.getCellularAutomaton().getIndividualCount();
+        log.log(Level.INFO, "Left individuals: {0}", 1);
+        visualization.getControl().setEvacuationResults(algorithmControl.getCaVisResults());
         visualizationView.updatePotentialSelector();
         visualizationToolBar.setEnabledPlayback(true);
         caView.getLeftPanel().getMainComponent().setSimulationData(algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping());
@@ -1542,8 +1563,8 @@ public class GUIControl implements AlgorithmListener {
             if (event instanceof AlgorithmStartedEvent) {
                 while (algorithmControl.getCellularAutomaton() == null) // the algorithm was started. we have to wait, until the
                 {
-                    try {																										 // computed data, as the CA and so on are available, if
-                        Thread.sleep(100);																		 // this event is dispatched earlier.
+                    try {                                                                                                         // computed data, as the CA and so on are available, if
+                        Thread.sleep(100);                                                                         // this event is dispatched earlier.
                         System.out.println("We are waiting here...");
                     } catch (InterruptedException ex) {
                         Logger.getLogger(AlgorithmControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -1612,12 +1633,12 @@ public class GUIControl implements AlgorithmListener {
 
     protected synchronized void handleProgressEvent(int progress) {
         editor.setProgressValue(progress);
-//		if( progress == 100 )
-//			editor.disableProgressBar();
+//        if( progress == 100 )
+//            editor.disableProgressBar();
     }
 
     public void executeTask(Runnable task) {
-		// Execute task
+        // Execute task
         //editor.enableProgressBar();
         AlgorithmTask worker = AlgorithmTask.getNewInstance();
         worker.setTask(task);
@@ -1683,6 +1704,6 @@ public class GUIControl implements AlgorithmListener {
     }
 
     public EditViewModel getViewModel() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new EditViewModel(zcontrol.getProject().getBuildingPlan(), 0);
     }
 }

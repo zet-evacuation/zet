@@ -13,21 +13,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	02110-1301, USA.
  */
-
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.zet_evakuierung.model.ConcreteAssignment;
 import org.zetool.common.datastructure.SimpleTuple;
 
-
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
+public class AssignmentApplicationInstance extends SimpleTuple<ConvertedCellularAutomaton, ConcreteAssignment> {
 
-	public class AssignmentApplicationInstance extends SimpleTuple<ConvertedCellularAutomaton, ConcreteAssignment> {
-
-		public AssignmentApplicationInstance( ConvertedCellularAutomaton u, ConcreteAssignment v ) {
-			super( u, v );
-		}
-	}
+    public AssignmentApplicationInstance(ConvertedCellularAutomaton u, ConcreteAssignment v) {
+        super(u, v);
+    }
+}

@@ -2,11 +2,9 @@ package de.tu_berlin.math.coga.batch.operations;
 
 import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.components.batch.operations.AbstractOperation;
-import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonRandom;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
 import org.zet.cellularautomaton.algorithm.SwapCellularAutomaton;
-import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
@@ -26,12 +24,20 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.PropertyContainer;
-import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.results.VisualResultsRecorder;
 import evacuationplan.BidirectionalNodeCellMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.EvacuationSimulationResults;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import org.zet.cellularautomaton.EvacCellInterface;
+import org.zet.cellularautomaton.Individual;
+import org.zet.cellularautomaton.InitialConfiguration;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
+import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import org.zetool.common.algorithm.Algorithm;
 
 /**
@@ -73,7 +79,7 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
     @Override
     public void run() {
         Project project = input.getSolution();
-    //todo
+        //todo
         // step 1: compute an exit assignment
         // here we use plugins to select type of exit assignment
 
@@ -104,10 +110,10 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
         System.out.println("Exit Assignment: ");
         System.out.println(exitAssignment);
 
-    // step 2: put the exit assingment into a cellular automaton
-    // We now have to create a cellular automaton, assign the concrete assignment and have to map the exits to the
+        // step 2: put the exit assingment into a cellular automaton
+        // We now have to create a cellular automaton, assign the concrete assignment and have to map the exits to the
         // chosen exits in our above exit computation
-        EvacuationCellularAutomaton ca;
+        MultiFloorEvacuationCellularAutomaton ca;
         ZToCAMapping mapping;
         ZToCARasterContainer container;
 
@@ -124,11 +130,11 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
         container = caConv.getContainer();
         ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton(ca, mapping, container);
 
-    // here we have to assign the concrete assignment
+        // here we have to assign the concrete assignment
         // create and convert concrete assignment
         System.out.println("Creating concrete Assignment.");
         for (AssignmentType at : project.getCurrentAssignment().getAssignmentTypes()) {
-            ca.setAssignmentType(at.getName(), at.getUid());
+            //ca.setAssignmentType(at.getName(), at.getUid());
         }
         //ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
         final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
@@ -137,7 +143,7 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
 
         ZToGraphRasterContainer graphRaster = networkFlowModel.getZToGraphMapping().getRaster();
 
-        cca = cac.getSolution();
+        cca = caConv.getSolution();
 
         BidirectionalNodeCellMapping.CAPartOfMapping caPartOfMapping = caConv.getLatestCAPartOfNodeCellMapping();
 
@@ -149,31 +155,33 @@ public class ExitAssignmentOperation extends AbstractOperation<Project, Evacuati
         graphBasedIndividualToExitMaping.calculate();
         System.out.println("Graph based individual to exit mapping:");
         System.out.println(graphBasedIndividualToExitMaping);
-        ca.setIndividualToExitMapping(graphBasedIndividualToExitMaping);
+        // TODO exit computation
+        //ca.setIndividualToExitMapping(graphBasedIndividualToExitMaping);
 
-    // step 3: simulate
-        //EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonRandom();
-        AbstractAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = new EvacuationCellularAutomatonRandom();
-    //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
-        //selected = cellularAutomatonAlgorithm;
+        // step 3: simulate
+        AbstractAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo;
 
         SwapCellularAutomaton swapAlgo = new SwapCellularAutomaton();
 
         caAlgo = swapAlgo;
 
-        caAlgo.setProblem(new EvacuationSimulationProblemImpl((ca)));
-        if (caAlgo instanceof EvacuationCellularAutomatonAlgorithm) {
-            double caMaxTime = PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime");
-            ((EvacuationCellularAutomatonAlgorithm) caAlgo).setMaxTimeInSeconds(caMaxTime);
-        }
-        ca.startRecording();
+        List<Individual> individuals = Collections.emptyList();
+        Map<Individual, EvacCellInterface> individualStartPositions = Collections.emptyMap();
+
+        InitialConfiguration ic = new InitialConfiguration(ca, individuals, individualStartPositions);
+        EvacuationSimulationProblemImpl esp = new EvacuationSimulationProblemImpl(ic);
+        double caMaxTime = PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime");
+        esp.setEvacuationTimeLimit((int)caMaxTime);
+        caAlgo.setProblem(esp);
 
         caAlgo.run();
-        ca.stopRecording();
 
         System.out.println("Recording stopped.");
 
-        visResults = new EvacuationSimulationResults(VisualResultsRecorder.getInstance().getRecording(), mapping, ca);
+        VisualResultsRecorder recorder = new VisualResultsRecorder(null, null);
+        EvacuationState es = null; //caAlgo.getSolution().getEvacuationState();
+        EvacuationSimulationSpeed ess = null; //caAlgo.getEvacuationSimulationSpeed();
+        visResults = new EvacuationSimulationResults(es, ess, recorder.getRecording());
     }
 
     @Override

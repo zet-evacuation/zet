@@ -17,62 +17,67 @@
  * Class VisualizationDataStructureTask
  * Erstellt 27.06.2008, 00:45:14
  */
-
 package batch.tasks;
 
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import gui.visualization.control.ZETGLControl;
 import io.visualization.BuildingResults;
+import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 
 /**
- * A task that starts creation of the visualization data structure used for the
- * visualization of flows and cellular automaton.
+ * A task that starts creation of the visualization data structure used for the visualization of flows and cellular
+ * automaton.
+ *
  * @author Jan-Philipp Kappmeier
  */
 public class VisualizationDataStructureTask implements Runnable {
-	private EvacuationSimulationResults caRes;
-	private GraphVisualizationResults graphRes;
-	private BuildingResults buildingRes;
-	private ZETGLControl control;
-	private CAStatistic caStatistic;
-        private CompareVisualizationResults compVisRes;
 
-	/**
-	 * Initializes the task with the needed objects.
-	 * @param caVisResults the results of the cellular automaton
-	 * @param graphVisResults the results of a flow optimization on a graph
-	 * @param buildingResults the structure of the building
-	 * @param caStatistic the statistic for the current run
-	 */
-	public VisualizationDataStructureTask( EvacuationSimulationResults caVisResults, GraphVisualizationResults graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic ) {
-		//if( caVisResults == null )
-		//	throw new java.lang.IllegalArgumentException( "Cellular Automaton results are null." );
-		//if( graphVisResults == null )
-		//	throw new java.lang.IllegalArgumentException( "Graph results are null." );
-		if( buildingResults == null )
-			throw new java.lang.IllegalArgumentException( "Building results are null." );
-		caRes = caVisResults;
-		graphRes = graphVisResults;
-		buildingRes = buildingResults;
-		this.caStatistic = caStatistic;
-	}
-	
-	/**
-	 * Creates the ZETGLControl object
-	 */
+    private CellularAutomatonVisualizationResults caRes;
+    private EvacuationSimulationResults evacRes;
+    private GraphVisualizationResults graphRes;
+    private BuildingResults buildingRes;
+    private ZETGLControl control;
+    private CAStatistic caStatistic;
+    private CompareVisualizationResults compVisRes;
 
-	public void run() {
-		control = new ZETGLControl( caRes, graphRes, buildingRes, caStatistic, compVisRes );
-	}
+    /**
+     * Initializes the task with the needed objects.
+     *
+     * @param caVisResults the results of the cellular automaton
+     * @param graphVisResults the results of a flow optimization on a graph
+     * @param buildingResults the structure of the building
+     * @param caStatistic the statistic for the current run
+     */
+    public VisualizationDataStructureTask(EvacuationSimulationResults caVisResults, GraphVisualizationResults graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic) {
+        //if( caVisResults == null )
+        //	throw new java.lang.IllegalArgumentException( "Cellular Automaton results are null." );
+        //if( graphVisResults == null )
+        //	throw new java.lang.IllegalArgumentException( "Graph results are null." );
+        if (buildingResults == null) {
+            throw new java.lang.IllegalArgumentException("Building results are null.");
+        }
+        evacRes = caVisResults;
+        graphRes = graphVisResults;
+        buildingRes = buildingResults;
+        this.caStatistic = caStatistic;
+    }
 
-	/**
-	 * Returns the created control object
-	 * @return the control object
-	 */
-	public ZETGLControl getControl() {
-		return control;
-	}
+    /**
+     * Creates the ZETGLControl object
+     */
+    public void run() {
+        control = new ZETGLControl(caRes, null, graphRes, buildingRes, caStatistic, compVisRes);
+    }
+
+    /**
+     * Returns the created control object
+     *
+     * @return the control object
+     */
+    public ZETGLControl getControl() {
+        return control;
+    }
 }

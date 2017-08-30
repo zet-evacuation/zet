@@ -1,6 +1,4 @@
-package algo.ca.framework;
-
-import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
+package org.zet.cellularautomaton.algorithm;
 
 /**
  *

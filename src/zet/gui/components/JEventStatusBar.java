@@ -13,12 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 package zet.gui.components;
 
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
+import gui.MessageType;
+import static gui.MessageType.Error;
+import static gui.MessageType.MousePosition;
+import static gui.MessageType.Status;
+import static gui.MessageType.VideoFrame;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,90 +30,96 @@ import javax.swing.Timer;
 import org.zetool.components.JStatusBar;
 
 /**
- * The status bar for the Z-Editor. Consisting (basically) of 3 fields used to
- * display error- status- mouse- and edit mode messages.
- * TODO: resize (has to be done in base class)
+ * The status bar for the Z-Editor. Consisting (basically) of 3 fields used to display error- status- mouse- and edit
+ * mode messages. TODO: resize (has to be done in base class)
+ *
  * @author Jan-Philipp Kappmeier
  */
-public class JEventStatusBar extends JStatusBar implements EventListener<MessageEvent> {
-	private Timer blinkTimer;
-	private Color blinkColor = Color.RED;
-	private int blinkCount = 0;
-			
-	private Color labelBackground;
-	
-	/**
-	 * Initializes an empty status bar.
-	 */
-	public JEventStatusBar() {
-		super();
-		EventServer.getInstance().registerListener( this, MessageEvent.class );
-		addElement();
-		addElement();
-		rebuild();
+public class JEventStatusBar extends JStatusBar implements EventListener<MessageEvent<?, MessageType>> {
 
-		labelBackground = components.get( 0 ).getBackground();
+    private Timer blinkTimer;
+    private Color blinkColor = Color.RED;
+    private int blinkCount = 0;
 
-		blinkTimer = new Timer( 200, new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				if( blinkCount == 0 )
-					components.get( 0 ).setOpaque( true );
+    private Color labelBackground;
 
-				if( blinkCount < 6 ) {
-					if( components.get( 0 ).getBackground() == labelBackground )
-						components.get( 0 ).setBackground( blinkColor );
-					else
-						components.get( 0 ).setBackground( labelBackground );
-					blinkCount++;
-				} else
-					stopBlinking();
-			}
-		} );
-		blinkTimer.setInitialDelay( 0 );
-		blinkTimer.setRepeats( true );
-	}
+    /**
+     * Initializes an empty status bar.
+     */
+    public JEventStatusBar() {
+        super();
+        EventServer.getInstance().registerListener((EventListener)this, MessageEvent.class);
+        addElement();
+        addElement();
+        rebuild();
 
-	private void stopBlinking() {
-		components.get( 0 ).setBackground( labelBackground );
-		blinkTimer.stop();
-		blinkCount = 0;
-		components.get( 0 ).setOpaque( false );
-	}
+        labelBackground = components.get(0).getBackground();
 
-	public void blink( String message ) {
-		setStatusText( 0, message );
-		if( !message.isEmpty() )
-			blinkTimer.start();
-		else
-			stopBlinking();
-	}
+        blinkTimer = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (blinkCount == 0) {
+                    components.get(0).setOpaque(true);
+                }
 
-	/**
-	 * Handles events sent from the {@link event.EventServer}, if the event is of
-	 * one of the types {@code Error}, {@code Status}, {@code MousePosition} or
-	 * {@code EditMode} the message is displayed on one of the four initial
-	 * elements.
-	 * @param event
-	 * @see event.MessageEvent.MessageType
-	 */
-	@Override
-	public void handleEvent ( MessageEvent event ) {
-		switch( event.getType () ) {
-			case Error:
-				if( event.getMessage() != null  )
-					blink( event.getMessage() );
-				break;
-			case Status:
-				setStatusText ( 1, event.getMessage () );
-				break;
-			case MousePosition:
-			case VideoFrame:
-				setStatusText ( 2, event.getMessage () );
-				break;
-			//case EditMode:
-			//	setStatusText ( 3, event.getMessage () );
-			//	break;
-		}
-	}
+                if (blinkCount < 6) {
+                    if (components.get(0).getBackground() == labelBackground) {
+                        components.get(0).setBackground(blinkColor);
+                    } else {
+                        components.get(0).setBackground(labelBackground);
+                    }
+                    blinkCount++;
+                } else {
+                    stopBlinking();
+                }
+            }
+        });
+        blinkTimer.setInitialDelay(0);
+        blinkTimer.setRepeats(true);
+    }
+
+    private void stopBlinking() {
+        components.get(0).setBackground(labelBackground);
+        blinkTimer.stop();
+        blinkCount = 0;
+        components.get(0).setOpaque(false);
+    }
+
+    public void blink(String message) {
+        setStatusText(0, message);
+        if (!message.isEmpty()) {
+            blinkTimer.start();
+        } else {
+            stopBlinking();
+        }
+    }
+
+    /**
+     * Handles events sent from the {@link event.EventServer}, if the event is of one of the types {@code Error},
+     * {@code Status}, {@code MousePosition} or {@code EditMode} the message is displayed on one of the four initial
+     * elements.
+     *
+     * @param event
+     * @see gui.MessageType
+     */
+    @Override
+    public void handleEvent(MessageEvent<?, MessageType> event) {
+        switch (event.getType()) {
+            case Error:
+                if (event.getMessage() != null) {
+                    blink(event.getMessage());
+                }
+                break;
+            case Status:
+                setStatusText(1, event.getMessage());
+                break;
+            case MousePosition:
+            case VideoFrame:
+                setStatusText(2, event.getMessage());
+                break;
+            //case EditMode:
+            //	setStatusText ( 3, event.getMessage () );
+            //	break;
+        }
+    }
 }

@@ -21,6 +21,7 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 
 public class FlowBasedCAFactory extends ZToCAConverter {
 
@@ -57,22 +58,7 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 //			ind.setStaticPotential(ep);
 //		}
         //return ca;
-        return new EvacuationCellularAutomaton();
-    }
-
-    /**
-     * The usual convert method may not be used because a transshipment is also needed.
-     */
-//	@Override
-//	public EvacuationCellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
-//		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
-//	}
-//
-    /**
-     * Empty method to stop the converter from calculating static potentials. Potentials are added separately.
-     */
-    @Override
-    protected void computeAndAddStaticPotentials(EvacuationCellularAutomaton convertedCA) {
+        return new MultiFloorEvacuationCellularAutomaton();
     }
 
     public static FlowBasedCAFactory getFlowBasedCAFactoryInstance() {

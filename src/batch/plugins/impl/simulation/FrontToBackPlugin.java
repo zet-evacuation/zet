@@ -1,7 +1,5 @@
-
 package batch.plugins.impl.simulation;
 
-import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonFrontToBack;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
 import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
@@ -34,8 +32,7 @@ public class FrontToBackPlugin implements AlgorithmPlugin<EvacuationSimulationPr
 
   @Override
   public AbstractAlgorithm<EvacuationSimulationProblem,EvacuationSimulationResult> getAlgorithm() {
-    EvacuationCellularAutomatonAlgorithm algo = new EvacuationCellularAutomatonFrontToBack();
-    return algo;
+    return EvacuationCellularAutomatonAlgorithm.getFrontToBackAlgorithm();
   }
 
   @Override

@@ -15,7 +15,6 @@
  */
 package gui.statistic;
 
-import io.visualization.CAVisualizationResults;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -25,8 +24,6 @@ import statistic.ca.gui.JCAStatisticPanel;
 import ds.GraphVisualizationResults;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import io.visualization.EvacuationSimulationResults;
-import java.awt.Dimension;
-import javax.swing.JTextArea;
 
 /**
  *

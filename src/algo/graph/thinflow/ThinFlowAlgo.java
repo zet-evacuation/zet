@@ -16,18 +16,17 @@
 
 package algo.graph.thinflow;
 
-import org.zetool.common.algorithm.AbstractAlgorithm;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
-
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
-import org.zetool.container.collection.ListSequence;
-import org.zetool.container.mapping.IdentifiableDoubleMapping;
-import org.zetool.graph.DynamicNetwork;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Set;
+import org.zetool.common.algorithm.AbstractAlgorithm;
+import org.zetool.container.collection.ListSequence;
+import org.zetool.container.mapping.IdentifiableDoubleMapping;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.DynamicNetwork;
 
 public class ThinFlowAlgo extends AbstractAlgorithm<ThinFlowProblem,ThinFlow> {
 
@@ -78,8 +77,8 @@ public class ThinFlowAlgo extends AbstractAlgorithm<ThinFlowProblem,ThinFlow> {
 
      /*function returns a set containing the exiting edges of given nodeset*/
      private HashSet<Edge> exitingEdges(DynamicNetwork wgraph, Set<Node> nodeset) {
-         HashSet<Edge> outedges = new HashSet<Edge>();
-         HashSet<Edge> inedges = new HashSet<Edge>();
+         HashSet<Edge> outedges = new HashSet<>();
+         HashSet<Edge> inedges = new HashSet<>();
          for(Node n : nodeset) {
              for(Edge oe : wgraph.outgoingEdges(n)) {
                  outedges.add(oe);
@@ -118,7 +117,8 @@ public class ThinFlowAlgo extends AbstractAlgorithm<ThinFlowProblem,ThinFlow> {
         Set<Node> spcutSet;
         Set<Edge> exitEdges;
         Set<Edge> edgesBehindSparsestCut;
-        Set<Edge> internalEdges = new HashSet<Edge>(workingGraph.edges());
+        Set<Edge> internalEdges = new HashSet<>();
+        workingGraph.edges().forEach(internalEdges::add);
 
         SparsestCut sparsestcut;
         Node source = getProblem().getSource();

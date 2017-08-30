@@ -1,11 +1,9 @@
-package algo.ca.framework;
+package org.zet.cellularautomaton.algorithm;
 
+import java.util.logging.Logger;
 import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
-import org.zetool.common.algorithm.parameter.ParameterSet;
-import org.zet.cellularautomaton.Individual;
-import java.util.List;
-import java.util.logging.Logger;
+import org.zetool.common.datastructure.parameter.ParameterSet;
 
 /**
  *
@@ -20,10 +18,10 @@ abstract class AbstractEvacuationCellularAutomatonWrapper extends EvacuationCell
         this.wrapped = wrapped;
     }
 
-    @Override
-    protected List<Individual> getIndividuals() {
-        return wrapped.getIndividuals();
-    }
+    //@Override
+    //protected List<Individual> getIndividuals() {
+    //    return wrapped.getIndividuals();
+    //}
 
     @Override
     protected void initialize() {

@@ -4,90 +4,111 @@
  */
 package zet.tasks;
 
-import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
 import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
-import ds.PropertyContainer;
-import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.results.VisualResultsRecorder;
-import de.zet_evakuierung.model.AssignmentType;
-import de.zet_evakuierung.model.ConcreteAssignment;
-import de.zet_evakuierung.model.Project;
-import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import io.visualization.EvacuationSimulationResults;
-import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
+import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import org.zet.cellularautomaton.statistic.CAStatistic;
-
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonTask extends AbstractAlgorithm<Project, EvacuationSimulationResults> {
-	EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
-	EvacuationCellularAutomaton ca;
-	ZToCAMapping mapping;
-	ZToCARasterContainer container;
+public class CellularAutomatonTask extends AbstractAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResults> {
 
-	public void setCaAlgo( EvacuationCellularAutomatonAlgorithm caAlgo ) {
-		this.cellularAutomatonAlgorithm = caAlgo;
-	}
+    EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
+    MultiFloorEvacuationCellularAutomaton ca;
+    ZToCAMapping mapping;
+    ZToCARasterContainer container;
 
-	public EvacuationCellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
-		return cellularAutomatonAlgorithm;
-	}
+    public void setCaAlgo(EvacuationCellularAutomatonAlgorithm caAlgo) {
+        this.cellularAutomatonAlgorithm = caAlgo;
+    }
 
-	@Override
-	protected EvacuationSimulationResults runAlgorithm( Project project ) {
-		// convert cellular automaton
-		final ZToCAConverter conv = new ZToCAConverter();
-		conv.setProblem( project.getBuildingPlan() );
-		conv.run();
-		ca = conv.getCellularAutomaton();
-		mapping = conv.getMapping();
-		container = conv.getContainer();
-		final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
+    public EvacuationCellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
+        return cellularAutomatonAlgorithm;
+    }
 
-		// create and convert concrete assignment
-		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
-			ca.setAssignmentType( at.getName(), at.getUid() );
-		ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
-		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
-		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
-		cac.run();
+    @Override
+    protected EvacuationSimulationResults runAlgorithm(EvacuationSimulationProblem esp) {
+        
+        log.info("Step 3: Run simulation...");
+        // Step 3: Create the Algorithm
+        //EvacuationCellularAutomatonAlgorithm caAlgorithm = CellularAutomatonAlgorithms.RandomOrder.getAlgorithm();
+        cellularAutomatonAlgorithm.setProblem(esp);
 
-		// set up simulation algorithm and compute
-		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm;
-		caAlgo.setProblem( new EvacuationSimulationProblemImpl( ( ca ) ) );
-		double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
-		caAlgo.setMaxTimeInSeconds( caMaxTime );
-		ca.startRecording ();
+        VisualResultsRecorder recorder = new VisualResultsRecorder(esp.getInitialConfiguration(), cellularAutomatonAlgorithm);
+        
+        Object solution = cellularAutomatonAlgorithm.call();
+        log.info("... done step 3. (" + solution + ")");
 
-		caAlgo.run();
-		ca.stopRecording();
+        log.info("Collected " + recorder.getRecordedCount() + " actions during " + cellularAutomatonAlgorithm.getStep() + " steps.");
+        //for( Action a : allActions) {
+            //log.info(a.toString());
+        //}
+//        // convert cellular automaton
+//        final ZToCAConverter conv = new ZToCAConverter();
+//        conv.setProblem(project.getBuildingPlan());
+//        conv.run();
+//        ca = conv.getCellularAutomaton();
+//        mapping = conv.getMapping();
+//        container = conv.getContainer();
+//        final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton(ca, mapping, container);
+//
+//        // create and convert concrete assignment
+//        log.warning("Ignore setting assignment type!");
+//        //for (AssignmentType at : project.getCurrentAssignment().getAssignmentTypes()) {
+//        //    ca.setAssignmentType(at.getName(), at.getUid());
+//        //}
+//        ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment(project.getCurrentAssignment(), 400);
+//        final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
+//        cac.setProblem(new AssignmentApplicationInstance(cca, concreteAssignment));
+//        cac.run();
+//
+//        // set up simulation algorithm and compute
+//        EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm;
+//
+//        // We need:
+//        //EvacuationCellularAutomaton ca = null;
+//        List<Individual> individuals = null;
+//        Map<Individual, EvacCellInterface> individualStartPositions = null;
+//
+//        EvacuationSimulationProblemImpl esp = new EvacuationSimulationProblemImpl(ca, individuals, individualStartPositions);
+//        int caMaxTime = (int) Math.round(PropertyContainer.getGlobal().getAsDouble("algo.ca.maxTime"));
+//        esp.setEvacuationTimeLimit(caMaxTime);
+//        caAlgo.setProblem(esp);
+//        //ca.startRecording();
+//        // Recording is now done through a listener?
+//        caAlgo.run();
+//        //ca.stopRecording();
+//
+//        CellularAutomatonVisualizationResults caVisResults = new CellularAutomatonVisualizationResults(mapping, ca);
+        EvacuationState es = cellularAutomatonAlgorithm.getEvacuationState();
+        EvacuationSimulationSpeed ess = cellularAutomatonAlgorithm.getEvacuationSimulationSpeed();
+        EvacuationSimulationResults evacResults = new EvacuationSimulationResults(es, ess, recorder.getRecording());
+
+        // No statistic available
+        evacResults.statistic = new CAStatistic(cellularAutomatonAlgorithm.getStatisticResults());
+
+        return evacResults;
+    }
     
-		EvacuationSimulationResults visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
-    
-    visResults.statistic = new CAStatistic (caAlgo.getProblem().getStatisticWriter().getStoredCAStatisticResults ());
-    
-		return visResults;
-	}
 
-	public EvacuationCellularAutomaton getCa() {
-		return ca;
-	}
+    public MultiFloorEvacuationCellularAutomaton getCa() {
+        return ca;
+    }
 
-	public ZToCARasterContainer getContainer() {
-		return container;
-	}
+    public ZToCARasterContainer getContainer() {
+        return container;
+    }
 
-	public ZToCAMapping getMapping() {
-		return mapping;
-	}
+    public ZToCAMapping getMapping() {
+        return mapping;
+    }
 }

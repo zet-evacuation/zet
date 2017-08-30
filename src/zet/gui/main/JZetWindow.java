@@ -13,7 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 package zet.gui.main;
 
 import org.zetool.common.debug.Debug;
@@ -25,7 +24,6 @@ import ds.PropertyContainer;
 import de.zet_evakuierung.model.ZControl;
 import event.EventServer;
 import event.MessageEvent;
-import event.MessageEvent.MessageType;
 import gui.GUIControl;
 import gui.ZETLoader;
 import java.awt.BorderLayout;
@@ -61,285 +59,328 @@ import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
 import org.zet.components.model.editor.editview.JEditView;
 import de.zet_evakuierung.util.ConversionTools;
+import gui.MessageType;
 import java.io.FileWriter;
 import org.zetool.components.property.PropertyTreeModelWriter;
 
 /**
  * The main window of the ZET application.
+ *
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public class JZetWindow extends JFrame implements Localized {
 
-	/** The localization class. */
-	static final Localization loc = GUILocalization.loc;
-	/** Stores the last mouse position if a mouse position event is sent. */
-	private static Point lastMouse = new Point( 0, 0 );
-	/** The delimiter used if numbers are stored in a tuple. */
-	final static String delimiter = ZETLocalization2.loc.getStringWithoutPrefix( "numberSeparator" );
-	private static boolean editing = false;
-	// Options
-	/** The number format used to display the zoom factor in the text field. */
-	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
-	/** The status bar. */
-	private JEventStatusBar statusBar;
-	/** The progress bar. */
-	private JProgressBar progressBar;
-	/** The editor tab. */
-	private JEditView editView;
-	/** The tab containing the graph statistic. */
-	private JToolBar currentToolbar;
-	/** A tabbed pane that allows switching of the different views. */
-	private JTabbedPane tabPane;
-	/** Decides whether the visualization should be restarted if 'play' is pressed. */
-	CardLayout statusBarCardLayout;
-	JPanel statusPanel;
-	private ArrayList<Tabs> tablist = new ArrayList<>();
-	private static class Tabs {
-		private final String title;
-		private final String toolTip;
-		private final JToolBar menuBar;
+    /**
+     * The localization class.
+     */
+    static final Localization loc = GUILocalization.loc;
+    /**
+     * Stores the last mouse position if a mouse position event is sent.
+     */
+    private static Point lastMouse = new Point(0, 0);
+    /**
+     * The delimiter used if numbers are stored in a tuple.
+     */
+    final static String delimiter = ZETLocalization2.loc.getStringWithoutPrefix("numberSeparator");
+    private static boolean editing = false;
+    // Options
+    /**
+     * The number format used to display the zoom factor in the text field.
+     */
+    private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
+    /**
+     * The status bar.
+     */
+    private JEventStatusBar statusBar;
+    /**
+     * The progress bar.
+     */
+    private JProgressBar progressBar;
+    /**
+     * The editor tab.
+     */
+    private JEditView editView;
+    /**
+     * The tab containing the graph statistic.
+     */
+    private JToolBar currentToolbar;
+    /**
+     * A tabbed pane that allows switching of the different views.
+     */
+    private JTabbedPane tabPane;
+    /**
+     * Decides whether the visualization should be restarted if 'play' is pressed.
+     */
+    CardLayout statusBarCardLayout;
+    JPanel statusPanel;
+    private ArrayList<Tabs> tablist = new ArrayList<>();
 
-		private Tabs( String title, String toolTip, JToolBar menuBar ) {
-			this.title = title;
-			this.toolTip = toolTip;
-			this.menuBar = menuBar;
-		}
-	}
+    private static class Tabs {
 
-	/**
-	 * Creates a new instance of {@code JZetWindow}. Sets the editor position
-	 * and size, loads file icon, tool bars and menus.
-	 * @param guiControl the control class for the ZET GUI
-	 * @param zcontrol the control class for the Z-model
-	 */
-	public JZetWindow( GUIControl guiControl, ZControl zcontrol ) {
-		super();
+        private final String title;
+        private final String toolTip;
+        private final JToolBar menuBar;
 
-		// Set up locale information
-		LocalizationManager.getManager().setLocale( Locale.getDefault() );
-		nfZoom.setMaximumFractionDigits( 2 );
+        private Tabs(String title, String toolTip, JToolBar menuBar) {
+            this.title = title;
+            this.toolTip = toolTip;
+            this.menuBar = menuBar;
+        }
+    }
 
-		// Set window position
-		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    /**
+     * Creates a new instance of {@code JZetWindow}. Sets the editor position and size, loads file icon, tool bars and
+     * menus.
+     *
+     * @param guiControl the control class for the ZET GUI
+     * @param zcontrol the control class for the Z-model
+     */
+    public JZetWindow(GUIControl guiControl, ZControl zcontrol) {
+        super();
 
-		// set size and location, move to visible area if otherwise hidden
-		int x = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.x" );
-		int y = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.y" );
-		int width = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.width" );
-		int height = PropertyContainer.getGlobal().getAsInt( "settings.editor.window.position.height" );
-		boolean maximized = PropertyContainer.getGlobal().getAsBoolean( "settings.editor.window.position.maximized" );
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		if( width < 0 || width > d.width )
-			width = d.width/2;
-		if( height < 0 || height > d.height )
-			height = d.height/2;
-		if( x < 0 || x + width > d.width )
-			x = (d.width - width) / 2;
-		if( y < 0 || y + height > d.height )
-			y = (d.height - height)/2;
-		setSize( width, height );
-		setLocation( x, y );
-		if( maximized )
-	    setExtendedState( getExtendedState() | JFrame.MAXIMIZED_BOTH );
+        // Set up locale information
+        LocalizationManager.getManager().setLocale(Locale.getDefault());
+        nfZoom.setMaximumFractionDigits(2);
 
-		getContentPane().setLayout( new BorderLayout() );
+        // Set window position
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Create status/progress bar
-		statusBarCardLayout = new CardLayout();
-		statusPanel = new JPanel( statusBarCardLayout );
-		statusBar = new JEventStatusBar();
-		statusPanel.add( statusBar, "status" );
-		add( statusPanel, BorderLayout.SOUTH );
-		progressBar = new JProgressBar( 0, 100 );
-		statusPanel.add( progressBar, "progress" );
+        // set size and location, move to visible area if otherwise hidden
+        int x = PropertyContainer.getGlobal().getAsInt("settings.editor.window.position.x");
+        int y = PropertyContainer.getGlobal().getAsInt("settings.editor.window.position.y");
+        int width = PropertyContainer.getGlobal().getAsInt("settings.editor.window.position.width");
+        int height = PropertyContainer.getGlobal().getAsInt("settings.editor.window.position.height");
+        boolean maximized = PropertyContainer.getGlobal().getAsBoolean("settings.editor.window.position.maximized");
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        if (width < 0 || width > d.width) {
+            width = d.width / 2;
+        }
+        if (height < 0 || height > d.height) {
+            height = d.height / 2;
+        }
+        if (x < 0 || x + width > d.width) {
+            x = (d.width - width) / 2;
+        }
+        if (y < 0 || y + height > d.height) {
+            y = (d.height - height) / 2;
+        }
+        setSize(width, height);
+        setLocation(x, y);
+        if (maximized) {
+            setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        }
 
-		// create tabs
-		tabPane = new JTabbedPane();
-		tabPane.addChangeListener( new ChangeListener() {
-			@Override
-			public void stateChanged( ChangeEvent e ) {
-				final int i = tabPane.getSelectedIndex();
-				showToolBar( tablist.get( i ).menuBar );
-			}
-		} );
-		getContentPane().add( tabPane, BorderLayout.CENTER );
-		ZETLoader.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
+        getContentPane().setLayout(new BorderLayout());
 
-		// window listener, saves stuff when closing
-		this.addWindowListener( new WindowAdapter() {
-			@Override
-			public void windowClosing( WindowEvent e ) {
-				try {
-					ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
-					ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
-                                        PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
-					writer.saveConfigFile( ZETLoader.ptmInformation, new FileWriter( ZETLoader.informationFilename ) );
-					writer.saveConfigFile( ZETLoader.ptmOptions, new FileWriter( ZETLoader.optionFilename ) );
-				} catch( IOException ex ) {
-					System.err.println( "Error saving information file." );
-				}
-			}
-		} );
+        // Create status/progress bar
+        statusBarCardLayout = new CardLayout();
+        statusPanel = new JPanel(statusBarCardLayout);
+        statusBar = new JEventStatusBar();
+        statusPanel.add(statusBar, "status");
+        add(statusPanel, BorderLayout.SOUTH);
+        progressBar = new JProgressBar(0, 100);
+        statusPanel.add(progressBar, "progress");
 
-		// component listener. updates location information when moved/resized.
-		this.addComponentListener( new ComponentAdapter() {
-			@Override
-			public void componentMoved( ComponentEvent e ) {
-				boolean maximized = (getExtendedState() & JFrame.MAXIMIZED_BOTH) != 0;
-				if( maximized ) {
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.maximized", true );
-				} else {
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.maximized", false );
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.x", getX() );
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.y", getY() );
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.width", getWidth() );
-					PropertyContainer.getGlobal().set( "settings.editor.window.position.height", getHeight() );
-				}
-			}
-		} );
+        // create tabs
+        tabPane = new JTabbedPane();
+        tabPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                final int i = tabPane.getSelectedIndex();
+                showToolBar(tablist.get(i).menuBar);
+            }
+        });
+        getContentPane().add(tabPane, BorderLayout.CENTER);
+        ZETLoader.sendMessage(loc.getString("gui.status.EditorInitialized"));
 
-		// set up the icon
-		final File iconFile = new File( "./icon.gif" );
-		ZETLoader.checkFile( iconFile );
-		try {
-			setIconImage( ImageIO.read( iconFile ) );
-		} catch( IOException e ) {
-			ZETLoader.exit( "Error loding icon." );
-		}
+        // window listener, saves stuff when closing
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
+                    ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
+                    PropertyTreeModelWriter writer = new PropertyTreeModelWriter();
+                    writer.saveConfigFile(ZETLoader.ptmInformation, new FileWriter(ZETLoader.informationFilename));
+                    writer.saveConfigFile(ZETLoader.ptmOptions, new FileWriter(ZETLoader.optionFilename));
+                } catch (IOException ex) {
+                    System.err.println("Error saving information file.");
+                }
+            }
+        });
 
-	}
+        // component listener. updates location information when moved/resized.
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                boolean maximized = (getExtendedState() & JFrame.MAXIMIZED_BOTH) != 0;
+                if (maximized) {
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.maximized", true);
+                } else {
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.maximized", false);
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.x", getX());
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.y", getY());
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.width", getWidth());
+                    PropertyContainer.getGlobal().set("settings.editor.window.position.height", getHeight());
+                }
+            }
+        });
 
-	public void addMode( String title, String toolTip, Icon icon, JComponent component, JToolBar menu ) {
-		tablist.add( new Tabs( title, toolTip, menu ) );
-		tabPane.addTab( loc.getString( title ), icon, component, loc.getString( toolTip ) );
-	}
+        // set up the icon
+        final File iconFile = new File("./icon.gif");
+        ZETLoader.checkFile(iconFile);
+        try {
+            setIconImage(ImageIO.read(iconFile));
+        } catch (IOException e) {
+            ZETLoader.exit("Error loding icon.");
+        }
 
-	/**
-	 * Sets up shortcuts for several actions.
-	 */
-	public void setUpKeyStrokes() {
-		// Register Shortcuts (no-menu-shortcuts)
-		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
-		ActionListener acl = new ActionListener() {
+    }
 
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				switch( editView.getEastPanelType() ) {
-					case Floor:
-						editView.setFloorNameFocus();
-						break;
-					case Room:
-						editView.setRoomNameFocus();
-						break;
-					default:
-						System.out.println( "Nothing" );
-				}
-			}
-		};
-		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-	}
+    public void addMode(String title, String toolTip, Icon icon, JComponent component, JToolBar menu) {
+        tablist.add(new Tabs(title, toolTip, menu));
+        tabPane.addTab(loc.getString(title), icon, component, loc.getString(toolTip));
+    }
 
-	/**
-	 * Changes the appearance of the GUI to the selected language.
-	 * @see de.tu_berlin.math.coga.common.localization.AbstractLocalization
-	 */
-	@Override
-	public void localize() {
-		for( int i = 0; i < tablist.size(); ++i ) {
-			tabPane.setTitleAt( i, loc.getString( tablist.get( i ).title ) );
-			tabPane.setToolTipTextAt( i, loc.getString( tablist.get( i ).toolTip ) );
-		}
-		sendMouse( lastMouse );
-		Debug.globalLogger.info( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
-	}
+    /**
+     * Sets up shortcuts for several actions.
+     */
+    public void setUpKeyStrokes() {
+        // Register Shortcuts (no-menu-shortcuts)
+        KeyStroke up = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+        ActionListener acl = new ActionListener() {
 
-	/**
-	 * Displays the mouse position in the right edge of the status bar
-	 * @param position the mouse position in millimeter.
-	 */
-	public static void sendMouse( Point position ) {
-		lastMouse = position;
-		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + LocalizationManager.getManager().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + LocalizationManager.getManager().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
-		String text = String.format( loc.getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.MousePosition, text ) );
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (editView.getEastPanelType()) {
+                    case Floor:
+                        editView.setFloorNameFocus();
+                        break;
+                    case Room:
+                        editView.setRoomNameFocus();
+                        break;
+                    default:
+                        System.out.println("Nothing");
+                }
+            }
+        };
+        tabPane.registerKeyboardAction(acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
 
-	public void sendError( String message ) {
-		statusBar.blink( message );
-	}
+    /**
+     * Changes the appearance of the GUI to the selected language.
+     *
+     * @see de.tu_berlin.math.coga.common.localization.AbstractLocalization
+     */
+    @Override
+    public void localize() {
+        for (int i = 0; i < tablist.size(); ++i) {
+            tabPane.setTitleAt(i, loc.getString(tablist.get(i).title));
+            tabPane.setToolTipTextAt(i, loc.getString(tablist.get(i).toolTip));
+        }
+        sendMouse(lastMouse);
+        Debug.globalLogger.info(loc.getStringWithoutPrefix("gui.status.LanguageChangedTo"));
+    }
 
-	/**
-	 * Displays an error message in the left edge of the status bar
-	 * @return true if the editor is in editing mode.
-	 */
-	public static boolean isEditing() {
-		return editing;
-	}
+    /**
+     * Displays the mouse position in the right edge of the status bar
+     *
+     * @param position the mouse position in millimeter.
+     */
+    public static void sendMouse(Point position) {
+        lastMouse = position;
+        String realCoordsMillimeter = "(" + Integer.toString(position.x) + delimiter + Integer.toString(position.y) + ")";
+        String realCoordsMeter = "(" + LocalizationManager.getManager().getFloatConverter().format(ConversionTools.toMeter(position.x)) + delimiter + LocalizationManager.getManager().getFloatConverter().format(ConversionTools.toMeter(position.y)) + ")";
+        String text = String.format(loc.getString("gui.EditPanel.Mouse.PositionMillimeterMeter"), realCoordsMillimeter, realCoordsMeter);
+        EventServer.getInstance().dispatchEvent(new MessageEvent<>(null, MessageType.MousePosition, text));
+    }
 
-	/**
-	 * Enables or disables the flag for the editing mode.
-	 * @param editing the status
-	 */
-	public static void setEditing( boolean editing ) {
-		JZetWindow.editing = editing;
-	}
+    public void sendError(String message) {
+        statusBar.blink(message);
+    }
 
-	/**
-	 * Shows a {@code JToolBar} and hides all others.
-	 * @param toolBar the tool bar that is shown
-	 */
-	private void showToolBar( JToolBar newToolbar ) {
-		if( currentToolbar != null )
-			getContentPane().remove( currentToolbar );
-		if( newToolbar != null )
-			getContentPane().add( newToolbar, BorderLayout.NORTH );
-		currentToolbar = newToolbar;
-		currentToolbar.repaint();
-	}
+    /**
+     * Displays an error message in the left edge of the status bar
+     *
+     * @return true if the editor is in editing mode.
+     */
+    public static boolean isEditing() {
+        return editing;
+    }
 
-	/*****************************************************************************
-	 *                                                                           *
-	 * Event handler                                                             *
-	 *                                                                           *
-	 ***************************************************************************
-	/**
-	 * @param event
-	 */
-	boolean progressBarEnabled = false;
+    /**
+     * Enables or disables the flag for the editing mode.
+     *
+     * @param editing the status
+     */
+    public static void setEditing(boolean editing) {
+        JZetWindow.editing = editing;
+    }
 
-	/**
-	 * Hides the status bar and replaces it with a progress bar.
-	 */
-	private synchronized void enableProgressBar() {
-		statusBarCardLayout.show( statusPanel, "progress" );
-		progressBarEnabled = true;
-	}
+    /**
+     * Shows a {@code JToolBar} and hides all others.
+     *
+     * @param toolBar the tool bar that is shown
+     */
+    private void showToolBar(JToolBar newToolbar) {
+        if (currentToolbar != null) {
+            getContentPane().remove(currentToolbar);
+        }
+        if (newToolbar != null) {
+            getContentPane().add(newToolbar, BorderLayout.NORTH);
+        }
+        currentToolbar = newToolbar;
+        currentToolbar.repaint();
+    }
 
-	/**
-	 * Disables the progress bar and shows the status bar again.
-	 */
-	private synchronized void disableProgressBar() {
-		progressBar.setValue( 0 );
-		progressBarEnabled = false;
-		statusBarCardLayout.show( statusPanel, "status" );
-	}
+    /**
+     * ***************************************************************************
+     *                                                                           *
+     * Event handler * * **************************************************************************
+	/
+     *
+     **
+     * @param event
+     */
+    boolean progressBarEnabled = false;
 
-	/**
-	 * Sets a value for the progress bar.
-	 * @param progress a progress value from 0 to 100
-	 */
-	public synchronized void setProgressValue( int progress ) {
-		if( !progressBarEnabled )
-			enableProgressBar();
-		progressBar.setValue( progress );
-		if( progress == 100 )
-			disableProgressBar();
-	}
+    /**
+     * Hides the status bar and replaces it with a progress bar.
+     */
+    private synchronized void enableProgressBar() {
+        statusBarCardLayout.show(statusPanel, "progress");
+        progressBarEnabled = true;
+    }
 
-	/** Prohibits serialization. */
-	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
-		throw new UnsupportedOperationException( "Serialization not supported" );
-	}
+    /**
+     * Disables the progress bar and shows the status bar again.
+     */
+    private synchronized void disableProgressBar() {
+        progressBar.setValue(0);
+        progressBarEnabled = false;
+        statusBarCardLayout.show(statusPanel, "status");
+    }
+
+    /**
+     * Sets a value for the progress bar.
+     *
+     * @param progress a progress value from 0 to 100
+     */
+    public synchronized void setProgressValue(int progress) {
+        if (!progressBarEnabled) {
+            enableProgressBar();
+        }
+        progressBar.setValue(progress);
+        if (progress == 100) {
+            disableProgressBar();
+        }
+    }
+
+    /**
+     * Prohibits serialization.
+     */
+    private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+        throw new UnsupportedOperationException("Serialization not supported");
+    }
 }

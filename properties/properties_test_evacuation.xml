@@ -22,9 +22,7 @@
         <stringListNode name="properties.simulation.ca.defaultRuleSet.init" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.primary.info" parameter="algo.ca.defaultRuleSet.init">
           <string>InitialPotentialExitMappingRule</string>
           <string>SaveIndividualsRule</string>
-          <string>EvacuateIndividualsRule</string>
-          <string>InitialDynamicPotentialRule</string>
-          
+          <string>EvacuateIndividualsRule</string>          
         </stringListNode>
         <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">
           <string>ReactionRuleCompleteRoom</string>

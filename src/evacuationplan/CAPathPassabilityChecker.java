@@ -15,23 +15,21 @@
  */
 package evacuationplan;
 
-import org.zet.cellularautomaton.CellularAutomatonDirectionChecker;
-import org.zet.cellularautomaton.EvacPotential;
 import org.zetool.rndutils.RandomUtils;
 import org.zetool.rndutils.generators.GeneralRandom;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.Node;
-import org.zet.cellularautomaton.EvacCell;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.ExitCell;
 import org.zet.cellularautomaton.Individual;
-import org.zet.cellularautomaton.PotentialManager;
-import org.zet.cellularautomaton.StaticPotential;
+import org.zet.cellularautomaton.potential.StaticPotential;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.zet.cellularautomaton.EvacCellInterface;
+import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 
 /**
  * This class controls the behavior of a cellular automaton so that the individuals (approximately) follow the paths of
@@ -47,10 +45,6 @@ public class CAPathPassabilityChecker implements CellularAutomatonDirectionCheck
      * A cellular automaton with start individuals. The checker manages the potentials of the individuals in this ca.
      */
     EvacuationCellularAutomaton ca;
-    /**
-     * The potential manager of the cellular automation {@code ca</code.>
-     */
-    PotentialManager pm;
     /**
      * The bidirectional node cell mapping describes the relation between graph and ca. It consists of a mapping that
      * gives all cells for a given node and of a mapping that gives the node for a given cell.
@@ -83,7 +77,6 @@ public class CAPathPassabilityChecker implements CellularAutomatonDirectionCheck
      */
     public CAPathPassabilityChecker(EvacuationCellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, PathBasedFlowOverTime transshipment) {
         this.ca = ca;
-        this.pm = ca.getPotentialManager();
         this.nodeCellMapping = nodeCellMapping;
         this.transshipment = transshipment;
         calculateIndivualPathMapping();
@@ -101,7 +94,7 @@ public class CAPathPassabilityChecker implements CellularAutomatonDirectionCheck
      * @throws java.lang.IllegalArgumentException if there is no path defined for the individual
      */
     @Override
-    public boolean canPass(Individual i, EvacCell from, EvacCell to) {
+    public boolean canPass(Individual i, EvacCellInterface from, EvacCellInterface to) {
         if (individualSuccessorNodeMapping.isDefinedFor(i)) {
             Node fromNode = nodeCellMapping.getNode(from);
             Node toNode = nodeCellMapping.getNode(to);
@@ -143,25 +136,26 @@ public class CAPathPassabilityChecker implements CellularAutomatonDirectionCheck
      */
     private void calculateIndivualPathMapping() {
         // get individuals from ca
-        int numberOfIndividuals = ca.getIndividualCount();
-        List<Individual> individualList = ca.getIndividuals();
+        // TODO: pass es to here.
+        EvacuationState es = null;        
+        int numberOfIndividuals = es.getInitialIndividualCount();
         // get all individuals and store them according to their start node
         HashMap<Node, ArrayList<Individual>> sourcesIndividualMapping;
-        sourcesIndividualMapping = new HashMap<Node, ArrayList<Individual>>();
-        for (Individual ind : individualList) {
-            Node node = nodeCellMapping.getNode(ind.getCell());
+        sourcesIndividualMapping = new HashMap<>();
+        for (Individual ind : es) {
+            Node node = nodeCellMapping.getNode(es.propertyFor(ind).getCell());
             ArrayList<Individual> individualsOfThisNode;
             if (sourcesIndividualMapping.containsKey(node)) {
                 individualsOfThisNode = sourcesIndividualMapping.get(node);
             } else {
-                individualsOfThisNode = new ArrayList<Individual>();
+                individualsOfThisNode = new ArrayList<>();
                 sourcesIndividualMapping.put(node, individualsOfThisNode);
             }
             individualsOfThisNode.add(ind);
         }
         // map individuals and dynamic path flows and calculate potential and successor mapping
-        individualSuccessorNodeMapping = new IdentifiableObjectMapping<Individual, SuccessorNodeMapping>(numberOfIndividuals + 1);
-        individualPotentialMapping = new IdentifiableObjectMapping<Individual, EvacPotential>(numberOfIndividuals + 1);
+        individualSuccessorNodeMapping = new IdentifiableObjectMapping<>(numberOfIndividuals + 1);
+        individualPotentialMapping = new IdentifiableObjectMapping<>(numberOfIndividuals + 1);
         for (FlowOverTimePath dynamicPathFlow : transshipment) {
             Individual chosenIndividual = null;
             // get all individuals that stand in the start node of the path
@@ -196,16 +190,16 @@ public class CAPathPassabilityChecker implements CellularAutomatonDirectionCheck
      * destination.
      */
     private EvacPotential calculateIndividualPotential(Individual i, Node exitNode) {
-        IndividualPotentialCalculator indPotCal = new IndividualPotentialCalculator(ca, i, this);
-        ArrayList<EvacCell> cellList = nodeCellMapping.getCells(exitNode);
-        ArrayList<ExitCell> exitCellList = new ArrayList<ExitCell>(cellList.size());
-        for (EvacCell cell : cellList) {
+        IndividualPotentialCalculator indPotCal = new IndividualPotentialCalculator(i, this);
+        List<EvacCellInterface> cellList = nodeCellMapping.getCells(exitNode);
+        List<ExitCell> exitCellList = new ArrayList<>(cellList.size());
+        for (EvacCellInterface cell : cellList) {
             if (cell instanceof ExitCell) {
                 exitCellList.add((ExitCell) cell);
             }
         }
         StaticPotential pot = indPotCal.createStaticPotential(exitCellList);
-        return pot.getAsEvacPotential(i, this);
+        return new EvacPotential(pot, i, this);
     }
 
 }

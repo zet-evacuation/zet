@@ -25,6 +25,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 
 /**
  *
@@ -47,7 +48,7 @@ public class ExitCapacityBasedCAFactory extends ZToCAConverter {
 //		graphBasedExitToCapacityMapping.calculate();
 //		ca.setExitToCapacityMapping( graphBasedExitToCapacityMapping.getExitCapacity() );
 //		return ca;
-		return new EvacuationCellularAutomaton();
+		return new MultiFloorEvacuationCellularAutomaton();
 	}
 
 	public static ExitCapacityBasedCAFactory getInstance() {

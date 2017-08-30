@@ -23,6 +23,7 @@ import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
+import org.zetool.container.collection.ListSequence;
 
 /**
  *
@@ -36,7 +37,7 @@ public class NodePartition {
 
 
 
-    public NodePartition(List<Node> nodeList, IdentifiableDoubleMapping<Node> thinflowNodelabels ) {
+    public NodePartition(ListSequence<Node> nodeList, IdentifiableDoubleMapping<Node> thinflowNodelabels ) {
         HashMap< Double, List<Node> > helperMap = new HashMap(nodeList.size());
         ArrayList<Double> helperList;
 

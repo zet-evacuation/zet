@@ -68,7 +68,7 @@ public class GLNashFlowEdge extends GLEdge {
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
-		currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() * acceleration;
+		currentTime = Conversion.NANO_SECONDS_TO_SEC * ncontrol.getTimeSinceStart() * acceleration;
 
 		for( FlowData flowData : ncontrol.getNashFlowEdgeData() )
 			displayFlow( gl, flowData );

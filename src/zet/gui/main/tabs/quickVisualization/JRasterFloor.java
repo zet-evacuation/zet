@@ -15,33 +15,32 @@
  */
 package zet.gui.main.tabs.quickVisualization;
 
-import org.zet.cellularautomaton.algorithm.PotentialController;
-import org.zet.cellularautomaton.algorithm.SPPotentialController;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import org.zetool.common.util.Direction8;
-import ds.PropertyContainer;
 import de.zet_evakuierung.model.Floor;
 import de.zet_evakuierung.model.Room;
-import org.zet.cellularautomaton.EvacCell;
-import org.zet.cellularautomaton.EvacuationCellularAutomaton;
-import org.zet.cellularautomaton.DynamicPotential;
-import org.zet.cellularautomaton.ExitCell;
-import org.zet.cellularautomaton.PotentialManager;
-import org.zet.cellularautomaton.SaveCell;
-import org.zet.cellularautomaton.StairCell;
-import org.zet.cellularautomaton.StaticPotential;
 import de.zet_evakuierung.model.ZControl;
-import org.zet.components.model.editor.floor.AbstractFloor;
+import ds.PropertyContainer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import static java.util.stream.Collectors.toList;
+import org.zet.algo.ca.util.PotentialUtils;
+import org.zet.cellularautomaton.EvacCell;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.SaveCell;
+import org.zet.cellularautomaton.StairCell;
+import org.zet.cellularautomaton.algorithm.state.EvacuationState;
+import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
+import org.zet.components.model.editor.floor.AbstractFloor;
 import org.zet.components.model.editor.floor.FloorViewModel;
+import org.zetool.common.util.Direction8;
+
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size of a cellular automaton.
@@ -52,7 +51,10 @@ public class JRasterFloor extends AbstractFloor {
 
     /** The displayed floor. */
     private Floor myFloor;
+    /** The static data for the simulation. */
     private EvacuationCellularAutomaton ca;
+    /** The current, modifiable evacuation state. */
+    private EvacuationState es;
     private ZToCAMapping mapping;
     private ZToCARasterContainer container;
     private CAStatistic cas;
@@ -117,8 +119,6 @@ public class JRasterFloor extends AbstractFloor {
         showPotentialValue = true;
         showDynamicPotential = false;
 
-        DynamicPotential dp = null;
-
         if (myFloor != null) {
             //removeAll();
             final int componentCount = getComponentCount();
@@ -138,11 +138,9 @@ public class JRasterFloor extends AbstractFloor {
         updateOffsets(getFloorModel());
 
         // TODO: Provide better implementation - Do not recreate everything each time
-        PotentialManager pm = ca.getPotentialManager();
-        PotentialController pc = new SPPotentialController(ca);
-        StaticPotential sp = null;
-        sp = pc.mergePotentials(new ArrayList<>(pm.getStaticPotentials()));
-        dp = pm.getDynamicPotential();
+        Potential sp = null;
+
+        sp = PotentialUtils.mergePotentials(ca.getExits().stream().map(exit -> ca.getPotentialFor(exit)).collect(toList()));
 
         final int roomCount = floor.getRooms().size();
         int count = 0;
@@ -170,14 +168,14 @@ public class JRasterFloor extends AbstractFloor {
                                 poly = new JCellPolygon(cell, Color.lightGray, Color.black, ca);
                             }
                         } else if (showDynamicPotential) {
-                            if (dp != null) {
-                                poly = new JDynamicPotentialCell(cell, this, Color.black, dp.getPotential(cell), dp.getMaxPotential(), ca);
+                            if (es != null) {
+                                poly = new JDynamicPotentialCell(cell, this, Color.black, (int) es.getDynamicPotential(cell), 1, ca);
                             } else {
                                 poly = new JCellPolygon(cell, Color.lightGray, Color.black, ca);
                             }
                         } else if (showCellUtilization) {
                             if (cas != null) {
-                                poly = new JDynamicPotentialCell(cell, this, Color.black, cas.getCellStatistic().getCellUtilization(cell, ca.getTimeStep()), dp.getMaxPotential(), ca);
+                                poly = new JDynamicPotentialCell(cell, this, Color.black, cas.getCellStatistic().getCellUtilization(cell, -1), 1, ca);
                             }
                         } else {
                             poly = new JCellPolygon(cell, Color.lightGray, Color.black, ca);

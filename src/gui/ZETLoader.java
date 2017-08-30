@@ -13,7 +13,6 @@ import ds.PropertyContainer;
 import org.zetool.components.property.PropertyLoadException;
 import event.EventServer;
 import event.MessageEvent;
-import event.MessageEvent.MessageType;
 import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
 import java.io.FileNotFoundException;

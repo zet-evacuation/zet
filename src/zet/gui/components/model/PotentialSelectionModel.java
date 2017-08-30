@@ -13,48 +13,47 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-/**
- * Class PotentialSelectionModel
- * Erstellt 05.07.2008, 01:42:38
- */
-
 package zet.gui.components.model;
-import org.zet.cellularautomaton.PotentialManager;
-import org.zet.cellularautomaton.StaticPotential;
+
 import javax.swing.DefaultComboBoxModel;
+import org.zet.cellularautomaton.potential.Potential;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class PotentialSelectionModel extends DefaultComboBoxModel {
-	public class PotentialEntry {
-		public String name;
-		public StaticPotential potential;
-		PotentialEntry ( String name, StaticPotential potential ) {
-			this.name = name;
-			this.potential = potential;
-		}
-		
-		@Override
-		public String toString() {
-			return name;
-		}
-	
-		public StaticPotential getPotential() {
-			return potential;
-		}
-	}
-	
-	public PotentialSelectionModel( PotentialManager pm ) {
-		super();
-		if( pm == null )
-			return;
-		
-		Integer a = 0;
-		for( StaticPotential potential : pm.getStaticPotentials() ) {
-			a++;
-			addElement( new PotentialEntry( "Potenzial " + a.toString(), potential ) );
-		}
-	}
+
+    public class PotentialEntry {
+
+        public String name;
+        public Potential potential;
+
+        PotentialEntry(String name, Potential potential) {
+            this.name = name;
+            this.potential = potential;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        public Potential getPotential() {
+            return potential;
+        }
+    }
+
+    public PotentialSelectionModel(Iterable<Potential> ca) {
+        super();
+        if (ca == null) {
+            return;
+        }
+
+        Integer a = 0;
+        for (Potential potential : ca) {
+            a++;
+            addElement(new PotentialEntry("Potenzial " + a.toString(), potential));
+        }
+    }
 }

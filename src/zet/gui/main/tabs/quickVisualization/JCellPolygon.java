@@ -30,6 +30,7 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.EnumSet;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
 import org.zet.components.model.editor.polygon.AbstractPolygon;
 
 /**
@@ -45,6 +46,7 @@ public class JCellPolygon extends AbstractPolygon {
     private final boolean showIndividualNames;
     private static final NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
     private EvacuationCellularAutomaton ca;
+    private EvacuationSimulationSpeed sp;
 
     /**
      * @param cell
@@ -103,7 +105,7 @@ public class JCellPolygon extends AbstractPolygon {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        if (cell.getIndividual() == null) {
+        if (cell.getState().isEmpty()) {
             paintCell(g2);
         } else {
             paintIndividual(g2);
@@ -119,7 +121,7 @@ public class JCellPolygon extends AbstractPolygon {
             return;
         }
         fill(g2, getForeground(), getBackground(), Color.green);
-        drawName(Integer.toString(cell.getIndividual().getNumber()), g2, Color.black);
+        drawName(Integer.toString(cell.getState().getIndividual().getNumber()), g2, Color.black);
     }
 
     private void fill(Graphics2D g2, Color foreground, Color background, Color fill) {
@@ -165,11 +167,11 @@ public class JCellPolygon extends AbstractPolygon {
     }
 
     private void setUpToolTipText() {
-        if (cell.getIndividual() != null) {
+        if (!cell.getState().isEmpty()) {
             String s = "<html>";
-            s += "Alter: " + Integer.toString(cell.getIndividual().getAge()) + "<br>";
+            s += "Alter: " + Integer.toString(cell.getState().getIndividual().getAge()) + "<br>";
             nfFloat.setMaximumFractionDigits(2);
-            s += "Wunschgeschwindigkeit: " + nfFloat.format(ca.absoluteSpeed(cell.getIndividual().getMaxSpeed())) + "m/s";
+            s += "Wunschgeschwindigkeit: " + nfFloat.format(sp.absoluteSpeed(cell.getState().getIndividual().getMaxSpeed())) + "m/s";
             s += "</html>";
             setToolTipText(s);
         } else {

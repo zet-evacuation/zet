@@ -4,7 +4,6 @@ import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.components.batch.operations.AbstractOperation;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblem;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationResult;
-import org.zet.cellularautomaton.algorithm.EvacuationCellularAutomatonAlgorithm;
 import de.zet_evakuierung.model.AssignmentType;
 import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
@@ -18,12 +17,19 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import ds.PropertyContainer;
-import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.results.VisualResultsRecorder;
 import io.visualization.EvacuationSimulationResults;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import org.zet.cellularautomaton.EvacCellInterface;
+import org.zet.cellularautomaton.Individual;
+import org.zet.cellularautomaton.InitialConfiguration;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationProblemImpl;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
+import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import org.zetool.common.algorithm.Algorithm;
 
 /**
@@ -38,7 +44,7 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
   EvacuationSimulationResults visResults;
 
   //EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
-  EvacuationCellularAutomaton ca;
+  MultiFloorEvacuationCellularAutomaton ca;
   ZToCAMapping mapping;
   ZToCARasterContainer container;
 
@@ -107,7 +113,7 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
     // create and convert concrete assignment
     System.out.println( "Creating concrete Assignment." );
     for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() ) {
-      ca.setAssignmentType( at.getName(), at.getUid() );
+      //ca.setAssignmentType( at.getName(), at.getUid() );
     }
     ConcreteAssignment concreteAssignment = AssignmentConcrete.createConcreteAssignment( project.getCurrentAssignment(), 400 );
     final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
@@ -117,23 +123,28 @@ public class BasicSimulation extends AbstractOperation<Project, EvacuationSimula
     // set up simulation algorithm and compute
     System.out.println( "Performing simulation." );
 
+    VisualResultsRecorder recorder = new VisualResultsRecorder(null, null);
     Algorithm<EvacuationSimulationProblem, EvacuationSimulationResult> caAlgo = caAlgorithm.getSelectedAlgorithm();
-    //Algorithm<EvacuationSimulationProblem,EvacuationSimulationResult> selected = caAlgorithm.getSelectedAlgorithm();
-    //selected = cellularAutomatonAlgorithm;
 
-    caAlgo.setProblem( new EvacuationSimulationProblemImpl( (ca) ) );
-    if( caAlgo instanceof EvacuationCellularAutomatonAlgorithm ) {
-      double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
-      ((EvacuationCellularAutomatonAlgorithm)caAlgo).setMaxTimeInSeconds( caMaxTime );
-    }
-    ca.startRecording();
+    List<Individual> individuals = Collections.emptyList();
+    Map<Individual, EvacCellInterface> individualStartPositions = Collections.emptyMap();
+    
+      InitialConfiguration ic = new InitialConfiguration(ca, individuals, individualStartPositions);
+    EvacuationSimulationProblemImpl esp = new EvacuationSimulationProblemImpl(ic);
+    double caMaxTime = PropertyContainer.getGlobal().getAsDouble( "algo.ca.maxTime" );
+    esp.setEvacuationTimeLimit((int)caMaxTime);
+    caAlgo.setProblem( esp );
+    //ca.startRecording();
+    //VisualResultsRecorder recorder = new VisualResultsRecorder(esp.getInitialConfiguration(), caAlgo);
 
     caAlgo.run();
-    ca.stopRecording();
+    //ca.stopRecording();
 
     System.out.println( "Recording stopped." );
 
-    visResults = new EvacuationSimulationResults( VisualResultsRecorder.getInstance().getRecording(), mapping, ca );
+        EvacuationState es = null; //caAlgo.getSolution().getEvacuationState();
+        EvacuationSimulationSpeed ess = null; //caAlgo.getEvacuationSimulationSpeed();
+    visResults = new EvacuationSimulationResults(es, ess, recorder.getRecording());
   }
 
   @Override

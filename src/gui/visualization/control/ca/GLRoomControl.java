@@ -20,72 +20,79 @@ import org.zet.cellularautomaton.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
-import io.visualization.EvacuationSimulationResults;
+import io.visualization.CellularAutomatonVisualizationResults;
 import java.util.HashMap;
+import org.zet.cellularautomaton.EvacCellInterface;
 
 public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
-	private HashMap<org.zet.cellularautomaton.EvacCell, GLCellControl> cellControls;
-	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
-	private double xPosition;
-	private double yPosition;
-	Room controlled;
 
-	public GLRoomControl( EvacuationSimulationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
-		super( glControl );
-		controlled = room;
-		xPosition = caVisResults.get( room ).x * mainControl.scaling;
-		yPosition = caVisResults.get( room ).y * mainControl.scaling;
-		this.glCAFloorControlObject = glCAFloorControl;
-		cellControls = new HashMap<>();
+    private HashMap<org.zet.cellularautomaton.EvacCell, GLCellControl> cellControls;
+    private final GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
+    private final double xPosition;
+    private final double yPosition;
+    Room controlled;
 
-		for( EvacCell cell : room.getAllCells() ) {
-			GLCellControl cellControl = new GLCellControl( caVisResults, cell, this, glControl );
-			cellControls.put( cell, cellControl );
-			add( cellControl );
-		}
-		this.setView( new GLRoom( this ) );
-		for( GLCellControl cell : this )
-			view.addChild( cell.getView() );
-	}
+    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl) {
+        super(glControl);
+        controlled = room;
+        xPosition = caVisResults.get(room).x * mainControl.scaling;
+        yPosition = caVisResults.get(room).y * mainControl.scaling;
+        this.glCAFloorControlObject = glCAFloorControl;
+        cellControls = new HashMap<>();
 
-	/**
-	 * Returns the offset of this room. The offset is in real (z-format) coordinates
-	 * @return the y offset
-	 */
-	public double getXPosition() {
-		return xPosition;
-	}
+        for (EvacCell cell : room.getAllCells()) {
+            GLCellControl cellControl = new GLCellControl(caVisResults, cell, this, glControl);
+            cellControls.put(cell, cellControl);
+            add(cellControl);
+        }
+        this.setView(new GLRoom(this));
+        for (GLCellControl cell : this) {
+            view.addChild(cell.getView());
+        }
+    }
 
-	/**
-	 * Returns the offset of this room. The offset is in real (z-format) coordinates
-	 * @return the x offset
-	 */
-	public double getYPosition() {
-		return -yPosition;
-	}
+    /**
+     * Returns the offset of this room. The offset is in real (z-format) coordinates
+     *
+     * @return the y offset
+     */
+    public double getXPosition() {
+        return xPosition;
+    }
 
-	GLCellControl getCellControl( org.zet.cellularautomaton.EvacCell cell ) {
-		return cellControls.get( cell );
-	}
+    /**
+     * Returns the offset of this room. The offset is in real (z-format) coordinates
+     *
+     * @return the x offset
+     */
+    public double getYPosition() {
+        return -yPosition;
+    }
 
-	public double getWidth() {
-		return controlled.getWidth() * mainControl.scaling * 400;
-	}
+    GLCellControl getCellControl(EvacCellInterface cell) {
+        return cellControls.get(cell);
+    }
 
-	public double getHeight() {
-		return controlled.getHeight() * mainControl.scaling * 400;
-	}
+    public double getWidth() {
+        return controlled.getWidth() * mainControl.scaling * 400;
+    }
 
-	/**
-	 * Returns the corresponding GLCAFloorControl-Object which created this GLRoomControl Object.
-	 * @return The corresponding GLCAFloorControl-Object which created this GLRoomControl Object.
-	 */
-	public GLCAFloorControl getGLCAFloorControl() {
-		return this.glCAFloorControlObject;
-	}
+    public double getHeight() {
+        return controlled.getHeight() * mainControl.scaling * 400;
+    }
 
-	void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
-		for( GLCellControl cellControl : cellControls.values() )
-			cellControl.setPotentialDisplay( potentialDisplay );
-	}
+    /**
+     * Returns the corresponding GLCAFloorControl-Object which created this GLRoomControl Object.
+     *
+     * @return The corresponding GLCAFloorControl-Object which created this GLRoomControl Object.
+     */
+    public GLCAFloorControl getGLCAFloorControl() {
+        return this.glCAFloorControlObject;
+    }
+
+    void setPotentialDisplay(CellInformationDisplay potentialDisplay) {
+        for (GLCellControl cellControl : cellControls.values()) {
+            cellControl.setPotentialDisplay(potentialDisplay);
+        }
+    }
 }

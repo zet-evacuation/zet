@@ -29,7 +29,7 @@ import java.util.HashMap;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZToExitMapping  extends IndividualToExitMapping {
+public class ZToExitMapping implements IndividualToExitMapping {
 	/**
 	 * This mapping is the main part of the {@code GraphBasedIndividualToExitMapping}.
 	 * It maps individuals to {@link ds.ca.TargetCell} objects, i.e. it maps

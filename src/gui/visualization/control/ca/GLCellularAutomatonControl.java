@@ -13,12 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 /**
  * Class GLCellularAutomatonControl
  * Created 02.05.2008, 18:44:21
  */
-
 package gui.visualization.control.ca;
 
 import org.zetool.math.Conversion;
@@ -28,11 +26,11 @@ import org.zet.cellularautomaton.results.DieAction;
 import org.zet.cellularautomaton.results.MoveAction;
 import org.zet.cellularautomaton.results.SwapAction;
 import org.zet.cellularautomaton.results.EvacuationRecording;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.ca.GLCA;
 import static gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLIndividual;
+import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,341 +39,398 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 import javax.media.opengl.GL;
+import org.zet.cellularautomaton.EvacCellInterface;
+import org.zet.cellularautomaton.InitialConfiguration;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
+import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
 import org.zetool.opengl.framework.abs.DrawableControlable;
 import org.zetool.opengl.helper.Frustum;
 
 /**
- *  @author Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
  */
 public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCellularAutomatonControl> implements DrawableControlable {
+    /** The logger. */
+    private static final Logger log = Logger.getGlobal();
 
-	// general control stuff
-	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
-	ArrayList<GLIndividual> glIndividuals;
-	ArrayList<GLIndividualControl> individuals;
-	EvacuationSimulationResults visResults;
-	//private EvacuationCellularAutomaton ca;
-	// timing stuff
-	private double realStep;
-	private double secondsPerStep;
-	private long nanoSecondsPerStep;
-	private long step;
-	private long time;
-	/** The status of the simulation, true if all is finished */
-	private boolean finished = false;
-	// ca visualization stuff
-	private int cellCount;
-	private int cellsDone;
-	private int recordingCount;
-	private int recordingDone;
-	private int maxReactionTime;
-	boolean containsRecording = false;
-	double scaling = 1;
-	double defaultFloorHeight = 10;
+    // general control stuff
+    private HashMap<Integer, GLCAFloorControl> allFloorsByID;
+    ArrayList<GLIndividual> glIndividuals;
+    ArrayList<GLIndividualControl> individuals;
+    // timing stuff
+    private double realStep;
+    private double secondsPerStep;
+    private long nanoSecondsPerStep;
+    private long step;
+    private long time;
+    /** The status of the simulation, true if all is finished. */
+    private boolean finished = false;
+    // ca visualization stuff
+    private int cellCount;
+    private int cellsDone;
+    private int recordingCount;
+    private int recordingDone;
+    private int maxReactionTime;
+    boolean containsRecording = false;
+    double scaling = 1;
+    double defaultFloorHeight = 10;
 
-	private EvacuationSimulationResults caVisResults;
+    private CellularAutomatonVisualizationResults caVisResults;
 
-	public GLCellularAutomatonControl( EvacuationSimulationResults caVisResults ) {
-		super();
-		this.caVisResults = caVisResults;
-	}
+    private EvacuationSimulationResults evacuationResults;
 
-	public void build() {
-		containsRecording = caVisResults.getRecording() != null;
-		mainControl = this;
-		cellCount = caVisResults.getCa().getCellCount();
-		cellsDone = 0;
-		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
+    public GLCellularAutomatonControl(CellularAutomatonVisualizationResults caVisResults) {
+        super();
+        this.caVisResults = caVisResults;
+    }
 
-		recordingCount = containsRecording ? caVisResults.getRecording().length() : 0;
-		recordingDone = 0;
+    public void build() {
+        if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
+            throw new IllegalStateException("Only multi floor automaton supported");
+        }
+        MultiFloorEvacuationCellularAutomaton mfca = (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa();
+        containsRecording = false;
+        mainControl = this;
+        cellCount = MultiFloorEvacuationCellularAutomaton.getCellCount(caVisResults.getCa());
+        cellsDone = 0;
+        //AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
-		allFloorsByID = new HashMap<>();
-		glIndividuals = new ArrayList<>();
-		this.visResults = caVisResults;
+        recordingCount = 0;
+        recordingDone = 0;
 
-		List<String> floors = caVisResults.getCa().getFloors();
-		for( int i = 0; i < floors.size(); ++i )
-			add( new GLCAFloorControl( caVisResults, caVisResults.getCa().getRoomsOnFloor( i ), i, mainControl ) );
+        allFloorsByID = new HashMap<>();
+        glIndividuals = new ArrayList<>();
 
-		this.setView( new GLCA( this ) );
-		for( GLCAFloorControl floor : this )
-			view.addChild( floor.getView() );
+        Collection<String> floors = mfca.getFloors();
+        for (int i = 0; i < floors.size(); ++i) {
+            add(new GLCAFloorControl(caVisResults, mfca.getRoomsOnFloor(i), i, mainControl));
+        }
 
-		showAllFloors();
+        this.setView(new GLCA(this));
+        for (GLCAFloorControl floor : this) {
+            view.addChild(floor.getView());
+        }
 
-		// Set up timing:
-		secondsPerStep = caVisResults.getCa().getSecondsPerStep();
-		nanoSecondsPerStep = Math.round( secondsPerStep * Conversion.secToNanoSeconds );
-		step = 0;
-		if( containsRecording ) {
-			convertIndividualMovements();
-			caVisResults.getRecording().rewind();
-			for( GLCAFloorControl floor : this )
-				floor.getView().setIndividuals( getIndividualControls() );
-		} else {
-			individuals = new ArrayList<>();
-		}
+        showAllFloors();
 
-	}
+        // initialize timing
+        secondsPerStep = Double.POSITIVE_INFINITY;
+        nanoSecondsPerStep = Long.MAX_VALUE;
+        step = 0;
+        realStep = 0.0;
 
-	public double getSecondsPerStep() {
-		return secondsPerStep;
-	}
+        // No individuals without simulation results
+        individuals = new ArrayList<>();
+    }
 
-	public List<GLIndividual> getIndividuals() {
-		return Collections.unmodifiableList( glIndividuals );
-	}
+    public void setEvacuationSimulationResults(EvacuationSimulationResults esr) {
+        this.evacuationResults = esr;
+        containsRecording = true;
+        recordingCount = esr.getRecording().length();
 
-	public Collection<GLCAFloorControl> getAllFloors() {
-		return allFloorsByID.values();
-	}
+        // Set up timing:
+        EvacuationSimulationSpeed esp = evacuationResults.getEsp();
+        secondsPerStep = esp.getSecondsPerStep();
+        nanoSecondsPerStep = Math.round(secondsPerStep * Conversion.SEC_TO_NANO_SECONDS);
+        step = 0;
 
-	public void showOnlyFloor( Integer floorID ) {
-		childControls.clear();
-		//childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
-		childControls.add( allFloorsByID.get( floorID ) ); // add the floor if possible, otherwise the first
-		view.clear();
-		for( GLCAFloorControl floor : this )
-			view.addChild( floor.getView() );
-	}
+        initialConfiguration = esr.getRecording().getInitialConfig();
+        
+        // Load recording
+        convertIndividualMovements();
+        evacuationResults.getRecording().rewind();
+        for (GLCAFloorControl floor : this) {
+            floor.getView().setIndividuals(getIndividualControls());
+        }
+    }
+    
+    private InitialConfiguration initialConfiguration;
+    public EvacCellInterface cellFor(Individual i) {
+        return initialConfiguration.getIndividualStartPositions().get(i);
+    }
+    
+    public int floorFor(Individual i) {
+        EvacCellInterface cell = cellFor(i);
+        return cell.getRoom().getFloor();
+    }
+    
 
-	public void showAllFloors() {
-		childControls.clear();
-		childControls.addAll( allFloorsByID.values() );
-		view.clear();
-		for( GLCAFloorControl floor : this )
-			view.addChild( floor.getView() );
-	}
+    public double getSecondsPerStep() {
+        return secondsPerStep;
+    }
 
-	@Override
-	public void add( GLCAFloorControl childControl ) {
-		super.add( childControl );
-		System.out.println( "FLoor hinzugefügt" );
-		allFloorsByID.put( childControl.getFloorNumber(), childControl );
-	}
+    public List<GLIndividual> getIndividuals() {
+        return Collections.unmodifiableList(glIndividuals);
+    }
 
-	@Override
-	public void clear() {
-		allFloorsByID.clear();
-		childControls.clear();
-	}
+    public Collection<GLCAFloorControl> getAllFloors() {
+        return allFloorsByID.values();
+    }
 
-	@Override
-	public Iterator<GLCAFloorControl> fullIterator() {
-		return allFloorsByID.values().iterator();
-	}
+    public void showOnlyFloor(Integer floorID) {
+        childControls.clear();
+        //childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
+        childControls.add(allFloorsByID.get(floorID)); // add the floor if possible, otherwise the first
+        view.clear();
+        for (GLCAFloorControl floor : this) {
+            view.addChild(floor.getView());
+        }
+    }
 
-	public void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
-		for( GLCAFloorControl floorControl : allFloorsByID.values() )
-			floorControl.setPotentialDisplay( potentialDisplay );
-	}
+    public void showAllFloors() {
+        childControls.clear();
+        childControls.addAll(allFloorsByID.values());
+        view.clear();
+        for (GLCAFloorControl floor : this) {
+            view.addChild(floor.getView());
+        }
+    }
 
-	GLCAFloorControl getFloorControl( Integer floorID ) {
-		return this.allFloorsByID.get( floorID );
-	}
+    @Override
+    public void add(GLCAFloorControl childControl) {
+        super.add(childControl);
+        System.out.println("FLoor hinzugefügt");
+        allFloorsByID.put(childControl.getFloorNumber(), childControl);
+    }
 
-	private GLCellControl getCellControl( org.zet.cellularautomaton.EvacCell cell ) {
-		GLCAFloorControl floor = getFloorControl( cell.getRoom().getFloorID() );
-		GLRoomControl room = floor.getRoomControl( cell.getRoom() );
-		return room.getCellControl( cell );
-	}
+    @Override
+    public void clear() {
+        allFloorsByID.clear();
+        childControls.clear();
+    }
 
-	private void convertIndividualMovements() {
-		EvacuationRecording recording = visResults.getRecording();
-		EvacuationCellularAutomaton ca = new EvacuationCellularAutomaton( recording.getInitialConfig() );
-		individuals = new ArrayList<GLIndividualControl>( ca.getIndividuals().size() );
-		for( int k = 0; k < ca.getIndividuals().size(); k++ )
-			individuals.add( null );
-		for( Individual individual : ca.getIndividuals() ) {
-			GLIndividualControl control = new GLIndividualControl( individual, mainControl );
-			individuals.set( individual.getNumber() - 1, control );
-		}
+    @Override
+    public Iterator<GLCAFloorControl> fullIterator() {
+        return allFloorsByID.values().iterator();
+    }
 
-		recording.rewind();
+    public void setPotentialDisplay(CellInformationDisplay potentialDisplay) {
+        for (GLCAFloorControl floorControl : allFloorsByID.values()) {
+            floorControl.setPotentialDisplay(potentialDisplay);
+        }
+    }
 
-		while(recording.hasNext()) {
-			recording.nextActions();
-			Vector<MoveAction> movements = recording.filterActions( MoveAction.class );
-			for( MoveAction movement : movements ) {
-				GLCellControl fromCell = getCellControl( movement.from() );
-				GLCellControl endCell = getCellControl( movement.to() );
-				double arrivalTime = movement.arrivalTime();
-				double startTime = movement.startTime();
-				individuals.get( movement.getIndividualNumber() - 1 ).addHistoryTriple( fromCell, endCell, startTime, arrivalTime );
-			}
-			Vector<SwapAction> swaps = recording.filterActions( SwapAction.class );
-			for( SwapAction swap : swaps ) {
-				GLCellControl cell1 = getCellControl( swap.cell1() );
-				GLCellControl cell2 = getCellControl( swap.cell2() );
-				double arrivalTime1 = swap.arrivalTime1();
-				double startTime1 = swap.startTime1();
-				double arrivalTime2 = swap.arrivalTime2();
-				double startTime2 = swap.startTime2();
-				individuals.get( swap.getIndividualNumber1() - 1 ).addHistoryTriple( cell1, cell2, startTime1, arrivalTime1 );
-				individuals.get( swap.getIndividualNumber1() - 1 ).addHistoryTriple( cell2, cell1, startTime2, arrivalTime2 );
-			}
-			Vector<DieAction> deaths = recording.filterActions( DieAction.class );
-			// Individuen, die schon von anfang an tot sind:
-			for( DieAction death : deaths ) {
-				GLCellControl cell = getCellControl( death.placeOfDeath() );
-				individuals.get( death.getIndividualNumber() - 1 ).addHistoryTriple( cell, cell, 0, 0 );
-			}
-			mainControl.recordingProgress();
-		}
-		recording.rewind();
-		for( int k = 0; k < ca.getIndividuals().size(); k++ )
-			glIndividuals.add( individuals.get( k ).getView() );
-	}
+    GLCAFloorControl getFloorControl(Integer floorID) {
+        return this.allFloorsByID.get(floorID);
+    }
 
-	public final List<GLIndividualControl> getIndividualControls() {
-		return Collections.unmodifiableList( individuals );
-	}
+    private GLCellControl getCellControl(EvacCellInterface cell) {
+        GLCAFloorControl floor = getFloorControl(cell.getRoom().getFloor());
+        GLRoomControl room = floor.getRoomControl(cell.getRoom());
+        return room.getCellControl(cell);
+    }
 
-	/**
-	 * <p>This method increases the number of cells that are created and
-	 * calculates a new progress. The progress will at most reach 99% so that
-	 * after all objects are created a final "Done" message can be submitted.</p>
-	 * <p>Note that before this method can be used in the proper way the private
-	 * variable {@code cellsDone} and {@code cellCount} should be
-	 * initialized correct. However, it is guaranteed to calculate a value from
-	 * 0 to 99.
-	 */
-	public void cellProgress() {
-		cellsDone++;
-		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) cellsDone / cellCount) * 100 ), 99 ) );
-		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Zellen...", "Zelle " + cellsDone + " von " + cellCount + " erzeugt." );
-	}
+    private void convertIndividualMovements() {
+        log.info("Converting indivudal movements");
+        EvacuationRecording recording = evacuationResults.getRecording();
+        EvacuationCellularAutomaton ca = recording.getInitialConfig().getCellularAutomaton();
+        individuals = new ArrayList<>(evacuationResults.getEs().getInitialIndividualCount());
+        for (int k = 0; k < evacuationResults.getEs().getInitialIndividualCount(); k++) {
+            individuals.add(null);
+        }
+        for (Individual individual : evacuationResults.getEs()) {
+            GLIndividualControl control = new GLIndividualControl(individual, mainControl);
+            individuals.set(individual.getNumber(), control);
+        }
 
-	/**
-	 * <p>This method increases the number of individuals that are created and
-	 * calculates a new progress. The progress will at most reach 99% so that
-	 * after all objects are created a final "Done" message can be submitted.</p>
-	 * <p>Note that before this method can be used in the proper way the private
-	 * variable {@code cellsDone} and {@code cellCount} should be
-	 * initialized correct. However, it is guaranteed to calculate a value from
-	 * 0 to 99.
-	 */
-	public void recordingProgress() {
-		recordingDone++;
-		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) recordingDone / recordingCount) * 100 ), 99 ) );
-		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Individuen-Bewegungen...", "Recording-Schritt " + recordingDone + " von " + recordingCount + " abgearbeitet." );
-	}
+        recording.rewind();
 
-	double speedFactor = 1;
+        while (recording.hasNext()) {
+            recording.nextActions();
+            Vector<MoveAction> movements = recording.filterActions(MoveAction.class);
+            for (MoveAction movement : movements) { 
+                GLCellControl fromCell = getCellControl(movement.from());
+                GLCellControl endCell = getCellControl(movement.to());
+                double arrivalTime = movement.arrivalTime();
+                double startTime = movement.startTime();
+                individuals.get(movement.getIndividualNumber()).addHistoryTriple(fromCell, endCell, startTime, arrivalTime);
+            }
+            Vector<SwapAction> swaps = recording.filterActions(SwapAction.class);
+            for (SwapAction swap : swaps) {
+                GLCellControl cell1 = getCellControl(swap.cell1());
+                GLCellControl cell2 = getCellControl(swap.cell2());
+                double arrivalTime1 = swap.arrivalTime1();
+                double startTime1 = swap.startTime1();
+                double arrivalTime2 = swap.arrivalTime2();
+                double startTime2 = swap.startTime2();
+                individuals.get(swap.getIndividualNumber1()).addHistoryTriple(cell1, cell2, startTime1, arrivalTime1);
+                individuals.get(swap.getIndividualNumber1()).addHistoryTriple(cell2, cell1, startTime2, arrivalTime2);
+            }
+            Vector<DieAction> deaths = recording.filterActions(DieAction.class);
+            // Individuen, die schon von anfang an tot sind:
+            for (DieAction death : deaths) {
+                GLCellControl cell = getCellControl(death.placeOfDeath());
+                individuals.get(death.getIndividualNumber()).addHistoryTriple(cell, cell, 0, 0);
+            }
+            mainControl.recordingProgress();
+        }
+        recording.rewind();
+        for (int k = 0; k < evacuationResults.getEs().getInitialIndividualCount(); k++) {
+            glIndividuals.add(individuals.get(k).getView());
+        }
+    }
 
-	@Override
-	public void addTime( long timeNanoSeconds ) {
-		time += timeNanoSeconds * speedFactor;
-		realStep = ((double) time / (double) nanoSecondsPerStep);
-		final long stepOld = step;
-		step = (long) realStep;
-		long elapsedSteps = stepOld - step;
+    public final List<GLIndividualControl> getIndividualControls() {
+        return Collections.unmodifiableList(individuals);
+    }
 
-		if( elapsedSteps > 0 )
-			for( GLCAFloorControl floor : this )
-				for( GLRoomControl room : floor )
-					for( GLCellControl cell : room )
-						cell.stepUpdate();
+    /**
+     * <p>
+     * This method increases the number of cells that are created and calculates a new progress. The progress will at
+     * most reach 99% so that after all objects are created a final "Done" message can be submitted.</p>
+     * <p>
+     * Note that before this method can be used in the proper way the private variable {@code cellsDone} and
+     * {@code cellCount} should be initialized correct. However, it is guaranteed to calculate a value from 0 to 99.
+     */
+    public void cellProgress() {
+        cellsDone++;
+        int progress = Math.max(0, Math.min((int) Math.round(((double) cellsDone / cellCount) * 100), 99));
+        //AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Zellen...", "Zelle " + cellsDone + " von " + cellCount + " erzeugt." );
+    }
 
-			finished = step > recordingCount;
-	}
+    /**
+     * <p>
+     * This method increases the number of individuals that are created and calculates a new progress. The progress will
+     * at most reach 99% so that after all objects are created a final "Done" message can be submitted.</p>
+     * <p>
+     * Note that before this method can be used in the proper way the private variable {@code cellsDone} and
+     * {@code cellCount} should be initialized correct. However, it is guaranteed to calculate a value from 0 to 99.
+     */
+    public void recordingProgress() {
+        recordingDone++;
+        int progress = Math.max(0, Math.min((int) Math.round(((double) recordingDone / recordingCount) * 100), 99));
+        //AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Individuen-Bewegungen...", "Recording-Schritt " + recordingDone + " von " + recordingCount + " abgearbeitet." );
+    }
 
-	@Override
-	public void setTime( long timeNanoSeconds ) {
-		time = timeNanoSeconds;
-		realStep = ((double) time / (double) nanoSecondsPerStep);
-		step = (long) realStep;
+    double speedFactor = 1;
 
-		for( GLCAFloorControl floor : this )
-			for( GLRoomControl room : floor )
-				for( GLCellControl cell : room )
-					cell.stepUpdate();
+    @Override
+    public void addTime(long timeNanoSeconds) {
+        time += timeNanoSeconds * speedFactor;
+        realStep = ((double) time / (double) nanoSecondsPerStep);
+        final long stepOld = step;
+        step = (long) realStep;
+        long elapsedSteps = step - stepOld;
 
-		finished = step > recordingCount;
-	}
+        if (elapsedSteps > 0) {
+            for (GLCAFloorControl floor : this) {
+                for (GLRoomControl room : floor) {
+                    for (GLCellControl cell : room) {
+                        cell.stepUpdate();
+                    }
+                }
+            }
+        }
 
-	public double getTimeInSeconds() {
-		return time * Conversion.nanoSecondsToSec;
-	}
+        finished = step > recordingCount;
+    }
 
-	@Override
-	public void resetTime() {
-		setTime( 0 );
-	}
+    @Override
+    public void setTime(long timeNanoSeconds) {
+        time = timeNanoSeconds;
+        realStep = ((double) time / (double) nanoSecondsPerStep);
+        step = (long) realStep;
 
-	@Override
-	public boolean isFinished() {
-		return finished;
-	}
+        for (GLCAFloorControl floor : this) {
+            for (GLRoomControl room : floor) {
+                for (GLCellControl cell : room) {
+                    cell.stepUpdate();
+                }
+            }
+        }
 
-	public final GLIndividual getControlledGLIndividual( int number ) {
-		return glIndividuals.get( number - 1 );
-	}
+        finished = step > recordingCount;
+    }
 
-	/**
-	 * Returns the current step of the cellular automaton. The step counter is
-	 * stopped if the cellular automaton is finished.
-	 * @return the current step of the cellular automaton
-	 */
-	public double getStep() {
-		return realStep;
-	}
+    public double getTimeInSeconds() {
+        return time * Conversion.NANO_SECONDS_TO_SEC;
+    }
 
-	/**
-	 * Sets a factor that is multiplicated with the visualization speed. Use
-	 * {@code 1.0} for normal (real-time) speed.
-	 * @param speedFactor the speed factor
-	 */
-	public void setSpeedFactor( double speedFactor ) {
-		//secondsPerStep = ca.getSecondsPerStep();
-		//nanoSecondsPerStep = (long) (Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
-		this.speedFactor = speedFactor;
-	}
+    @Override
+    public void resetTime() {
+        setTime(0);
+    }
 
-	public long getNanoSecondsPerStep() {
-		return nanoSecondsPerStep;
-	}
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
 
-	public long getStepCount() {
-		return recordingCount;
-	}
+    public final GLIndividual getControlledGLIndividual(int number) {
+        return glIndividuals.get(number - 1);
+    }
 
-	Frustum frustum;
+    /**
+     * Returns the current step of the cellular automaton. The step counter is stopped if the cellular automaton is
+     * finished.
+     *
+     * @return the current step of the cellular automaton
+     */
+    public double getStep() {
+        return realStep;
+    }
 
-	public void setFrustum( Frustum frustum ) {
-		this.frustum = frustum;
-		for( GLIndividual individual : glIndividuals )
-			individual.setFrustum( frustum );
-	}
+    /**
+     * Sets a factor that is multiplicated with the visualization speed. Use {@code 1.0} for normal (real-time) speed.
+     *
+     * @param speedFactor the speed factor
+     */
+    public void setSpeedFactor(double speedFactor) {
+        //secondsPerStep = ca.getSecondsPerStep();
+        //nanoSecondsPerStep = (long) (Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
+        this.speedFactor = speedFactor;
+    }
 
-	public Frustum getFrustum() {
-		return frustum;
-	}
+    public long getNanoSecondsPerStep() {
+        return nanoSecondsPerStep;
+    }
 
-	public void draw( GL gl ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
+    public long getStepCount() {
+        return recordingCount;
+    }
 
-	public void update() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
+    Frustum frustum;
 
-	public void delete() {
-		for( GLCAFloorControl floor : this ) {
-			//floor.delete();
-		}
-		view.delete();
-		//ca = null;
-    caVisResults = null;
-	}
+    @Override
+    public void setFrustum(Frustum frustum) {
+        this.frustum = frustum;
+        for (GLIndividual individual : glIndividuals) {
+            individual.setFrustum(frustum);
+        }
+    }
 
-	public void setScaling( double scaling ) {
-		this.scaling = scaling;
-	}
+    @Override
+    public Frustum getFrustum() {
+        return frustum;
+    }
 
-	public void setDefaultFloorHeight( double defaultFloorHeight ) {
-		this.defaultFloorHeight = defaultFloorHeight;
-	}
+    @Override
+    public void draw(GL gl) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void update() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void delete() {
+        for (GLCAFloorControl floor : this) {
+            //floor.delete();
+        }
+        view.delete();
+        //ca = null;
+        caVisResults = null;
+    }
+
+    public void setScaling(double scaling) {
+        this.scaling = scaling;
+    }
+
+    public void setDefaultFloorHeight(double defaultFloorHeight) {
+        this.defaultFloorHeight = defaultFloorHeight;
+    }
 }

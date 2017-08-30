@@ -22,14 +22,12 @@
           <string>InitialConcretePotentialRule</string>
           <string>SaveIndividualsRule</string>
           <string>EvacuateIndividualsRule</string>
-          <string>InitialDynamicPotentialRule</string>
         </stringListNode>
         <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">
           <string>ReactionRuleOnePerson</string>
           <string>WaitingMovementRule</string>
           <string>SaveIndividualsRule</string>
           <string>EvacuateIndividualsRule</string>
-          <string>ChangePotentialFamiliarityOrAttractivityOfExitRule</string>
           <string>ChangePotentialInsufficientAdvancementRule</string>
         </stringListNode>
       </treeNode>

@@ -23,6 +23,7 @@ import de.zet_evakuierung.model.BuildingPlan;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 
 public class ExitDistributionZToCAConverter extends ZToCAConverter {
 //public class ExitDistributionZToCAConverter extends ZToCAConverter {
@@ -77,7 +78,7 @@ public class ExitDistributionZToCAConverter extends ZToCAConverter {
 //		graphBasedIndividualToExitMaping.calculate();
 //		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
 //		return ca;
-    return new EvacuationCellularAutomaton();
+    return new MultiFloorEvacuationCellularAutomaton();
   }
 
   /**

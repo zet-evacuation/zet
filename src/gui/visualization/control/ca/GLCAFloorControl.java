@@ -19,6 +19,7 @@ import org.zet.cellularautomaton.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCAFloor;
+import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	
 	private int floorNumber = 0;
 	
-	public GLCAFloorControl( EvacuationSimulationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLCellularAutomatonControl glControl ) {
+	public GLCAFloorControl( CellularAutomatonVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		
 		xPosition = caVisResults.get(floorID).x;
