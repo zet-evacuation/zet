@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   zet evacuation tool copyright (c) 2007-20 zet evacuation team
+
+   This program is free software; you can redistribute it and/or
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.zet-evakuierung</groupId>
+    <artifactId>zet</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <name>zet</name>
+    <url>https://zetool.org</url>
+
+    <inceptionYear>2007</inceptionYear>
+    <organization>
+        <name>zet-evacuation</name>
+        <url>https://zet-evakuierung.de/en</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GNU General Public License v2.0 or later</name>
+            <url>https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- -zetool dependencies-->
+        <common.version>0.1.2</common.version>
+        <collection.version>0.1.0</collection.version>
+        <components.version>0.1.0</components.version>
+        <components-batch.version>0.1.0</components-batch.version>
+        <components-property.version>0.1.1</components-property.version>
+        <graph.version>0.2.0</graph.version>
+        <network-flow.version>0.1.0</network-flow.version>
+        <math.version>0.1.0</math.version>
+        <rndutils.version>0.1.0</rndutils.version>
+        <opengl.version>0.1.2-SNAPSHOT</opengl.version>
+        <!-- zet dependencies -->
+        <model.version>0.1.0</model.version>
+        <components-model-editor.version>0.101</components-model-editor.version>
+        <evacuation-cellular-automaton.version>0.1.0</evacuation-cellular-automaton.version>
+        <!-- 3rd party dependencies -->
+        <jmf.version>2.1.1e</jmf.version>
+        <jama.version>1.0.2</jama.version>
+        <xstream.version>1.4.8</xstream.version>
+        <jsap.version>2.1</jsap.version>
+        <jfreechart.version>1.0.19</jfreechart.version>
+        <ssj.version>2.5</ssj.version>
+        <!-- test dependencies -->
+        <junit.version>4.12</junit.version>
+        <hamcrest.version>1.3</hamcrest.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>common</artifactId>
+            <version>${common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>collection</artifactId>
+            <version>${collection.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>components</artifactId>
+            <version>${components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>components-batch</artifactId>
+            <version>${components-batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>components-property</artifactId>
+            <version>${components-property.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>graph</artifactId>
+            <version>${graph.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>network-flow</artifactId>
+            <version>${network-flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>math</artifactId>
+            <version>${math.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>rndutils</artifactId>
+            <version>${rndutils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zetool</groupId>
+            <artifactId>opengl</artifactId>
+            <version>${opengl.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>de.zet-evakuierung</groupId>
+            <artifactId>model</artifactId>
+            <version>${model.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.zet-evakuierung</groupId>
+            <artifactId>components-model-editor</artifactId>
+            <version>${components-model-editor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.zet-evakuierung</groupId>
+            <artifactId>evacuation-cellular-automaton</artifactId>
+            <version>${evacuation-cellular-automaton.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.media</groupId>
+            <artifactId>jmf</artifactId>
+            <version>${jmf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.math</groupId>
+            <artifactId>jama</artifactId>
+            <version>${jama.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>${xstream.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.martiansoftware</groupId>
+            <artifactId>jsap</artifactId>
+            <version>${jsap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>${jfreechart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.umontreal.iro</groupId>
+            <artifactId>ssj</artifactId>
+            <version>${ssj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addTestSources</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github-zet</id>
+            <layout>default</layout>
+            <name>GitHub zet Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/zet-evacuation/zet</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/zet-evacuation/zet</connection>
+        <url>https://github.com/zet-evacuation/zet.git</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>
