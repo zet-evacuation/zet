@@ -44,7 +44,7 @@ public class ZETMain {
     /**
      * The version of zet.
      */
-    public final static String version = "1.1.0 Beta";
+    public final static String version = "2.0.0-SNAPSHOT";
     /**
      * SVN version
      */
