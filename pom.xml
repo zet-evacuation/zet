@@ -44,6 +44,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <exec.mainClass>gui.ZETMain</exec.mainClass>
+        <!-- Plugins -->
+        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <!-- -zetool dependencies-->
         <common.version>0.1.2</common.version>
         <collection.version>0.1.0</collection.version>
@@ -122,7 +125,7 @@
             <artifactId>opengl</artifactId>
             <version>${opengl.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>de.zet-evakuierung</groupId>
             <artifactId>model</artifactId>
@@ -196,6 +199,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
