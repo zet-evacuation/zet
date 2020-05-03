@@ -15,13 +15,15 @@
  */
 package gui.visualization.draw.ca;
 
-import org.zetool.math.vectormath.Vector3;
+import java.awt.Color;
+
+import javax.media.opengl.GL2;
+
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.util.Tuple;
-import java.awt.Color;
-import javax.media.opengl.GL2;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 import org.zetool.opengl.helper.Frustum;
@@ -83,7 +85,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
         gl.glTranslated(pos.x, pos.y, 0.1);
         bodyColor.draw(gl);
 
-        glu.gluCylinder(quadObj, /*1.2 **/ individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, /*1.2 **/ individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
         headColor.draw(gl);
         gl.glTranslated(0, 0, individualHeight - individualRadius * 0.7);
 
@@ -92,7 +94,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
         Vector3 check = new Vector3(pos.x, pos.y, 1);
         // TODO Frustum
         //if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-        glu.gluSphere(quadObj, /*1.5 * */ individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
+        GLU_INSTANCE.gluSphere(GLU_QUADRIC, /*1.5 * */ individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
 
         gl.glPopMatrix();
     }

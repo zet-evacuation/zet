@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.gl2.GLUgl2;
 
 import org.zetool.opengl.framework.JMovingEyePanel;
 import org.zetool.opengl.helper.TextureFontStrings;
@@ -82,7 +82,7 @@ public class CreditsPanel extends JMovingEyePanel {
     public void initGFX(GLAutoDrawable drawable) {
         drawable.getGL().glEnable(GL.GL_TEXTURE_2D);
         super.initGFX(drawable);
-        glu = new GLU();
+        glu = new GLUgl2();
         if (!texturesLoaded) {
             texMan = TextureManager.getInstance();
             texMan.setGL(drawable.getGL().getGL2());
@@ -130,11 +130,11 @@ public class CreditsPanel extends JMovingEyePanel {
         drawLines(lines, startPos + 1);
     }
 
-    @Override
     /**
      * Moves the getText a bit upwards. The scrolling is not time independent, that means lags can occur on slower
      * hardware.
      */
+    @Override
     public void animate() {
         super.animate();
         final double timePerPixel = Conversion.SEC_TO_NANO_SECONDS / 1;

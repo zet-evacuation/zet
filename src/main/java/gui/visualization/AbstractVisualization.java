@@ -32,6 +32,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.gl2.GLUgl2;
 
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.awt.Screenshot;
@@ -113,11 +114,10 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
      */
     public AbstractVisualization(GLCapabilities caps) {
         super(caps);
-        glu = new GLU();
+        glu = new GLUgl2();
         setBackground(VisualizationOptionManager.getBackground());
         // TODO: eventl-listener for OpenGL.
         addGLEventListener(this);
-        animator = new Animator(this);
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
