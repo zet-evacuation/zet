@@ -59,7 +59,7 @@
         <rndutils.version>0.1.0</rndutils.version>
         <opengl.version>0.1.2</opengl.version>
         <!-- zet dependencies -->
-        <model.version>0.1.0</model.version>
+        <model.version>0.1.1</model.version>
         <components-model-editor.version>0.101</components-model-editor.version>
         <evacuation-cellular-automaton.version>0.1.0</evacuation-cellular-automaton.version>
         <!-- 3rd party dependencies -->
