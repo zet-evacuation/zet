@@ -1,10 +1,9 @@
 language: java
 
-install: ant resolve
-
-script: 
-  - ant test.travis
+dist: trusty
 
 jdk:
   - oraclejdk8
 
+install:
+  - cp .travis.settings.xml ${HOME}/.m2/settings.xml
