@@ -22,6 +22,10 @@
                     </snapshots>
                 </repository>
                 <repository>
+                    <id>tweety</id>
+                    <url>https://tweetyproject.org/mvn/</url>
+                </repository>
+                <repository>
                     <id>ekito-public-releases</id>
                     <url>https://raw.github.com/Ekito/maven-repo/master/releases</url>
                 </repository>
