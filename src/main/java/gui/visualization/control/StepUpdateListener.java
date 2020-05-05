@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -17,7 +17,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package gui.visualization.control;
 
 /**

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-14 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -40,7 +40,6 @@ import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zet.components.model.editor.floor.AbstractFloor;
 import org.zet.components.model.editor.floor.FloorViewModel;
 import org.zetool.common.util.Direction8;
-
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size of a cellular automaton.
