@@ -1,6 +1,7 @@
 # ZET Evacuation Tool
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![Build Status](https://travis-ci.org/zet-evacuation/zet.svg?branch=master)](https://travis-ci.org/zet-evacuation/zet)
 
 The ZET softwaretools, which is licensed under the GPL. allows to model evacuation scenarios and simulate and optimze them. Within ZET multi-storey buildings can be designed and residents can be placed and emergency exits can be assigned to them.
 
