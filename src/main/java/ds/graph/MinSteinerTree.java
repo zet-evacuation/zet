@@ -23,7 +23,7 @@ import algo.graph.spanningtree.MinSpanningTreeProblem;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class MinSteinerTree {
     

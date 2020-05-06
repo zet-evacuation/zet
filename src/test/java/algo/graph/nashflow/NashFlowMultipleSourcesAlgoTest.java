@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author Sebastian
+ * @author Sebastian Schenker
  */
 public class NashFlowMultipleSourcesAlgoTest {
     

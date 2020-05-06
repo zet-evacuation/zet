@@ -75,7 +75,6 @@ import org.zet.cellularautomaton.statistic.exception.AllCyclesNoValueBecauseNotS
  *
  * @author Matthias Woste
  * @author Timon Kelter
- *
  */
 public class JCAStatisticPanel extends JPanel {
 

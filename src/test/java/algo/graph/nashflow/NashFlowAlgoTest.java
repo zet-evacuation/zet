@@ -25,7 +25,7 @@ import org.zetool.graph.DynamicNetwork;
 
 /**
  *
- * @author Sebastian
+ * @author Sebastian Schenker
  */
 public class NashFlowAlgoTest {
     

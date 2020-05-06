@@ -30,7 +30,8 @@ import java.util.Iterator;
 
 /**
  *
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class GraphViewConverter implements Converter {
 

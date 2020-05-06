@@ -37,7 +37,7 @@ import java.util.Map;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> {
 

@@ -20,7 +20,7 @@ import java.awt.Point;
 
 /**
  *
- * @author marlenschwengfelder
+ * @author Marlen Schwengfelder
  */
 class PositionNode {
     

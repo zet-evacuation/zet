@@ -21,7 +21,7 @@ package gui.visualization.control;
  * @param <T1> 
  * @param <T2> 
  * @param <T3> 
- * @author marcel
+ * @author Marcel Preuß
  *
  */
 public class VisHistoryTriple<T1 extends Comparable<T1>, T2, T3> implements Comparable<VisHistoryTriple<T1, T2, T3>> {

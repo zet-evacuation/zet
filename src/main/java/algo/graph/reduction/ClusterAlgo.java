@@ -29,7 +29,7 @@ import java.util.Random;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class ClusterAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree>{
     

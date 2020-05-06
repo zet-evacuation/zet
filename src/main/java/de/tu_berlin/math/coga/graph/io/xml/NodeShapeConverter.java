@@ -24,7 +24,7 @@ package de.tu_berlin.math.coga.graph.io.xml;
 //
 ///**
 // *
-// * @author Martin Gro�
+// * @author Martin Groß
 // */
 //public class NodeShapeConverter implements Converter {
 //

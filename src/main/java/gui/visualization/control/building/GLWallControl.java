@@ -29,7 +29,8 @@ import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.Controlable;
 
 /**
- * @author Daniel R. Schmidt, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
+ * @author Daniel R. Schmidt
  */
 public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, GLBuildingControl> implements Controlable {
 

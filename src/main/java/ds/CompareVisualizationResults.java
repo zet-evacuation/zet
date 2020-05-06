@@ -20,7 +20,7 @@ import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class CompareVisualizationResults implements VisualizationResult{
     

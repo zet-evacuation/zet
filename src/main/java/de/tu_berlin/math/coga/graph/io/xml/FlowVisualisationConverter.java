@@ -31,25 +31,28 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.Iterator;
 
 /**
- * A converter that can convert a flow visualization datastracture out of an XML
- * file using {@code XStream}.
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * A converter that can convert a flow visualization datastracture out of an XML file using {@code XStream}.
+ *
+ * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class FlowVisualisationConverter implements Converter {
 
-	private XMLData xmlData;
+    private final XMLData xmlData;
 
 //    protected LinkedHashMap<String, PathFlow> flows = new LinkedHashMap<String,PathFlow>();
 //    protected LinkedHashMap<String, FlowAttributes> flowAttributes = new LinkedHashMap<String,FlowAttributes>();
-	public FlowVisualisationConverter( XMLData xmlData ) {
-		this.xmlData = xmlData;
-	}
+    public FlowVisualisationConverter(XMLData xmlData) {
+        this.xmlData = xmlData;
+    }
 
-	public boolean canConvert( Class type ) {
-		return type.equals( FlowVisualization.class );
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return type.equals(FlowVisualization.class);
+    }
 
-	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 //        FlowVisualization fv = (FlowVisualization) source;
 //        writer.startNode("graphLayout");
 //        context.convertAnother(fv.graphView());
@@ -95,89 +98,90 @@ public class FlowVisualisationConverter implements Converter {
 //            writer.endNode();
 //        }
 //        writer.endNode();
-	}
+    }
 
-	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-		if( !reader.hasMoreChildren() )
-			throw new InvalidFileFormatException( "Flow visualization root has no children." );
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        if (!reader.hasMoreChildren()) {
+            throw new InvalidFileFormatException("Flow visualization root has no children.");
+        }
 
-		// move to the first child, must be 'graphLayout'. then convert the layout.
-		reader.moveDown();
-		if( !reader.getNodeName().equals( "graphLayout" ) )
-			throw new InvalidFileFormatException( "First node has to be graphlayout" );
+        // move to the first child, must be 'graphLayout'. then convert the layout.
+        reader.moveDown();
+        if (!reader.getNodeName().equals("graphLayout")) {
+            throw new InvalidFileFormatException("First node has to be graphlayout");
+        }
 
-		// TODO the scale and subersink things are moved to GraphViewConverter (as they should!)
-		
-		GraphViewConverter gvc = new GraphViewConverter( xmlData );
-		GraphVisualization graphView2 = (GraphVisualization) gvc.unmarshal( reader, context );
-		FlowVisualization graphView = new FlowVisualization( graphView2 );
-		reader.moveUp();	// close graphLayout reading
+        // TODO the scale and subersink things are moved to GraphViewConverter (as they should!)
+        GraphViewConverter gvc = new GraphViewConverter(xmlData);
+        GraphVisualization graphView2 = (GraphVisualization) gvc.unmarshal(reader, context);
+        FlowVisualization graphView = new FlowVisualization(graphView2);
+        reader.moveUp();	// close graphLayout reading
 
-		System.out.println( "converted network: " );
-		System.out.println( graphView.getNetwork().toString() );
+        System.out.println("converted network: ");
+        System.out.println(graphView.getNetwork().toString());
 
+        PathBasedFlowOverTime dynamicFlow = new PathBasedFlowOverTime();
+        int maxFlowRate = 0;
 
-		PathBasedFlowOverTime dynamicFlow = new PathBasedFlowOverTime();
-		int maxFlowRate = 0;
+        // read the flow if exists
+        if (reader.hasMoreChildren()) {
+            // must be flow
+            reader.moveDown();
+            if (!reader.getNodeName().equals("flows")) {
+                throw new InvalidFileFormatException("Second part has to be the flow.");
+            }
 
-		// read the flow if exists
-		if( reader.hasMoreChildren() ) {
-			// must be flow
-			reader.moveDown();
-			if( !reader.getNodeName().equals( "flows" ) )
-				throw new InvalidFileFormatException( "Second part has to be the flow." );
+            while (reader.hasMoreChildren()) {
+                reader.moveDown();
+                if (reader.getNodeName().equals("flow")) {
 
-			while(reader.hasMoreChildren()) {
-				reader.moveDown();
-				if( reader.getNodeName().equals( "flow" ) ) {
+                    String path = "";
+                    String sp[] = null;
+                    int amount = 1;
+                    int rate = 1;
 
-					String path = "";
-					String sp[] = null;
-					int amount = 1;
-					int rate = 1;
+                    Iterator iter = reader.getAttributeNames();
+                    while (iter.hasNext()) {
+                        Object name = iter.next();
+                        if (name.equals("rate")) {
+                            rate = (int) Double.parseDouble(reader.getAttribute("rate"));
+                        } else if (name.equals("amount")) {
+                            amount = (int) Double.parseDouble(reader.getAttribute("amount"));
+                        } else if (name.equals("path")) {
+                            path = reader.getAttribute("path");
+                            sp = path.split(",");
+                        }
+                    }
 
-					Iterator iter = reader.getAttributeNames();
-					while(iter.hasNext()) {
-						Object name = iter.next();
-						if( name.equals( "rate" ) )
-							rate = (int) Double.parseDouble( reader.getAttribute( "rate" ) );
-						else if( name.equals( "amount" ) )
-							amount = (int) Double.parseDouble( reader.getAttribute( "amount" ) );
-						else if( name.equals( "path" ) ) {
-							path = reader.getAttribute( "path" );
-							sp = path.split( "," );
-						}
-					}
+                    maxFlowRate = Math.max(maxFlowRate, rate);
 
-					maxFlowRate = Math.max( maxFlowRate, rate );
+                    if (sp == null) {
+                        throw new InvalidFileFormatException("No path defined.");
+                    }
 
-					if( sp == null )
-						throw new InvalidFileFormatException( "No path defined." );
+                    // parsing the path
+                    FlowOverTimeEdgeSequence es = new FlowOverTimeEdgeSequence();
+                    for (int i = 0; i < sp.length; ++i) {
+                        // Baue den Pfad zusammen
+                        final int delay = sp[i].contains(".") ? (int) Double.parseDouble(sp[i++]) : 0;
+                        es.addLast(new FlowOverTimeEdge(xmlData.getEdges().get(sp[i]), delay));
+                    }
+                    // füge den Pfad hinzu
+                    final FlowOverTimePath p = new FlowOverTimePath(es);
+                    p.setRate(rate);
+                    p.setAmount(amount);
+                    dynamicFlow.addPathFlow(p);
+                }
 
-					// parsing the path
-					FlowOverTimeEdgeSequence es = new FlowOverTimeEdgeSequence();
-					for( int i = 0; i < sp.length; ++i ) {
-						// Baue den Pfad zusammen
-						final int delay = sp[i].contains( "." ) ? (int) Double.parseDouble( sp[i++] ) : 0;
-						es.addLast( new FlowOverTimeEdge( xmlData.getEdges().get( sp[i] ), delay ) );
-					}
-					// füge den Pfad hinzu
-					final FlowOverTimePath p = new FlowOverTimePath( es );
-					p.setRate( rate );
-					p.setAmount( amount );
-					dynamicFlow.addPathFlow( p );
-				}
+                reader.moveUp();
+            }
+            reader.moveUp();
+        }
 
-				reader.moveUp();
-			}
-			reader.moveUp();
-		}
-
-
-		while(reader.hasMoreChildren()) {
-			reader.moveDown();
-			reader.moveUp();
-		}
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            reader.moveUp();
+        }
 //                PathFlow flow = new PathFlow();
 //                flow.setUnitSize(1.0);
 //                //flow.setRate(1.0);
@@ -249,21 +253,21 @@ public class FlowVisualisationConverter implements Converter {
 //        for (String key : this.flows.keySet()) {
 //            flowViews.add(new FlowView(graphView,this.flows.get(key),flowAttributes.get(key)));
 //        }
-		//FlowVisualization fv = new FlowVisualization( graphView );
+        //FlowVisualization fv = new FlowVisualization( graphView );
 
-		graphView.setEdgesDoubled( xmlData.doubleEdges );
-		
+        graphView.setEdgesDoubled(xmlData.doubleEdges);
 
-		PathComposition pathComposition = new PathComposition( graphView.getNetwork() , graphView.getTransitTimes(), dynamicFlow );
-		pathComposition.run();
+        PathComposition pathComposition = new PathComposition(graphView.getNetwork(), graphView.getTransitTimes(), dynamicFlow);
+        pathComposition.run();
 
-		graphView.setFlow( pathComposition.getEdgeFlows(), maxFlowRate );
+        graphView.setFlow(pathComposition.getEdgeFlows(), maxFlowRate);
 
-		int maxTimeHorizon = 0;
-		for( Edge edge : xmlData.getEdges().values() )
-			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimesIntegral().get( edge ) );
+        int maxTimeHorizon = 0;
+        for (Edge edge : xmlData.getEdges().values()) {
+            maxTimeHorizon = Math.max(maxTimeHorizon, pathComposition.getEdgeFlows().get(edge).getLastTimeWithNonZeroValue() + xmlData.getTransitTimesIntegral().get(edge));
+        }
 
-		graphView.setTimeHorizon( maxTimeHorizon );
-		return graphView;
-	}
+        graphView.setTimeHorizon(maxTimeHorizon);
+        return graphView;
+    }
 }

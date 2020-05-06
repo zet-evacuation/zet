@@ -28,7 +28,8 @@ import javax.swing.UIManager;
  * in the editor. In the future these options could also be user-editable
  * and be made persistent by storing them in a separate options file.
  *
- * @author Timon Kelter, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
+ * @author Timon Kelter
  */
 public abstract class GUIOptionManager {
     /** The instance of the PropertyContainer. */

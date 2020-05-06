@@ -226,7 +226,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
                             // squares
                             for (int offset = 0; offset <= extent; offset++) {
                                 downblocked |= isDownSquareBlocked(room, x + offset,
-                                        y + extent + added, accurateDelayAreaCreation, accurateAssignmentAreaCration);    // sondern der obere �bergeben werden muss
+                                        y + extent + added, accurateDelayAreaCreation, accurateAssignmentAreaCration);    // sondern der obere übergeben werden muss
                             }
                             // set the line under the rectangle if is free
                             if (!downblocked) {

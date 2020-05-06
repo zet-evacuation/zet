@@ -30,7 +30,7 @@ import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class CompareTask extends AbstractAlgorithm<Project, CompareVisualizationResults>{
     

@@ -28,7 +28,7 @@ import java.util.Random;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class PrimForNetwork extends AbstractAlgorithm<NetworkMSTProblem, NetworkMST>{
     

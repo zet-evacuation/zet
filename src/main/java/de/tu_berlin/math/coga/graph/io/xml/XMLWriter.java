@@ -31,7 +31,8 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class XMLWriter {
 

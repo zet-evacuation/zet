@@ -24,7 +24,7 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask extends NetworkFlowModelAlgorithm {
 

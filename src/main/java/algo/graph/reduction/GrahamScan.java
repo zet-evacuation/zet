@@ -22,7 +22,7 @@ import java.util.Stack;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class GrahamScan {
 

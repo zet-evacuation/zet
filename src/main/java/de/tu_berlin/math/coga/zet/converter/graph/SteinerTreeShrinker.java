@@ -30,7 +30,7 @@ import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel,NetworkFlowModel> {
 

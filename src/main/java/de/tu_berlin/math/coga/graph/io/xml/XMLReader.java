@@ -34,9 +34,11 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * This class allows to readFlowVisualization a graph and especially a network flow from an
- * input file into the graph data structure.
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * This class allows to readFlowVisualization a graph and especially a network flow from an input file into the graph
+ * data structure.
+ *
+ * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class XMLReader {
 

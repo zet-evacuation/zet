@@ -66,7 +66,8 @@ import org.zetool.components.property.PropertyTreeModelWriter;
 /**
  * The main window of the ZET application.
  *
- * @author Jan-Philipp Kappmeier, Timon Kelter
+ * @author Jan-Philipp Kappmeier,
+ * @author Timon Kelter
  */
 @SuppressWarnings("serial")
 public class JZetWindow extends JFrame implements Localized {

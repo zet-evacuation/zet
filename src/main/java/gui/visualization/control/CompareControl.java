@@ -23,7 +23,7 @@ import org.zetool.opengl.framework.abs.DrawableControlable;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class CompareControl extends AbstractControl<CompareControl, GLCompare> {
    

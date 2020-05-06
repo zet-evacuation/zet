@@ -27,7 +27,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class GLCompare extends AbstractDrawable<GLCompare, CompareControl> {
 

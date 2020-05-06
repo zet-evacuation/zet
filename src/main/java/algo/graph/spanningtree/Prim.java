@@ -30,7 +30,7 @@ import org.zetool.graph.DynamicNetwork;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem,UndirectedTree> {
     

@@ -17,7 +17,7 @@ package ds.graph.problem;
 
 /**
  *
- * @author gross
+ * @author Martin Groß
  */
 public class RawMinimumCostFlowProblem {
 

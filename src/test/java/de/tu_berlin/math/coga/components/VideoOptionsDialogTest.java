@@ -25,7 +25,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Jan-PHilipp Kappmeier
+ * @author Jan-Philipp Kappmeier
  */
 public class VideoOptionsDialogTest extends TestCase {
 

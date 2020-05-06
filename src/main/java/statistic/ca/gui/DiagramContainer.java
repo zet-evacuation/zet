@@ -39,8 +39,8 @@ import statistic.ca.gui.JCAStatisticPanel.diagramClick;
 
 /**
  * 
- * @author Matthias Woste, Timon Kelter
- * 
+ * @author Matthias Woste
+ * @author Timon Kelter
  */
 public class DiagramContainer extends JPanel {
 

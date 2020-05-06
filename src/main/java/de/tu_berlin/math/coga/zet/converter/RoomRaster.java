@@ -185,8 +185,8 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T> {
 			}
 		}
 
-		// Alle Rasterquadrate als unbetretbar markieren, die au�erhalb des Raumes liegen
-		// (nicht blockiert durch Inaccessible Areas, sondern einfach au�erhalb des Raumumrisses).
+		// Alle Rasterquadrate als unbetretbar markieren, die außerhalb des Raumes liegen
+		// (nicht blockiert durch Inaccessible Areas, sondern einfach außerhalb des Raumumrisses).
 		List<T> insides = this.insideSquares();
 		for( int i = 0; i < getColumnCount(); i++ ) {
 			for( int j = 0; j < getRowCount(); j++ ) {

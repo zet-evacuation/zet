@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author mouk
+ * @author Moukarram Kabbash
  */
 public class FlowCalculator
 {

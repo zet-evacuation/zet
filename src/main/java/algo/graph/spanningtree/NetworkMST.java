@@ -20,7 +20,7 @@ import org.zetool.graph.Edge;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class NetworkMST {
     

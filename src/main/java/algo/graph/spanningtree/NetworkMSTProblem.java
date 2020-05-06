@@ -21,7 +21,7 @@ import org.zetool.graph.DynamicNetwork;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class NetworkMSTProblem {
     

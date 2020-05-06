@@ -17,7 +17,7 @@ package gui.visualization.control;
 
 /**
  *
- * @author mouk
+ * @author Moukarram Kabbash
  */
 public class FlowHistroryTriple extends VisHistoryTriple<Integer, Double, Integer>
 {

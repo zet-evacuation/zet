@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class GreedyAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree> {
 
