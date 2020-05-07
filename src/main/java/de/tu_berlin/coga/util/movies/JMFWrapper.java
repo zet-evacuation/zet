@@ -28,7 +28,7 @@ import javax.swing.JPanel;
  * @author Jan-Philipp Kappmeier
  */
 public class JMFWrapper extends PicturesOnlyWriter {
-	private final static Localization loc = LocalizationManager.getManager().getLocalization( "io.movie.movies" );
+	private final static Localization loc = LocalizationManager.getManager().getLocalization( "zet.gui.GUILocalization" );
 	/**
 	 * {@inheritDoc}
 	 * <p>Creates a new quicktime movie out of the images in the submitted vector.
