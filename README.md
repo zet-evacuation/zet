@@ -1,5 +1,8 @@
 # ZET Evacuation Tool
 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![Build Status](https://travis-ci.org/zet-evacuation/zet.svg?branch=master)](https://travis-ci.org/zet-evacuation/zet)
+
 The ZET softwaretools, which is licensed under the GPL. allows to model evacuation scenarios and simulate and optimze them. Within ZET multi-storey buildings can be designed and residents can be placed and emergency exits can be assigned to them.
 
 An earliest arrival flow is then computed to route the residents to the best exits. Since the flow computation has to make certain idealistic assumptions, the included simulation can then be used to test the computed evacuation paths. A wide selection of statistics and an advanced visualizer help to analyze the data.
@@ -16,3 +19,7 @@ The evacuees can be automatically set in so called "assignment areas". The resid
 ## Visualization
 
  Both, the simulaton on a cellular automaton and the calculated network flow can be visualized in 3d using OpenGL. The position of the camera inside the visualization is completely controllable using the normal mouse and keyboard controls. Within the visualization various information can be accessed, such as for example the utilization of areas. The visualization can be viewed in perspective view, isometric view and orthogonal projection.
+
+## License
+
+This project is [licensed](LICENSE) under the terms of the [GPL 2.0 license](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) or later.
