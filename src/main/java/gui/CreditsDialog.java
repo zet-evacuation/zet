@@ -20,24 +20,25 @@ import javax.swing.JDialog;
 import zet.gui.GUILocalization;
 
 /**
- * A window that contains a {@link CreditsPanel} to represent the
- * credits for zet evacuation tool.
+ * A window that contains a {@link CreditsPanel} to represent the credits for zet evacuation tool.
+ *
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsDialog extends JDialog {
-	/**
-	 * Creates the window and the {@link CreditsPanel}. The window has the
-	 * program title and the version as defined by {@link ZETMain#version} as
-	 * title, is modal and centered in the parent window.
-	 * @param parent the parent window
-	 */
-	public CreditsDialog( Frame parent ) {
-		super(parent, GUILocalization.loc.getString( "AppTitle" ) + " v" + ZETMain.version + " " + ZETMain.revision, true);
-		setSize( 640, 480 );
-		setLocation ( parent.getX () + ((parent.getWidth() - getWidth()) / 2), parent.getY () + ((parent.getHeight() - getHeight()) / 2));
-		CreditsPanel credits = new CreditsPanel();
-		credits.setSize( 480, 360 );
-		credits.startAnimation();
-		add( credits );
-	}
+
+    /**
+     * Creates the window and the {@link CreditsPanel}. The window has the program title and the version as defined by
+     * {@link ZETMain#version} as title, is modal and centered in the parent window.
+     *
+     * @param parent the parent window
+     */
+    public CreditsDialog(Frame parent) {
+        super(parent, GUILocalization.loc.getString("AppTitle") + " v" + ZETMain.VERSION_FULL, true);
+        setSize(640, 480);
+        setLocation(parent.getX() + ((parent.getWidth() - getWidth()) / 2), parent.getY() + ((parent.getHeight() - getHeight()) / 2));
+        CreditsPanel credits = new CreditsPanel();
+        credits.setSize(480, 360);
+        credits.startAnimation();
+        add(credits);
+    }
 }

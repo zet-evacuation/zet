@@ -192,7 +192,7 @@ public class CZET {
         Debug.setDefaultLogLevel(Level.FINER);
         Debug.setUpLogging();
 
-        log.log(Level.INFO, "Command Line Interface for ZET {0} Revision {1}", new Object[]{ZETMain.version, ZETMain.revision});
+        log.log(Level.INFO, "Command Line Interface for ZET {0}", new Object[]{ZETMain.VERSION_FULL});
 
         JSAP jsap = new JSAP();
 

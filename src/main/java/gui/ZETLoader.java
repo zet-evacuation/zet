@@ -239,6 +239,7 @@ public class ZETLoader {
 
             debug = config.getBoolean("debug");
             if (debug) {
+                log.log(Level.INFO, "Enabled debug output for zet version {0}", new Object[]{ZETMain.DEBUG_VERSION_INFO});
                 //Debug.setDefaultLogLevel( Level.ALL );
                 Debug.setDefaultLogLevel(Level.FINER);
                 //log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Version:" ), System.getProperty( "java.version" )});

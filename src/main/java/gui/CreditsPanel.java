@@ -44,6 +44,11 @@ import org.zetool.opengl.helper.TextureManager;
  */
 public class CreditsPanel extends JMovingEyePanel {
 
+    /**
+     * The string to replace the {@code #VERSION} marker.
+     */
+    private final String versionText = ZETLoader.isDebug() ? ZETMain.VERSION_FULL + "\n" + ZETMain.DEBUG_VERSION_INFO : ZETMain.VERSION_FULL;
+
     /** The instance of the texture manager. */
     private TextureManager texMan;
     /** Describes if the textures are loaded or not. */
@@ -73,12 +78,12 @@ public class CreditsPanel extends JMovingEyePanel {
         useKeyListener();
     }
 
-    @Override
     /**
      * Initializes the graphics context and initializes the texture font.
      *
      * @param drawable the context which is used for the credits panel
      */
+    @Override
     public void initGFX(GLAutoDrawable drawable) {
         drawable.getGL().glEnable(GL.GL_TEXTURE_2D);
         super.initGFX(drawable);
@@ -116,13 +121,13 @@ public class CreditsPanel extends JMovingEyePanel {
         texLogo.bind();
         gl.glBegin(GL2.GL_QUADS);
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3d(-10, -4, startPos);                // lower left
+        gl.glVertex3d(-10, -4, startPos); // lower left
         gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3d(-10, -4, startPos - 10);           // upper left
+        gl.glVertex3d(-10, -4, startPos - 10); // upper left
         gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3d(10, -4, startPos - 10);            // upper right
+        gl.glVertex3d(10, -4, startPos - 10); // upper right
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3d(10, -4, startPos);                 // lower right
+        gl.glVertex3d(10, -4, startPos); // lower right
         gl.glEnd();
 
         // load font texture and draw text
@@ -173,7 +178,10 @@ public class CreditsPanel extends JMovingEyePanel {
         Path creditsFile = Paths.get("./credits.txt");
         try {
             for (String line : Files.readAllLines(creditsFile, StandardCharsets.UTF_8)) {
-                lines.add(parse(line.substring(0, line.length() - 2)), line.endsWith("1"));
+                String parsedLine = parse(line.substring(0, line.length() - 2));
+                for (String lineToAdd : parsedLine.split("\n")) {
+                    lines.add(lineToAdd, line.endsWith("1"));
+                }
             }
         } catch (IOException ex) {
             lines.add("Error loading credits", true);
@@ -182,7 +190,7 @@ public class CreditsPanel extends JMovingEyePanel {
     }
 
     private String parse(String input) {
-        return input.replace("#VERSION", ZETMain.version);
+        return input.replace("#VERSION", versionText);
     }
 
     /**

@@ -15,23 +15,26 @@
  */
 package gui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
+
 import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.debug.Debug;
 import org.zetool.common.debug.HTMLLoggerHandler;
 import org.zetool.common.debug.SimpleFileHandler;
 import org.zetool.common.debug.SimpleLogFormatter;
 import org.zetool.common.util.Formatter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 /**
  * The {@code ZETMain} class is the main entry for the graphical user interface of the evacuation tool. It creates an
@@ -44,11 +47,55 @@ public class ZETMain {
     /**
      * The version of zet.
      */
-    public final static String version = "2.0.0-SNAPSHOT";
+    public final static String VERSION;
     /**
-     * SVN version
+     * Soruce code version. Git commit.
      */
-    public final static String revision = getVersion();
+    public final static String REVISION;
+
+    /**
+     * String to be displayed containing detailed version. If the version is a release, it will contain only the release
+     * version. When the version is a SNAPSHOT, the revision will be added.
+     */
+    public final static String VERSION_FULL;
+
+    /**
+     * A more detailed source code revision for debugging purposes. Includes git describe output.
+     */
+    public final static String DEBUG_VERSION_INFO;
+
+    private final static String GIT_PROPERTIES = "/git.properties";
+    private final static String GIT_BUILD_VERSION = "git.build.version";
+    private final static String GIT_COMMIT = "git.commit.id.abbrev";
+    private final static String GIT_DESCRIBE = "git.commit.id.describe";
+
+    private static Properties loadGitProperties() {
+        InputStream inputStream = ZETMain.class.getResourceAsStream(GIT_PROPERTIES);
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Error loading " + GIT_PROPERTIES, ex);
+        }
+        return p;
+    }
+
+    private static boolean isSnapshot() {
+        return VERSION.contains("SNAPSHOT");
+    }
+
+    static {
+        Properties gitProperties = loadGitProperties();
+        VERSION = gitProperties.getProperty(GIT_BUILD_VERSION);
+        REVISION = gitProperties.getProperty(GIT_COMMIT);
+        if (isSnapshot()) {
+            VERSION_FULL = VERSION + " " + REVISION;
+        } else {
+            VERSION_FULL = VERSION;
+        }
+        DEBUG_VERSION_INFO = gitProperties.getProperty(GIT_DESCRIBE);
+    }
+
     /**
      * The file to which the log is written (if specified via command line).
      */
@@ -195,7 +242,13 @@ public class ZETMain {
             gl = new HTMLLoggerHandler();
             log.addHandler(gl);
             if (logging && !privateLogging) {
-                log.log(Level.INFO, "ZET Suite {5} Revision {6}\nLog of " + cal.get(Calendar.YEAR) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros(cal.get(Calendar.MONTH) + 1, 2), Formatter.fillLeadingZeros(cal.get(Calendar.DAY_OF_MONTH), 2), Formatter.fillLeadingZeros(cal.get(Calendar.HOUR_OF_DAY), 2), Formatter.fillLeadingZeros(cal.get(Calendar.MINUTE), 2), Formatter.fillLeadingZeros(cal.get(Calendar.SECOND), 2), ZETMain.version, ZETMain.revision});
+                log.log(Level.INFO, "ZET Suite {5}\nLog of " + cal.get(Calendar.YEAR) + "-{0}-{1} {2}-{3}-{4}",
+                        new Object[]{Formatter.fillLeadingZeros(cal.get(Calendar.MONTH) + 1, 2),
+                            Formatter.fillLeadingZeros(cal.get(Calendar.DAY_OF_MONTH), 2),
+                            Formatter.fillLeadingZeros(cal.get(Calendar.HOUR_OF_DAY), 2),
+                            Formatter.fillLeadingZeros(cal.get(Calendar.MINUTE), 2),
+                            Formatter.fillLeadingZeros(cal.get(Calendar.SECOND), 2),
+                            ZETMain.VERSION_FULL});
             }
             if (logging && !logFile.equals(errFile) && !privateLogging) {
                 log.log(Level.SEVERE, "Error log of " + cal.get(Calendar.YEAR) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros(cal.get(Calendar.MONTH) + 1, 2), Formatter.fillLeadingZeros(cal.get(Calendar.DAY_OF_MONTH), 2), Formatter.fillLeadingZeros(cal.get(Calendar.HOUR_OF_DAY), 2), Formatter.fillLeadingZeros(cal.get(Calendar.MINUTE), 2), Formatter.fillLeadingZeros(cal.get(Calendar.SECOND), 2)});
@@ -210,13 +263,5 @@ public class ZETMain {
         return err
                 ? "zet_" + cal.get(Calendar.YEAR) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.MONTH) + 1, 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.DAY_OF_MONTH), 2) + "_" + Formatter.fillLeadingZeros(cal.get(Calendar.HOUR_OF_DAY), 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.MINUTE), 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.SECOND), 2) + "_err.log"
                 : "zet_" + cal.get(Calendar.YEAR) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.MONTH) + 1, 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.DAY_OF_MONTH), 2) + "_" + Formatter.fillLeadingZeros(cal.get(Calendar.HOUR_OF_DAY), 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.MINUTE), 2) + "-" + Formatter.fillLeadingZeros(cal.get(Calendar.SECOND), 2) + ".log";
-    }
-
-    private static String getVersion() {
-        try {
-            return new String(Files.readAllBytes(Paths.get("./version.txt")));
-        } catch (IOException ex) {
-            return "> $Rev$";
-        }
     }
 }
