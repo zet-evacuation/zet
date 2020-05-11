@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-20 zet evacuation team
+/* zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -722,7 +722,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
         if (square.isSave() != down.isSave()) {
             return true;
         }
-
+        
         // Only squares from stairs with the same up and down speedfactor may be in the same node
         // (or squares that are not in a stair with stairs that are also not in a stair)
         if (square.getUpSpeedFactor() != down.getUpSpeedFactor()) {
