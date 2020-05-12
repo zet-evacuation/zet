@@ -15,17 +15,6 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import org.zetool.common.util.Direction8;
-import org.zetool.common.util.Formatter;
-import org.zetool.common.util.Level;
-import org.zetool.common.util.units.TimeUnits;
-import ds.PropertyContainer;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
-import ds.graph.NodeRectangle;
-import de.zet_evakuierung.model.PlanPoint;
-import de.zet_evakuierung.model.Room;
-import de.zet_evakuierung.model.StairArea;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +22,18 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import de.zet_evakuierung.model.PlanPoint;
+import de.zet_evakuierung.model.Room;
+import de.zet_evakuierung.model.StairArea;
+import ds.PropertyContainer;
+import ds.graph.NodeRectangle;
+import org.zetool.common.util.Direction8;
+import org.zetool.common.util.Formatter;
+import org.zetool.common.util.Level;
+import org.zetool.common.util.units.TimeUnits;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 
 /**
  *
@@ -110,7 +111,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
                     int nodeRectangleNW_x = roomOffsetX + x * room.getRaster();
                     int nodeRectangleNW_y = roomOffsetY + y * room.getRaster();
-                    // Finding the upper Right square by looking for the maximal x and Years.
+                    // Finding the upper Right square by looking for the maximal x and y ears.
                     int maxX = x;
                     int maxY = y;
 
@@ -669,6 +670,10 @@ public class RectangleConverter extends BaseZToGraphConverter {
             return true;
         }
 
+        if(square.isExit() != right.isExit()) {
+            return true;
+        }
+
         // Only squares from stairs with the same up and down speedfactor may be in the same node
         // (or squares that are not in a stair with stairs that are also not in a stair)
         if (square.getUpSpeedFactor() != right.getUpSpeedFactor()) {
@@ -722,7 +727,11 @@ public class RectangleConverter extends BaseZToGraphConverter {
         if (square.isSave() != down.isSave()) {
             return true;
         }
-        
+
+        if(square.isExit() != down.isExit()) {
+            return true;
+        }
+
         // Only squares from stairs with the same up and down speedfactor may be in the same node
         // (or squares that are not in a stair with stairs that are also not in a stair)
         if (square.getUpSpeedFactor() != down.getUpSpeedFactor()) {
@@ -874,7 +883,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
                     ZToGraphRasterSquare square = room.getSquare(col, row);
 
                     // todo: parameter
-                    if (square.isSave() && square.isExit()) {
+                    if ( square.isExit()) {
                         Node node = square.getNode();
                         Edge edge = model.getEdge(node, supersink);
                         if (edge == null) {
