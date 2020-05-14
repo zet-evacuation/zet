@@ -53,7 +53,7 @@ public class NetworkFlowModel implements Iterable<Node> {
     protected ZToGraphMapping mapping;
     protected Node supersink;
     int edgeIndex = 0;
-    int nodeCount = 1;
+    int nodeCount;
     private int individualSourceIndex = -1;
     private int individualEdgeIndex = -1;
     boolean finalized = false;
@@ -68,6 +68,7 @@ public class NetworkFlowModel implements Iterable<Node> {
         this.currentAssignment = new IdentifiableIntegerMapping<>(0);
         this.sources = new LinkedList<>();
         supersink = new Node(0);
+        nodeCount = 1;
         network.setNode(supersink);
         mapping = new ZToGraphMapping(raster); // start with an empty mapping in case we have an empty model
         mapping.setNodeRectangle(supersink, new NodeRectangle(0, 0, 0, 0));
@@ -79,6 +80,7 @@ public class NetworkFlowModel implements Iterable<Node> {
         // a constructor that copies the nodes. TODO: as static method
         this(model.mapping.getRaster());
         network.setNodes(model.network.nodes());
+        nodeCount = model.nodeCount;
         supersink = model.supersink;
         sources = model.sources;
         nodeCapacities = model.nodeCapacities;
@@ -368,8 +370,8 @@ public class NetworkFlowModel implements Iterable<Node> {
             completeConstruction();
         }
 
-        // add one for test purposes
-        network.addNode(new Node(nodeCount++));
+//        // add one for test purposes
+//        network.addNode(new Node(nodeCount++));
 
         // try to remove nodes with higher index
         Node current = network.nodes().last();
