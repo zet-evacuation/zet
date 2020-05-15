@@ -15,195 +15,110 @@
  */
 package algo.graph.spanningtree;
 
-import org.zetool.common.algorithm.AbstractAlgorithm; 
-import org.zetool.graph.Node;
 import java.util.Random;
-import org.zetool.graph.Edge;
+
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import org.zetool.graph.Graph;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.ListSequence;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
-import org.zetool.container.collection.ListSequence;
 import org.zetool.container.priority.MinHeap;
-import org.zetool.graph.DynamicNetwork;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Graph;
+import org.zetool.graph.Node;
 
 /**
  *
  * @author Marlen Schwengfelder
  */
-public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem,UndirectedTree> {
-    
-    
-    IdentifiableIntegerMapping<Edge> currentEdgesTransit;
-    IdentifiableCollection<Edge> solEdges = new ListSequence<>();    
-    IdentifiableCollection<Node> solNodes = new ListSequence<>();
-    IdentifiableCollection<Edge> currentEdges = new ListSequence<>();
-    IdentifiableCollection<Edge> remaincurrentEdges = new ListSequence<>();
-    IdentifiableCollection<Edge> edges = new ListSequence<>();
-    Edge MinEdge;
-    Edge supersinkedge;
-    Node startNode;
-    Node endNode;
-    Node currentNode;
-    int Transit;
-    int i;
-    //int overalldist=0;
-    int Min = 100000;
-    NetworkFlowModel OriginNetwork;
-    Graph OriginGraph;
-    DynamicNetwork neu;
-    int NumEdges = 0;
-    IdentifiableIntegerMapping<Node> distances;
-    IdentifiableObjectMapping<Node, Edge> heapedges;
-    
-    @Override
-    public UndirectedTree runAlgorithm(MinSpanningTreeProblem minspan)
-    {
-        
-        try{
-        OriginNetwork = minspan.getNetworkFlowModel(); 
-        Node supersink = minspan.getNetworkFlowModel().getSupersink();
-        OriginGraph = OriginNetwork.graph();
-        int numNodes = OriginGraph.nodeCount();
-        IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.transitTimes();
-     
-        //gives a random start node
-        Random r = new Random();
-				long seed = r.nextLong();
-				seed = 5706550742198787144l; // this one creates a chain decomposition error in 3-storey 4-rooms.
-				//1364865666242639293
-				System.out.println( "Spanning Tree Seed: " + seed );
-        r.setSeed( seed );
-        int num = 0 + Math.abs(r.nextInt()) % numNodes;
+public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree> {
+    // TODO: make prim independent from network flow model
+    // requires MinSpanningTreeProblem only uses graphs, but no network flow model
+    // Super-sink specific handling must be done by caller then.
 
-        if (num != 0)
-        {   
-            startNode = OriginGraph.getNode(num);
-        }
-        else
-        {
-            startNode = OriginGraph.getNode(num+1);
-        }
-        System.out.println("Startknoten: " + num);
-        solNodes.add(startNode);
-         
-        distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
-        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.numberOfEdges());
-        MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.numberOfNodes());
-        IdentifiableCollection<Edge> incidentEdges;
-        
-        for (Node node: OriginNetwork )
-        {
-            if (node != supersink)
-            {
+    @Override
+    public UndirectedTree runAlgorithm(MinSpanningTreeProblem minspan) {
+        NetworkFlowModel originNetwork = minspan.getNetworkFlowModel();
+        Node supersink = minspan.getNetworkFlowModel().getSupersink();
+
+        IdentifiableIntegerMapping<Edge> transitTimes = originNetwork.transitTimes();
+
+        Node startNode = getStartNode(originNetwork.graph());
+
+        IdentifiableIntegerMapping<Node> distances = new IdentifiableIntegerMapping<>(originNetwork.numberOfNodes());
+        IdentifiableObjectMapping<Node, Edge> heapedges = new IdentifiableObjectMapping<>(originNetwork.numberOfEdges());
+        MinHeap<Node, Integer> queue = new MinHeap<>(originNetwork.numberOfNodes());
+
+        for (Node node : originNetwork) {
+            if (node != supersink) {
                 distances.add(node, Integer.MAX_VALUE);
                 heapedges.set(node, null);
             }
         }
-        
+
         distances.set(startNode, 0);
-        System.out.println("done");
         queue.insert(startNode, 0);
-        
-        
-        while (!queue.isEmpty())
-        {
+
+        int edgeCount = 0;
+        IdentifiableCollection<Edge> solEdges = new ListSequence<>();
+        IdentifiableCollection<Node> solNodes = new ListSequence<>();
+        while (!queue.isEmpty()) {
             MinHeap<Node, Integer>.Element min = queue.extractMin();
             Node v = min.getObject();
             solNodes.add(v);
             distances.set(v, Integer.MIN_VALUE);
-            
-            if (v != startNode)
-            {
-                Edge edge = new Edge(NumEdges++,heapedges.get(v).start(),heapedges.get(v).end());
+
+            if (v != startNode) {
+                Edge edge = new Edge(edgeCount++, heapedges.get(v).start(), heapedges.get(v).end());
                 //only consider edges that are not incident to supersink
-                if (heapedges.get(v).start() != supersink && heapedges.get(v).end() != supersink)
-                {
+                if (heapedges.get(v).start() != supersink && heapedges.get(v).end() != supersink) {
                     solEdges.add(edge);
                 }
             }
-            incidentEdges = OriginNetwork.graph().incidentEdges(v);
-            for (Edge edge: incidentEdges)
-            {
+            IdentifiableCollection<Edge> incidentEdges = originNetwork.graph().incidentEdges(v);
+            for (Edge edge : incidentEdges) {
                 Node w = edge.opposite(v);
-                if (distances.get(w) == Integer.MAX_VALUE)
-                {
-                    distances.set(w, TransitForEdge.get(edge));
+                if (distances.get(w) == Integer.MAX_VALUE) {
+                    distances.set(w, transitTimes.get(edge));
                     heapedges.set(w, edge);
-                    queue.insert(w,distances.get(w));
-                }
-                else
-                {
-                    if (TransitForEdge.get(edge) < distances.get(w))
-                    {
-                        distances.set(w, TransitForEdge.get(edge));
-                        queue.decreasePriority(w, TransitForEdge.get(edge));
+                    queue.insert(w, distances.get(w));
+                } else {
+                    if (transitTimes.get(edge) < distances.get(w)) {
+                        distances.set(w, transitTimes.get(edge));
+                        queue.decreasePriority(w, transitTimes.get(edge));
                         heapedges.set(w, edge);
-                    }
-                }
-                
-            }
-        }
-        
-        IdentifiableCollection<Edge> addEdges = OriginNetwork.graph().incidentEdges(supersink);
-        for (Edge edge: addEdges)
-        {
-            supersinkedge = new Edge(NumEdges++, edge.start(), edge.end());
-            solEdges.add(supersinkedge);
-        }
-        
-               //2. langsamere Implementation
-       
-        /*currentNode = startNode;
-        currentEdges = OriginNetwork.getNetworkFlowModel().incidentEdges(startNode);
-        
-        while (solNodes.size() < OriginGraph.nodeCount()+1)
-        {
-            for (Edge edge: currentEdges)
-            {
-                if (solNodes.contains(edge.start()) ^ solNodes.contains(edge.end()))
-                {
-                    if (TransitForEdge.get(edge) < Min)
-                    {
-                        MinEdge = edge;
                     }
                 }
 
             }
-            Edge edge = new Edge(NumEdges++,MinEdge.start(),MinEdge.end());
-            solEdges.add(edge);
-            if (solNodes.contains(MinEdge.start()))
-            {
-               solNodes.add(MinEdge.end()); 
-               //currentNode = MinEdge.end();
-               for (Edge neu: OriginNetwork.getNetworkFlowModel().incidentEdges(MinEdge.end()))
-               {
-                    currentEdges.add(neu);
-               }
-            }
-            else
-            {
-                solNodes.add(MinEdge.start());
-                //currentNode = MinEdge.start();
-                for (Edge neu: OriginNetwork.getNetworkFlowModel().incidentEdges(MinEdge.start()))
-               {
-                    currentEdges.add(neu);
-               }
-            }
-           
-        }*/
-        
         }
-        catch(Exception e) {
-             System.out.println("Fehler in runMinSpan " + e.toString());
-         }
-        //System.out.println("Overalldistance " + overalldist);
-        return new UndirectedTree( solEdges );
-       
- 
-        
+
+        IdentifiableCollection<Edge> addEdges = originNetwork.graph().incidentEdges(supersink);
+        for (Edge edge : addEdges) {
+            Edge supersinkedge = new Edge(edgeCount++, edge.start(), edge.end());
+            solEdges.add(supersinkedge);
+        }
+
+        return new UndirectedTree(solEdges);
+
     }
-    
-    
+
+    /**
+     * Retruns a random node in the graph. Supersink is excluded.
+     *
+     * @param originGraph the input graph
+     * @return a random node except the super sink
+     */
+    private Node getStartNode(Graph originGraph) {
+        Random r = new Random();
+        long seed = r.nextLong();
+        r.setSeed(seed);
+        int num = 0 + Math.abs(r.nextInt()) % originGraph.nodeCount();
+        if (num != 0) {
+            return originGraph.getNode(num);
+        } else {
+            return originGraph.getNode(num + 1);
+        }
+    }
 }
