@@ -15,52 +15,43 @@
  */
 package ds.graph;
 
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 
 /**
  *
  * @author Marlen Schwengfelder
  */
 public class MinSteinerTree {
-    
-    private MinSpanningTreeProblem minspanprob;
+
     private IdentifiableIntegerMapping<Edge> shortestdist;
-    private IdentifiableCollection<Edge> Edges ;
+    private IdentifiableCollection<Edge> Edges;
     private IdentifiableCollection<Node> nodes;
     private int overalldist;
-    
-    public MinSteinerTree(MinSpanningTreeProblem minspanprob,IdentifiableIntegerMapping<Edge> shortestdist, IdentifiableCollection<Edge> Edges, IdentifiableCollection<Node> nodes, int overalldist)
-    {
-        this.minspanprob = minspanprob;
+
+    public MinSteinerTree(IdentifiableIntegerMapping<Edge> shortestdist, IdentifiableCollection<Edge> Edges, IdentifiableCollection<Node> nodes, int overalldist) {
         this.shortestdist = shortestdist;
         this.Edges = Edges;
         this.nodes = nodes;
         this.overalldist = overalldist;
     }
-    public MinSteinerTree()
-    {
-        
+
+    public MinSteinerTree() {
+
     }
-    
-    public MinSpanningTreeProblem getProblem()
-    {
-        return minspanprob;
-    }
-    public IdentifiableCollection<Edge> getEdges()
-    {
+
+    public IdentifiableCollection<Edge> getEdges() {
         return Edges;
     }
-    public IdentifiableCollection<Node> getNodes()
-    {
+
+    public IdentifiableCollection<Node> getNodes() {
         return nodes;
     }
-    public IdentifiableIntegerMapping<Edge> getdist()
-    {
+
+    public IdentifiableIntegerMapping<Edge> getdist() {
         return shortestdist;
     }
-    
+
 }

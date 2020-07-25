@@ -16,11 +16,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.GreedyAlgo;
+import org.zetool.algorithm.spanningtree.UndirectedForest;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
-import algo.graph.spanningtree.UndirectedTree;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * Creates a t-spanner for grid graphs using a greedy algorithm.
@@ -58,13 +56,11 @@ public class GreedySpannerShrinker extends GraphShrinker {
 	@Override
 	IdentifiableCollection<Edge> runEdge() {
 		//creates a minimum spanning tree problem
-		MinSpanningTreeProblem minimumSpanningTreeProblem = new MinSpanningTreeProblem( getProblem(), getProblem().transitTimes() );
-
 		//creates a t-spanner using a greedy algorithm
 		GreedyAlgo greedySpannerAlgorithm = new GreedyAlgo();
-		greedySpannerAlgorithm.setProblem( minimumSpanningTreeProblem );
+		greedySpannerAlgorithm.setProblem( getProblem() );
 		greedySpannerAlgorithm.run();
-		UndirectedTree minspantree = greedySpannerAlgorithm.getSolution();
+		UndirectedForest minspantree = greedySpannerAlgorithm.getSolution();
 		System.out.print( "Compute t-Spanner using greedy... " );
 		System.out.println( "used time: " + greedySpannerAlgorithm.getRuntimeAsString() );
 		IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();

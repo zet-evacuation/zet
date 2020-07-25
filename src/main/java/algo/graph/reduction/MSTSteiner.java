@@ -15,7 +15,6 @@
  */
 package algo.graph.reduction;
 
-import algo.graph.spanningtree.MinSpanningTreeProblem;
 import algo.graph.spanningtree.NetworkMST;
 import algo.graph.spanningtree.NetworkMSTProblem;
 import algo.graph.spanningtree.PrimForNetwork;
@@ -39,7 +38,7 @@ import org.zetool.graph.structure.Path;
  *
  * @author Marlen Schwengfelder
  */
-public class MSTSteiner extends AbstractAlgorithm<MinSpanningTreeProblem, MinSteinerTree> {
+public class MSTSteiner extends AbstractAlgorithm<NetworkFlowModel, MinSteinerTree> {
 
     int overalldist = 0;
     NetworkFlowModel originNetwork;
@@ -66,11 +65,11 @@ public class MSTSteiner extends AbstractAlgorithm<MinSpanningTreeProblem, MinSte
     Dijkstra dijkstra;
 
     @Override
-    public MinSteinerTree runAlgorithm(MinSpanningTreeProblem minspan) {
+    public MinSteinerTree runAlgorithm(NetworkFlowModel networkFlowModel) {
 
         try {
-            originNetwork = minspan.getNetworkFlowModel();
-            Node supersink = minspan.getNetworkFlowModel().getSupersink();
+            originNetwork = networkFlowModel;
+            Node supersink = originNetwork.getSupersink();
             OriginGraph = originNetwork.graph();
             int numNodes = OriginGraph.nodeCount();
             ZToGraphMapping mapping = originNetwork.getZToGraphMapping();
@@ -208,7 +207,7 @@ public class MSTSteiner extends AbstractAlgorithm<MinSpanningTreeProblem, MinSte
         } catch (Exception e) {
             System.out.println("Fehler in Steiner-MST " + e.toString());
         }
-        return new MinSteinerTree(minspan, shortestpathDist, solutionEdges, solNodes, overalldist);
+        return new MinSteinerTree(shortestpathDist, solutionEdges, solNodes, overalldist);
 
     }
 }
