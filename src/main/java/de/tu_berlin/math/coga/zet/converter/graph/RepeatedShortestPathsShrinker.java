@@ -22,14 +22,13 @@ import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
 import org.zetool.graph.structure.Forest;
 import org.zetool.container.collection.IdentifiableCollection;
-import algo.graph.spanningtree.UndirectedTree;
 import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import de.zet_evakuierung.model.AssignmentArea;
 import de.zet_evakuierung.model.PlanPoint;
 import de.zet_evakuierung.model.Room;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,9 +40,7 @@ import java.util.Map;
  */
 public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> {
 
-    public NetworkFlowModel minspanmodel;
-    public MinSpanningTreeProblem minspanprob;
-    public UndirectedTree spantree;
+    public NetworkFlowModel networkFlowModel;
     public IdentifiableIntegerMapping TransitForEdge;
     public IdentifiableIntegerMapping currentTransitForEdge;
     IdentifiableIntegerMapping<Edge> currentTransitForEdge2;
@@ -92,8 +89,8 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
             }
         }
 
-        minspanmodel = new NetworkFlowModel(problem.getZToGraphMapping().getRaster());
-        ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+        networkFlowModel = new NetworkFlowModel(problem.getZToGraphMapping().getRaster());
+        ZToGraphMapping newMapping = networkFlowModel.getZToGraphMapping();
 
         Node Super = problem.getSupersink();
         //newgraph.addNode(Super);
@@ -190,7 +187,7 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
         for (Node node : solNodes) {
             //Node new_node = new Node(NumNodes++);
 
-            Node new_node = minspanmodel.newNode();
+            Node new_node = networkFlowModel.newNode();
             //newgraph.addNode(new_node);
             newNodeMap.put(node, new_node);
             //System.out.println("new Node: " + new_node + "for old: " + node);
@@ -200,7 +197,7 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
                 //newMapping.setIsEvacuationNode( new_node,problem.getZToGraphMapping().getIsEvacuationNode(node));
                 //newMapping.setIsSourceNode(new_node, problem.getZToGraphMapping().getIsSourceNode(node));
                 newMapping.setDeletedSourceNode(new_node, problem.getZToGraphMapping().getIsDeletedSourceNode(node));
-                minspanmodel.setNodeCapacity(new_node, problem.getNodeCapacity(node));
+                networkFlowModel.setNodeCapacity(new_node, problem.getNodeCapacity(node));
                 newMapping.setNodeSpeedFactor(new_node, originalMapping.getNodeSpeedFactor(node));
                 newMapping.setNodeUpSpeedFactor(new_node, originalMapping.getUpNodeSpeedFactor(node));
                 newMapping.setNodeDownSpeedFactor(new_node, originalMapping.getDownNodeSpeedFactor(node));
@@ -211,13 +208,13 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
             Edge orig = problem.getEdge(edge.start(), edge.end());
             //Edge new_edge = new Edge(NumEdges++,newNodeMap.get(edge.start()),newNodeMap.get(edge.end()));
             //System.out.println("neue Kante: " + new_edge + "for: " + orig);
-            Edge new_edge = minspanmodel.newEdge(newNodeMap.get(edge.start()), newNodeMap.get(edge.end()));
+            Edge new_edge = networkFlowModel.newEdge(newNodeMap.get(edge.start()), newNodeMap.get(edge.end()));
 
             //newgraph.addEdge(new_edge);
-            minspanmodel.setEdgeCapacity(new_edge, problem.getEdgeCapacity(orig));
-            minspanmodel.setTransitTime(new_edge, problem.getTransitTime(orig));
+            networkFlowModel.setEdgeCapacity(new_edge, problem.getEdgeCapacity(orig));
+            networkFlowModel.setTransitTime(new_edge, problem.getTransitTime(orig));
             newMapping.setEdgeLevel(new_edge, originalMapping.getEdgeLevel(orig));
-            minspanmodel.setExactTransitTime(new_edge, problem.getExactTransitTime(orig));
+            networkFlowModel.setExactTransitTime(new_edge, problem.getExactTransitTime(orig));
         }
 
         for (Edge e : super_edges) {
@@ -225,12 +222,12 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
                 //Edge new_edge = new Edge(NumEdges++,newNodeMap.get(e.start()),minspanmodel.getSupersink());
                 //System.out.println("superEdge: " + new_edge + "for: " + e);
                 //newgraph.addEdge(new_edge);
-                Edge new_edge = minspanmodel.newEdge(newNodeMap.get(e.start()), minspanmodel.getSupersink());
+                Edge new_edge = networkFlowModel.newEdge(newNodeMap.get(e.start()), networkFlowModel.getSupersink());
 
                 Edge orig = problem.getEdge(e.start(), e.end());
-                minspanmodel.setTransitTime(new_edge, problem.getTransitTime(orig));
-                minspanmodel.setEdgeCapacity(new_edge, Integer.MAX_VALUE);
-                minspanmodel.setExactTransitTime(new_edge, problem.getExactTransitTime(orig));
+                networkFlowModel.setTransitTime(new_edge, problem.getTransitTime(orig));
+                networkFlowModel.setEdgeCapacity(new_edge, Integer.MAX_VALUE);
+                networkFlowModel.setExactTransitTime(new_edge, problem.getExactTransitTime(orig));
                 newMapping.setEdgeLevel(new_edge, originalMapping.getEdgeLevel(orig));
             }
         }
@@ -263,12 +260,12 @@ public class RepeatedShortestPathsShrinker extends AbstractAlgorithm<NetworkFlow
      {
      System.out.println("Kante: " + e + "Cap: " + minspanmodel.getEdgeCapacity(e) + "Tran: " + minspanmodel.getTransitTime(e));
      }*/
-        BaseZToGraphConverter.createReverseEdges(minspanmodel);
+        BaseZToGraphConverter.createReverseEdges(networkFlowModel);
         //minspanmodel.setNetwork(newgraph);
         //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
         //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().edgeCount());
-        minspanmodel.resetAssignment();
-        return minspanmodel;
+        networkFlowModel.resetAssignment();
+        return networkFlowModel;
 
     }
 

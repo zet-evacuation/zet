@@ -21,11 +21,11 @@ import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.ListSequence;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
-import algo.graph.spanningtree.UndirectedTree;
 import ds.graph.MinSteinerTree;
 import org.zetool.graph.Node;
 import ds.graph.NodeRectangle;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
+import org.zetool.algorithm.spanningtree.MinSpanningTreeProblem;
+import org.zetool.algorithm.spanningtree.UndirectedForest;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 
 /**
@@ -44,7 +44,7 @@ public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel,Netw
     public MinSteinerTree steinertree;
     public Prim prim;
     public MinSpanningTreeProblem minspan;
-    public UndirectedTree tree;
+    public UndirectedForest tree;
 
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
@@ -82,12 +82,12 @@ public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel,Netw
 		newMapping.setFloorForNode( Super, -1 );
 
 
-                minspanprob = new MinSpanningTreeProblem(problem,problem.transitTimes());
+                minspanprob = new MinSpanningTreeProblem(problem.graph(),problem.transitTimes());
 
 
                 //using
                 steineralgo = new MSTSteiner();
-                steineralgo.setProblem( minspanprob );
+                steineralgo.setProblem( getProblem() );
                 System.out.print("Compute Steiner... " );
 		steineralgo.run();
                 System.out.println("used time: " + steineralgo.getRuntimeAsString() );

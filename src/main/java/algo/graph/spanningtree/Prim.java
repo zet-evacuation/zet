@@ -18,6 +18,7 @@ package algo.graph.spanningtree;
 import java.util.Random;
 
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.algorithm.spanningtree.UndirectedForest;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.collection.ListSequence;
@@ -32,23 +33,23 @@ import org.zetool.graph.Node;
  *
  * @author Marlen Schwengfelder
  */
-public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTree> {
+public class Prim extends AbstractAlgorithm<NetworkFlowModel, UndirectedForest> {
     // TODO: make prim independent from network flow model
     // requires MinSpanningTreeProblem only uses graphs, but no network flow model
     // Super-sink specific handling must be done by caller then.
 
     @Override
-    public UndirectedTree runAlgorithm(MinSpanningTreeProblem minspan) {
-        NetworkFlowModel originNetwork = minspan.getNetworkFlowModel();
-        Node supersink = minspan.getNetworkFlowModel().getSupersink();
+    public UndirectedForest runAlgorithm(NetworkFlowModel minspan) {
+        NetworkFlowModel originNetwork = minspan;
+        Node supersink = minspan.getSupersink();
 
-        IdentifiableIntegerMapping<Edge> transitTimes = originNetwork.transitTimes();
+        IdentifiableIntegerMapping<Edge> transitTimes = minspan.transitTimes();
 
-        Node startNode = getStartNode(originNetwork.graph());
+        Node startNode = getStartNode(minspan.graph());
 
-        IdentifiableIntegerMapping<Node> distances = new IdentifiableIntegerMapping<>(originNetwork.numberOfNodes());
-        IdentifiableObjectMapping<Node, Edge> heapedges = new IdentifiableObjectMapping<>(originNetwork.numberOfEdges());
-        MinHeap<Node, Integer> queue = new MinHeap<>(originNetwork.numberOfNodes());
+        IdentifiableIntegerMapping<Node> distances = new IdentifiableIntegerMapping<>(minspan.graph().nodeCount());
+        IdentifiableObjectMapping<Node, Edge> heapedges = new IdentifiableObjectMapping<>(minspan.graph().nodeCount());
+        MinHeap<Node, Integer> queue = new MinHeap<>(minspan.graph().nodeCount());
 
         for (Node node : originNetwork) {
             if (node != supersink) {
@@ -94,13 +95,13 @@ public class Prim extends AbstractAlgorithm<MinSpanningTreeProblem, UndirectedTr
             }
         }
 
-        IdentifiableCollection<Edge> addEdges = originNetwork.graph().incidentEdges(supersink);
+        IdentifiableCollection<Edge> addEdges = minspan.graph().incidentEdges(supersink);
         for (Edge edge : addEdges) {
             Edge supersinkedge = new Edge(edgeCount++, edge.start(), edge.end());
             solEdges.add(supersinkedge);
         }
 
-        return new UndirectedTree(solEdges);
+        return new UndirectedForest(solEdges);
 
     }
 
