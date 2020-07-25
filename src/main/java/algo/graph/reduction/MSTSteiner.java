@@ -15,24 +15,25 @@
  */
 package algo.graph.reduction;
 
+import algo.graph.spanningtree.MinSpanningTreeProblem;
+import algo.graph.spanningtree.NetworkMST;
+import algo.graph.spanningtree.NetworkMSTProblem;
 import algo.graph.spanningtree.PrimForNetwork;
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import org.zetool.container.collection.ListSequence;
-import org.zetool.graph.Edge;
-import org.zetool.graph.structure.Forest;
-import org.zetool.graph.Graph;
-import org.zetool.container.collection.IdentifiableCollection;
 import ds.graph.MinSteinerTree;
-import algo.graph.spanningtree.NetworkMST;
-import org.zetool.graph.Node;
-import org.zetool.graph.structure.Path;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
-import algo.graph.spanningtree.NetworkMSTProblem;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.common.algorithm.AbstractAlgorithm;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.ListSequence;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DynamicNetwork;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Graph;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.Forest;
+import org.zetool.graph.structure.Path;
 
 /**
  *
@@ -99,19 +100,20 @@ public class MSTSteiner extends AbstractAlgorithm<MinSpanningTreeProblem, MinSte
             //gives a network connecting the source and evacutaion nodes with shortest path edges...
             while (!steinerNodes.isEmpty()) {
                 Node node = steinerNodes.first();
-                dijkstra = new Dijkstra(originNetwork.graph(), TransitForEdge, node, true);
+                dijkstra = new Dijkstra(true);
+                dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(originNetwork.graph(), TransitForEdge, node));
                 dijkstra.run();
 
                 steinerNodes.remove(steinerNodes.first());
                 for (Node restnode : steinerNodes) {
-                    int dist = dijkstra.getDistance(restnode);
+                    int dist = dijkstra.getSolution().getDistance(restnode);
 
                     edge = new Edge(NumEdges++, node, restnode);
                     firstnet.addEdge(edge);
                     //weight of edge is shortest distance (using Dijkstra)
                     shortestpathDist.set(edge, dist);
                     solEdges.add(edge);
-                    Forest spt = dijkstra.getShortestPathTree();
+                    Forest spt = dijkstra.getSolution().getForest();
                     //stores the shortest path from root to certain vertex
                     shortestPaths[node.id()][restnode.id()] = spt.getPathToRoot(restnode);
                 }

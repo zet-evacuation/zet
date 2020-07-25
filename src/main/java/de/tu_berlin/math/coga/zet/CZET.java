@@ -15,48 +15,6 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import org.zetool.netflow.io.DatFileReaderWriter;
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
-import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import com.martiansoftware.jsap.FlaggedOption;
-import com.martiansoftware.jsap.JSAP;
-import com.martiansoftware.jsap.JSAPException;
-import com.martiansoftware.jsap.JSAPResult;
-import com.martiansoftware.jsap.Switch;
-import com.martiansoftware.jsap.UnflaggedOption;
-import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
-import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
-import org.zetool.common.debug.Debug;
-import org.zetool.common.util.units.Quantity;
-import org.zetool.common.util.units.TimeUnits;
-import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
-import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
-import org.zetool.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.GraphVisualizationResults;
-import ds.PropertyContainer;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
-import org.zetool.graph.structure.StaticPath;
-import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
-import org.zetool.netflow.ds.structure.FlowOverTimePath;
-import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
-import org.zetool.netflow.ds.network.ExtendedGraph;
-import org.zetool.graph.DefaultDirectedGraph;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.zet_evakuierung.model.ConcreteAssignment;
-import de.zet_evakuierung.model.Project;
-import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
-import org.zetool.components.property.PropertyLoadException;
-import gui.AlgorithmControl;
-import gui.GraphConverterAlgorithms;
-import gui.ZETLoader;
-import gui.ZETMain;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedWriter;
@@ -76,8 +34,54 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.SwingWorker;
+
+import com.martiansoftware.jsap.FlaggedOption;
+import com.martiansoftware.jsap.JSAP;
+import com.martiansoftware.jsap.JSAPException;
+import com.martiansoftware.jsap.JSAPResult;
+import com.martiansoftware.jsap.Switch;
+import com.martiansoftware.jsap.UnflaggedOption;
+
+import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
+import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Project;
+import ds.GraphVisualizationResults;
+import ds.PropertyContainer;
+import gui.AlgorithmControl;
+import gui.GraphConverterAlgorithms;
+import gui.ZETLoader;
+import gui.ZETMain;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.common.debug.Debug;
+import org.zetool.common.util.units.Quantity;
+import org.zetool.common.util.units.TimeUnits;
+import org.zetool.components.property.PropertyLoadException;
 import org.zetool.components.property.PropertyTreeModelLoader;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.structure.StaticPath;
+import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.network.ExtendedGraph;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPattern;
+import org.zetool.netflow.dynamic.eatapprox.EarliestArrivalFlowPatternBuilder;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import org.zetool.netflow.io.DatFileReaderWriter;
+import org.zetool.rndutils.RandomUtils;
 
 /**
  * A command line interface to ZET. Allows to call all important algorithms.
@@ -972,7 +976,6 @@ public class CZET {
 
         // transform the transit times
         // compute shortest paths
-        Dijkstra dijkstra;
         DefaultDirectedGraph n = (DefaultDirectedGraph) eafp.getNetwork();
 
         IdentifiableIntegerMapping<Edge> transitTimes;
@@ -989,18 +992,18 @@ public class CZET {
             transitTimes.set(newEdge, 0);
         }
 
-        dijkstra = new Dijkstra(ex, eafp.getTransitTimes(), superNode);
+        Dijkstra dijkstra = new Dijkstra();
+        dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(ex, eafp.getTransitTimes(), superNode));
         dijkstra.run();
 
-        dijkstra.getShortestPathTree();
-        log.info("Solution: " + dijkstra.getShortestPathTree());
+        log.info("Solution: " + dijkstra.getSolution().getForest());
 
         transitTimes = eafp.getTransitTimes();
         IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>(transitTimes);
 
         for (Edge e : eafp.getNetwork().edges()) {
-            int newTransit = transitTimes.get(e) + dijkstra.getDistance(e.start()) - dijkstra.getDistance(e.end());
-            log.log(Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get(e), dijkstra.getDistance(e.start()), dijkstra.getDistance(e.end()), newTransit});
+            int newTransit = transitTimes.get(e) + dijkstra.getSolution().getDistance(e.start()) - dijkstra.getSolution().getDistance(e.end());
+            log.log(Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get(e), dijkstra.getSolution().getDistance(e.start()), dijkstra.getSolution().getDistance(e.end()), newTransit});
             newTransitTimes.set(e, newTransit);
         }
 

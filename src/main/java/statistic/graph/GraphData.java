@@ -15,19 +15,21 @@
  */
 package statistic.graph;
 
-import org.zetool.container.mapping.IntegerDoubleMapping;
-import org.zetool.netflow.classic.PathComposition;
-import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
-import org.zetool.netflow.ds.structure.FlowOverTimePath;
-import org.zetool.graph.Edge;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import org.zetool.graph.DirectedGraph;
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import org.zetool.graph.Node;
-import org.zetool.netflow.ds.structure.FlowOverTimeEdge;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.container.mapping.IntegerDoubleMapping;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.netflow.classic.PathComposition;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.structure.FlowOverTimeEdge;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
 
 /**
  *
@@ -76,11 +78,11 @@ public class GraphData {
     protected void calculateDistances() {
         distances = new int[network.nodeCount()][network.edgeCount()];
         for (Node from : network.nodes()) {
-            Dijkstra dijkstra = new Dijkstra(network, transitTimes, from);
+            Dijkstra dijkstra = new Dijkstra();
+            dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(network, transitTimes, from));
             dijkstra.run();
-            IdentifiableIntegerMapping<Node> nodeDistances = dijkstra.getDistances();
             for (Node to : network.nodes()) {
-                distances[from.id()][to.id()] = nodeDistances.get(to);
+                distances[from.id()][to.id()] = dijkstra.getSolution().getDistance(to);
             }
         }
     }

@@ -15,14 +15,15 @@
  */
 package algo.graph.exitassignment;
 
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.AbstractAlgorithm;
-import org.zetool.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.IdentifiableCollection;
-import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
+import org.zetool.container.priority.MinHeap;
 import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Node;
 
 /**
  *
@@ -35,16 +36,16 @@ public class ShortestPathExitAssignment extends AbstractAlgorithm<NetworkFlowMod
         ExitAssignment solution = new ExitAssignment(model.graph().nodes());
         DirectedGraph network = model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
-        Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
+        Dijkstra dijkstra = new Dijkstra(true);
         IdentifiableObjectMapping<Node, MinHeap> exitDistances = new IdentifiableObjectMapping<>(network.nodes() );
         for (Node sink : sinks) {
-            dijkstra.setSource(sink);
+            dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(network, model.transitTimes(), sink));
             dijkstra.run();
             for (Node source : model.getSources()) {
                 if (!exitDistances.isDefinedFor(source)) {
                     exitDistances.set(source, new MinHeap());
                 }
-                exitDistances.get(source).insert(sink, dijkstra.getDistance(source));
+                exitDistances.get(source).insert(sink, dijkstra.getSolution().getDistance(source));
             }
         }
         for (Node start : model.getSources()) {
