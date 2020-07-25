@@ -15,29 +15,31 @@
  */
 package algo.graph.exitassignment;
 
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
-import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import org.zetool.netflow.classic.problems.MaximumFlowProblem;
-import org.zetool.graph.Edge;
-import org.zetool.graph.structure.Forest;
-import org.zetool.container.collection.IdentifiableCollection;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import org.zetool.graph.Node;
-import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
-import org.zetool.netflow.ds.structure.FlowOverTimePath;
-import org.zetool.netflow.ds.flow.MaximumFlow;
-import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralShortestPathSolution;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.common.algorithm.Algorithm;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.netflow.classic.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import org.zetool.netflow.classic.problems.MaximumFlowProblem;
+import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
+import org.zetool.netflow.ds.flow.MaximumFlow;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.ds.structure.FlowOverTimePath;
+import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import org.zetool.netflow.dynamic.TimeHorizonBounds;
+import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 
 /**
  *
@@ -52,16 +54,16 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends AbstractA
         DirectedGraph network = model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
-        Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
+        Dijkstra dijkstra = new Dijkstra(true);
         int[][] distances = new int[network.nodeCount()][network.nodeCount()];
         int[][] caps = new int[network.nodeCount()][network.nodeCount()];
         for (Node sink : sinks) {
-            dijkstra.setSource(sink);
+            dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(network, model.transitTimes(), sink));
             dijkstra.run();
-            Forest shortestPathTree = dijkstra.getShortestPathTree();
+            IntegralShortestPathSolution shortestPathSolution = dijkstra.getSolution();
             for (Node source : model.getSources()) {
-                distances[source.id()][sink.id()] = dijkstra.getDistance(source);
-                caps[source.id()][sink.id()] = model.edgeCapacities().minimum(shortestPathTree.getPathToRoot(source));
+                distances[source.id()][sink.id()] = shortestPathSolution.getDistance(source);
+                caps[source.id()][sink.id()] = model.edgeCapacities().minimum(shortestPathSolution.getForest().getPathToRoot(source));
             }
         }
 

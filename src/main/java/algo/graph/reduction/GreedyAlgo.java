@@ -15,22 +15,24 @@
  */
 package algo.graph.reduction;
 
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import org.zetool.common.algorithm.AbstractAlgorithm;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import org.zetool.container.collection.ListSequence;
-import org.zetool.graph.Edge;
-import org.zetool.container.collection.IdentifiableCollection;
-import algo.graph.spanningtree.UndirectedTree;
-import org.zetool.graph.Node;
-import org.zetool.graph.DefaultDirectedGraph;
-import algo.graph.spanningtree.MinSpanningTreeProblem;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import algo.graph.spanningtree.MinSpanningTreeProblem;
+import algo.graph.spanningtree.UndirectedTree;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.common.algorithm.AbstractAlgorithm;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.container.collection.ListSequence;
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
 
 /**
  *
@@ -127,11 +129,12 @@ public class GreedyAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, Undire
       while( sortededges.size() > 0 ) {
         int capacity = 0, Min = 100000;
         // Calculates distance from a node of the current considered edge to every other node
-        Dijkstra dijkstra = new Dijkstra( network, currentTransitForEdge, sortededges.first().end(), true );
+        Dijkstra dijkstra = new Dijkstra( true );
+        dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(network, currentTransitForEdge, sortededges.first().end()));
         dijkstra.run();
-        int dist = dijkstra.getDistance( sortededges.first().start() );
+        int dist = dijkstra.getSolution().getDistance( sortededges.first().start() );
         Node current = sortededges.first().start();
-        Node next = dijkstra.getLastEdges().get( sortededges.first().start() ).opposite( sortededges.first().start() );
+        Node next = dijkstra.getSolution().getLastEdges().get( sortededges.first().start() ).opposite( sortededges.first().start() );
         if( next.equals( sortededges.first().end() ) ) {
           Edge e = network.getEdge( current, next );
           capacity = currentCapForEdge.get( e );
@@ -143,7 +146,7 @@ public class GreedyAlgo extends AbstractAlgorithm<MinSpanningTreeProblem, Undire
               capacity = Min;
             }
             current = next;
-            next = dijkstra.getLastEdges().get( current ).opposite( current );
+            next = dijkstra.getSolution().getLastEdges().get( current ).opposite( current );
           }
         }
 

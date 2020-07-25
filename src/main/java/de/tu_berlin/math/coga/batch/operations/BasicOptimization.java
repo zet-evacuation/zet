@@ -15,29 +15,31 @@
  */
 package de.tu_berlin.math.coga.batch.operations;
 
-import org.zetool.components.batch.operations.AtomicOperation;
-import org.zetool.components.batch.operations.AbstractOperation;
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.model.BuildingPlan;
+import de.zet_evakuierung.model.ConcreteAssignment;
+import de.zet_evakuierung.model.Project;
+import ds.GraphVisualizationResults;
+import ds.PropertyContainer;
+import org.zetool.algorithm.shortestpath.Dijkstra;
+import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
+import org.zetool.common.algorithm.Algorithm;
 import org.zetool.components.batch.input.reader.InputFileReader;
+import org.zetool.components.batch.operations.AbstractOperation;
+import org.zetool.components.batch.operations.AtomicOperation;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
-import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.GraphVisualizationResults;
-import ds.PropertyContainer;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.network.ExtendedGraph;
 import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
-import de.zet_evakuierung.model.BuildingPlan;
-import de.zet_evakuierung.model.ConcreteAssignment;
-import de.zet_evakuierung.model.Project;
-import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
-import org.zetool.algorithm.shortestpath.Dijkstra;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.zetool.common.algorithm.Algorithm;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
@@ -165,7 +167,6 @@ public class BasicOptimization extends AbstractOperation<Project, GraphVisualiza
 
 		// transform the transit times
         // compute shortest paths
-        Dijkstra dijkstra;
         DefaultDirectedGraph n = (DefaultDirectedGraph) eafp.getNetwork();
 
         IdentifiableIntegerMapping<Edge> transitTimes;
@@ -182,23 +183,23 @@ public class BasicOptimization extends AbstractOperation<Project, GraphVisualiza
             transitTimes.set(newEdge, 0);
         }
 
-        dijkstra = new Dijkstra(ex, eafp.getTransitTimes(), superNode);
+        Dijkstra dijkstra = new Dijkstra();
+        dijkstra.setProblem(new IntegralSingleSourceShortestPathProblem(ex, eafp.getTransitTimes(), superNode));
         dijkstra.run();
 
-        dijkstra.getShortestPathTree();
-        log.log(Level.INFO, "Solution: {0}", dijkstra.getShortestPathTree());
+        log.log(Level.INFO, "Solution: {0}", dijkstra.getSolution().getForest());
 
         transitTimes = eafp.getTransitTimes();
         IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>(transitTimes);
 
         for (Edge e : eafp.getNetwork().edges()) {
             // We have a value of Integer.MAX_VALUE (= infinity) at e.start()) if the node is not reachable.
-            int newTransit = transitTimes.get(e) + dijkstra.getDistance(e.start()) - dijkstra.getDistance(e.end());
-            if (dijkstra.getDistance(e.start()) == Integer.MAX_VALUE) {
+            int newTransit = transitTimes.get(e) + dijkstra.getSolution().getDistance(e.start()) - dijkstra.getSolution().getDistance(e.end());
+            if (dijkstra.getSolution().getDistance(e.start()) == Integer.MAX_VALUE) {
                 //if( newTransit == 2147483318 ) {
                 newTransit = 0; // the transit time does not matter, the start node is not reachable anyway
             }
-            log.log(Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get(e), dijkstra.getDistance(e.start()), dijkstra.getDistance(e.end()), newTransit});
+            log.log(Level.FINEST, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get(e), dijkstra.getSolution().getDistance(e.start()), dijkstra.getSolution().getDistance(e.end()), newTransit});
             newTransitTimes.set(e, newTransit);
         }
 
