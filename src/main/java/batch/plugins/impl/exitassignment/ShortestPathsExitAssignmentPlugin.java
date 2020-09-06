@@ -19,7 +19,7 @@ import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.plugins.AlgorithmPlugin;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 /**

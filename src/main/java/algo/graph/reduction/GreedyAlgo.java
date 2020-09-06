@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;
 import org.zetool.algorithm.spanningtree.UndirectedForest;
@@ -56,7 +56,7 @@ public class GreedyAlgo extends AbstractAlgorithm<NetworkFlowModel, UndirectedFo
     IdentifiableIntegerMapping<Edge> currentCapForEdge;
     Collection<Edge> origedges = new LinkedList<>();
     //stores exactTransitTimes
-    HashMap<Edge, Double> extransitTimes = new HashMap<>();
+    HashMap<Edge, Integer> extransitTimes = new HashMap<>();
     IdentifiableCollection<Edge> sortededges = new ListSequence<>();
     IdentifiableCollection<Edge> solEdges = new ListSequence<>();
     Node supersink;
@@ -86,10 +86,10 @@ public class GreedyAlgo extends AbstractAlgorithm<NetworkFlowModel, UndirectedFo
             }
 
             //store the exact TransitTimes
-            List<Double> tr = new LinkedList<>();
+            List<Integer> tr = new LinkedList<>();
             for (Edge e : origedges) {
-                tr.add(networkFlowModel.getExactTransitTime(e));
-                extransitTimes.put(e, networkFlowModel.getExactTransitTime(e));
+                tr.add(networkFlowModel.getTransitTime(e));
+                extransitTimes.put(e, networkFlowModel.getTransitTime(e));
             }
 
             Collections.sort(tr);

@@ -17,7 +17,7 @@ package algo.graph.reduction;
 
 import java.util.Random;
 
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.algorithm.spanningtree.UndirectedForest;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.IdentifiableCollection;

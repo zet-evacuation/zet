@@ -16,7 +16,7 @@
 package exitdistributions;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import de.zet_evakuierung.model.BuildingPlan;

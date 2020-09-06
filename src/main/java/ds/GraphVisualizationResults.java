@@ -19,7 +19,7 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.classic.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import org.zetool.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Node;
@@ -29,7 +29,10 @@ import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
+
 import java.util.ArrayList;
+
+import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
@@ -74,7 +77,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	
 	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, NodePositionMapping nodePositionMapping ) {
 		//super( networkFlowModel.getNetwork(), new NodePositionMapping( networkFlowModel.getNetwork().nodeCount() ), networkFlowModel.getEdgeCapacities(), networkFlowModel.getNodeCapacities(), networkFlowModel.getTransitTimes(), networkFlowModel.getCurrentAssignment(), networkFlowModel.getSources(), networkFlowModel.getSinks());
-		super( networkFlowModel.getEAFP(), networkFlowModel.getNodeCoordinates() );
+		super( networkFlowModel.getEAFP(), createNodeCoordinates(networkFlowModel) );
 
 	
 		
@@ -112,7 +115,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	}
 	
 	public GraphVisualizationResults( NetworkFlowModel nfm, PathBasedFlowOverTime dynamicFlow ) {
-		this( nfm, nfm.getNodeCoordinates() );
+		this( nfm, createNodeCoordinates(nfm) );
 		this.setFlowOverTime( dynamicFlow );
 //		if( Flags.FLOWWRONG ) {
 //			System.out.println( "Eingabe in die PathComposition:" );
@@ -122,8 +125,19 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //		}
 //		this.dynamicFlow = null;
 	}
-	
-	
+    
+    public  static NodePositionMapping createNodeCoordinates(NetworkFlowModel model) {
+        NodePositionMapping nodePositionMapping = new NodePositionMapping(model.graph().nodeCount());
+        for (Node n : model.graph().nodes()) {
+            final Vector3 v;
+            NodeRectangle rect = model.getZToGraphMapping().getNodeRectangles().get(n);
+            final double zs = model.getZToGraphMapping().getNodeFloorMapping().get(n) * VisualizationOptionManager.getFloorDistance();
+            v = new Vector3(rect.getCenterX(), rect.getCenterY(), zs);
+            nodePositionMapping.set(n, v);
+        }
+        return nodePositionMapping;
+    }
+
 //
 //	/** The structure of the network the algorithm was applied to. */
 //	private AbstractNetwork network;

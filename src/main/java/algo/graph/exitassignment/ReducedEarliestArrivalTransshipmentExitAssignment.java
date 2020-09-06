@@ -18,7 +18,7 @@ package algo.graph.exitassignment;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.algorithm.shortestpath.Dijkstra;
 import org.zetool.algorithm.shortestpath.IntegralShortestPathSolution;
 import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem;

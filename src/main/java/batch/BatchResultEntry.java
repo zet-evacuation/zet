@@ -18,7 +18,7 @@ package batch;
 import com.thoughtworks.xstream.XStream;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import ds.GraphVisualizationResults;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import io.visualization.BuildingResults;

@@ -19,7 +19,7 @@ import org.zetool.statistic.Statistics;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.structure.FlowOverTimePath;
 import org.zetool.graph.Edge;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.graph.Node;
 import java.awt.Component;
 import java.awt.Container;

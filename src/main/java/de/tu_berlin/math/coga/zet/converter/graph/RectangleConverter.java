@@ -70,7 +70,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
         //Node supersink = new Node( 0 );
         //graph.setNode( supersink );
         //model.setSupersink( supersink );
-        Node supersink = model.getSupersink();
+        Node supersink = modelBuilder.getSupersink();
 
         mapping.setNodeSpeedFactor(supersink, 1);
         mapping.setNodeRectangle(supersink, new NodeRectangle(0, 0, 0, 0));
@@ -118,14 +118,15 @@ public class RectangleConverter extends BaseZToGraphConverter {
                     if (square.isAccessible() && !square.isMarked()) {
 
                         //Node node = new Node( nodeCount );
-                        Node node = model.newNode();
-                        model.getZToGraphMapping().getNodeFloorMapping().set(node, getProblem().getFloorID(room.getFloor()));
+                        Node node = modelBuilder.newNode();
+                        modelBuilder.getZToGraphMapping().getNodeFloorMapping().set(node, getProblem().getFloorID(room.getFloor()));
                         //model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
                         if (square.isExit()) {
-                            model.getZToGraphMapping().setNameOfExit(node, square.getName());
+                            modelBuilder.addSink(node);
+                            modelBuilder.getZToGraphMapping().setNameOfExit(node, square.getName());
                         }
                         //model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
-                        model.getZToGraphMapping().setDeletedSourceNode(node, false);
+                        modelBuilder.getZToGraphMapping().setDeletedSourceNode(node, false);
                         if (getProblem().getFloorID(room.getFloor()) == -1) {
                             Logger.getGlobal().warning("\nFehler: Floor beim Konvertieren nicht gefunden.");
                         }
@@ -294,7 +295,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
                         //System.out.println( " at (" + nodex + "," + nodey + ") on floor " + raster.getFloors().indexOf( room.getFloor() ) );
                         if (nodeIsSource) //sources.add( node );
                         {
-                            model.addSource(node);
+                            modelBuilder.addSource(node);
                         }
                     }
                 }
@@ -313,14 +314,12 @@ public class RectangleConverter extends BaseZToGraphConverter {
     @Override
     protected void createEdgesAndCapacities() {
         Logger.getGlobal().fine("Set up edges and compute capacities... ");
-        ZToGraphMapping mappingLocal = model.getZToGraphMapping();
+        ZToGraphMapping mappingLocal = modelBuilder.getZToGraphMapping();
 
         List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
-        model.ensureCapacities();
-
         // set node capacity of super sink to max value
-        model.setNodeCapacity(model.getSupersink(), Integer.MAX_VALUE);
+        modelBuilder.setNodeCapacity(modelBuilder.getSupersink(), Integer.MAX_VALUE);
 
         for (ZToGraphRoomRaster room : rasteredRooms) {
 
@@ -337,17 +336,17 @@ public class RectangleConverter extends BaseZToGraphConverter {
                     //increase node capacity
                     if (node != null) //nodesCap.increase( node, 1 * FACTOR );
                     {
-                        model.increaseNodeCapacity(node, 1 * FACTOR);
+                        modelBuilder.increaseNodeCapacity(node, 1 * FACTOR);
                     }
 
                     boolean nodesConnectable = (node != null) && (lastNode != null) && !lastNode.equals(node);
                     boolean connectionPassable = (col != 0) && (!square.isBlocked(Direction8.Left));
 
                     if (nodesConnectable && connectionPassable) {
-                        Edge edge = model.getEdge(lastNode, node);
+                        Edge edge = modelBuilder.getEdge(lastNode, node);
 
                         if (edge == null) {
-                            edge = model.newEdge(lastNode, node);
+                            edge = modelBuilder.newEdge(lastNode, node);
                             defineEdgeLevel(node, edge, room, mappingLocal, row, col);
 //              
 //                            ZToGraphRasterSquare lastSquare = null;
@@ -358,7 +357,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 //              }
 //              mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
                         }
-                        model.increaseEdgeCapacity(edge, 1 * FACTOR);
+                        modelBuilder.increaseEdgeCapacity(edge, 1 * FACTOR);
                         //edgesCap.increase( edge, 1 * FACTOR );
                     }
                     lastNode = node;
@@ -378,11 +377,11 @@ public class RectangleConverter extends BaseZToGraphConverter {
                     boolean connectionPassable = (row != 0) && (!square.isBlocked(Direction8.Top));
 
                     if (nodesConnectable && connectionPassable) {
-                        Edge edge = model.getEdge(lastNode, node);
+                        Edge edge = modelBuilder.getEdge(lastNode, node);
                         //Edge edge = graph.getEdge( lastNode, node );
                         if (edge == null) {
                             //edge = new Edge( nextEdge++, lastNode, node );
-                            edge = model.newEdge(lastNode, node);
+                            edge = modelBuilder.newEdge(lastNode, node);
                             //graph.addEdge( edge );
                             //sedgesCap.set( edge, 0 );
 
@@ -390,7 +389,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
                         }
                         //edgesCap.increase( edge, 1 * FACTOR );
-                        model.increaseEdgeCapacity(edge, 1 * FACTOR);
+                        modelBuilder.increaseEdgeCapacity(edge, 1 * FACTOR);
                     }
                     lastNode = node;
                 }// end of the inner for each loop
@@ -435,25 +434,20 @@ public class RectangleConverter extends BaseZToGraphConverter {
                 nodeToSquare.put(node, nodeSquareList);
             }
 
-            Node supersink = model.getSupersink();
+            Node supersink = modelBuilder.getSupersink();
 
             for (Node start : nodeListOfRoom)//nodes){
             {
                 for (Node end : nodeListOfRoom) {//nodes){
                     // do only, if there is an edge between start and end & if start does not equal end
                     //Edge edge = graph.getEdge( start, end );
-                    Edge edge = model.getEdge(start, end);
+                    Edge edge = modelBuilder.getEdge(start, end);
                     if (edge != null && start != end) {
                         if (end.equals(supersink)) {
-                            model.setExactTransitTime(edge, 0);
                             continue;
                         }
-                        // add a transitTime-0-entry to the IIMapping for the current edge if there is not yet such an entry
-                        if (model.getExactTransitTime(edge) <= 0) {
-                            model.setExactTransitTime(edge, 0);
-                        }
                         // if the transitTime for the current edge is not already modified
-                        if (model.getExactTransitTime(edge) <= 0) {
+                        if (modelBuilder.getExactTransitTime(edge) <= 0) {
                             NodeRectangle.NodeRectanglePoint startUpperLeft = mapping.getNodeRectangles().get(start).get_nw_point();
                             NodeRectangle.NodeRectanglePoint startLowerRight = mapping.getNodeRectangles().get(start).get_se_point();
                             int startCentreX = (int) Math.round(mapping.getNodeRectangles().get(start).getCenterX());
@@ -510,8 +504,8 @@ public class RectangleConverter extends BaseZToGraphConverter {
                             }
 
                             // speed factor within the node-squares
-                            double startSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor(start);
-                            double endSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor(end);
+                            double startSpeedFactor = modelBuilder.getZToGraphMapping().getNodeSpeedFactor(start);
+                            double endSpeedFactor = modelBuilder.getZToGraphMapping().getNodeSpeedFactor(end);
 
                             // path from the start centre point to the intersection point
                             double startPath;
@@ -534,7 +528,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
                             // write the new transitTime into the IIMapping
                             System.out.println("Set transit time for " + edge + " to " + transitTimeStartEnd);
-                            model.setExactTransitTime(edge, transitTimeStartEnd);
+                            modelBuilder.setExactTransitTime(edge, transitTimeStartEnd);
                         }
                     }
                 } // END of for(start)
@@ -564,8 +558,8 @@ public class RectangleConverter extends BaseZToGraphConverter {
                 for (Node nodeA : nodeListOfStartRoom) {
                     for (Node nodeB : nodeListOfEndRoom) {
                         //Edge edge = graph.getEdge( nodeA, nodeB );
-                        Edge edge = model.getEdge(nodeA, nodeB); // TODO: kann contains false sein obwohl edge != null ist?
-                        if (edge != null && model.contains(edge) && doorEdgeToSquare.get(edge) != null && !doorEdgeToSquare.get(edge).isEmpty()) {
+                        Edge edge = modelBuilder.getEdge(nodeA, nodeB); // TODO: kann contains false sein obwohl edge != null ist?
+                        if (edge != null && modelBuilder.contains(edge) && doorEdgeToSquare.get(edge) != null && !doorEdgeToSquare.get(edge).isEmpty()) {
                             ArrayList<ZToGraphRasterSquare> doorSquareListAB = doorEdgeToSquare.get(edge);
                             ArrayList<ZToGraphRasterSquare> doorSquareListA = new ArrayList<>();
                             ArrayList<ZToGraphRasterSquare> doorSquareListB = new ArrayList<>();
@@ -591,14 +585,14 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
                             PlanPoint mitteSquare;
 
-                            double nodeASpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor(nodeA);
+                            double nodeASpeedFactor = modelBuilder.getZToGraphMapping().getNodeSpeedFactor(nodeA);
                             for (ZToGraphRasterSquare square : doorSquareListA) {
                                 mitteSquare = calculateCentre(square);
                                 transitTimeA += calculateDistance(mitteA, mitteSquare);
                             }
                             transitTimeA = (1. / nodeASpeedFactor) * transitTimeA / doorSquareListA.size();
 
-                            double nodeBSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor(nodeB);
+                            double nodeBSpeedFactor = modelBuilder.getZToGraphMapping().getNodeSpeedFactor(nodeB);
                             for (ZToGraphRasterSquare square : doorSquareListB) {
                                 mitteSquare = calculateCentre(square);
                                 transitTimeB += calculateDistance(mitteB, mitteSquare);
@@ -615,7 +609,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
                             transitTimeAB = transitTimeAB * precision / 400.0d;
 
                             System.out.println("Set transit time for " + edge + " to " + transitTimeAB);
-                            model.setExactTransitTime(edge, transitTimeAB);
+                            modelBuilder.setExactTransitTime(edge, transitTimeAB);
                         }
                     }
                 }
@@ -821,7 +815,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 
     private HashMap<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms() {
         Logger.getGlobal().fine("Connect rooms... ");
-        ZToGraphMapping mappingLocal = model.getZToGraphMapping();
+        ZToGraphMapping mappingLocal = modelBuilder.getZToGraphMapping();
 
         HashMap<Edge, ArrayList<ZToGraphRasterSquare>> table = new HashMap<>();
 
@@ -838,14 +832,14 @@ public class RectangleConverter extends BaseZToGraphConverter {
             }
 
             //Edge edge = graph.getEdge( firstNode, secondNode );
-            Edge edge = model.getEdge(firstNode, secondNode);
+            Edge edge = modelBuilder.getEdge(firstNode, secondNode);
             if (edge == null) {
-                edge = model.newEdge(firstNode, secondNode);
+                edge = modelBuilder.newEdge(firstNode, secondNode);
                 mappingLocal.setEdgeLevel(edge, Level.Equal);
 
             }
             //edgesCap.increase( edge, 1 * FACTOR );
-            model.increaseEdgeCapacity(edge, 1 * FACTOR);
+            modelBuilder.increaseEdgeCapacity(edge, 1 * FACTOR);
             //store squares in the squares list of the door-edge
             ArrayList<ZToGraphRasterSquare> list = table.get(edge);
             if (list == null) {
@@ -866,7 +860,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
         }//end for each door loop
 
         //Connect the super source with all other sources
-        Node supersink = model.getSupersink();
+        Node supersink = modelBuilder.getSupersink();
 
         if (supersink == null) {
             return table;
@@ -885,12 +879,8 @@ public class RectangleConverter extends BaseZToGraphConverter {
                     // todo: parameter
                     if ( square.isExit()) {
                         Node node = square.getNode();
-                        Edge edge = model.getEdge(node, supersink);
-                        if (edge == null) {
-                            edge = model.newEdge(node, supersink);
-                            mappingLocal.setEdgeLevel(edge, Level.Equal);
-                        }
-                        model.setEdgeCapacity(edge, Integer.MAX_VALUE);
+                        Edge edge = modelBuilder.getEdge(node, supersink);
+                        modelBuilder.setEdgeCapacity(edge, Integer.MAX_VALUE);
                     }// end if safe
                 }//end outer loop
             }

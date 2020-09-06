@@ -23,7 +23,7 @@ import org.zetool.algorithm.shortestpath.IntegralSingleSourceShortestPathProblem
 import org.zetool.netflow.classic.maxflow.PathDecomposition;
 import org.zetool.netflow.classic.mincost.SuccessiveShortestPath;
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;

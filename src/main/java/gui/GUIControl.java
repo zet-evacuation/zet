@@ -15,6 +15,8 @@
  */
 package gui;
 
+import static ds.GraphVisualizationResults.createNodeCoordinates;
+
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import batch.BatchResult;
 import batch.BatchResultEntry;
@@ -31,7 +33,7 @@ import org.zetool.common.localization.LocalizationManager;
 import org.zetool.common.util.IOTools;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import de.zet_evakuierung.model.ProjectLoader;
@@ -96,6 +98,7 @@ import gui.propertysheet.PropertyTreeNode;
 import io.visualization.BuildingResults;
 import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
+
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -113,6 +116,7 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -122,6 +126,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.ParserConfigurationException;
+
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 import org.xml.sax.SAXException;
@@ -129,7 +134,6 @@ import org.zetool.components.JLogPane;
 import org.zetool.components.Localizer;
 import org.zetool.components.batch.gui.JBatch;
 import org.zet.cellularautomaton.statistic.CAStatistic;
-import org.zet.cellularautomaton.statistic.MultipleCycleCAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JZetWindow;
@@ -1512,7 +1516,7 @@ public class GUIControl implements AlgorithmListener {
             @Override
             public void propertyChange(PropertyChangeEvent pce) {
                 if (isDone(pce)) {
-                    GraphVisualizationResults gvr = new GraphVisualizationResults(algorithmControl.getNetworkFlowModel(), algorithmControl.getNetworkFlowModel().getNodeCoordinates());
+                    GraphVisualizationResults gvr = new GraphVisualizationResults(algorithmControl.getNetworkFlowModel(), createNodeCoordinates(algorithmControl.getNetworkFlowModel()));
                     visualization.getControl().setGraphControl(gvr);
 
                 }

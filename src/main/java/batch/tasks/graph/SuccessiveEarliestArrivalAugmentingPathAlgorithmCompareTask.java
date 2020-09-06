@@ -17,7 +17,7 @@ package batch.tasks.graph;
 
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.earliestarrival.old.SEAAPAlgoWithTH;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;

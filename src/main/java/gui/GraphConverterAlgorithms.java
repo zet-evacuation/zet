@@ -21,7 +21,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ClusterShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphConverterAndShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GreedySpannerShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GridGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.RepeatedShortestPathsShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.ShortestPathGraphShrinker;

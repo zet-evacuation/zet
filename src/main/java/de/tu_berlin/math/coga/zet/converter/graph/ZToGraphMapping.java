@@ -107,7 +107,7 @@ public class ZToGraphMapping {
 		if( edgeLevels.isDefinedFor( edge ) )
 			return edgeLevels.get( edge );
 		else
-			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.EdgeLvlNotDefinedException" + " (" + edge + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.EdgeLvlNotDefinedException") + " (" + edge + ")" );
 
 	}
 
@@ -129,11 +129,11 @@ public class ZToGraphMapping {
 		return exitName.get( node );
 	}
 
-	void setNodeRectangle( Node node, NodeRectangle nodeRectangle ) {
+	public void setNodeRectangle( Node node, NodeRectangle nodeRectangle ) {
 		nodeRectangles.set( node, nodeRectangle );
 	}
 
-	void setFloorForNode( Node node, int floor ) {
+	public void setFloorForNode( Node node, int floor ) {
 		nodeFloorMapping.set( node, floor );
 	}
 
