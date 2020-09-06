@@ -15,11 +15,14 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import de.zet_evakuierung.network.model.NetworkFlowModel;
+import ds.graph.NodeRectangle;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
-import ds.graph.NodeRectangle;
-import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  *
@@ -37,7 +40,7 @@ public class RectangleConverterTest {
 		conv.setProblem( ig.zControl.getProject().getBuildingPlan() );
 		conv.run();
 		
-		assertTrue( conv.checkParallelEdges() );
+		assertTrue( conv.checkParallelEdges(conv.getModel()) );
 		
 		assertEquals( "Number of nodes", 10, conv.getSolution().numberOfNodes() );
 		assertEquals( "Number of edges", 35, conv.getSolution().numberOfEdges() );

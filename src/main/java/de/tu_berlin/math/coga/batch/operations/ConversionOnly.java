@@ -15,6 +15,8 @@
  */
 package de.tu_berlin.math.coga.batch.operations;
 
+import static ds.GraphVisualizationResults.createNodeCoordinates;
+
 import org.zetool.components.batch.operations.AbstractOperation;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.zet_evakuierung.model.BuildingPlan;
@@ -23,9 +25,10 @@ import de.zet_evakuierung.model.Project;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import org.zetool.components.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import ds.GraphVisualizationResults;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -111,7 +114,7 @@ public class ConversionOnly extends AbstractOperation<Project,GraphVisualization
     // Generate building results
     
     // Create Graph
-    gvr = new GraphVisualizationResults( cav.getSolution(), cav.getSolution().getNodeCoordinates() );
+    gvr = new GraphVisualizationResults( cav.getSolution(), createNodeCoordinates(cav.getSolution()) );
     
   }
   

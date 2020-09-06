@@ -16,7 +16,7 @@
 package ds;
 
 import org.zetool.common.algorithm.AbstractAlgorithm;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 
 /**

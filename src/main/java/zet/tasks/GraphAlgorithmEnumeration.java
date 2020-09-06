@@ -29,7 +29,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import org.zetool.netflow.dynamic.problems.MaximumFlowOverTimeProblem;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 

@@ -1,7 +1,7 @@
 package algo.graph.reduction;
 
 import org.zetool.container.priority.MinHeap;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.graph.Edge;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;

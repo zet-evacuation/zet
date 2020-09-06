@@ -19,7 +19,7 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.netflow.dynamic.LongestShortestPathTimeHorizonEstimator;
 import org.zetool.netflow.dynamic.earliestarrival.SEAAPAlgorithm;
 import org.zetool.common.algorithm.Transformation;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 

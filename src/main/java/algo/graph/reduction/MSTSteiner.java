@@ -18,7 +18,7 @@ package algo.graph.reduction;
 import algo.graph.spanningtree.NetworkMST;
 import algo.graph.spanningtree.NetworkMSTProblem;
 import algo.graph.spanningtree.PrimForNetwork;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import ds.graph.MinSteinerTree;
 import org.zetool.algorithm.shortestpath.Dijkstra;
