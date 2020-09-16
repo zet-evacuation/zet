@@ -15,125 +15,65 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.reduction.MSTSteiner;
-import algo.graph.spanningtree.Prim;
 import de.zet_evakuierung.network.model.NetworkFlowModel;
-import ds.graph.MinSteinerTree;
 import ds.graph.NodeRectangle;
-import org.zetool.algorithm.spanningtree.MinSpanningTreeProblem;
-import org.zetool.algorithm.spanningtree.UndirectedForest;
+import org.zetool.algorithm.steinertree.MinSteinerTreeProblem;
+import org.zetool.algorithm.steinertree.SteinerTree;
+import org.zetool.algorithm.steinertree.SteinerTreeSpanningTreeApproximationAlgorithm;
 import org.zetool.common.algorithm.AbstractAlgorithm;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.collection.ListSequence;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.graph.DynamicNetwork;
 import org.zetool.graph.Edge;
+import org.zetool.graph.Graph;
 import org.zetool.graph.Node;
 
 /**
+ * Reduces a {@link NetworkFlowModel network flow model} to a Steiner tree like graph connecting the sources and sinks.
+ * The inner network of the results forms a Steiner tree. Additional edges connect the sink nodes with the super sink.
  *
  * @author Marlen Schwengfelder
  */
 public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel, NetworkFlowModel> {
 
-    private NetworkFlowModel.BasicBuilder minspanmodel;
-    public IdentifiableCollection<Node> SteinerNodes = new ListSequence<Node>();
-    public MinSpanningTreeProblem minspanprob;
-    int NumNode = 0;
-    int NumEdges = 0;
-    public IdentifiableIntegerMapping<Edge> TransitForEdge;
-    public MSTSteiner steineralgo;
-    public MinSteinerTree steinertree;
-    public Prim prim;
-    public MinSpanningTreeProblem minspan;
-    public UndirectedForest tree;
-
     @Override
     protected NetworkFlowModel runAlgorithm(NetworkFlowModel problem) {
         ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-//		mapping = new ZToGraphMapping();
-//                ZToGraphMapping newmapping = new ZToGraphMapping();
-//		model = new NetworkFlowModel();
-//
-//		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
-//		mapping.setRaster( raster );
-//		model.setZToGraphMapping( mapping );
-//
-//                //DynamicNetwork newgraph = new DynamicNetwork();
-//
-//		super.createNodes();
-//		super.createEdgesAndCapacities();
-//		super.computeTransitTimes();
-//		super.multiplyWithUpAndDownSpeedFactors();
-//		//model.setTransitTimes( exactTransitTimes.round() );
-//		model.roundTransitTimes();
-//		createReverseEdges( model );
-        //model.setNetwork( model.getGraph().getAsStaticNetwork() );
         System.out.println("number of edges of original graph:" + problem.numberOfEdges());
 
-        minspanmodel = NetworkFlowModel.BasicBuilder.fromNodes(problem);
-        //minspanmodel.setNetwork(newgraph);
-        //newgraph.setNodes(model.getGraph().nodes());
+        NetworkFlowModel.BasicBuilder steinerModel = NetworkFlowModel.BasicBuilder.fromNodes(problem);
 
-        //minspanmodel.setSupersink(model.getSupersink());
-        Node Super = minspanmodel.getSupersink();
-        ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+        Node Super = steinerModel.getSupersink();
+        ZToGraphMapping newMapping = steinerModel.getZToGraphMapping();
 
         newMapping.setNodeSpeedFactor(Super, 1);
         newMapping.setNodeRectangle(Super, new NodeRectangle(0, 0, 0, 0));
         newMapping.setFloorForNode(Super, -1);
 
-        minspanprob = new MinSpanningTreeProblem(problem.graph(), problem.transitTimes());
-
         //using
-        steineralgo = new MSTSteiner();
-        steineralgo.setProblem(getProblem());
         System.out.print("Compute Steiner... ");
-        steineralgo.run();
-        System.out.println("used time: " + steineralgo.getRuntimeAsString());
-        steinertree = steineralgo.getSolution();
+        SteinerTree steinertree = computeSteiner(problem);
         IdentifiableCollection<Edge> MinEdges = steinertree.getEdges();
-        IdentifiableCollection<Node> MinNodes = steinertree.getNodes();
-        IdentifiableIntegerMapping<Edge> MinDist = steinertree.getdist();
-
-        //Aenderungen...
-        //AbstractNetwork netw = minspanmodel.getNetwork();
-        //DynamicNetwork dynnet = minspanmodel.getDynamicNetwork();
-        //newgraph.setNode(Super);
-        IdentifiableCollection<Node> NonMinNodes = new ListSequence();
-        int numberhidden = 0;
+        // add edges to super sink
+        for (Edge e : problem.graph().incidentEdges(problem.getSupersink())) {
+            System.out.println("Adding supersink edge: " + e);
+            MinEdges.add(e);
+        }
+        System.out.println("done");
 
         for (Node node : problem) {
-            if (node.id() != 0) {
-
-                minspanmodel.setNodeCapacity(node, problem.getNodeCapacity(node));
-                //newmapping.setNodeShape(node, mapping.getNodeShape(node));
+            if (!node.equals(problem.getSupersink())) {
+                steinerModel.setNodeCapacity(node, problem.getNodeCapacity(node));
                 newMapping.setNodeSpeedFactor(node, originalMapping.getNodeSpeedFactor(node));
                 newMapping.setNodeUpSpeedFactor(node, originalMapping.getUpNodeSpeedFactor(node));
                 newMapping.setNodeDownSpeedFactor(node, originalMapping.getDownNodeSpeedFactor(node));
-                if (MinNodes.contains(node)) {
-                    //netw.setHiddenOnlyNode(node, false);
-
-                } else {
-                    if (node.id() != 0) {
-                        NonMinNodes.add(node);
-                        numberhidden++;
-                        //  netw.setHiddenOnlyNode(node, true);
-                    }
-                }
             }
         }
 
-        /*AbstractNetwork neu1 = minspanmodel.getNetwork();
-                int i = neu1.getNodeCapacity();
-                System.out.println("Kapazitaet: " + i);
-                neu1.setNodeCapacity(i- MinNodes.size());*/
-        //System.out.print("Number of hidden Nodes: " + numberhidden);
-        //dynnet.removeNodes(NonMinNodes);
-        //creates edges of new graph
         for (Edge neu : MinEdges) {
-            Edge newEdge = minspanmodel.newEdge(neu.start(), neu.end());
-            minspanmodel.setEdgeCapacity(newEdge, problem.getEdgeCapacity(neu));
-            minspanmodel.setExactTransitTime(newEdge, problem.getTransitTime(neu));
+            Edge newEdge = steinerModel.newEdge(neu.start(), neu.end());
+            steinerModel.setEdgeCapacity(newEdge, problem.getEdgeCapacity(neu));
+            steinerModel.setExactTransitTime(newEdge, problem.getTransitTime(neu));
             newMapping.setEdgeLevel(newEdge, originalMapping.getEdgeLevel(neu));
         }
 
@@ -144,7 +84,38 @@ public class SteinerTreeShrinker extends AbstractAlgorithm<NetworkFlowModel, Net
         newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
         newMapping.exitName = originalMapping.exitName;
 
-        return minspanmodel.build();
+        return steinerModel.build();
+    }
+
+    private SteinerTree computeSteiner(NetworkFlowModel networkFlowModel) {
+        Graph modelGraph = networkFlowModel.graph();
+
+        DynamicNetwork firstnet = new DynamicNetwork();
+
+        IdentifiableCollection<Node> terminalNodes = new ListSequence();
+        for (Node node : modelGraph.nodes()) {
+            if (!node.equals(networkFlowModel.getSupersink())) {
+                boolean isSource = networkFlowModel.getSources().contains(node);
+                boolean isSink = networkFlowModel.getModelSinks().contains(node);
+                firstnet.addNode(node);
+                if (isSource || isSink) {
+                    terminalNodes.add(node);
+                }
+            }
+        }
+        System.out.println("Number of terminal nodes: " + terminalNodes.size());
+        for (Node node : modelGraph.nodes()) {
+            for (Edge edge : modelGraph.incidentEdges(node)) {
+                if (edge.start().id() < edge.end().id() && !edge.start().equals(networkFlowModel.getSupersink())) {
+                    firstnet.addEdge(edge);
+                }
+            }
+        }
+
+        MinSteinerTreeProblem steinerProblem = new MinSteinerTreeProblem(modelGraph, networkFlowModel.transitTimes(), terminalNodes);
+        SteinerTreeSpanningTreeApproximationAlgorithm steinerApproximation = new SteinerTreeSpanningTreeApproximationAlgorithm();
+        steinerApproximation.setProblem(steinerProblem);
+        return steinerApproximation.call();
     }
 
 }

@@ -49,11 +49,11 @@
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <!-- -zetool dependencies-->
         <common.version>0.1.2</common.version>
-        <collection.version>0.1.0</collection.version>
+        <collection.version>0.1.2</collection.version>
         <components.version>0.1.0</components.version>
         <components-batch.version>0.1.0</components-batch.version>
         <components-property.version>0.1.1</components-property.version>
-        <graph.version>0.2.0</graph.version>
+        <graph.version>0.3.0</graph.version>
         <network-flow.version>0.1.0</network-flow.version>
         <math.version>0.1.0</math.version>
         <rndutils.version>0.1.0</rndutils.version>

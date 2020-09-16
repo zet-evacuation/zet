@@ -82,7 +82,7 @@ public class ShrinkerTest {
         // convert
         int nodes = 10;
 
-        performTest(new GraphConverterAndShrinker(new RectangleConverter(), new SteinerTreeShrinker()), nodes, (nodes - 2) * 2 + 1);
+        performTest(new GraphConverterAndShrinker(new RectangleConverter(), new SteinerTreeShrinker()), nodes, 7);
     }
 
     @Test
@@ -123,7 +123,6 @@ public class ShrinkerTest {
         // convert
         int nodes = 9;
         performTest(new GraphConverterAndShrinker(new RectangleConverter(), new RepeatedShortestPathsShrinker()), nodes, 25);
-
     }
 
     private void performTest(AbstractAlgorithm<BuildingPlan, NetworkFlowModel> conv, int targetNodes, int targetEdges) {
