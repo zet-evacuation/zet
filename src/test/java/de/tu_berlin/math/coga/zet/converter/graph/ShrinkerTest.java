@@ -93,7 +93,13 @@ public class ShrinkerTest {
         int nodes = 10;
 
         // here we have non-determinism? number of edges varies from run to run...
-        performTest(new GraphConverterAndShrinker(new RectangleConverter(), new ClusterShrinker()), nodes, 24);
+        // performTest(new GraphConverterAndShrinker(new RectangleConverter(), new ClusterShrinker()), nodes, 24);
+        InstanceGenerator ig = new InstanceGenerator();
+        ig.setUpInstance();
+
+        RectangleConverter conv = new RectangleConverter();
+        conv.setProblem(ig.zControl.getProject().getBuildingPlan());
+        conv.run();
     }
 
     @Test
