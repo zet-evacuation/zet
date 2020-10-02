@@ -66,7 +66,7 @@ public class SpanningTreeShrinker extends GraphShrinker {
 
         Edge superSinkTreeEdge = streamSupplier.get()
                 .filter(treeEdge -> treeEdge.isIncidentTo(getProblem().getSupersink()))
-                .findAny().orElseThrow();
+                .findAny().orElseThrow(() -> new IllegalStateException());
 
         streamSupplier.get()
                 .filter(edge -> edge.isIncidentTo(getProblem().getSupersink()))
