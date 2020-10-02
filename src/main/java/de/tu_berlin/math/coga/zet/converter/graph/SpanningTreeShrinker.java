@@ -15,13 +15,18 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.spanningtree.Prim;
-import org.zetool.graph.Edge;
-import org.zetool.container.collection.IdentifiableCollection;
-
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Supplier;
 import java.util.logging.Level;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import org.zetool.algorithm.spanningtree.UndirectedForest;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
+import org.zetool.algorithm.spanningtree.MinSpanningTreeProblem;
+import org.zetool.algorithm.spanningtree.PrimAlgorithm;
+import org.zetool.container.collection.IdentifiableCollection;
+import org.zetool.graph.Edge;
 
 /**
  *
@@ -46,14 +51,28 @@ public class SpanningTreeShrinker extends GraphShrinker {
      */
     @Override
     IdentifiableCollection<Edge> runEdge() {
-
-        //using Prims algorithm
-        Prim primalgo = new Prim();
-        primalgo.setProblem(getProblem());
+        // Calculate a minimum spanning tree in the graph behind the network flow model
+        PrimAlgorithm primalgo = new PrimAlgorithm();
+        MinSpanningTreeProblem mstProblem = new MinSpanningTreeProblem(getProblem().graph(), getProblem().transitTimes());
+        primalgo.setProblem(mstProblem);
         log.info("Compute minimum spanning tree using Prim... ");
         primalgo.run();
         log.log(Level.INFO, "done in {0}", primalgo.getRuntimeAsString());
-        UndirectedForest minspantree = primalgo.getSolution();
-        return minspantree.getEdges();
+
+        // Update the solution edges with missing edges connecting the sinks
+        IdentifiableCollection<Edge> solutionEdges = primalgo.getSolution().getEdges();
+        Supplier<Stream<Edge>> streamSupplier = () -> StreamSupport.stream(
+                Spliterators.spliterator(solutionEdges.iterator(), solutionEdges.size(), Spliterator.CONCURRENT), true);
+
+        Edge superSinkTreeEdge = streamSupplier.get()
+                .filter(treeEdge -> treeEdge.isIncidentTo(getProblem().getSupersink()))
+                .findAny().orElseThrow();
+
+        streamSupplier.get()
+                .filter(edge -> edge.isIncidentTo(getProblem().getSupersink()))
+                .filter(edge -> !edge.equals(superSinkTreeEdge))
+                .forEach(solutionEdges::add);
+
+        return solutionEdges;
     }
 }
