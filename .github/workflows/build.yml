@@ -34,7 +34,9 @@ jobs:
         { "id": "github-zetool", "username": "zet-bot", "password": "${GITHUB_TOKEN}" },
         { "id": "github-zet", "username": "zet-bot", "password": "${GITHUB_TOKEN}" }
         ]'
-    - name: Build with Maven
+    - name: Test with Maven
       uses: GabrielBB/xvfb-action@v1.0
       with:
-        run: mvn -B package --file pom.xml
+        run: mvn -B test --file pom.xml
+    - name: Build with Maven
+      run: mvn -B package -DskipTests --file pom.xml
