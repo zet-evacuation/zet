@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_TOKEN: ${{ secrets. GH_RELEASE_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_PACKAGE_TOKEN }}
 
     steps:
     - name: Checkout source code
