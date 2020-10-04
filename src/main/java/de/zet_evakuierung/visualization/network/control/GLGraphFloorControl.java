@@ -13,15 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
+
+import java.util.Iterator;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.zet_evakuierung.visualization.network.draw.GLGraphFloor;
 import ds.GraphVisualizationResults;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.draw.graph.GLGraphFloor;
-import java.util.Iterator;
 
 /**
  * The {@code GLGraphFloorControl} class represents an floor of the

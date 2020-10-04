@@ -13,17 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Graph;
+import de.zet_evakuierung.visualization.network.draw.GLNashGraph;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
-import gui.visualization.draw.graph.GLNashGraph;
 
 /**
  *

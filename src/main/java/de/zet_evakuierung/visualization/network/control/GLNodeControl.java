@@ -13,17 +13,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
+
+import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
+import de.zet_evakuierung.visualization.network.draw.GLNode;
+import de.zet_evakuierung.visualization.network.util.FlowCalculator;
 import ds.GraphVisualizationResults;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.FlowHistroryTriple;
-import gui.visualization.draw.graph.GLNode;
-import gui.visualization.util.FlowCalculator;
-import java.util.ArrayList;
 
 public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, GLFlowGraphControl> {
 	private double xPosition;

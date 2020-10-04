@@ -13,11 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.graph;
-
-import gui.visualization.control.graph.GLNashNodeControl;
+package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
+
+import de.zet_evakuierung.visualization.network.control.GLNashNodeControl;
 
 /**
  *

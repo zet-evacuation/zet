@@ -13,15 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
 
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
+import de.zet_evakuierung.visualization.network.draw.GLEdge;
+import org.zetool.graph.Edge;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Edge;
-import gui.visualization.draw.graph.GLEdge;
 import org.zetool.opengl.framework.abs.AbstractControl;
-
 
 /**
  *

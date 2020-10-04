@@ -13,15 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
+import de.zet_evakuierung.visualization.network.draw.GLNashFlowEdge;
 import org.zetool.graph.Edge;
-import gui.visualization.draw.graph.GLNashFlowEdge;
 import org.zetool.opengl.drawingutils.RainbowGradient;
-
 
 /**
  *

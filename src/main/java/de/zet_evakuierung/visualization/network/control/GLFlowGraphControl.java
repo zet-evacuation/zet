@@ -13,23 +13,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.graph;
-
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import org.zetool.math.Conversion;
-import ds.GraphVisualizationResults;
-import org.zetool.graph.Node;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.draw.graph.GLFlowGraph;
+package de.zet_evakuierung.visualization.network.control;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.zet_evakuierung.visualization.network.draw.GLFlowGraph;
+import ds.GraphVisualizationResults;
+import gui.visualization.control.AbstractZETVisualizationControl;
+import org.zetool.graph.Node;
+import org.zetool.math.Conversion;
 import org.zetool.opengl.framework.abs.DrawableControlable;
 import org.zetool.opengl.helper.Frustum;
 

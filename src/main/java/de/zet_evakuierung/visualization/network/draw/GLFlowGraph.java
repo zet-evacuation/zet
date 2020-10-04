@@ -13,11 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.graph;
+package de.zet_evakuierung.visualization.network.draw;
 
+import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
-
-import gui.visualization.control.graph.GLFlowGraphControl;
 
 public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphControl> {
 

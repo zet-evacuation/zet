@@ -2,18 +2,18 @@
  * GLSimpleNodeControl.java
  * Created: Aug 18, 2010,3:32:10 PM
  */
-package gui.visualization.control.graph;
+package de.zet_evakuierung.visualization.network.control;
 
-import org.zetool.graph.DirectedGraph;
-import org.zetool.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Graph;
-import org.zetool.graph.Node;
-import gui.visualization.control.FlowHistroryTriple;
-import gui.visualization.draw.graph.GLSimpleNode;
-import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
+
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
+import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
+import de.zet_evakuierung.visualization.network.draw.GLSimpleNode;
+import de.zet_evakuierung.visualization.network.util.FlowCalculator;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
 
 /**

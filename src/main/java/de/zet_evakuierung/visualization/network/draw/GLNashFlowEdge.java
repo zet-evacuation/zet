@@ -13,13 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.graph;
+package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
-import gui.visualization.control.graph.GLEdgeControl;
-import gui.visualization.control.graph.GLNashFlowEdgeControl;
+import de.zet_evakuierung.visualization.network.control.GLEdgeControl;
+import de.zet_evakuierung.visualization.network.control.GLNashFlowEdgeControl;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;

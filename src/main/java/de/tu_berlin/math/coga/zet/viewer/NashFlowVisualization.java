@@ -15,20 +15,22 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
-import org.zetool.math.Conversion;
-import org.zetool.math.vectormath.Vector3;
-import org.zetool.graph.Edge;
-import org.zetool.container.mapping.IdentifiableObjectMapping;
-import org.zetool.graph.Node;
-import org.zetool.graph.DefaultDirectedGraph;
-import gui.visualization.Visualization;
-import gui.visualization.control.graph.GLNashGraphControl;
-import gui.visualization.draw.graph.GLEdge;
-import org.zetool.opengl.drawingutils.RainbowGradient;
 import java.util.ArrayList;
+
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
+
+import de.zet_evakuierung.visualization.network.control.GLNashGraphControl;
+import de.zet_evakuierung.visualization.network.draw.GLEdge;
+import gui.visualization.Visualization;
+import org.zetool.container.mapping.IdentifiableObjectMapping;
+import org.zetool.graph.DefaultDirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.math.Conversion;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.RainbowGradient;
 
 /**
  *

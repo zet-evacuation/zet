@@ -15,14 +15,15 @@
  */
 package gui.visualization.control.ca;
 
-import org.zet.cellularautomaton.Individual;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.StepUpdateListener;
-import gui.visualization.control.VisHistoryTriple;
-import gui.visualization.draw.ca.GLIndividual;
-import gui.visualization.util.Tuple;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import de.zet_evakuierung.visualization.VisHistoryTriple;
+import gui.visualization.control.AbstractZETVisualizationControl;
+import gui.visualization.control.StepUpdateListener;
+import gui.visualization.draw.ca.GLIndividual;
+import gui.visualization.util.Tuple;
+import org.zet.cellularautomaton.Individual;
 import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import zet.gui.main.tabs.JVisualizationView;
 

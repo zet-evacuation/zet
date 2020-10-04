@@ -13,16 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.graph;
+package de.zet_evakuierung.visualization.network.draw;
 
 import java.util.ArrayList;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.graph.GLFlowEdgeControl;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 

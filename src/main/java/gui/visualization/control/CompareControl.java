@@ -15,11 +15,10 @@
  */
 package gui.visualization.control;
 
-import org.zetool.math.vectormath.Vector3;
+import de.zet_evakuierung.visualization.network.draw.GLCompare;
 import ds.CompareVisualizationResults;
-import gui.visualization.draw.graph.GLCompare;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
-import org.zetool.opengl.framework.abs.DrawableControlable;
 
 /**
  *

@@ -15,44 +15,42 @@
  */
 package gui.visualization.control;
 
-import org.zetool.common.localization.Localization;
-import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import ds.CompareVisualizationResults;
-import ds.PropertyContainer;
-import ds.GraphVisualizationResults;
-import org.zet.cellularautomaton.EvacuationCellularAutomaton;
-import gui.visualization.control.building.GLBuildingControl;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
-import gui.visualization.control.ca.GLCAFloorControl;
-import gui.visualization.control.ca.GLCellControl;
-import gui.visualization.control.ca.GLIndividualControl;
-import gui.visualization.control.ca.GLRoomControl;
-import gui.visualization.control.graph.GLFlowGraphControl;
-import gui.visualization.control.graph.GLGraphFloorControl;
-import gui.visualization.control.graph.GLNodeControl;
-import gui.visualization.draw.ca.GLIndividual;
-import gui.visualization.VisualizationOptionManager;
-import gui.visualization.draw.ca.GLCA;
-import gui.visualization.draw.graph.GLGraph;
-import io.visualization.BuildingResults;
-import io.visualization.EvacuationSimulationResults;
-import io.visualization.BuildingResults.Floor;
-import io.visualization.CellularAutomatonVisualizationResults;
-
-import java.util.List;
-import java.util.Collection;
-import java.util.logging.Logger;
-
 import static java.util.stream.Collectors.toList;
 
-import javax.media.opengl.GL;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
+
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
+import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
+import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.control.GLNodeControl;
+import de.zet_evakuierung.visualization.network.draw.GLGraph;
+import ds.CompareVisualizationResults;
+import ds.GraphVisualizationResults;
+import ds.PropertyContainer;
+import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.building.GLBuildingControl;
+import gui.visualization.control.ca.GLCAFloorControl;
+import gui.visualization.control.ca.GLCellControl;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
+import gui.visualization.control.ca.GLIndividualControl;
+import gui.visualization.control.ca.GLRoomControl;
+import gui.visualization.draw.ca.GLCA;
+import gui.visualization.draw.ca.GLIndividual;
+import io.visualization.BuildingResults;
+import io.visualization.BuildingResults.Floor;
+import io.visualization.CellularAutomatonVisualizationResults;
+import io.visualization.EvacuationSimulationResults;
+import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.potential.Potential;
-import org.zetool.opengl.helper.Frustum;
-import org.zetool.opengl.framework.abs.DrawableControlable;
 import org.zet.cellularautomaton.statistic.CAStatistic;
+import org.zetool.common.localization.Localization;
+import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.helper.Frustum;
 import zet.gui.main.tabs.JVisualizationView;
 
 /**
