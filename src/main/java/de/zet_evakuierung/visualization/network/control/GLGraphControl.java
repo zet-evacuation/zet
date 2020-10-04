@@ -15,10 +15,11 @@
  */
 package de.zet_evakuierung.visualization.network.control;
 
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.visualization.network.draw.GLGraph;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
 import org.zetool.opengl.framework.abs.DrawableControlable;
 import org.zetool.opengl.helper.Frustum;
@@ -28,14 +29,14 @@ import org.zetool.opengl.helper.Frustum;
  * @author Jan-Philipp Kappmeier
  */
 public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements DrawableControlable {
-	protected NodePositionMapping nodePositionMapping;
+	protected NodePositionMapping<Vector3> nodePositionMapping;
 	protected DirectedGraph graph;
 
-	public GLGraphControl( DirectedGraph graph, NodePositionMapping nodePositionMapping ) {
+	public GLGraphControl( DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping ) {
 		this( graph, nodePositionMapping, true );
 	}
 
-public GLGraphControl( DirectedGraph graph, NodePositionMapping nodePositionMapping, boolean setUpNodes ) {
+public GLGraphControl( DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes ) {
 		this.nodePositionMapping = nodePositionMapping;
 		this.graph = graph;
 		if( setUpNodes )

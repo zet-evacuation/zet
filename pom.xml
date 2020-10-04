@@ -55,7 +55,7 @@
         <components-property.version>0.1.1</components-property.version>
         <graph.version>0.3.0</graph.version>
         <network-flow.version>0.1.0</network-flow.version>
-        <math.version>0.1.0</math.version>
+        <math.version>0.1.1</math.version>
         <rndutils.version>0.1.0</rndutils.version>
         <opengl.version>0.1.2</opengl.version>
         <!-- zet dependencies -->

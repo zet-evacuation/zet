@@ -15,18 +15,20 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
-import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import org.zetool.graph.DirectedGraph;
-import org.zetool.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Node;
-import java.util.HashMap;
-import java.util.Iterator;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
 
 /**
  *
@@ -167,7 +169,7 @@ public class GraphViewConverter implements Converter {
 		reader.moveUp();
 
 		// assign default position to all nodes
-		xmlData.nodePositionMapping = new NodePositionMapping( xmlData.network.nodeCount() );
+		xmlData.nodePositionMapping = new NodePositionMapping<>( 3, xmlData.network.nodeCount() );
 		for( Node node : xmlData.nodes.values() )
 			xmlData.nodePositionMapping.set( node, new Vector3() );
 

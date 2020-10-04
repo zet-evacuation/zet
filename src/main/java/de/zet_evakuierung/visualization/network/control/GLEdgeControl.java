@@ -15,9 +15,9 @@
  */
 package de.zet_evakuierung.visualization.network.control;
 
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.visualization.network.draw.GLEdge;
 import org.zetool.graph.Edge;
+import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
@@ -37,11 +37,11 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	private Vector3 endPoint;
 	double scaling = 1;
 
-	public GLEdgeControl( NodePositionMapping nodePositionMapping, Edge edge ) {
+	public GLEdgeControl( NodePositionMapping<Vector3> nodePositionMapping, Edge edge ) {
 		this( nodePositionMapping, edge, true );
 	}
 
-	public GLEdgeControl( NodePositionMapping nodePositionMapping, Edge edge, boolean setView ) {
+	public GLEdgeControl( NodePositionMapping<Vector3> nodePositionMapping, Edge edge, boolean setView ) {
 		super();
 
 		// Do not set a view here. maybe changed later on

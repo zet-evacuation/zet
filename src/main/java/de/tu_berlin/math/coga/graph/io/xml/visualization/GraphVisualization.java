@@ -15,16 +15,17 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import org.zetool.graph.DirectedGraph;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 
 /**
  *
@@ -34,7 +35,7 @@ public class GraphVisualization {
 	/** The graph. */
 	DirectedGraph network;
 	/** The positions for the nodes. */
-	NodePositionMapping nodePositionMapping;
+	NodePositionMapping<Vector3> nodePositionMapping;
 	/** Capacities for all edges. */
 	IdentifiableIntegerMapping<Edge> edgeCapacities;
 	/** Capacities for all nodes. */
@@ -135,11 +136,11 @@ public class GraphVisualization {
 		this.network = network;
 	}
 
-	public NodePositionMapping getNodePositionMapping() {
+	public NodePositionMapping<Vector3> getNodePositionMapping() {
 		return nodePositionMapping;
 	}
 
-	public final void setNodePositionMapping( NodePositionMapping nodePositionMapping ) {
+	public final void setNodePositionMapping( NodePositionMapping<Vector3> nodePositionMapping ) {
 		this.nodePositionMapping = nodePositionMapping;
 
 		// compute min and max values

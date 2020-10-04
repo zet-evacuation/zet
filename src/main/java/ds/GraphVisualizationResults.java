@@ -15,24 +15,23 @@
  */
 package ds;
 
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.netflow.classic.PathComposition;
+import java.util.ArrayList;
+
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import org.zetool.math.vectormath.Vector3;
-import de.zet_evakuierung.network.model.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Node;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.graph.NodeRectangle;
-import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
-import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import gui.visualization.VisualizationOptionManager;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
-
-import java.util.ArrayList;
-
-import gui.visualization.VisualizationOptionManager;
+import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
+import org.zetool.netflow.classic.PathComposition;
+import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
+import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
@@ -45,7 +44,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	/** A mapping saving a rectangle in the real world for each node. */
 	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles;
 	/** The node position mapping. */
-	private NodePositionMapping nodePositionMapping = null;
+	private NodePositionMapping<Vector3> nodePositionMapping = null;
 	/** */
 	private ArrayList<ArrayList<Node>> floorToNodeMapping;
 	/** A mapping giving the number of the floor (this node lies in) in the list in the z-format. */
@@ -59,7 +58,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	}
 	
 	public GraphVisualizationResults( EarliestArrivalFlowProblem earliestArrivalFlowProblem, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime flowOverTime ) {
-		super( earliestArrivalFlowProblem, new NodePositionMapping( earliestArrivalFlowProblem.getNetwork().nodeCount() ) );
+		super( earliestArrivalFlowProblem, new NodePositionMapping<Vector3>( 3, earliestArrivalFlowProblem.getNetwork().nodeCount() ) );
 		// TODO: set up node position mapping
 
 		int nodeCount = getNetwork().nodeCount();
@@ -126,8 +125,8 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //		this.dynamicFlow = null;
 	}
     
-    public  static NodePositionMapping createNodeCoordinates(NetworkFlowModel model) {
-        NodePositionMapping nodePositionMapping = new NodePositionMapping(model.graph().nodeCount());
+    public  static NodePositionMapping<Vector3> createNodeCoordinates(NetworkFlowModel model) {
+        NodePositionMapping<Vector3> nodePositionMapping = new NodePositionMapping<>(3, model.graph().nodeCount());
         for (Node n : model.graph().nodes()) {
             final Vector3 v;
             NodeRectangle rect = model.getZToGraphMapping().getNodeRectangles().get(n);
@@ -322,7 +321,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	}
 //
 	private void setUpNodeCoordinates( IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles ) {
-		nodePositionMapping = new NodePositionMapping( nodeRectangles.getDomainSize() );
+		nodePositionMapping = new NodePositionMapping<>( 3, nodeRectangles.getDomainSize() );
 //		for( int i = 0; i < nodePositionMapping.getDomainSize(); ++i ) {
 //		for( Node n : network ) {
 //			NodeRectangle rect = getNodeRectangles().get( n );

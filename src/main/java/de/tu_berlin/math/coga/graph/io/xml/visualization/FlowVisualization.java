@@ -15,14 +15,16 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
-import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
-import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
+import java.util.List;
+
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DirectedGraph;
-import java.util.List;
+import org.zetool.graph.Edge;
+import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
+import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
+import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
 
 /**
  *
@@ -34,7 +36,7 @@ public class FlowVisualization extends GraphVisualization {
 	int maxFlowRate;
 	boolean edgesDoubled = false;
 
-	public FlowVisualization( DirectedGraph network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
+	public FlowVisualization( DirectedGraph network, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
 		super( network, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks );
 		flow = new EdgeBasedFlowOverTime( getNetwork() );
 	}

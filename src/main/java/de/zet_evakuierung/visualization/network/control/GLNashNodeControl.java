@@ -17,12 +17,13 @@ package de.zet_evakuierung.visualization.network.control;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.visualization.network.draw.GLNashNode;
-import org.zetool.graph.Edge;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
+import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
 
 /**
  *
@@ -32,7 +33,7 @@ public class GLNashNodeControl extends GLSimpleNodeControl {
 	private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
 	private final NashFlowVisualization nfv;
 
-	public GLNashNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
+	public GLNashNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
 		super( graph, node, nodePositionMapping, false );
 		this.nashFlowMapping = nashFlowMapping;
 		this.nfv = nfv;

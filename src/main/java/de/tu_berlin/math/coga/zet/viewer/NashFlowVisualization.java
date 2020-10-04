@@ -27,6 +27,7 @@ import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
@@ -93,7 +94,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
         Edge e3 = network.createAndSetEdge(network.getNode(1), network.getNode(3));
         Edge e4 = network.createAndSetEdge(network.getNode(2), network.getNode(3));
 
-        NodePositionMapping nodePositionMapping = new NodePositionMapping(4);
+        NodePositionMapping<Vector3> nodePositionMapping = new NodePositionMapping<>(3, 4);
         nodePositionMapping.set(network.getNode(0), new Vector3(-14, 0, 0));
         nodePositionMapping.set(network.getNode(1), new Vector3(0, 8, 0));
         nodePositionMapping.set(network.getNode(2), new Vector3(0, -8, 0));

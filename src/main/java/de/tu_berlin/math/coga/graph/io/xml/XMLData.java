@@ -16,14 +16,17 @@
 package de.tu_berlin.math.coga.graph.io.xml;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import org.zetool.container.mapping.IdentifiableDoubleMapping;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DirectedGraph;
+
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
 
 /**
  * A class that stores the data found in the XML file that is read. Thus we can
@@ -45,7 +48,7 @@ public class XMLData {
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<>();
 	LinkedHashMap<String, Edge> edges = new LinkedHashMap<>();
 	DirectedGraph network;
-	NodePositionMapping nodePositionMapping = new NodePositionMapping();
+	NodePositionMapping<Vector3> nodePositionMapping = new NodePositionMapping<>(3, 0);
 	boolean doubleEdges = false;
 	double scaleVal;
 	boolean containsSuperSink;

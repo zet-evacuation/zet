@@ -17,9 +17,9 @@ package de.zet_evakuierung.visualization.network.control;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.visualization.network.draw.GLNashFlowEdge;
 import org.zetool.graph.Edge;
+import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.opengl.drawingutils.RainbowGradient;
 
 /**

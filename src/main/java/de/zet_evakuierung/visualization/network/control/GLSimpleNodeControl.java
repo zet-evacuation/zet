@@ -6,13 +6,13 @@ package de.zet_evakuierung.visualization.network.control;
 
 import java.util.ArrayList;
 
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
 import de.zet_evakuierung.visualization.network.draw.GLSimpleNode;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
+import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
 
@@ -37,7 +37,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	protected final NodePositionMapping nodePositionMapping;
 	protected final Node node;
 
-	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping ) {
+	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;
@@ -45,7 +45,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 		setUpEdges();
 	}
 
-	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping nodePositionMapping, boolean setUpEdges ) {
+	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpEdges ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;

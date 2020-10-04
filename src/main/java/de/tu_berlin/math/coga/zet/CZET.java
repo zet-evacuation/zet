@@ -49,10 +49,9 @@ import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.converter.AssignmentConcrete;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.zet_evakuierung.network.model.NetworkFlowModel;
-import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import de.zet_evakuierung.model.ConcreteAssignment;
 import de.zet_evakuierung.model.Project;
+import de.zet_evakuierung.network.model.NetworkFlowModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import gui.AlgorithmControl;
@@ -71,6 +70,8 @@ import org.zetool.graph.DefaultDirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import org.zetool.graph.structure.StaticPath;
+import org.zetool.graph.visualization.NodePositionMapping;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.netflow.ds.flow.FlowOverTimeImplicit;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.ds.network.ExtendedGraph;
@@ -641,7 +642,7 @@ public class CZET {
     GraphVisualizationResults graphVisResult;
     IdentifiableIntegerMapping<Node> xPos;
     IdentifiableIntegerMapping<Node> yPos;
-    NodePositionMapping nodePositionMapping;
+    NodePositionMapping<Vector3> nodePositionMapping;
     PathBasedFlowOverTime df;
     int neededTimeHorizon;
     int percentInterval = 100;
@@ -652,7 +653,7 @@ public class CZET {
         // Use internal dat format
         log.log(Level.INFO, "Reading from dat-file ''{0}''", inputFile.toString());
         // .dat files must contain node positions
-        nodePositionMapping = new NodePositionMapping();
+        nodePositionMapping = new NodePositionMapping<>(3, 0);
         xPos = new IdentifiableIntegerMapping<>(0);
         yPos = new IdentifiableIntegerMapping<>(0);
         long start = System.nanoTime();
