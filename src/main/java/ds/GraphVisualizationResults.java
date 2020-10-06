@@ -32,7 +32,6 @@ import org.zetool.netflow.classic.PathComposition;
 import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
 import org.zetool.netflow.ds.flow.PathBasedFlowOverTime;
 import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
-import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  * The class {@code GraphVisualizationResults} contains all information necessary to visualize the result of a dynamic flow algorithm.
@@ -40,7 +39,7 @@ import org.zetool.opengl.framework.abs.VisualizationResult;
  * is covering. Also the floor that each node belongs to is saved. The floors have indices according to their position in the list of
  * floors in the z-format.  
  */
-public class GraphVisualizationResults extends FlowVisualization implements VisualizationResult {
+public class GraphVisualizationResults extends FlowVisualization {
 	/** A mapping saving a rectangle in the real world for each node. */
 	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles;
 	/** The node position mapping. */

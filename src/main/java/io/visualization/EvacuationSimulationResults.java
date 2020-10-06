@@ -19,7 +19,6 @@ import java.util.Objects;
 import org.zet.cellularautomaton.results.EvacuationRecording;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
 import org.zet.cellularautomaton.algorithm.state.EvacuationState;
-import org.zetool.opengl.framework.abs.VisualizationResult;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 
 /**
@@ -28,7 +27,7 @@ import org.zet.cellularautomaton.statistic.CAStatistic;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationSimulationResults implements VisualizationResult {
+public class EvacuationSimulationResults {
 
     /** The recording of a simulation. */
     private final EvacuationRecording visRecording;

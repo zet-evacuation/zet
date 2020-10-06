@@ -16,13 +16,12 @@
 package ds;
 
 import org.zetool.math.vectormath.Vector2;
-import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  *
  * @author Marlen Schwengfelder
  */
-public class CompareVisualizationResults implements VisualizationResult{
+public class CompareVisualizationResults {
     
     //needs only pairs of time and flow 
     int[] TimeFlowPairOrigNetwork;

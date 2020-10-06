@@ -16,7 +16,6 @@
 package io.visualization;
 
 import de.zet_evakuierung.model.FloorInterface;
-import org.zetool.opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +33,7 @@ import java.util.Vector;
  * @author Daniel R. Schmidt
  *
  */
-public class BuildingResults implements VisualizationResult {
+public class BuildingResults {
 
 	public static class Wall implements Iterable<Point2D.Double> {
 

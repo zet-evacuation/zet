@@ -20,7 +20,6 @@ import java.util.HashMap;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 import org.zetool.math.vectormath.Vector3;
-import org.zetool.opengl.framework.abs.VisualizationResult;
 
 /**
  * A data structure containing all information about a {@link EvacuationCellularAutomaton}, including the (real
@@ -28,7 +27,7 @@ import org.zetool.opengl.framework.abs.VisualizationResult;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonVisualizationResults implements VisualizationResult {
+public class CellularAutomatonVisualizationResults {
 
     /**
      * A mapping from a cell to its offset relative to the room containing it. (The offset of the room is NOT
