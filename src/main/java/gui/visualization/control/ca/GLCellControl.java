@@ -15,15 +15,13 @@
  */
 package gui.visualization.control.ca;
 
-import org.zet.algo.ca.util.PotentialUtils;
-import org.zet.cellularautomaton.EvacCell;
-import org.zet.cellularautomaton.DoorCell;
-import org.zet.cellularautomaton.ExitCell;
-import org.zet.cellularautomaton.RoomCell;
-import org.zet.cellularautomaton.SaveCell;
-import org.zet.cellularautomaton.StairCell;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
+import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
+import static java.util.stream.Collectors.toList;
+
+import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.StepUpdateListener;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCell;
 import gui.visualization.draw.ca.GLDelayCell;
 import gui.visualization.draw.ca.GLEvacuationCell;
@@ -31,30 +29,32 @@ import gui.visualization.draw.ca.GLIndividual;
 import gui.visualization.draw.ca.GLSaveCell;
 import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
-import org.zetool.opengl.drawingutils.GLColor;
-import org.zetool.common.util.Direction8;
-import org.zet.cellularautomaton.TeleportCell;
-import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
 import io.visualization.CellularAutomatonVisualizationResults;
-import static java.util.stream.Collectors.toList;
+import org.zet.algo.ca.util.PotentialUtils;
+import org.zet.cellularautomaton.DoorCell;
+import org.zet.cellularautomaton.EvacCell;
 import org.zet.cellularautomaton.EvacCellInterface;
+import org.zet.cellularautomaton.ExitCell;
+import org.zet.cellularautomaton.RoomCell;
+import org.zet.cellularautomaton.SaveCell;
+import org.zet.cellularautomaton.StairCell;
+import org.zet.cellularautomaton.TeleportCell;
 import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
+import org.zetool.common.util.Direction8;
+import org.zetool.opengl.drawingutils.GLColor;
 
-public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCellularAutomatonControl> implements StepUpdateListener {
+public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, CellularAutomatonVisualizationModel> implements StepUpdateListener {
 
-    private int floorID;
-    private GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object
-    private double xPosition;
-    private double yPosition;
+    private final GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object
+    private final double xPosition;
+    private final double yPosition;
     private static Potential mergedPotential = null;
     private static Potential activePotential = null;
     private static long MAX_DYNAMIC_POTENTIAL = -1;
     private CellInformationDisplay displayMode = CellInformationDisplay.StaticPotential;
-    private EvacCell controlled;
+    private final EvacCell controlled;
     // Initially unset
     private EvacuationState es;
     
@@ -64,12 +64,12 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
     CAStatistic statistic;
 
-    public GLCellControl(CellularAutomatonVisualizationResults caVisResults, EvacCell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl) {
-        super(glControl);
+    public GLCellControl(CellularAutomatonVisualizationResults caVisResults, EvacCell cell, GLRoomControl glRoomControl, CellularAutomatonVisualizationModel visualizationModel) {
+        super(visualizationModel);
         this.statistic = null;
         this.controlled = cell;
-        xPosition = caVisResults.get(cell).x * mainControl.scaling;
-        yPosition = caVisResults.get(cell).y * mainControl.scaling;
+        xPosition = caVisResults.get(cell).x * visualizationModel.scaling;
+        yPosition = caVisResults.get(cell).y * visualizationModel.scaling;
         this.glRoomControlObject = glRoomControl;
 
         if (mergedPotential == null) {
@@ -77,8 +77,6 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
             activePotential = mergedPotential;
         }
         MAX_DYNAMIC_POTENTIAL = 0;
-
-        floorID = controlled.getRoom().getFloor();
 
         GLCell glCell = null;
         if (cell instanceof DoorCell || cell instanceof RoomCell) {
@@ -99,12 +97,12 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
             throw new java.lang.IllegalStateException("Illegal Cell Type");
         }
         this.setView(glCell);
-        glControl.cellProgress();
+        visualizationModel.cellProgress();
     }
 
     public GLIndividual getDrawIndividual() {
 
-        return mainControl.getControlledGLIndividual(controlled.getState().getIndividual().getNumber());
+        return visualizationModel.getControlledGLIndividual(controlled.getState().getIndividual().getNumber());
     }
 
     public int getFloorID() {
@@ -192,12 +190,12 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
                 //return 0;
                 // TODO statistic visualization
                 //return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
-                return statistic.getCellStatistic().getCellUtilization(controlled, (int) mainControl.getStep());
+                return statistic.getCellStatistic().getCellUtilization(controlled, (int) visualizationModel.getStep());
             case Waiting:
                 //return 0;
                 // TODO statistic visualization
                 //return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
-                return statistic.getCellStatistic().getCellWaitingTime(controlled, (int) mainControl.getStep());
+                return statistic.getCellStatistic().getCellWaitingTime(controlled, (int) visualizationModel.getStep());
             default:
                 return 0;
         }
@@ -295,10 +293,10 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
     }
 
     public double getWidth() {
-        return mainControl.scaling * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
+        return visualizationModel.scaling * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
     }
 
     public double getOffset() {
-        return VisualizationOptionManager.showSpaceBetweenCells() ? 10 * mainControl.scaling : 0;
+        return VisualizationOptionManager.showSpaceBetweenCells() ? 10 * visualizationModel.scaling : 0;
     }
 }

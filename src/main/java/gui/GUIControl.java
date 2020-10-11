@@ -691,7 +691,7 @@ public class GUIControl implements AlgorithmListener {
         pbd.setVisible(true);
         ZETLoader.sendMessage(GUILocalization.loc.getStringWithoutPrefix("batch.tasks.progress.visualizationDatastructureComplete"));
 
-        visualization.setControl(visualizationDataStructure.getControl());
+        visualization.setControl(visualizationDataStructure.getControl(), visualizationDataStructure.getControl());
         // create a copy here:
         control = visualizationDataStructure.getControl();
 

@@ -1,4 +1,5 @@
-/* zet evacuation tool copyright © 2007-20 zet evacuation team
+/*
+ * zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -37,7 +38,7 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
+public class NashFlowVisualization extends Visualization<GLNashGraphControl, GLNashGraphControl> {
 
     RainbowGradient rainbowGradient;
     NashFlowEdgeData flowDatas0 = new NashFlowEdgeData(2, 1);
@@ -109,7 +110,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 
         graphControl = new GLNashGraphControl(network, nodePositionMapping, mapping, this);
 
-        setControl(graphControl);
+        setControl(graphControl, graphControl);
 
         this.set3DView();
     }

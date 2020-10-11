@@ -28,12 +28,15 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
 import de.zet_evakuierung.visualization.network.control.GLNodeControl;
+import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
 import de.zet_evakuierung.visualization.network.draw.GLGraph;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.building.BuildingVisualizationModel;
 import gui.visualization.control.building.GLBuildingControl;
+import gui.visualization.control.ca.CellularAutomatonVisualizationModel;
 import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
@@ -49,7 +52,8 @@ import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zetool.common.localization.Localization;
-import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
 import zet.gui.main.tabs.JVisualizationView;
 
@@ -59,18 +63,18 @@ import zet.gui.main.tabs.JVisualizationView;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZETGLControl implements DrawableControlable {
+public class ZETGLControl implements Drawable, VisualizationModel {
     private static final Logger log = Logger.getGlobal();
     Frustum frustum;
 
     @Override
     public void setFrustum(Frustum frustum) {
         this.frustum = frustum;
-        if (caControl != null) {
-            caControl.setFrustum(frustum);
+        if (cellularAutomatonVisualizationModel != null) {
+            cellularAutomatonVisualizationModel.setFrustum(frustum);
         }
-        if (graphControl != null) {
-            graphControl.setFrustum(frustum);
+        if (networkVisualizationModel != null) {
+            networkVisualizationModel.setFrustum(frustum);
         }
     }
 
@@ -100,7 +104,7 @@ public class ZETGLControl implements DrawableControlable {
         
         caControl.setEvacuationSimulationResults(evacResults);
 
-        estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * caControl.getSecondsPerStep());
+        estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
     }
 
     /**
@@ -173,6 +177,9 @@ public class ZETGLControl implements DrawableControlable {
     private GLFlowGraphControl graphControl;
     private CompareControl compareControl;
     private GLBuildingControl buildingControl;
+    private CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
+    private NetworkVisualizationModel networkVisualizationModel;
+    private BuildingVisualizationModel buildingVisualizationModel;
     /** The estimated time used for the whole visualization in seconds. */
     private double estimatedTime = 0;
     private long time;
@@ -217,26 +224,28 @@ double absoluteMaxSpeed = 1;
                 ca = evacResults.getRecording().getInitialConfig().getCellularAutomaton();
                 absoluteMaxSpeed = evacResults.getRecording().getInitialConfig().getAbsoluteMaxSpeed();
             }
-            caControl = new GLCellularAutomatonControl(caVisResults);
-            caControl.setScaling(sizeMultiplicator);
-            caControl.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+            cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
+            cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
+            caControl = new GLCellularAutomatonControl(caVisResults, cellularAutomatonVisualizationModel);
+            cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
             caControl.build();
 
-            estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * caControl.getSecondsPerStep());
+            estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
         } else {
             hasCellularAutomaton = false;
         }
         if (graphVisResult != null) {
             hasGraph = true;
-            graphControl = new GLFlowGraphControl(graphVisResult);
-            graphControl.setScaling(sizeMultiplicator);
-            graphControl.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+            networkVisualizationModel = new NetworkVisualizationModel();
+            networkVisualizationModel.setScaling(sizeMultiplicator);
+            networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+            graphControl = new GLFlowGraphControl(graphVisResult, networkVisualizationModel);
             graphControl.build();
 
             this.secondsPerStepGraph();
 
             // TODO OpenGL equal-flow-arrival, see
-            estimatedTime = Math.max(estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep());
+            estimatedTime = Math.max(estimatedTime, networkVisualizationModel.getStepCount() * networkVisualizationModel.getSecondsPerStep());
         } else {
             hasGraph = false;
         }
@@ -246,8 +255,9 @@ double absoluteMaxSpeed = 1;
             compareControl.build(compvisres);
         }
         time = 0;
-        buildingControl = new GLBuildingControl(buildingResults);
-        buildingControl.setScaling(sizeMultiplicator);
+        buildingVisualizationModel = new BuildingVisualizationModel();
+        buildingVisualizationModel.setScaling(sizeMultiplicator);
+        buildingControl = new GLBuildingControl(buildingResults, buildingVisualizationModel);
         buildingControl.build();
         //AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
         initSettings();
@@ -263,8 +273,9 @@ double absoluteMaxSpeed = 1;
             buildingControl.delete();
         }
         System.gc();
-        buildingControl = new GLBuildingControl(buildingResults);
-        buildingControl.setScaling(sizeMultiplicator);
+        buildingVisualizationModel = new BuildingVisualizationModel();
+        buildingVisualizationModel.setScaling(sizeMultiplicator);
+        buildingControl = new GLBuildingControl(buildingResults, buildingVisualizationModel);
         buildingControl.build();
         showWalls(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.walls"));
     }
@@ -281,10 +292,11 @@ double absoluteMaxSpeed = 1;
         }
         hasCellularAutomaton = true;
         this.ca = caVis.getCa();
-        caControl = new GLCellularAutomatonControl(caVis);
+        cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
+        cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
+        caControl = new GLCellularAutomatonControl(caVis, cellularAutomatonVisualizationModel);
         log.warning("Setting caControl to " + caControl);
-        caControl.setScaling(sizeMultiplicator);
-        caControl.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+        cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
         caControl.build();
         estimatedTime = 0;
         showCellularAutomaton(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.cellularAutomaton"));
@@ -308,15 +320,16 @@ double absoluteMaxSpeed = 1;
         }
         if (graphVisResult != null) {
             hasGraph = true;
-            graphControl = new GLFlowGraphControl(graphVisResult);
-            graphControl.setScaling(sizeMultiplicator);
-            graphControl.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+            networkVisualizationModel = new NetworkVisualizationModel();
+            networkVisualizationModel.setScaling(sizeMultiplicator);
+            networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+            graphControl = new GLFlowGraphControl(graphVisResult, networkVisualizationModel);
             graphControl.build();
 
             this.secondsPerStepGraph();
 
             // TODO OpenGL equal-flow-arrival, see
-            estimatedTime = Math.max(estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep());
+            estimatedTime = Math.max(estimatedTime, networkVisualizationModel.getStepCount() * networkVisualizationModel.getSecondsPerStep());
             showGraph(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.graph"));
             showNodeRectangles(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.nodeArea"));
         } else {
@@ -381,10 +394,12 @@ double absoluteMaxSpeed = 1;
     private void secondsPerStepGraph() {
         // Set speed such that it arrives when the last individual is evacuated.
         if (hasCellularAutomaton && PropertyContainer.getGlobal().getAsBoolean("options.visualization.flow.equalArrival")) {
-            graphControl.setNanoSecondsPerStep(graphControl.getStepCount() == 0 ? 0 : (caControl.getNanoSecondsPerStep() * caControl.getStepCount()) / graphControl.getStepCount());
+            networkVisualizationModel.setNanoSecondsPerStep(networkVisualizationModel.getStepCount() == 0
+                    ? 0
+                    : (cellularAutomatonVisualizationModel.getNanoSecondsPerStep() * cellularAutomatonVisualizationModel.getStepCount()) / networkVisualizationModel.getStepCount());
         } else {
             if (ca == null) {
-                graphControl.setSecondsPerStep(0.26425707443);
+                networkVisualizationModel.setSecondsPerStep(0.26425707443);
                 return;
             }
             double maxSpeed = absoluteMaxSpeed;
@@ -394,7 +409,7 @@ double absoluteMaxSpeed = 1;
             }
             average /= getIndividuals().size();
             double secondsPerStep = 0.4 / average;
-            graphControl.setSecondsPerStep(secondsPerStep);
+            networkVisualizationModel.setSecondsPerStep(secondsPerStep);
         }
     }
 
@@ -415,7 +430,7 @@ double absoluteMaxSpeed = 1;
      */
     @Override
     public boolean isFinished() {
-        return (graphControl == null || graphControl.isFinished()) && (caControl == null || caControl.isFinished());
+        return (graphControl == null || networkVisualizationModel.isFinished()) && (caControl == null || cellularAutomatonVisualizationModel.isFinished());
     }
 
     /**
@@ -424,7 +439,7 @@ double absoluteMaxSpeed = 1;
      * @return true if the cellular automaton is finished, false otherwise
      */
     public boolean isCaFinshed() {
-        return caControl.isFinished();
+        return cellularAutomatonVisualizationModel.isFinished();
     }
 
     /**
@@ -433,7 +448,7 @@ double absoluteMaxSpeed = 1;
      * @return true if the flow has completely reached the sink, false otherwise
      */
     public final boolean isGraphFinished() {
-        return graphControl.isFinished();
+        return networkVisualizationModel.isFinished();
     }
 
     /**
@@ -442,7 +457,7 @@ double absoluteMaxSpeed = 1;
      * @return the current step of the graph
      */
     public final double getGraphStep() {
-        return graphControl.getStep();
+        return networkVisualizationModel.getStep();
     }
 
     /**
@@ -452,7 +467,7 @@ double absoluteMaxSpeed = 1;
      * @return the current step of the cellular automaton
      */
     public final double getCaStep() {
-        return caControl.getStep();
+        return cellularAutomatonVisualizationModel.getStep();
     }
 
     /**
@@ -472,31 +487,31 @@ double absoluteMaxSpeed = 1;
     @Override
     public final void addTime(long timeNanoSeconds) {
         time += timeNanoSeconds;
-        if (hasCellularAutomaton && !caControl.isFinished()) {
-            caControl.addTime(timeNanoSeconds);
+        if (hasCellularAutomaton && !cellularAutomatonVisualizationModel.isFinished()) {
+            cellularAutomatonVisualizationModel.addTime(timeNanoSeconds);
         }
-        if (hasGraph && !graphControl.isFinished()) {
-            graphControl.addTime(timeNanoSeconds);
+        if (hasGraph && !networkVisualizationModel.isFinished()) {
+            networkVisualizationModel.addTime(timeNanoSeconds);
         }
     }
 
     @Override
     public void setTime(long timeNanoSeconds) {
         if (hasCellularAutomaton) {
-            caControl.setTime(timeNanoSeconds);
+            cellularAutomatonVisualizationModel.setTime(timeNanoSeconds);
         }
         if (hasGraph) {
-            graphControl.setTime(timeNanoSeconds);
+            networkVisualizationModel.setTime(timeNanoSeconds);
         }
     }
 
     @Override
     public void resetTime() {
         if (hasCellularAutomaton) {
-            caControl.resetTime();
+            cellularAutomatonVisualizationModel.resetTime();
         }
         if (hasGraph) {
-            graphControl.resetTime();
+            networkVisualizationModel.resetTime();
         }
     }
 
@@ -506,7 +521,7 @@ double absoluteMaxSpeed = 1;
      * @return the time needed by one step of the cellular automaton
      */
     public double getCaSecondsPerStep() {
-        return caControl.getSecondsPerStep();
+        return cellularAutomatonVisualizationModel.getSecondsPerStep();
     }
 
     /**
@@ -516,7 +531,7 @@ double absoluteMaxSpeed = 1;
      * @return the time needed by one step of the graph
      */
     public double getGraphSecondsPerStep() {
-        return graphControl.getSecondsPerStep();
+        return networkVisualizationModel.getSecondsPerStep();
     }
 
     /**
@@ -536,10 +551,10 @@ double absoluteMaxSpeed = 1;
     public void setSpeedFactor(double speedFactor) {
         this.speedFactor = speedFactor;
         if (hasCellularAutomaton) {
-            caControl.setSpeedFactor(speedFactor);
+            cellularAutomatonVisualizationModel.setSpeedFactor(speedFactor);
         }
         if (hasGraph) {
-            graphControl.setSpeedFactor(speedFactor);
+            networkVisualizationModel.setSpeedFactor(speedFactor);
         }
     }
 
@@ -697,6 +712,8 @@ double absoluteMaxSpeed = 1;
         if (showGraph && hasGraph) {
             graphControl.draw(gl);
         }
+        System.out.println("Show walls: " + showWalls);
+        System.out.println("Building Control: " + buildingControl);
         if (showWalls && buildingControl != null) {
             buildingControl.getView().draw(gl);
         }
@@ -740,11 +757,11 @@ double absoluteMaxSpeed = 1;
     }
 
     public final List<GLIndividual> getIndividuals() {
-        return caControl.getIndividuals();
+        return cellularAutomatonVisualizationModel.getIndividuals();
     }
 
     public List<GLIndividualControl> getIndividualControls() {
-        return caControl.getIndividualControls();
+        return cellularAutomatonVisualizationModel.getIndividualControls();
     }
 
     /**

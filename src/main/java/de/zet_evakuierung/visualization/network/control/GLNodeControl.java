@@ -26,7 +26,7 @@ import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
-public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, GLFlowGraphControl> {
+public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, NetworkVisualizationModel> {
 	private double xPosition;
 	private double yPosition;
 	// TODO read data from file in ZET
@@ -48,28 +48,28 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	private boolean drawInterFloorEdges = true;
 	private int id = 0;
 
-	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLFlowGraphControl glControl ) {
-		super( glControl );
+	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, NetworkVisualizationModel visualizationModel ) {
+		super( visualizationModel );
 
-		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX() * glControl.scaling;
-		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY() * glControl.scaling;
-		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX() * glControl.scaling;
-		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY() * glControl.scaling;
+		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX() * visualizationModel.scaling;
+		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY() * visualizationModel.scaling;
+		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX() * visualizationModel.scaling;
+		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY() * visualizationModel.scaling;
 
-		xPosition = graphVisResult.getNodePositionMapping().get( node ).x * glControl.scaling;
-		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * glControl.scaling;
+		xPosition = graphVisResult.getNodePositionMapping().get( node ).x * visualizationModel.scaling;
+		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * visualizationModel.scaling;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
 		final boolean showEdgesBetweenFloors = false;
 
 		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
-			if( edge.start().id() != glControl.superSinkID() && edge.end().id() != glControl.superSinkID() ) {
+			if( edge.start().id() != visualizationModel.superSinkID() && edge.end().id() != visualizationModel.superSinkID() ) {
 				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
 				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
 				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors && !drawInterFloorEdges)
 					System.out.println( "Knoten auf verschiedenen Etagen." );
 				else
-					add( new GLFlowEdgeControl( graphVisResult, edge, glControl ) );
+					add( new GLFlowEdgeControl( graphVisResult, edge, visualizationModel ) );
 			}
 		id = node.id();
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
@@ -78,8 +78,8 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 
 		floor = graphVisResult.getNodeToFloorMapping().get( node );
 
-		zPosition = glControl.defaultFloorHeight * 0.1 * glControl.scaling; // set bottom graph 10% above the ground
-		zPosition += floor * glControl.defaultFloorHeight * glControl.scaling;
+		zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
+		zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
 
 		setView( new GLNode( this ) );
 		for( GLFlowEdgeControl edge : this ) {
@@ -88,32 +88,32 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		}
 
 		flowCalculator = new FlowCalculator();
-		glControl.nodeProgress();
+		visualizationModel.nodeProgress();
 	}
 
-	GLNodeControl( FlowVisualization fv, Node node, GLFlowGraphControl mainControl ) {
-		super( mainControl );
+	GLNodeControl( FlowVisualization fv, Node node, NetworkVisualizationModel visualizationModel ) {
+		super( visualizationModel );
 
-		nwX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * mainControl.scaling;
-		nwY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * mainControl.scaling;
-		seX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * mainControl.scaling;
-		seY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * mainControl.scaling;
+		nwX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * visualizationModel.scaling;
+		nwY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * visualizationModel.scaling;
+		seX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * visualizationModel.scaling;
+		seY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * visualizationModel.scaling;
 
-		xPosition = (nwX + 0.5 * (seX - nwX)) * mainControl.scaling;
-		yPosition = (nwY + 0.5 * (seY - nwY)) * mainControl.scaling;
+		xPosition = (nwX + 0.5 * (seX - nwX)) * visualizationModel.scaling;
+		yPosition = (nwY + 0.5 * (seY - nwY)) * visualizationModel.scaling;
 
-		xPosition = (fv.getNodePositionMapping().get( node ).x + fv.getEffectiveOffset().x) * fv.getScale() * mainControl.scaling;
-		yPosition = (fv.getNodePositionMapping().get( node ).y + fv.getEffectiveOffset().y) * fv.getScale() * mainControl.scaling;
+		xPosition = (fv.getNodePositionMapping().get( node ).x + fv.getEffectiveOffset().x) * fv.getScale() * visualizationModel.scaling;
+		yPosition = (fv.getNodePositionMapping().get( node ).y + fv.getEffectiveOffset().y) * fv.getScale() * visualizationModel.scaling;
 		capacity = fv.getNodeCapacities().get( node );
 
 		//final boolean showEdgesBetweenFloors = true;
 
 		for( Edge edge : fv.getNetwork().outgoingEdges( node ) )
 			if( !fv.isContainsSuperSink() )
-				add( new GLFlowEdgeControl( fv, edge, mainControl ) );
-			else if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
+				add( new GLFlowEdgeControl( fv, edge, visualizationModel ) );
+			else if( edge.start().id() != visualizationModel.superSinkID() && edge.end().id() != visualizationModel.superSinkID() ) {
 				// edit ignore floors
-				add( new GLFlowEdgeControl( fv, edge, mainControl ) );
+				add( new GLFlowEdgeControl( fv, edge, visualizationModel ) );
 			}
 		isEvacuationNode = fv.isEvacuationNode( node );
 		isSourceNode = fv.isSourceNode( node );
@@ -121,7 +121,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 
 		floor = 0; // ignore floors at the moment
 
-		zPosition = fv.getNodePositionMapping().get( node ).z * fv.getScale() * mainControl.scaling;
+		zPosition = fv.getNodePositionMapping().get( node ).z * fv.getScale() * visualizationModel.scaling;
 
 		setView( new GLNode( this ) );
 		for( GLFlowEdgeControl edge : this ) {
@@ -130,7 +130,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		}
 
 		flowCalculator = new FlowCalculator();
-		mainControl.nodeProgress();
+		visualizationModel.nodeProgress();
 	}
 
 	public boolean isEvacuationNode() {
@@ -186,7 +186,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	}
 
 	public void stepUpdate( int step ) {
-		time = mainControl.getStep();
+		time = visualizationModel.getStep();
 		graphHistory = flowCalculator.getCalculatedFlow();
 
 		if( graphHistory.size() <= 0 )
@@ -221,7 +221,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	 * @return 
 	 */
 	public double getFloorHeight() {
-		return mainControl.defaultFloorHeight*mainControl.scaling*0.1;
+		return visualizationModel.defaultFloorHeight*visualizationModel.scaling*0.1;
 	}
 	
 	public int getNumber() {

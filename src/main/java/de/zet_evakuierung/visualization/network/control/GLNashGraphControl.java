@@ -24,48 +24,68 @@ import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
+import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.VisualizationModel;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLNashGraphControl extends GLGraphControl {
-	private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
-	private final NashFlowVisualization nfv;
+public class GLNashGraphControl extends GLGraphControl implements Drawable, VisualizationModel {
 
-	public GLNashGraphControl( DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
-		super( graph, nodePositionMapping, false );
-		this.nashFlowMapping = nashFlowMapping;
-		this.nfv = nfv;
-		setUpNodes();
-	}
+    private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
+    private final NashFlowVisualization nfv;
 
-	@Override
-	protected void setUpNodes() {
-		for( Node n : graph.nodes() ) {
-			GLNashNodeControl nodeControl = new GLNashNodeControl( graph, n, nodePositionMapping, nashFlowMapping, nfv );
-			add( nodeControl );
-		}
+    public GLNashGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv) {
+        super(graph, nodePositionMapping, false);
+        this.nashFlowMapping = nashFlowMapping;
+        this.nfv = nfv;
+        setUpNodes();
+    }
 
-		this.setView( new GLNashGraph( this ) );
-		for( GLSimpleNodeControl nodeControl : this )
-			view.addChild( nodeControl.getView() );
-	}
+    @Override
+    protected void setUpNodes() {
+        for (Node n : graph.nodes()) {
+            GLNashNodeControl nodeControl = new GLNashNodeControl(graph, n, nodePositionMapping, nashFlowMapping, nfv);
+            add(nodeControl);
+        }
 
-	@Override
-	public boolean isFinished() {
-		return time > endTime;
-	}
+        this.setView(new GLNashGraph(this));
+        for (GLSimpleNodeControl nodeControl : this) {
+            view.addChild(nodeControl.getView());
+        }
+    }
 
-	double time = 0;
-	double endTime = 0;
+    @Override
+    public boolean isFinished() {
+        return time > endTime;
+    }
 
-	@Override
-	public void addTime( long timeNanoSeconds ) {
-		time += timeNanoSeconds;
-	}
+    double time = 0;
+    double endTime = 0;
 
-	public void setEndTime( long timeNanoSeconds ) {
-		endTime = timeNanoSeconds;
-	}
+    @Override
+    public void addTime(long timeNanoSeconds) {
+        time += timeNanoSeconds;
+    }
+
+    public void setEndTime(long timeNanoSeconds) {
+        endTime = timeNanoSeconds;
+    }
+
+    @Override
+    public void setFrustum(Frustum frustum) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTime(long time) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void resetTime() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

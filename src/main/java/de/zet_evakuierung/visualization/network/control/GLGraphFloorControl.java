@@ -30,7 +30,7 @@ import org.zetool.graph.Node;
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLFlowGraphControl> {
+public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, NetworkVisualizationModel> {
 
 	/**
 	 * Creates a new instance of {@code GLGraphFloorControl}. Therefore for
@@ -39,30 +39,30 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	 * @param graphVisResult the graph visualization results
 	 * @param nodesOnTheFloor the nodes that lie on this floor
 	 * @param floor the number of the floor
-	 * @param glControl the general control object for visualization
+	 * @param visualizationModel the general control object for visualization
 	 */
-	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLFlowGraphControl glControl ) {
-		super( glControl );
+	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, NetworkVisualizationModel visualizationModel ) {
+		super( visualizationModel );
 		Iterator<Node> it = nodesOnTheFloor.iterator();
 		Node supersink = graphVisResult.getSupersink();
 		while( it.hasNext() ) {
 			Node n = it.next();
 			if( !n.equals(supersink) /*&& floor != 0*/ )
-				add( new GLNodeControl( graphVisResult, n, glControl ) );
+				add( new GLNodeControl( graphVisResult, n, visualizationModel ) );
 		}
 		setView( new GLGraphFloor( this ) );
 		for( GLNodeControl node : this )
 			view.addChild( node.getView() );
 	}
 
-	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, GLFlowGraphControl mainControl ) {
-		super( mainControl );
+	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, NetworkVisualizationModel visualizationModel ) {
+		super( visualizationModel );
 		Iterator<Node> it = nodes.iterator();
 		Node supersink = fv.getSinks().get( 0 );
 		while( it.hasNext() ) {
 			Node n = it.next();
 			//if( !n.equals(supersink) )
-				add( new GLNodeControl( fv, n, mainControl ) );
+				add( new GLNodeControl( fv, n, visualizationModel ) );
 		}
 		setView( new GLGraphFloor( this ) );
 		for( GLNodeControl node : this )

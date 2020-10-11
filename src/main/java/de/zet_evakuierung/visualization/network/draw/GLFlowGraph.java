@@ -15,19 +15,40 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
+import javax.media.opengl.GL2;
+
+import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
+import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.control.GLNodeControl;
+import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphControl> {
 
-	public GLFlowGraph( GLFlowGraphControl control ) {
-		super( control );
-	}
+    private final NetworkVisualizationModel networkVisualizationModel;
+    private long lastStep = 0;
 
-	/**
-	 * @see opengl.framework.abs.AbstractDrawable#update()
-	 */
-	@Override
-	public void update() {
-	}
+    public GLFlowGraph(GLFlowGraphControl control, NetworkVisualizationModel networkVisualizationModel) {
+        super(control);
+        this.networkVisualizationModel = networkVisualizationModel;
+    }
+
+    /**
+     * @see opengl.framework.abs.AbstractDrawable#update()
+     */
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public void performDrawing(GL2 gl) {
+        long step = (long) networkVisualizationModel.getStep();
+        if (step != lastStep) {
+            getControl().stepUpdate();
+            lastStep = step;
+        }
+
+        super.performDrawing(gl);
+    }
 }

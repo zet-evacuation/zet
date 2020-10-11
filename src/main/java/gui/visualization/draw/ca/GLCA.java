@@ -15,28 +15,39 @@
  */
 package gui.visualization.draw.ca;
 
-import gui.visualization.control.ca.GLCellularAutomatonControl;
-
 import javax.media.opengl.GL2;
+
+import gui.visualization.control.ca.CellularAutomatonVisualizationModel;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl> {
-	public GLCA( GLCellularAutomatonControl control ) {
-		super( control );
-	}
 
-	@Override
-	public void update() {
-	}
+    private final CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
+    private long lastStep = 0;
 
-	@Override
-	public String toString() {
-		return "GLCA";
-	}
+    public GLCA(GLCellularAutomatonControl control, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
+        super(control);
+        this.cellularAutomatonVisualizationModel = cellularAutomatonVisualizationModel;
+    }
 
-	@Override
-	public void performDrawing( GL2 gl ) {
-		super.performDrawing( gl );
-	}
+    @Override
+    public void update() {
+    }
+
+    @Override
+    public String toString() {
+        return "GLCA";
+    }
+
+    @Override
+    public void performDrawing(GL2 gl) {
+        long step = (long) cellularAutomatonVisualizationModel.getStep();
+        if (step != lastStep) {
+            getControl().stepUpdate();
+            lastStep = step;
+        }
+
+        super.performDrawing(gl);
+    }
 }
-

@@ -30,7 +30,7 @@ import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
  * @author Jan-Philipp Kappmeier
  */
 public class GLFlowEdgeControl extends GLEdgeControl {
-	protected GLFlowGraphControl mainControl;
+	protected final NetworkVisualizationModel visualizationModel;
 	private double time;
 	private ArrayList<Integer> flowOnEdge;
 	private int maxFlowRate;
@@ -45,15 +45,15 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	 * the {@code graphVisResult} object.
 	 * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
 	 * @param edge the edge for this control object.
-	 * @param glControl the main control class.
+	 * @param visualizationModel the main control class.
 	 */
-	public GLFlowEdgeControl( GraphVisualizationResults graphVisResult, Edge edge, GLFlowGraphControl glControl ) {
+	public GLFlowEdgeControl( GraphVisualizationResults graphVisResult, Edge edge, NetworkVisualizationModel visualizationModel ) {
 		super( graphVisResult.getNodePositionMapping(), edge );
 		setScaling( Z_TO_OPENGL_SCALING );
 
     this.edge = edge;
 
-		this.mainControl = glControl;
+		this.visualizationModel = visualizationModel;
 		//controlled = edge;
 		setView( new GLFlowEdge( this ) );
     //System.out.println( "Edge " + edge );
@@ -78,7 +78,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
     //System.out.println( " - max time with non zero value: " + maxT);
 		int transit = transitTimes.get( edge );
 		if( maxT > 0 )
-			glControl.setMaxTime( maxT + transit );
+			visualizationModel.setMaxTime( maxT + transit );
 		if( maxT > 0 ) {
 			flowOnEdge = new ArrayList<>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
@@ -91,16 +91,16 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 			flowOnEdge = new ArrayList<>();
 	}
 
-	GLFlowEdgeControl( FlowVisualization fv, Edge edge, GLFlowGraphControl mainControl ) {
+	GLFlowEdgeControl( FlowVisualization fv, Edge edge, NetworkVisualizationModel visualizationModel ) {
 		super( fv.getNodePositionMapping(), edge );
-		this.mainControl = mainControl;
+		this.visualizationModel = visualizationModel;
 
 		// todo: usage of isFirst by flag...
 		isFirst = !fv.isEdgesDoubled() || edge.start().id() < edge.end().id() ? true : false;
 
 		// store general edge attributes
 		maxFlowRate = fv.getMaxFlowRate();
-		mainControl.setMaxTime( fv.getTimeHorizon() + 1 );
+		visualizationModel.setMaxTime( fv.getTimeHorizon() + 1 );
 		transitTime = fv.getTransitTimes().get( edge );
 		capacity = fv.getEdgeCapacities().get( edge );
 
@@ -187,7 +187,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	 * of the graph step in the main control class.
 	 */
 	public void stepUpdate() {
-		time = mainControl.getStep();
+		time = visualizationModel.getStep();
 		deltaStep = time - Math.floor( time );
 	}
 

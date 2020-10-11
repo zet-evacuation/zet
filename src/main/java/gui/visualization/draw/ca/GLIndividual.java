@@ -26,7 +26,6 @@ import gui.visualization.util.Tuple;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
-import org.zetool.opengl.helper.Frustum;
 
 /**
  * Draws an individual on a {@code OpenGL} canvas.
@@ -38,18 +37,12 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
     //public static double individualHeight = 150 * 0.1; // TODO: use the scaling value, original 30
     //public static double individualRadius = 100 * 0.1; // original 10
     // set up individual heights
-    private static double individualHeight = /*1.2 **/ VisualizationOptionManager.getIndividualHeight();
-    private static double individualRadius = VisualizationOptionManager.getIndividualRadius();
+    private static final double INDIVIDUAL_HEIGHT = /*1.2 **/ VisualizationOptionManager.getIndividualHeight();
+    private static final double INDIVIDUAL_RADIUS = VisualizationOptionManager.getIndividualRadius();
 
     public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
     public static GLColor deadColor = new GLColor(130, 55, 101);
     public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-
-    Frustum frustum;
-
-    public void setFrustum(Frustum frustum) {
-        this.frustum = frustum;
-    }
 
     public GLIndividual(GLIndividualControl control) {
         super(control);
@@ -85,16 +78,16 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
         gl.glTranslated(pos.x, pos.y, 0.1);
         bodyColor.draw(gl);
 
-        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, /*1.2 **/ individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, /*1.2 **/ INDIVIDUAL_RADIUS, 0.0, INDIVIDUAL_HEIGHT, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
         headColor.draw(gl);
-        gl.glTranslated(0, 0, individualHeight - individualRadius * 0.7);
+        gl.glTranslated(0, 0, INDIVIDUAL_HEIGHT - INDIVIDUAL_RADIUS * 0.7);
 
         // here the head is drawn...
         // perform frustum test if the center point is within the frustum
         Vector3 check = new Vector3(pos.x, pos.y, 1);
         // TODO Frustum
         //if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-        GLU_INSTANCE.gluSphere(GLU_QUADRIC, /*1.5 * */ individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
+        GLU_INSTANCE.gluSphere(GLU_QUADRIC, /*1.5 * */ INDIVIDUAL_RADIUS * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
 
         gl.glPopMatrix();
     }

@@ -1,4 +1,5 @@
-/* zet evacuation tool copyright © 2007-20 zet evacuation team
+/*
+ * zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -21,69 +22,61 @@ import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
-import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.VisualizationModelProvider;
 import org.zetool.opengl.helper.Frustum;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements DrawableControlable {
-	protected NodePositionMapping<Vector3> nodePositionMapping;
-	protected DirectedGraph graph;
+public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, VisualizationModelProvider {
 
-	public GLGraphControl( DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping ) {
-		this( graph, nodePositionMapping, true );
-	}
+    protected NodePositionMapping<Vector3> nodePositionMapping;
+    protected DirectedGraph graph;
 
-public GLGraphControl( DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes ) {
-		this.nodePositionMapping = nodePositionMapping;
-		this.graph = graph;
-		if( setUpNodes )
-			setUpNodes();
-	}
+    public GLGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping) {
+        this(graph, nodePositionMapping, true);
+    }
 
-	protected void setUpNodes() {
-		for( Node n : graph.nodes() ) {
-			GLSimpleNodeControl nodeControl = new GLSimpleNodeControl( graph, n, nodePositionMapping );
-			add( nodeControl );
-		}
+    public GLGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes) {
+        this.nodePositionMapping = nodePositionMapping;
+        this.graph = graph;
+        if (setUpNodes) {
+            setUpNodes();
+        }
+    }
 
-		this.setView( new GLGraph( this ) );
-		for( GLSimpleNodeControl nodeControl : this )
-			view.addChild( nodeControl.getView() );
-	}
+    protected void setUpNodes() {
+        for (Node n : graph.nodes()) {
+            GLSimpleNodeControl nodeControl = new GLSimpleNodeControl(graph, n, nodePositionMapping);
+            add(nodeControl);
+        }
 
-	public void setFrustum( Frustum frustum ) {
+        this.setView(new GLGraph(this));
+        for (GLSimpleNodeControl nodeControl : this) {
+            view.addChild(nodeControl.getView());
+        }
+    }
 
-	}
+    @Override
+    public Frustum getFrustum() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public Frustum getFrustum() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 
-	public void update() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
+    @Override
+    public void update() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public void delete() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	public void addTime( long timeNanoSeconds ) {
-
-	}
-
-	public void setTime( long time ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	public void resetTime() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	public boolean isFinished() {
-		return false;
-	}
+    @Override
+    public void delete() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

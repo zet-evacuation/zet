@@ -39,6 +39,7 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 	@Override
 	public void performDrawing( GL2 gl ) {
 		super.performDrawing( gl );
+        System.out.println("Print building");
 		if( repaint )
 			performStaticDrawing( gl );
 		gl.glCallList( displayList );
@@ -47,6 +48,7 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 	@Override
 	public void performStaticDrawing( GL2 gl ) {
 		// Erzeuge eine display-Liste falls nicht schon längst gemacht
+        System.out.println("Static print building");
 		if( displayList <= 0 )
 			gl.glDeleteLists( displayList, 1 );
 		displayList = gl.glGenLists( 1 );

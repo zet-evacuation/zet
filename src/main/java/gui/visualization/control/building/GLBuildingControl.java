@@ -15,15 +15,16 @@
  */
 package gui.visualization.control.building;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.building.GLBuilding;
 import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Floor;
 import io.visualization.BuildingResults.Wall;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import org.zetool.opengl.framework.abs.Controlable;
+import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
  * A control class that allows hiding and showing of walls on different floors.
@@ -31,11 +32,8 @@ import org.zetool.opengl.framework.abs.Controlable;
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, GLBuildingControl> implements Controlable {
+public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode {
 
-    double scaling = 1;
-    private int wallCount;
-    private int wallsDone;
     private List<ArrayList<GLWallControl>> allFloorsByID;
     private BuildingResults visResult;
 
@@ -46,23 +44,21 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
      *
      * @param visResult
      */
-    public GLBuildingControl(BuildingResults visResult) {
-        super();
+    public GLBuildingControl(BuildingResults visResult, BuildingVisualizationModel visualizationModel) {
+        super(visualizationModel);
         this.visResult = visResult;
     }
 
     public void build() {
-        mainControl = this;
         //AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
-        wallCount = visResult.getWalls().size();
-        wallsDone = 0;
+        visualizationModel.init(visResult.getWalls().size());
 
         allFloorsByID = new ArrayList<>(visResult.getFloors().size());
         for (int i = 0; i < visResult.getFloors().size(); ++i) {
             allFloorsByID.add(new ArrayList<>());
         }
         for (Wall wall : visResult.getWalls()) {
-            final GLWallControl child = new GLWallControl(wall, mainControl);
+            final GLWallControl child = new GLWallControl(wall, visualizationModel);
             add(child);
             allFloorsByID.get(wall.getFloor().id()).add(child);
         }
@@ -113,55 +109,6 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
     }
 
     /**
-     * <p>
-     * This method increases the number of cells that are created and calculates a new progress. The progress will at
-     * most reach 99% so that after all objects are created a final "Done" message can be submitted.</p>
-     * <p>
-     * Note that before this method can be used in the proper way the private variable {@code wallsDone} and
-     * {@code WallCount} should be initialized correct. However, it is guaranteed to calculate a value from 0 to 99.
-     */
-    public void wallProgress() {
-        wallsDone++;
-        int progress = Math.max(0, Math.min((int) Math.round(((double) wallsDone / wallCount) * 100), 99));
-        //AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Gebäude...", "Wand " + wallsDone + " von " + wallCount + " erzeugt." );
-    }
-
-    /**
-     * Does nothing, as the building is static at the moment.
-     *
-     * @param timeNanoSeconds the time that has passed.
-     */
-    @Override
-    public final void addTime(long timeNanoSeconds) {
-    }
-
-    /**
-     * Returns {@code true} as the building is static.
-     *
-     * @return {@code true}
-     */
-    @Override
-    public final boolean isFinished() {
-        return true;
-    }
-
-    /**
-     * Does nothing, as the building is static at the moment.
-     *
-     * @param timeNanoSeconds the time that has passed.
-     */
-    @Override
-    public void setTime(long timeNanoSeconds) {
-    }
-
-    /**
-     * Does nothing, as the building is static at the moment.
-     */
-    @Override
-    public void resetTime() {
-    }
-
-    /**
      * Prepares this object for deletion, removes all pointers and calls this method on all child elements.
      */
     @Override
@@ -171,10 +118,6 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
         }
         view.delete();
         view = null;
-    }
-
-    public void setScaling(double scaling) {
-        this.scaling = scaling;
     }
 
     public Collection<Floor> getFloors() {

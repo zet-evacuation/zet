@@ -1,4 +1,5 @@
-/* zet evacuation tool copyright © 2007-20 zet evacuation team
+/*
+ * zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -14,13 +15,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package gui.visualization;
-
-import org.zetool.math.Conversion;
-import org.zetool.math.vectormath.Vector3;
-import event.EventServer;
-import event.MessageEvent;
-import de.tu_berlin.coga.util.movies.MovieManager;
-import gui.MessageType;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,8 +32,16 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
 
+import de.tu_berlin.coga.util.movies.MovieManager;
+import event.EventServer;
+import event.MessageEvent;
+import gui.MessageType;
+import org.zetool.math.Conversion;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
-import org.zetool.opengl.framework.abs.DrawableControlable;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
 import org.zetool.opengl.helper.ProjectionHelper;
 import org.zetool.opengl.helper.Texture;
@@ -48,17 +50,20 @@ import org.zetool.opengl.helper.TextureFontStrings;
 import org.zetool.opengl.helper.TextureManager;
 
 /**
- * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes
- * the canvas, sets up light, textures and other stuff and draws the scene.
+ * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes the canvas, sets up light,
+ * textures and other stuff and draws the scene.
+ *
  * @param <U> the object that is visualized
+ * @param <V> the visualization model
  * @author Jan-Philipp Kappmeier
  */
-@SuppressWarnings( "serial" )
-public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
+@SuppressWarnings("serial")
+public class Visualization<U extends Drawable, V extends VisualizationModel> extends AbstractVisualization {
+
     public enum RecordingMode {
-            Recording,
-            NotRecording,
-            SkipFrame,
+        Recording,
+        NotRecording,
+        SkipFrame,
     }
 
     protected double sizeMultiplikator = 0.1;
@@ -74,8 +79,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
     private Texture logoTex;
     /** The texture for the logo mask (used for blending). */
     private Texture maskTex;
-    /** The control object of the graphics data structure (in MVC pattern). */
-    protected U control = null;
+    /** The visualized drawable object. */
+    protected U visualized = null;
+    /** The model object. */
+    protected V visualizationModel;
     /** The {@code OpenGL} context. */
     private GLAutoDrawable drawable;
     /** Indicates if mouse movement in 2d-view rotates or moves the building. */
@@ -229,10 +236,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
     final public void animate() {
         super.animate();
         computeFPS();
-        control.addTime(getDeltaTime());
-        if (control.isFinished()) {
+        visualizationModel.addTime(getDeltaTime());
+        if (visualizationModel.isFinished()) {
             if (isLoop()) {
-                control.resetTime();
+                visualizationModel.resetTime();
             } else {
                 stopAnimation();
             }
@@ -246,7 +253,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
      */
     @Override
     final public void animate(long timestep) {
-        control.addTime(timestep);
+        visualizationModel.addTime(timestep);
     }
 
     /**
@@ -413,8 +420,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
             }
         }
 
-        if (control != null) {
-            control.draw(gl);
+        if (visualized != null) {
+            visualized.draw(gl);
         }
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         drawFPS();
@@ -442,7 +449,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
             font.print(0, 0, Integer.toString(getFPS()) + " FPS " + Double.toString(secs));
         }
 
-        if (control.isFinished()) {
+        if (visualizationModel.isFinished()) {
             minimalFrameCount--;
         } else {
             minimalFrameCount = 2;
@@ -484,11 +491,13 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
     /**
      * Sets the current control object.
      *
-     * @param control the control object
+     * @param drawable the object to be visualized
+     * @param model the visualization model
      */
-    public final void setControl(U control) {
-        this.control = control;
-        control.setFrustum(frustum);
+    public final void setControl(U drawable, V model) {
+        this.visualized = drawable;
+        this.visualizationModel = model;
+        model.setFrustum(frustum);
     }
 
     /**
@@ -496,8 +505,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
      *
      * @return the control object
      */
-    public final U getControl() {
-        return control;
+    public final V getControl() {
+        return visualizationModel;
     }
 
     /**

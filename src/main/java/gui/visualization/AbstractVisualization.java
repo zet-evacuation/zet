@@ -141,7 +141,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
      */
     @Override
     final public void updateViewport(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        //gl = drawable.getGL();
+        gl = drawable.getGL().getGL2();
         gl.glViewport(0, 0, width, height);
 
         if (height <= 0) // avoid a divide by zero error!

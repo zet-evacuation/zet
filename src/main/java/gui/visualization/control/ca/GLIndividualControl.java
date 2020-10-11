@@ -33,8 +33,7 @@ import zet.gui.main.tabs.JVisualizationView;
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, GLCellularAutomatonControl> implements StepUpdateListener {
-    private static final Logger log = Logger.getGlobal();
+public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, CellularAutomatonVisualizationModel> implements StepUpdateListener {
     
     /** The history data structure that stores information about the positions of the individual at given times */
     private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
@@ -67,18 +66,18 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * Creates a new individual control class for an {@link Individual}.
      *
      * @param individual the controlled individual
-     * @param glCellularAutomatonControl the general control class
+     * @param visualizationModel the general control class
      */
-    public GLIndividualControl(Individual individual, GLCellularAutomatonControl glCellularAutomatonControl) {
-        super(glCellularAutomatonControl);
+    public GLIndividualControl(Individual individual, CellularAutomatonVisualizationModel visualizationModel) {
+        super(visualizationModel);
         this.setView(new GLIndividual(this));
-        view.setFrustum(mainControl.getFrustum());
+        visualizationModel.setFrustum(visualizationModel.getFrustum());
         controlled = individual;
         path = new ArrayList<>();
         moveVector = new Tuple(0, 0);
         sourcePos = new Tuple(0, 0);        
         //onFloor = es.propertyFor(controlled).getCell().getRoom().getFloor();
-        onFloor = mainControl.floorFor(individual);
+        onFloor = visualizationModel.floorFor(individual);
     }
 
     /**
@@ -97,10 +96,10 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      */
     @Override
     public void stepUpdate() {
-        if (mainControl.getStep() < step) {
+        if (visualizationModel.getStep() < step) {
             index = 0;
         }
-        step = mainControl.getStep();
+        step = visualizationModel.getStep();
         getView().update();
         if (path.size() <= 0) {
             return;
@@ -132,7 +131,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * @return the current position of the individual in absolute coordinates.
      */
     public Tuple getCurrentPosition() {
-        double cellSize = 200 * mainControl.scaling;
+        double cellSize = 200 * visualizationModel.scaling;
         double completedPartOfMove = (step - startTimeOfMove) / timeForMove;
         completedPartOfMove = Math.min(completedPartOfMove, 1.0);
         completedPartOfMove = Math.max(completedPartOfMove, 0.0);
@@ -193,7 +192,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
                 //headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
                 break;
             case ReactionTime:
-                headInformationValue = 1 - (mainControl.getTimeInSeconds() / controlled.getReactionTime());
+                headInformationValue = 1 - (visualizationModel.getTimeInSeconds() / controlled.getReactionTime());
                 break;
         }
     }

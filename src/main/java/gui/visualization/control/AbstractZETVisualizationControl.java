@@ -16,33 +16,34 @@
 package gui.visualization.control;
 
 import org.zetool.opengl.framework.abs.AbstractControl;
-import org.zetool.opengl.framework.abs.AbstractDrawable;
-import org.zetool.opengl.framework.abs.Controlable;
+import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.VisualizationModelProvider;
 
 /**
  *
- * @param <U>
- * @param <V> 
- * @param <W>
+ * @param <U> the child elements
+ * @param <V> the drawable type belonging to this control class
+ * @param <W> an external type providing general information about the hierarchy
  * @author Jan-Philipp Kappmeier
  */
-public abstract class AbstractZETVisualizationControl<U extends AbstractControl<?, ?>, V extends AbstractDrawable<?, ?>, W extends Controlable> extends AbstractControl<U,V> {
-	protected W mainControl;
+public abstract class AbstractZETVisualizationControl<U, V extends Drawable, W extends VisualizationModelProvider> extends AbstractControl<U, V> {
 
-	public AbstractZETVisualizationControl( V controlled, W mainControl ) {
-		super( controlled );
-		this.mainControl = mainControl;
-	}
+    protected final W visualizationModel;
 
-	public AbstractZETVisualizationControl( W mainControl ) {
-		this.mainControl = mainControl;
-	}
+    public AbstractZETVisualizationControl(V controlled, W visualizationModel) {
+        super(controlled);
+        this.visualizationModel = visualizationModel;
+    }
 
-	/**
-	 * Does not set main control. Need to set it manually!
-	 */
-	public AbstractZETVisualizationControl() {
+    public AbstractZETVisualizationControl(W visualizationModel) {
+        this.visualizationModel = visualizationModel;
+    }
 
-	}
+    /**
+     * Does not set main control. Need to set it manually!
+     */
+//    public AbstractZETVisualizationControl() {
+//
+//    }
 
 }

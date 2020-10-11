@@ -21,24 +21,25 @@ import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
 import io.visualization.CellularAutomatonVisualizationResults;
+
 import java.util.HashMap;
+
 import org.zet.cellularautomaton.EvacCellInterface;
 
-public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
+public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, CellularAutomatonVisualizationModel> {
 
-    private HashMap<org.zet.cellularautomaton.EvacCell, GLCellControl> cellControls;
+    private final HashMap<org.zet.cellularautomaton.EvacCellInterface, GLCellControl> cellControls = new HashMap<>();
     private final GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
     private final double xPosition;
     private final double yPosition;
     Room controlled;
 
-    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl) {
+    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, CellularAutomatonVisualizationModel glControl) {
         super(glControl);
         controlled = room;
-        xPosition = caVisResults.get(room).x * mainControl.scaling;
-        yPosition = caVisResults.get(room).y * mainControl.scaling;
+        xPosition = caVisResults.get(room).x * visualizationModel.scaling;
+        yPosition = caVisResults.get(room).y * visualizationModel.scaling;
         this.glCAFloorControlObject = glCAFloorControl;
-        cellControls = new HashMap<>();
 
         for (EvacCell cell : room.getAllCells()) {
             GLCellControl cellControl = new GLCellControl(caVisResults, cell, this, glControl);
@@ -74,11 +75,11 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
     }
 
     public double getWidth() {
-        return controlled.getWidth() * mainControl.scaling * 400;
+        return controlled.getWidth() * visualizationModel.scaling * 400;
     }
 
     public double getHeight() {
-        return controlled.getHeight() * mainControl.scaling * 400;
+        return controlled.getHeight() * visualizationModel.scaling * 400;
     }
 
     /**

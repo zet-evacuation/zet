@@ -40,7 +40,7 @@ import zet.gui.GUILocalization;
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings("serial")
-public class ZETVisualization extends Visualization<ZETGLControl> {
+public class ZETVisualization extends Visualization<ZETGLControl, ZETGLControl> {
 
     /** The GUI localization class. */
     Localization loc = GUILocalization.loc;
@@ -75,7 +75,8 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 //			this.setParallelViewMode( ParallelViewMode.Isometric );
 //		else
 //			this.setParallelViewMode( ParallelViewMode.Orthogonal );
-        setControl(new ZETGLControl());
+        ZETGLControl zetGlControl = new ZETGLControl();
+        setControl(zetGlControl, zetGlControl);
     }
 
     public void setZcontrol(ZControl zcontrol) {
@@ -111,8 +112,8 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 
         // TODO gehört hier nicht rein!
         int row = 1;
-        if (control.hasCellularAutomaton()) {
-            if (control.isCaFinshed()) {
+        if (visualizationModel.hasCellularAutomaton()) {
+            if (visualizationModel.isCaFinshed()) {
                 minimalFrameCountCellularAutomaton--;
                 if (showTimestepCellularAutomaton) {
                     // TODO updateinformationen anzeigen
@@ -120,7 +121,7 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
                             loc.getString("gui.VisualizationPanel.FPS.Simulation.Finished"));
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Simulation.Needed") + " "
-                            + Formatter.formatUnit(control.getCaStep() * control.getCaSecondsPerStep(),
+                            + Formatter.formatUnit(visualizationModel.getCaStep() * visualizationModel.getCaSecondsPerStep(),
                                     TimeUnits.SECOND));
                 }
             } else {
@@ -129,24 +130,24 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
                 if (showTimestepCellularAutomaton) {
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Simulation.Step") + " "
-                            + LocalizationManager.getManager().getFloatConverter().format(control.getCaStep()));
+                            + LocalizationManager.getManager().getFloatConverter().format(visualizationModel.getCaStep()));
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Simulation.Time") + " "
-                            + Formatter.formatUnit(control.getCaStep() * control.getCaSecondsPerStep(),
+                            + Formatter.formatUnit(visualizationModel.getCaStep() * visualizationModel.getCaSecondsPerStep(),
                                     TimeUnits.SECOND));
                 }
             }
             row++;
         }
-        if (control.hasGraph()) {
-            if (control.isGraphFinished()) {
+        if (visualizationModel.hasGraph()) {
+            if (visualizationModel.isGraphFinished()) {
                 minimalFrameCountGraph--;
                 if (showTimestepGraph) {
                     font.print(0, this.getHeight() - (row++) * fontSize,
                             loc.getString("gui.VisualizationPanel.FPS.Graph.Finished"));
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Graph.Needed") + " "
-                            + Formatter.formatUnit(control.getGraphStep() * control.getGraphSecondsPerStep(),
+                            + Formatter.formatUnit(visualizationModel.getGraphStep() * visualizationModel.getGraphSecondsPerStep(),
                                     TimeUnits.SECOND));
                 }
             } else {
@@ -155,10 +156,10 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
                 if (showTimestepGraph) {
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Graph.Step") + " "
-                            + LocalizationManager.getManager().getFloatConverter().format(control.getGraphStep()));
+                            + LocalizationManager.getManager().getFloatConverter().format(visualizationModel.getGraphStep()));
                     font.print(0, this.getHeight() - (row++) * fontSize, loc.getString(
                             "gui.VisualizationPanel.FPS.Graph.Time") + " "
-                            + Formatter.formatUnit(control.getGraphStep() * control.getGraphSecondsPerStep(),
+                            + Formatter.formatUnit(visualizationModel.getGraphStep() * visualizationModel.getGraphSecondsPerStep(),
                                     TimeUnits.SECOND));
                 }
             }
