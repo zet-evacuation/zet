@@ -23,14 +23,13 @@ import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.AbstractControl;
 import org.zetool.opengl.framework.abs.Drawable;
-import org.zetool.opengl.framework.abs.VisualizationModelProvider;
-import org.zetool.opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, VisualizationModelProvider {
+public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, HierarchyNode {
 
     protected NodePositionMapping<Vector3> nodePositionMapping;
     protected DirectedGraph graph;
@@ -57,16 +56,6 @@ public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph
         for (GLSimpleNodeControl nodeControl : this) {
             view.addChild(nodeControl.getView());
         }
-    }
-
-    @Override
-    public Frustum getFrustum() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 
     @Override

@@ -88,4 +88,9 @@ public class GLNashGraphControl extends GLGraphControl implements Drawable, Visu
     public void resetTime() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public Frustum getFrustum() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

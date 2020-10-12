@@ -53,6 +53,7 @@ import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zetool.common.localization.Localization;
 import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.HierarchyNode;
 import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
 import zet.gui.main.tabs.JVisualizationView;
@@ -63,7 +64,7 @@ import zet.gui.main.tabs.JVisualizationView;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZETGLControl implements Drawable, VisualizationModel {
+public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode {
     private static final Logger log = Logger.getGlobal();
     Frustum frustum;
 
