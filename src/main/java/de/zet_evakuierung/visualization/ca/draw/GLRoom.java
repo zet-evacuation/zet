@@ -13,11 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.ca;
+package de.zet_evakuierung.visualization.ca.draw;
 
-import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLRoomControl;
 import javax.media.opengl.GL2;
+
+import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 

@@ -13,15 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.ca;
+package de.zet_evakuierung.visualization.ca.draw;
 
+import de.zet_evakuierung.visualization.ca.control.GLCellControl;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLCellControl;
 
-public class GLSaveCell extends GLCell {
+public class GLDelayCell extends GLCell {
 
-	public GLSaveCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getSaveCellFloorColor() );
+	public GLDelayCell( GLCellControl control ) {
+		super( control, VisualizationOptionManager.getDelayCellFloorColor() );
 	}
 
 	@Override

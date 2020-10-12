@@ -13,21 +13,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.building;
-
-import org.zetool.math.Conversion;
-import org.zetool.math.vectormath.Vector3;
-import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.building.GLWallControl;
-import io.visualization.BuildingResults.Wall;
+package de.zet_evakuierung.visualization.building.draw;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.building.control.GLWallControl;
+import gui.visualization.VisualizationOptionManager;
+import io.visualization.BuildingResults.Wall;
+import org.zetool.math.Conversion;
+import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;

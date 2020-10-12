@@ -13,13 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.ca;
+package de.zet_evakuierung.visualization.ca.draw;
 
-import org.zetool.opengl.framework.abs.AbstractDrawable;
-import gui.visualization.control.ca.GLCAFloorControl;
-import gui.visualization.control.ca.GLIndividualControl;
 import java.util.List;
+
 import javax.media.opengl.GL2;
+
+import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
+import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
+import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  *  @author Jan-Philipp Kappmeier

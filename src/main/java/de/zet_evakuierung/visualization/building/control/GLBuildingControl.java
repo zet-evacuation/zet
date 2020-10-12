@@ -13,14 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.building;
+package de.zet_evakuierung.visualization.building.control;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.zet_evakuierung.visualization.building.draw.GLBuilding;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.draw.building.GLBuilding;
 import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Floor;
 import io.visualization.BuildingResults.Wall;

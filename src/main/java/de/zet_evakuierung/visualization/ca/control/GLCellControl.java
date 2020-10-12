@@ -13,21 +13,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.ca;
+package de.zet_evakuierung.visualization.ca.control;
 
 import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
 import static java.util.stream.Collectors.toList;
 
+import de.zet_evakuierung.visualization.ca.draw.GLCell;
+import de.zet_evakuierung.visualization.ca.draw.GLDelayCell;
+import de.zet_evakuierung.visualization.ca.draw.GLEvacuationCell;
+import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
+import de.zet_evakuierung.visualization.ca.draw.GLSaveCell;
+import de.zet_evakuierung.visualization.ca.draw.GLStairCell;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
-import gui.visualization.draw.ca.GLCell;
-import gui.visualization.draw.ca.GLDelayCell;
-import gui.visualization.draw.ca.GLEvacuationCell;
-import gui.visualization.draw.ca.GLIndividual;
-import gui.visualization.draw.ca.GLSaveCell;
-import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.algo.ca.util.PotentialUtils;

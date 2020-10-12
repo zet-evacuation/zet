@@ -13,12 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.ca;
+package de.zet_evakuierung.visualization.ca.draw;
 
 import javax.media.opengl.GL2;
 
-import gui.visualization.control.ca.CellularAutomatonVisualizationModel;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
+import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonControl;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl> {

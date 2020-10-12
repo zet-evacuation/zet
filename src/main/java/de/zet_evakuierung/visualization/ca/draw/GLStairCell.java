@@ -13,17 +13,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.draw.ca;
+package de.zet_evakuierung.visualization.ca.draw;
 
+import de.zet_evakuierung.visualization.ca.control.GLCellControl;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLCellControl;
 
-public class GLEvacuationCell extends GLCell {
+/**
+ * This class represents the graphical representation of a {@link ds.ca.StairCell}.
+ * The only difference between this type and the general cell type is that it
+ * can have the color of stair cells.
+ * @author Jan-Philipp Kappmeier
+ */
+public class GLStairCell extends GLCell {
 
-	public GLEvacuationCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getEvacuationCellFloorColor() );
+	/**
+	 * Creates a new instance of a stair cell.
+	 * @param control
+	 */
+	public GLStairCell( GLCellControl control ) {
+		super( control, VisualizationOptionManager.getStairCellFloorColor() );
 	}
 
+	/**
+	 * Overriden version of {@code updateFloorColor}. It can switch between
+	 * showing the natural stair color of the color of a given potential.
+	 */
 	@Override
 	protected void updateFloorColor() {
 		if( VisualizationOptionManager.getAlwaysDisplayCellType() )
@@ -32,4 +46,3 @@ public class GLEvacuationCell extends GLCell {
 			super.updateFloorColor();
 	}
 }
-

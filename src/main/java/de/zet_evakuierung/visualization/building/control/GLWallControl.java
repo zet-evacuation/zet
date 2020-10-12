@@ -13,16 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.building;
+package de.zet_evakuierung.visualization.building.control;
 
 import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.zet_evakuierung.visualization.building.draw.GLWall;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.draw.building.GLWall;
 import io.visualization.BuildingResults.Wall;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.HierarchyNode;

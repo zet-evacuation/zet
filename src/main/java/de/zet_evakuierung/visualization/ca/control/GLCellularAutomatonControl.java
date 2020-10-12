@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.ca;
+package de.zet_evakuierung.visualization.ca.control;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import de.zet_evakuierung.visualization.ca.draw.GLCA;
+import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
-import gui.visualization.draw.ca.GLCA;
-import gui.visualization.draw.ca.GLIndividual;
 import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import org.zet.cellularautomaton.EvacCellInterface;

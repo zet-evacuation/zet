@@ -14,14 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.ca;
+package de.zet_evakuierung.visualization.ca.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.EvacuationVisualizationModel;
-import gui.visualization.draw.ca.GLIndividual;
 import org.zet.cellularautomaton.EvacCellInterface;
 import org.zet.cellularautomaton.Individual;
 import org.zet.cellularautomaton.InitialConfiguration;

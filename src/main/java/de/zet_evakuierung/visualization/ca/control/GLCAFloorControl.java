@@ -13,17 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package gui.visualization.control.ca;
-
-import org.zet.cellularautomaton.Room;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
-import gui.visualization.draw.ca.GLCAFloor;
-import io.visualization.CellularAutomatonVisualizationResults;
+package de.zet_evakuierung.visualization.ca.control;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import de.zet_evakuierung.visualization.ca.draw.GLCAFloor;
+import gui.visualization.control.AbstractZETVisualizationControl;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
+import io.visualization.CellularAutomatonVisualizationResults;
+import org.zet.cellularautomaton.Room;
 
 public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor, CellularAutomatonVisualizationModel> {
 
