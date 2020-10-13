@@ -34,9 +34,9 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	private GLColor defaultColor;
 	protected static GLColor wallColor = VisualizationOptionManager.getCellWallColor();
 
-	public GLCell( GLCellControl control ) {
-    //this( control, VisualizationOptionManager.getCellFloorColor() );
-    this( control, VisualizationOptionManager.getCellWallColor() );
+	public GLCell( GLCellControl model ) {
+    //this( model, VisualizationOptionManager.getCellFloorColor() );
+    this( model, VisualizationOptionManager.getCellWallColor() );
   }
 
 	public GLCell( GLCellControl control, GLColor color ) {
@@ -59,13 +59,13 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 			boolean lighting = gl.glIsEnabled( GL2.GL_LIGHTING );
 			gl.glBegin( GL2.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-		 	getControl().mixColorWithNeighbours( Direction8.TopLeft ).draw( gl, lighting );
+		 	getModel().mixColorWithNeighbours( Direction8.TopLeft ).draw( gl, lighting );
 			ul.draw( gl );
-			getControl().mixColorWithNeighbours( Direction8.TopRight ).draw( gl, lighting );
+			getModel().mixColorWithNeighbours( Direction8.TopRight ).draw( gl, lighting );
 			ur.draw( gl );
-			getControl().mixColorWithNeighbours( Direction8.DownLeft ).draw( gl, lighting );
+			getModel().mixColorWithNeighbours( Direction8.DownLeft ).draw( gl, lighting );
 			lr.draw( gl );
-			getControl().mixColorWithNeighbours( Direction8.DownRight ).draw( gl, lighting );
+			getModel().mixColorWithNeighbours( Direction8.DownRight ).draw( gl, lighting );
 			ll.draw( gl );
 			gl.glEnd();
 		} else {
@@ -85,14 +85,14 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	 * is calculated.
 	 */
 	protected void updateFloorColor() {
-		if( control.getDisplayMode() == CellInformationDisplay.NoPotential )
+		if( model.getDisplayMode() == CellInformationDisplay.NoPotential )
 			this.color = getDefaultColor();
 		else
-			this.color = potentialToColor( control.getCellInformation( control.getDisplayMode() ), control.getMaxCellInformation( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationLowColor( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationHighColor( control.getDisplayMode() ) );
+			this.color = potentialToColor( model.getCellInformation( model.getDisplayMode() ), model.getMaxCellInformation( model.getDisplayMode() ), VisualizationOptionManager.getCellInformationLowColor( model.getDisplayMode() ), VisualizationOptionManager.getCellInformationHighColor( model.getDisplayMode() ) );
 	}
 
 	protected final GLColor potentialToColor( long potential, long maxPotential, GLColor lowColor, GLColor highColor ) {
-		if( control.isPotentialValid() )
+		if( model.isPotentialValid() )
 			return lowColor.blend( highColor, potential / (double)maxPotential );
 		else
 			return VisualizationOptionManager.getInvalidPotentialColor();

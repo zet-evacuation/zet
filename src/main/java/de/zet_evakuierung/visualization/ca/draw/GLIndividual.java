@@ -44,8 +44,8 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
     public static GLColor deadColor = new GLColor(130, 55, 101);
     public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
-    public GLIndividual(GLIndividualControl control) {
-        super(control);
+    public GLIndividual(GLIndividualControl model) {
+        super(model);
     }
 
     @Override
@@ -57,24 +57,24 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 
     @Override
     public void performDrawing(GL2 gl) {
-        control.stepUpdate();
-        if (control.isInvisible()) {
+        model.stepUpdate();
+        if (model.isInvisible()) {
             return;
         }
         GLColor headColor;
         GLColor bodyColor;
-        if (control.isDead()) {
+        if (model.isDead()) {
             headColor = deadColor;
             bodyColor = deadColor;
-        } else if (control.isEvacuated()) {
+        } else if (model.isEvacuated()) {
             return;
         } else {
-            //headColor = green.blend( red, control.getHeadInformation() );
+            //headColor = green.blend( red, model.getHeadInformation() );
             headColor = VisualizationOptionManager.getEvacuationNodeColor();
             bodyColor = individualColor;
         }
         gl.glPushMatrix();
-        Tuple pos = control.getCurrentPosition();
+        Tuple pos = model.getCurrentPosition();
         gl.glTranslated(pos.x, pos.y, 0.1);
         bodyColor.draw(gl);
 

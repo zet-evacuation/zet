@@ -23,8 +23,8 @@ import de.zet_evakuierung.visualization.network.control.GLNashGraphControl;
  */
 public class GLNashGraph extends GLGraph {
 
-	public GLNashGraph( GLNashGraphControl control ) {
-		super( control );
+	public GLNashGraph( GLNashGraphControl model ) {
+		super( model );
 	}
 
 

@@ -37,10 +37,10 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
     double radius;
     private static final QualityPreset QUALITY_PRESET = QualityPreset.MediumQuality;
 
-    public GLSimpleNode(GLSimpleNodeControl control) {
-        super(control);
+    public GLSimpleNode(GLSimpleNodeControl model) {
+        super(model);
         this.radius = 13 * 0.1;
-        position = new GLVector(control.getPosition());
+        position = new GLVector(model.getPosition());
     }
 
     @Override
@@ -61,8 +61,8 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
     protected void drawNode(GL2 gl) {
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
 
-        double xOffset = -this.getControl().getXPosition();
-        double yOffset = this.getControl().getYPosition();
+        double xOffset = -this.getModel().getXPosition();
+        double yOffset = this.getModel().getYPosition();
 
         nodeColor.draw(gl);
 

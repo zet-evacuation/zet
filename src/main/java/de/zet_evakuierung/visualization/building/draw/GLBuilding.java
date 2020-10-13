@@ -27,10 +27,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
 public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 
 	/**
-	 * @param control
+	 * @param model
 	 */
-	public GLBuilding( GLBuildingControl control ) {
-		super( control );
+	public GLBuilding( GLBuildingControl model ) {
+		super( model );
 		callChildren = false;
 	}
 

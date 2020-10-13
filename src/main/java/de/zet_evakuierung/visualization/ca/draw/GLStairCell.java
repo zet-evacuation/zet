@@ -28,10 +28,10 @@ public class GLStairCell extends GLCell {
 
 	/**
 	 * Creates a new instance of a stair cell.
-	 * @param control
+	 * @param model
 	 */
-	public GLStairCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getStairCellFloorColor() );
+	public GLStairCell( GLCellControl model ) {
+		super( model, VisualizationOptionManager.getStairCellFloorColor() );
 	}
 
 	/**

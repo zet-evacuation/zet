@@ -20,8 +20,8 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLSaveCell extends GLCell {
 
-	public GLSaveCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getSaveCellFloorColor() );
+	public GLSaveCell( GLCellControl model ) {
+		super( model, VisualizationOptionManager.getSaveCellFloorColor() );
 	}
 
 	@Override

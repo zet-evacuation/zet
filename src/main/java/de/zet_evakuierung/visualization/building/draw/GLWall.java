@@ -43,14 +43,14 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	private boolean barrier = false;
 
 	/**
-	 * @param control
+	 * @param model
 	 */
-	public GLWall( GLWallControl control ) {
-		super( control );
-		basePoints = control.getBasePoints();
+	public GLWall( GLWallControl model ) {
+		super( model );
+		basePoints = model.getBasePoints();
     //wallColor = VisualizationOptionManager.getCellWallColor();
     wallColor = VisualizationOptionManager.getCellFloorColor();
-    barrier = control.isBarrier();
+    barrier = model.isBarrier();
 	}
 
 	@Override
@@ -106,8 +106,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 			GLVector outerStartHigh = new GLVector( innerStartHigh );
 			GLVector outerEndHigh = new GLVector( innerEndHigh );
 
-			if( control.getWallType( i ) != Wall.ElementType.PASSABLE ) {	// Normal wall, no door
-				GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
+			if( model.getWallType( i ) != Wall.ElementType.PASSABLE ) {	// Normal wall, no door
+				GLVector normal = model.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
 				normal.normalize();
 				normal.normal( gl );
 				double angleStart;
@@ -122,7 +122,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 				GLVector innerEndVectorAddition = new GLVector( normal );
 				GLVector outerEndVectorAddition;
 
-				if( control.isRoomLeft() ) {
+				if( model.isRoomLeft() ) {
 					innerStartVectorAddition.rotate( -(angleEnd/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 					innerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 )* 0.1 );
 					innerStart.addTo( innerStartVectorAddition );
@@ -232,7 +232,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 				gl.glVertex3d( tr.x, tr.y, tr.z );
 				gl.glVertex3d( tl.x, tl.y, tl.z );
 				// Startseite
-				GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
+				GLVector normal = model.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
 				normal.normalize();
 				normal.normal( gl );
 				normal.scalarMultiplicateTo( 0.1 );
@@ -270,7 +270,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 				gl.glVertex3d( dr.x, dr.y, dr.z );
 				gl.glVertex3d( tr.x, tr.y, tr.z );
 				gl.glVertex3d( tl.x, tl.y, tl.z );
-				normal = control.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
+				normal = model.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
 				normal.normalize();
 				normal.normal( gl );
 				// Nutze dl und tl
@@ -320,7 +320,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	private double calcAngle( Vector3 v1, Vector3 v2 ) {
 		double angle = Math.acos( v1.dotProduct( v2 ) );
 		int orientation = Vector3.orientation( v1, v2 );
-		if( orientation == -1 && control.isRoomRight() || orientation == 1 && control.isRoomLeft() )
+		if( orientation == -1 && model.isRoomRight() || orientation == 1 && model.isRoomLeft() )
 			angle = -angle;
 		return angle;
 	}
@@ -354,7 +354,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 		doorVector.normalize();
 		doorVector.scalarMultiplicateTo( 0.1 ); // improvement!
 		//doorVector.normal( gl );
-		GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( endVec, startVec, startVecHigh ) ) : new GLVector( Vector3.normal( startVec, endVec, endVecHigh ) );
+		GLVector normal = model.isRoomLeft() ? new GLVector( Vector3.normal( endVec, startVec, startVecHigh ) ) : new GLVector( Vector3.normal( startVec, endVec, endVecHigh ) );
 		normal.normalize();
 		normal.scalarMultiplicateTo( 0.1 );
 

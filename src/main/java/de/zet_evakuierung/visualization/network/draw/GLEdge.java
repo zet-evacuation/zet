@@ -40,8 +40,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
     /* The edgeLength of the edge in {@code OpenGL} scaling. */
     double edgeLength;
 
-    public GLEdge( GLEdgeControl control ) {
-        super( control );
+    public GLEdge( GLEdgeControl model ) {
+        super( model );
         //update();
     }
 
@@ -56,7 +56,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
     public void performStaticDrawing( GL2 gl ) {
         beginDraw( gl );
         edgeColor.draw( gl );
-        if( control.isFirstEdge() )
+        if( model.isFirstEdge() )
             drawStaticStructure( gl );
         endDraw( gl );
     }
@@ -74,9 +74,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
         //gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
         Vector3 b = new Vector3( 0, 0, 1 );
-        Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-        Vector3 axis = control.getRotationAxis( a, b );
-        gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+        Vector3 a = model.getDifferenceVectorInOpenGlScaling();
+        Vector3 axis = model.getRotationAxis( a, b );
+        gl.glRotated( model.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
         GLU_INSTANCE.gluCylinder( GLU_QUADRIC, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1 );
         //gl.glDisable( GL.GL_BLEND );
@@ -86,9 +86,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 
     @Override
     public void update() {
-        edgeLength = control.get3DLength();
+        edgeLength = model.get3DLength();
         edgeColor = VisualizationOptionManager.getEdgeColor();
-        thickness = control.getThickness();//5;
+        thickness = model.getThickness();//5;
 
     }
 

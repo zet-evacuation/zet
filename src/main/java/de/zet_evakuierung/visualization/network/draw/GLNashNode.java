@@ -25,8 +25,8 @@ import de.zet_evakuierung.visualization.network.control.GLNashNodeControl;
  */
 public class GLNashNode extends GLSimpleNode {
 
-	public GLNashNode( GLNashNodeControl control ) {
-		super( control );
+	public GLNashNode( GLNashNodeControl model ) {
+		super( model );
 		
 	}
 

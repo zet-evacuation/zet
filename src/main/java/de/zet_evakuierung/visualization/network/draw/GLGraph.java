@@ -26,8 +26,8 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLGraph extends AbstractDrawable<GLSimpleNode, GLGraphControl> {
 
-	public GLGraph( GLGraphControl control ) {
-		super( control );
+	public GLGraph( GLGraphControl model ) {
+		super( model );
 	}
 
 	@Override

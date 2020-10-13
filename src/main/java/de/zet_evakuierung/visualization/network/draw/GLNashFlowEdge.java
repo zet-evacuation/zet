@@ -32,8 +32,8 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
  */
 public class GLNashFlowEdge extends GLEdge {
 
-    /** The control class for the Nash edge. */
-    GLNashFlowEdgeControl ncontrol;
+    /** The model class for the Nash edge. */
+    GLNashFlowEdgeControl nmodel;
     /** An acceleration factor. */
     final static double acceleration = 1;
     /** The current time during visualization. */
@@ -64,14 +64,14 @@ public class GLNashFlowEdge extends GLEdge {
     /** The angle used to rotate to display the edges. */
     final double rotateAngle;
 
-    public GLNashFlowEdge(GLEdgeControl control) {
-        super(control);
-        ncontrol = (GLNashFlowEdgeControl) control;
+    public GLNashFlowEdge(GLEdgeControl model) {
+        super(model);
+        nmodel = (GLNashFlowEdgeControl) model;
         edgeColor = GLColor.gray;
         final Vector3 b = new Vector3(0, 0, 1);
-        final Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-        rotateAxis = control.getRotationAxis(a, b);
-        rotateAngle = control.getAngleBetween(a, b);
+        final Vector3 a = model.getDifferenceVectorInOpenGlScaling();
+        rotateAxis = model.getRotationAxis(a, b);
+        rotateAngle = model.getAngleBetween(a, b);
         update();
     }
 
@@ -82,9 +82,9 @@ public class GLNashFlowEdge extends GLEdge {
      */
     @Override
     public void performDrawing(GL2 gl) {
-        currentTime = Conversion.NANO_SECONDS_TO_SEC * ncontrol.getTimeSinceStart() * acceleration;
+        currentTime = Conversion.NANO_SECONDS_TO_SEC * nmodel.getTimeSinceStart() * acceleration;
 
-        for (FlowData flowData : ncontrol.getNashFlowEdgeData()) {
+        for (FlowData flowData : nmodel.getNashFlowEdgeData()) {
             displayFlow(gl, flowData);
         }
 
@@ -113,7 +113,7 @@ public class GLNashFlowEdge extends GLEdge {
 
         gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
 
-        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, scale * capacity * 0.5 * eps, scale * capacity * 0.5 * eps, control.get3DLength(), 16, 1);
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, scale * capacity * 0.5 * eps, scale * capacity * 0.5 * eps, model.get3DLength(), 16, 1);
         gl.glDisable(GL2.GL_BLEND);
         gl.glPopMatrix();
     }
@@ -127,7 +127,7 @@ public class GLNashFlowEdge extends GLEdge {
     private void displayCorridor(GL2 gl) {
         gl.glPushMatrix();
         wallColor.draw(gl);
-        final double len = control.get3DLength();
+        final double len = model.get3DLength();
         gl.glRotated(rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z);
         final double eps = 1.001;
         gl.glEnable(GL2.GL_BLEND);
@@ -259,7 +259,7 @@ public class GLNashFlowEdge extends GLEdge {
                 positionStart = (currentTime - flowData.endTime) / (flowData.lastEnterExit - flowData.endTime) * (corridorExitPosition - shownQueueLengthForLast);
             }
             final double positionEnd = currentTime <= flowData.firstEnterExit ? (currentTime - flowData.startTime) / (flowData.firstEnterExit - flowData.startTime) * (corridorExitPosition - shownQueueLength) : corridorExitPosition - shownQueueLength;
-            drawFlow(gl, startColorValue, endColorValue, control.get3DLength() * (positionEnd - positionStart), control.get3DLength() * (positionStart), flowData.inflow);
+            drawFlow(gl, startColorValue, endColorValue, model.get3DLength() * (positionEnd - positionStart), model.get3DLength() * (positionStart), flowData.inflow);
         }
     }
 
@@ -283,7 +283,7 @@ public class GLNashFlowEdge extends GLEdge {
                 final double shownRemainingQueueLength = physicalRemainingQueueLength * corridorExitPosition / (physicalRemainingQueueLength + corridorExitPosition);
                 positionStart -= shownRemainingQueueLength;
             }
-            drawFlow(gl, startColorValue, endColorValue, control.get3DLength() * positionStart, control.get3DLength() * (corridorExitPosition - shownQueueLength), corridorCapacity);
+            drawFlow(gl, startColorValue, endColorValue, model.get3DLength() * positionStart, model.get3DLength() * (corridorExitPosition - shownQueueLength), corridorCapacity);
         }
     }
 
@@ -325,7 +325,7 @@ public class GLNashFlowEdge extends GLEdge {
                 endColorValue = flowData.globalStart + (current - firstArrival) / (lastInflow - firstVisible) * flowData.colorDifference;
             }
 
-            drawFlow(gl, startColorValue, endColorValue, control.get3DLength() * (endPos - startPos), control.get3DLength() * startPos, flowData.inflow);
+            drawFlow(gl, startColorValue, endColorValue, model.get3DLength() * (endPos - startPos), model.get3DLength() * startPos, flowData.inflow);
         }
     }
 
@@ -362,11 +362,11 @@ public class GLNashFlowEdge extends GLEdge {
      */
     @Override
     public void update() {
-        capacity = ncontrol.getNashFlowEdgeData().getCapacity();
-        transitTime = ncontrol.getNashFlowEdgeData().getTransitTime();
-        corridorCapacity = ncontrol.getNashFlowEdgeData().getCorridorCapacity();
-        corridorExitPosition = ncontrol.getNashFlowEdgeData().getExitPosition();
+        capacity = nmodel.getNashFlowEdgeData().getCapacity();
+        transitTime = nmodel.getNashFlowEdgeData().getTransitTime();
+        corridorCapacity = nmodel.getNashFlowEdgeData().getCorridorCapacity();
+        corridorExitPosition = nmodel.getNashFlowEdgeData().getExitPosition();
         //corridorStartPosition = 1 - corridorExitPosition;
-        rainbowGradient = ncontrol.getRainbowGradient();
+        rainbowGradient = nmodel.getRainbowGradient();
     }
 }

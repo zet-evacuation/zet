@@ -20,8 +20,8 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLEvacuationCell extends GLCell {
 
-	public GLEvacuationCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getEvacuationCellFloorColor() );
+	public GLEvacuationCell( GLCellControl model ) {
+		super( model, VisualizationOptionManager.getEvacuationCellFloorColor() );
 	}
 
 	@Override

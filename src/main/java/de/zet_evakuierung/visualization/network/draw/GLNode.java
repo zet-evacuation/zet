@@ -54,13 +54,12 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;// QualityPreset.MediumQuality;
 
-    public GLNode(GLNodeControl control) {
-        super(control);
+    public GLNode(GLNodeControl model) {
+        super(model);
 
-        this.control = control;
-        position.x = control.getXPosition();
-        position.y = control.getYPosition();
-        position.z = control.getZPosition();
+        position.x = model.getXPosition();
+        position.y = model.getYPosition();
+        position.z = model.getZPosition();
 
         radius = nodeRadius;
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
@@ -71,7 +70,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     public void performDrawing(GL2 gl) {
         super.performDrawing(gl);
 
-        if (getControl().isCurrentlyOccupied()) {
+        if (getModel().isCurrentlyOccupied()) {
             performFlowDrawing(gl);
         }
     }
@@ -101,40 +100,40 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     public void performStaticDrawing(GL2 gl) {
         beginDraw(gl);
 
-//        if( getControl().isCurrentlyOccupied() ) {
+//        if( getModel().isCurrentlyOccupied() ) {
 //            performFlowDrawing( drawable );
 //        }
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
 
         nodeBorderColor.draw(gl);
-        double xOffset = -this.getControl().getXPosition();
-        double yOffset = -this.getControl().getYPosition();
+        double xOffset = -this.getModel().getXPosition();
+        double yOffset = -this.getModel().getYPosition();
 
-        if (control.isRectangleVisible()) {
+        if (model.isRectangleVisible()) {
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex3d(this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1);
-            gl.glVertex3d(this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getNwX() + xOffset, this.getModel().getNwY() + yOffset, -model.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getSeX() + xOffset, this.getModel().getNwY() + yOffset, -model.getFloorHeight() + 0.1);
 
-            gl.glVertex3d(this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1);
-            gl.glVertex3d(this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getSeX() + xOffset, this.getModel().getNwY() + yOffset, -model.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getSeX() + xOffset, this.getModel().getSeY() + yOffset, -model.getFloorHeight() + 0.1);
 
-            gl.glVertex3d(this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1);
-            gl.glVertex3d(this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getSeX() + xOffset, this.getModel().getSeY() + yOffset, -model.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getNwX() + xOffset, this.getModel().getSeY() + yOffset, -model.getFloorHeight() + 0.1);
 
-            gl.glVertex3d(this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1);
-            gl.glVertex3d(this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getNwX() + xOffset, this.getModel().getSeY() + yOffset, -model.getFloorHeight() + 0.1);
+            gl.glVertex3d(this.getModel().getNwX() + xOffset, this.getModel().getNwY() + yOffset, -model.getFloorHeight() + 0.1);
             gl.glEnd();
         }
         //gl.glEnable( gl.GL_BLEND );
         //gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
-        if (control.isEvacuationNode()) {
+        if (model.isEvacuationNode()) {
             evacuationColor.draw(gl);
         } else {
-            if (control.isSourceNode()) {
+            if (model.isSourceNode()) {
                 sourceColor.draw(gl);
             } else {
-                if (control.isDeletedSourceNode()) {
+                if (model.isDeletedSourceNode()) {
                     deletedSourceColor.draw(gl);
                 } else {
                     nodeColor.draw(gl);
@@ -145,10 +144,10 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
         //System.out.println( "Textur s_1 beim Zeichnen benutzt" );
 //                boolean enableLight = gl.glIsEnabled(  GL.GL_LIGHTING );
 //        TextureManager texMan = TextureManager.getInstance();
-//        String texName = "s_" + control.getNumber();
+//        String texName = "s_" + model.getNumber();
 //
 //        if( !texMan.contains( texName ) ) {
-//            createTexture( control.getNumber() );
+//            createTexture( model.getNumber() );
 //        }
 //
 //        Texture tex = texMan.contains( texName ) ? texMan.get( texName ) : texMan.get( "empty" );

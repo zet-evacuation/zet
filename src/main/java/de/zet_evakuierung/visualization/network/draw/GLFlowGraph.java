@@ -17,10 +17,7 @@ package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
-import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
-import de.zet_evakuierung.visualization.network.control.GLNodeControl;
 import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
@@ -29,8 +26,8 @@ public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphContr
     private final NetworkVisualizationModel networkVisualizationModel;
     private long lastStep = 0;
 
-    public GLFlowGraph(GLFlowGraphControl control, NetworkVisualizationModel networkVisualizationModel) {
-        super(control);
+    public GLFlowGraph(GLFlowGraphControl model, NetworkVisualizationModel networkVisualizationModel) {
+        super(model);
         this.networkVisualizationModel = networkVisualizationModel;
     }
 
@@ -45,7 +42,7 @@ public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphContr
     public void performDrawing(GL2 gl) {
         long step = (long) networkVisualizationModel.getStep();
         if (step != lastStep) {
-            getControl().stepUpdate();
+            getModel().stepUpdate();
             lastStep = step;
         }
 

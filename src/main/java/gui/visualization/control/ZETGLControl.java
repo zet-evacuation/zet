@@ -406,7 +406,7 @@ double absoluteMaxSpeed = 1;
             double maxSpeed = absoluteMaxSpeed;
             double average = 0;
             for (GLIndividual ind : this.getIndividuals()) {
-                average += ind.getControl().getMaxSpeed() * maxSpeed;
+                average += ind.getModel().getMaxSpeed() * maxSpeed;
             }
             average /= getIndividuals().size();
             double secondsPerStep = 0.4 / average;

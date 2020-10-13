@@ -26,8 +26,8 @@ public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl
     private final CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
     private long lastStep = 0;
 
-    public GLCA(GLCellularAutomatonControl control, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
-        super(control);
+    public GLCA(GLCellularAutomatonControl model, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
+        super(model);
         this.cellularAutomatonVisualizationModel = cellularAutomatonVisualizationModel;
     }
 
@@ -44,7 +44,7 @@ public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl
     public void performDrawing(GL2 gl) {
         long step = (long) cellularAutomatonVisualizationModel.getStep();
         if (step != lastStep) {
-            getControl().stepUpdate();
+            getModel().stepUpdate();
             lastStep = step;
         }
 

@@ -36,15 +36,15 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 	/** Lower right coordinate of the room. */
 	private GLVector lr;
 
-	public GLRoom( GLRoomControl control ) {
-		super( control );
-		this.position.x = control.getXPosition();
-		this.position.y = control.getYPosition();
+	public GLRoom( GLRoomControl model ) {
+		super( model );
+		this.position.x = model.getXPosition();
+		this.position.y = model.getYPosition();
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 			ul = new GLVector( 0, 0, -0.1 );
-			ur = new GLVector( control.getWidth(), 0 , -0.1 );
-			ll = new GLVector( 0, -control.getHeight(), -0.1 );
-			lr = new GLVector( control.getWidth(), -control.getHeight(), -0.1 );
+			ur = new GLVector( model.getWidth(), 0 , -0.1 );
+			ll = new GLVector( 0, -model.getHeight(), -0.1 );
+			lr = new GLVector( model.getWidth(), -model.getHeight(), -0.1 );
 		}
 	}
 

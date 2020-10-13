@@ -28,7 +28,7 @@ import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLFlowEdge extends GLEdge {
 
-    GLFlowEdgeControl fcontrol;
+    GLFlowEdgeControl fmodel;
 
     /** The edgeLength of single flow units. If set to 1 no single units are displayed. */
     static double factor = 0.7;
@@ -55,10 +55,10 @@ public class GLFlowEdge extends GLEdge {
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
-    public GLFlowEdge(GLFlowEdgeControl control) {
-        super(control);
-        fcontrol = control;
-        maxFlowRate = control.getMaxFlowRate();
+    public GLFlowEdge(GLFlowEdgeControl model) {
+        super(model);
+        fmodel = model;
+        maxFlowRate = model.getMaxFlowRate();
         update();
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, edgeDisplayMode);        // Fill, points, lines
     }
@@ -108,15 +108,15 @@ public class GLFlowEdge extends GLEdge {
      * @gl the {@code OpenGL} context
      */
     private void drawFlow(GL2 gl) {
-        fcontrol.stepUpdate();
+        fmodel.stepUpdate();
 
         flowColor.draw(gl);
-        flowOnEdge = fcontrol.getFlowOnEdge();
+        flowOnEdge = fmodel.getFlowOnEdge();
 
         // compute the correct position in the flow-value-array for each time step.
         // the position consists of an offset by transitTime and the current time
         // of the flow
-        int pointer = transitTime + (int) Math.floor(fcontrol.getTime());
+        int pointer = transitTime + (int) Math.floor(fmodel.getTime());
 
         gl.glPushMatrix();
 
@@ -124,14 +124,14 @@ public class GLFlowEdge extends GLEdge {
         // the start point in the origin. This is needed as flow particles are
         // drawn as GLU cylinder and these are automatically drawn along the z-axis.
         final Vector3 b = new Vector3(0, 0, 1);
-        final Vector3 a = fcontrol.getDifferenceVectorInOpenGlScaling();
-        final Vector3 axis = fcontrol.getRotationAxis(a, b);
-        gl.glRotated(fcontrol.getAngleBetween(a, b), axis.x, axis.y, axis.z);
+        final Vector3 a = fmodel.getDifferenceVectorInOpenGlScaling();
+        final Vector3 axis = fmodel.getRotationAxis(a, b);
+        gl.glRotated(fmodel.getAngleBetween(a, b), axis.x, axis.y, axis.z);
 
         // the length of a flow unit (without spacing factor)
         double flowUnitLength = edgeLength / transitTime;
         // the start position of the first edge. delta is the fraction of the current step that is already over
-        double delta = fcontrol.getDeltaStep() * flowUnitLength;
+        double delta = fmodel.getDeltaStep() * flowUnitLength;
         if (pointer < flowOnEdge.size()) {
             // the real visible length of an edge (spaces are taken into account)
             final double visibleLen = (flowUnitLength * factor);
@@ -197,15 +197,15 @@ public class GLFlowEdge extends GLEdge {
     }
 
     private void drawFlow2(GL2 gl) {
-        fcontrol.stepUpdate();
+        fmodel.stepUpdate();
 
         flowColor.draw(gl);
-        flowOnEdge = fcontrol.getFlowOnEdge();
+        flowOnEdge = fmodel.getFlowOnEdge();
 
         // compute the correct position in the flow-value-array for each time step.
         // the position consists of an offset by transitTime and the current time
         // of the flow
-        int pointer = transitTime + (int) Math.floor(fcontrol.getTime());
+        int pointer = transitTime + (int) Math.floor(fmodel.getTime());
 
         gl.glPushMatrix();
 
@@ -213,14 +213,14 @@ public class GLFlowEdge extends GLEdge {
         // the start point in the origin. This is needed as flow particles are
         // drawn as GLU cylinder and these are automatically drawn along the z-axis.
         final Vector3 b = new Vector3(0, 0, 1);
-        final Vector3 a = fcontrol.getDifferenceVectorInOpenGlScaling();
-        final Vector3 axis = fcontrol.getRotationAxis(a, b);
-        gl.glRotated(fcontrol.getAngleBetween(a, b), axis.x, axis.y, axis.z);
+        final Vector3 a = fmodel.getDifferenceVectorInOpenGlScaling();
+        final Vector3 axis = fmodel.getRotationAxis(a, b);
+        gl.glRotated(fmodel.getAngleBetween(a, b), axis.x, axis.y, axis.z);
 
         // the length of a flow unit (without spacing factor)
         double flowUnitLength = edgeLength / transitTime;
         // the start position of the first edge. delta is the fraction of the current step that is already over
-        double delta = fcontrol.getDeltaStep() * flowUnitLength;
+        double delta = fmodel.getDeltaStep() * flowUnitLength;
         if (pointer < flowOnEdge.size()) {
             // draw the first flow element, if flow is running into the edge at the moment
             //gl.glTranslated( 0, 0, flowUnitLength );
@@ -273,7 +273,7 @@ public class GLFlowEdge extends GLEdge {
      */
     @Override
     public void performDrawing(GL2 gl) {
-        if (fcontrol.edge.id() == 0) {
+        if (fmodel.edge.id() == 0) {
             return;
         }
         drawFlow(gl);
@@ -282,13 +282,13 @@ public class GLFlowEdge extends GLEdge {
     @Override
     public void update() {
         super.update();
-        GLFlowEdgeControl control = (GLFlowEdgeControl) super.control;
-        transitTime = control.getTransitTime();
-        capacity = control.getCapacity();
-        //maxCapacity = control.getMaxCapacity();
+        GLFlowEdgeControl model = (GLFlowEdgeControl) super.model;
+        transitTime = model.getTransitTime();
+        capacity = model.getCapacity();
+        //maxCapacity = model.getMaxCapacity();
         flowColor = VisualizationOptionManager.getFlowUnitColor();
         flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
-        maxFlowRate = control.getMaxFlowRate();
+        maxFlowRate = model.getMaxFlowRate();
         minFlowThickness = 3 * 0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;
         maxFlowThickness = 10 * 0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;
         flowThicknessOfOneCapacityStep = (maxFlowThickness - minFlowThickness) / maxFlowRate;

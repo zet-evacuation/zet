@@ -36,8 +36,8 @@ public class GLCompare extends AbstractDrawable<GLCompare, CompareControl> {
     double axisLength = 10.0;
     private static final QualityPreset QUALITY_PRESET = QualityPreset.MediumQuality;
 
-    public GLCompare(CompareControl control) {
-        super(control);
+    public GLCompare(CompareControl model) {
+        super(model);
     }
 
     @Override
@@ -54,9 +54,9 @@ public class GLCompare extends AbstractDrawable<GLCompare, CompareControl> {
         //gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
         /*Vector3 b = new Vector3( 0, 0, 1 );
-        Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-        Vector3 axis = control.getRotationAxis( a, b );
-        gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );*/
+        Vector3 a = model.getDifferenceVectorInOpenGlScaling();
+        Vector3 axis = model.getRotationAxis( a, b );
+        gl.glRotated( model.getAngleBetween( a, b ), axis.x, axis.y, axis.z );*/
         GLU_INSTANCE.gluCylinder(GLU_QUADRIC, thickness, thickness, axisLength, QUALITY_PRESET.edgeSlices, 1);
         //gl.glDisable( GL.GL_BLEND );
         gl.glPopMatrix();

@@ -34,10 +34,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> {
 
-	public GLGraphFloor( GLGraphFloorControl control ) {
-		super( control );
-		this.position.x = control.getXPosition();
-		this.position.y = control.getYPosition();
+	public GLGraphFloor( GLGraphFloorControl model ) {
+		super( model );
+		this.position.x = model.getXPosition();
+		this.position.y = model.getYPosition();
 	}
 
 	@Override

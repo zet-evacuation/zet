@@ -31,12 +31,12 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	private List<GLIndividualControl> individuals;
 	private int floorID;
 
-	public GLCAFloor( GLCAFloorControl control ) {
-		super( control );
-		this.position.x = control.getXPosition();
-		this.position.y = control.getYPosition();
-		this.position.z = control.getZPosition();
-		floorID = control.getFloorNumber();
+	public GLCAFloor( GLCAFloorControl model ) {
+		super( model );
+		this.position.x = model.getXPosition();
+		this.position.y = model.getYPosition();
+		this.position.z = model.getZPosition();
+		floorID = model.getFloorNumber();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	public void performDrawing( GL2 gl ) {
 		super.performDrawing( gl );
 		
-		for( GLIndividualControl ic : control.getIndividualControls() )
+		for( GLIndividualControl ic : model.getIndividualControls() )
 			if( ic.onFloor() == floorID )
 				ic.getView().performDrawing( gl );
 	}

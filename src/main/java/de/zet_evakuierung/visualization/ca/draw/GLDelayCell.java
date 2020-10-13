@@ -20,8 +20,8 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLDelayCell extends GLCell {
 
-	public GLDelayCell( GLCellControl control ) {
-		super( control, VisualizationOptionManager.getDelayCellFloorColor() );
+	public GLDelayCell( GLCellControl model ) {
+		super( model, VisualizationOptionManager.getDelayCellFloorColor() );
 	}
 
 	@Override
