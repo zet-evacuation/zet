@@ -1,4 +1,5 @@
-/* zet evacuation tool copyright © 2007-20 zet evacuation team
+/*
+ * zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -26,42 +27,45 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 
-	/**
-	 * @param model
-	 */
-	public GLBuilding( GLBuildingControl model ) {
-		super( model );
-		callChildren = false;
-	}
+    /**
+     * @param model
+     */
+    public GLBuilding(GLBuildingControl model) {
+        super(model);
+        callChildren = false;
+    }
 
-	@Override
-	public void performDrawing( GL2 gl ) {
-		super.performDrawing( gl );
+    @Override
+    public void performDrawing(GL2 gl) {
+        super.performDrawing(gl);
         System.out.println("Print building");
-		if( repaint )
-			performStaticDrawing( gl );
-		gl.glCallList( displayList );
-	}
+        if (repaint) {
+            performStaticDrawing(gl);
+        }
+        gl.glCallList(displayList);
+    }
 
-	@Override
-	public void performStaticDrawing( GL2 gl ) {
-		// Erzeuge eine display-Liste falls nicht schon längst gemacht
+    @Override
+    public void performStaticDrawing(GL2 gl) {
+        // Erzeuge eine display-Liste falls nicht schon längst gemacht
         System.out.println("Static print building");
-		if( displayList <= 0 )
-			gl.glDeleteLists( displayList, 1 );
-		displayList = gl.glGenLists( 1 );
-		gl.glNewList( displayList, GL2.GL_COMPILE );
-		staticDrawAllChildren( gl );
-		gl.glEndList();
-		repaint = false;
-	}
+        if (displayList <= 0) {
+            gl.glDeleteLists(displayList, 1);
+        }
+        displayList = gl.glGenLists(1);
+        gl.glNewList(displayList, GL2.GL_COMPILE);
+        staticDrawAllChildren(gl);
+        gl.glEndList();
+        repaint = false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see opengl.framework.abs.AbstractDrawable#update()
-	 */
-	@Override
-	public void update() {
-		repaint = true;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @see opengl.framework.abs.AbstractDrawable#update()
+     */
+    @Override
+    public void update() {
+        repaint = true;
+    }
 }

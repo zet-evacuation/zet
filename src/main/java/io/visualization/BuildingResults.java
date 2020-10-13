@@ -69,6 +69,11 @@ public class BuildingResults {
 			this.barrier = barrier;
 		}
 
+		/**
+		 * Checks if the room is on the left side of the wall.
+		 *
+		 * @return true if the room is on the left side, false otherwise.
+		 */
 		public boolean isRoomLeft() {
 			return roomIsLeft;
 		}
@@ -77,6 +82,11 @@ public class BuildingResults {
 			this.roomIsLeft = roomIsLeft;
 		}
 
+		/**
+		 * Checks if the room is on the right side of the wall.
+		 *
+		 * @return true if the room is on the right side, false otherwise
+		 */
 		public boolean isRoomRight() {
 			return roomIsRight;
 		}
@@ -102,6 +112,12 @@ public class BuildingResults {
 			addPoint( zPoint.x, zPoint.y, type );
 		}
 
+		/**
+		 * Returns the {@link io.visualization.BuildingResults.Wall.ElementType} of the controlled class.
+ 		 *
+		 * @param wallSegment the segment of the wall which type should be returned
+		 * @return the wall type of the wall segment in the controlled class.
+		 */
 		public ElementType getWallType( int wallSegment ) {
 			return wallTypes.get( wallSegment );
 		}
