@@ -38,9 +38,8 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
     private static final QualityPreset QUALITY_PRESET = QualityPreset.MediumQuality;
 
     public GLSimpleNode(GLSimpleNodeControl model) {
-        super(model);
+        super(model, new GLVector(model.getPosition()));
         this.radius = 13 * 0.1;
-        position = new GLVector(model.getPosition());
     }
 
     @Override

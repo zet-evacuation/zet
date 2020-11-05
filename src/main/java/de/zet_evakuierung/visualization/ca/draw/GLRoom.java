@@ -37,9 +37,7 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 	private GLVector lr;
 
 	public GLRoom( GLRoomControl model ) {
-		super( model );
-		this.position.x = model.getXPosition();
-		this.position.y = model.getYPosition();
+		super( model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 			ul = new GLVector( 0, 0, -0.1 );
 			ur = new GLVector( model.getWidth(), 0 , -0.1 );

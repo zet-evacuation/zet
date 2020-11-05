@@ -16,56 +16,19 @@
  */
 package de.zet_evakuierung.visualization.building.draw;
 
-import javax.media.opengl.GL2;
-
-import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
-import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.HierarchyDrawable;
 
 /**
  * @author Daniel R. Schmidt
  * @author Jan-Philipp Kappmeier
  */
-public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
+public class GLBuilding extends HierarchyDrawable<GLWall> {
 
     /**
      * @param model
      */
-    public GLBuilding(GLBuildingControl model) {
-        super(model);
-        callChildren = false;
-    }
-
-    @Override
-    public void performDrawing(GL2 gl) {
-        super.performDrawing(gl);
-        System.out.println("Print building");
-        if (repaint) {
-            performStaticDrawing(gl);
-        }
-        gl.glCallList(displayList);
-    }
-
-    @Override
-    public void performStaticDrawing(GL2 gl) {
-        // Erzeuge eine display-Liste falls nicht schon längst gemacht
-        System.out.println("Static print building");
-        if (displayList <= 0) {
-            gl.glDeleteLists(displayList, 1);
-        }
-        displayList = gl.glGenLists(1);
-        gl.glNewList(displayList, GL2.GL_COMPILE);
-        staticDrawAllChildren(gl);
-        gl.glEndList();
-        repaint = false;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see opengl.framework.abs.AbstractDrawable#update()
-     */
-    @Override
-    public void update() {
-        repaint = true;
+    public GLBuilding(Void model) {
+        super(new GLVector());
     }
 }

@@ -21,6 +21,7 @@ import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
 import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
+import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
@@ -29,13 +30,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
 public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 
 	private List<GLIndividualControl> individuals;
-	private int floorID;
+	private final int floorID;
 
 	public GLCAFloor( GLCAFloorControl model ) {
-		super( model );
-		this.position.x = model.getXPosition();
-		this.position.y = model.getYPosition();
-		this.position.z = model.getZPosition();
+		super( model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
 		floorID = model.getFloorNumber();
 	}
 

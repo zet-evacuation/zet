@@ -15,53 +15,27 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
-import javax.media.opengl.GL2;
-
 import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
+import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
- * <p>This class draws a floor in the graph (which does not explicitly exist
- * in the graph itself). It consists of the nodes belonging to rooms on one
- * floor in a {@link ds.Project}.</p>
- * <p>The nodes are stored in a display list to speed up the visualization,
- * the display list is created if {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is called.
- * During normal visualization (when {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is
- * called) the display list is executed. The display list is rebuilt when some
- * settings are updated.</p>
+ * <p>
+ * This class draws a floor in the graph (which does not explicitly exist in the graph itself). It consists of the nodes
+ * belonging to rooms on one floor in a {@link ds.Project}.</p>
+ * <p>
+ * The nodes are stored in a display list to speed up the visualization, the display list is created if
+ * {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is called. During normal visualization (when
+ * {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is called) the display list is executed. The display
+ * list is rebuilt when some settings are updated.</p>
+ *
  * @see AbstractDrawable
  * @author Jan-Philipp Kappmeier
  */
 public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> {
 
-	public GLGraphFloor( GLGraphFloorControl model ) {
-		super( model );
-		this.position.x = model.getXPosition();
-		this.position.y = model.getYPosition();
-	}
+    public GLGraphFloor(GLGraphFloorControl model) {
+        super(model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
+    }
 
-	@Override
-	public void update() { 
-		repaint = true;
-	}
-	
-	@Override
-	public void performDrawing( GL2 gl ) {
-		super.performDrawing( gl );
-		if( repaint )
-			performStaticDrawing( gl );
-		gl.glCallList( displayList );
-	}
-	
-	@Override
-	public void performStaticDrawing( GL2 gl ) {
-		// Erzeuge eine display-Liste falls nicht schon längst gemacht
-		if( displayList <= 0 )
-			gl.glDeleteLists( displayList, 1 );
-		displayList = gl.glGenLists( 1 );
-		gl.glNewList( displayList, GL2.GL_COMPILE );
-		staticDrawAllChildren( gl );
-		gl.glEndList();
-		repaint = false;
-	}
 }

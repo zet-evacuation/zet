@@ -34,6 +34,7 @@ import de.zet_evakuierung.visualization.network.control.GLNodeControl;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLColor;
+import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 import org.zetool.opengl.helper.Texture;
 import org.zetool.opengl.helper.TextureManager;
@@ -55,12 +56,8 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;// QualityPreset.MediumQuality;
 
     public GLNode(GLNodeControl model) {
-        super(model);
-
-        position.x = model.getXPosition();
-        position.y = model.getYPosition();
-        position.z = model.getZPosition();
-
+        super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
+        
         radius = nodeRadius;
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
         GLU_INSTANCE.gluQuadricOrientation(GLU_QUADRIC, GLU.GLU_OUTSIDE);

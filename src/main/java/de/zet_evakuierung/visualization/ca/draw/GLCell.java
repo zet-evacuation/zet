@@ -40,9 +40,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
   }
 
 	public GLCell( GLCellControl control, GLColor color ) {
-		super( control );
-		this.position.x = control.getXPosition();
-		this.position.y = control.getYPosition();
+		super( control, new GLVector(control.getXPosition(), control.getYPosition(), 0));
 		if( ul == null ) {
 			ul = new GLVector( control.getOffset(), -control.getOffset(), 0 );
 			ur = new GLVector( control.getWidth(), -control.getOffset(), 0 );

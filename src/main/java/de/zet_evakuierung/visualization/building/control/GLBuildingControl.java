@@ -15,9 +15,11 @@
  */
 package de.zet_evakuierung.visualization.building.control;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 import de.zet_evakuierung.visualization.building.draw.GLBuilding;
 import gui.visualization.control.AbstractZETVisualizationControl;
@@ -34,13 +36,27 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  */
 public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode {
 
+    /**
+     * Null object for the non existing building model to pass to the {@code GLBuilding} view class.
+     */
+    private static final Void MODEL = ((Supplier<Void>) () -> {
+        try {
+            Constructor<Void> voidConstructor = Void.class.getDeclaredConstructor();
+            voidConstructor.setAccessible(true);
+            return voidConstructor.newInstance();
+        } catch (Exception ex) {
+            // Does not happen
+            throw new AssertionError(ex);
+        }
+    }).get();
+
     private List<ArrayList<GLWallControl>> allFloorsByID;
     private BuildingResults visResult;
 
     /**
      * Creates a new object of this control class.The wall objects (a control and the corresponding view object) are
- created and stored in data structures to easily assign them by their floor id. Note that no default floor is
- enabled!
+     * created and stored in data structures to easily assign them by their floor id. Note that no default floor is
+     * enabled!
      *
      * @param visResult
      * @param visualizationModel
@@ -63,7 +79,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
             add(child);
             allFloorsByID.get(wall.getFloor().id()).add(child);
         }
-        setView(new GLBuilding(this));
+        setView(new GLBuilding(MODEL));
         for (GLWallControl wall : this) {
             view.addChild(wall.getView());
         }
