@@ -65,7 +65,7 @@
         <!-- 3rd party dependencies -->
         <jmf.version>2.1.1e</jmf.version>
         <jama.version>1.0.2</jama.version>
-        <xstream.version>1.4.13</xstream.version>
+        <xstream.version>1.4.14</xstream.version>
         <jsap.version>2.1</jsap.version>
         <jfreechart.version>1.0.19</jfreechart.version>
         <ssj.version>2.5</ssj.version>
