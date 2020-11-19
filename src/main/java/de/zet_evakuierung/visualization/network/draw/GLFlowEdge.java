@@ -272,7 +272,7 @@ public class GLFlowEdge extends GLEdge {
      * @param gl the {@code OpenGL} drawable object
      */
     @Override
-    public void performDrawing(GL2 gl) {
+    public void performDynamicDrawing(GL2 gl) {
         if (fmodel.edge.id() == 0) {
             return;
         }

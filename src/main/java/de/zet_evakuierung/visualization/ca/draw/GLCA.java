@@ -19,15 +19,17 @@ import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonControl;
-import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.HierarchyRoot;
 
-public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl> {
+public class GLCA extends HierarchyRoot<GLCAFloor> {
 
     private final CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
     private long lastStep = 0;
+    private final GLCellularAutomatonControl model;
 
     public GLCA(GLCellularAutomatonControl model, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
-        super(model);
+        super();
+        this.model = model;
         this.cellularAutomatonVisualizationModel = cellularAutomatonVisualizationModel;
     }
 
@@ -41,13 +43,11 @@ public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl
     }
 
     @Override
-    public void performDrawing(GL2 gl) {
+    public void performDynamicDrawing(GL2 gl) {
         long step = (long) cellularAutomatonVisualizationModel.getStep();
         if (step != lastStep) {
-            getModel().stepUpdate();
+            model.stepUpdate();
             lastStep = step;
         }
-
-        super.performDrawing(gl);
     }
 }

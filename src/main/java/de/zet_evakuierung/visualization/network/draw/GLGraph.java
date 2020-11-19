@@ -15,17 +15,17 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
-
 import de.zet_evakuierung.visualization.network.control.GLGraphControl;
-import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.drawingutils.GLVector;
+import org.zetool.opengl.framework.abs.HierarchyRoot;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraph extends AbstractDrawable<GLSimpleNode, GLGraphControl> {
+public class GLGraph extends HierarchyRoot<GLSimpleNode> {
 
     public GLGraph(GLGraphControl model) {
-        super(model);
+        super();
     }
 }

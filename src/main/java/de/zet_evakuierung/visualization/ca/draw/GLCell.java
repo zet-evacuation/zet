@@ -52,7 +52,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	}
 
 	@Override
-	public void performDrawing( GL2 gl ) {
+	public void performDynamicDrawing( GL2 gl ) {
 		if( VisualizationOptionManager.smoothCellVisualization() ) {
 			boolean lighting = gl.glIsEnabled( GL2.GL_LIGHTING );
 			gl.glBegin( GL2.GL_QUADS );

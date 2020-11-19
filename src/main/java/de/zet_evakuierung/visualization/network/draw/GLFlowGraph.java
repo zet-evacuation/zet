@@ -19,15 +19,17 @@ import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
-import org.zetool.opengl.framework.abs.AbstractDrawable;
+import org.zetool.opengl.framework.abs.HierarchyRoot;
 
-public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphControl> {
+public class GLFlowGraph extends HierarchyRoot<GLGraphFloor> {
 
     private final NetworkVisualizationModel networkVisualizationModel;
     private long lastStep = 0;
+    private final GLFlowGraphControl model;
 
     public GLFlowGraph(GLFlowGraphControl model, NetworkVisualizationModel networkVisualizationModel) {
-        super(model);
+        super();
+        this.model = model;
         this.networkVisualizationModel = networkVisualizationModel;
     }
 
@@ -39,13 +41,11 @@ public class GLFlowGraph extends AbstractDrawable<GLGraphFloor, GLFlowGraphContr
     }
 
     @Override
-    public void performDrawing(GL2 gl) {
+    public void performDynamicDrawing(GL2 gl) {
         long step = (long) networkVisualizationModel.getStep();
         if (step != lastStep) {
-            getModel().stepUpdate();
+            model.stepUpdate();
             lastStep = step;
         }
-
-        super.performDrawing(gl);
     }
 }

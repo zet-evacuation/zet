@@ -70,10 +70,6 @@ public class GLWall extends AbstractDrawable<GLWall, Wall> {
         return result;
     }
 
-    @Override
-    public void performDrawing(GL2 gl) {
-    }
-
     /**
      * Draws the walls around rooms. The walls have some thickness and also an upper side. {@inheritDoc}
      *

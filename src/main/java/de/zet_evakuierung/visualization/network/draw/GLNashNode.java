@@ -25,15 +25,13 @@ import de.zet_evakuierung.visualization.network.control.GLNashNodeControl;
  */
 public class GLNashNode extends GLSimpleNode {
 
-	public GLNashNode( GLNashNodeControl model ) {
-		super( model );
-		
-	}
+    public GLNashNode(GLNashNodeControl model) {
+        super(model);
+    }
 
-	@Override
-	public void performDrawing( GL2 gl ) {
-		super.drawNode( gl );
-		super.performDrawing( gl );
-	}
+    @Override
+    public void performStaticDrawing(GL2 gl) {
+        super.performStaticDrawing(gl);
+    }
 
 }

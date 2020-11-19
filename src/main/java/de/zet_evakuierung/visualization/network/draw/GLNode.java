@@ -64,9 +64,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     }
 
     @Override
-    public void performDrawing(GL2 gl) {
-        super.performDrawing(gl);
-
+    public void performDynamicDrawing(GL2 gl) {
         if (getModel().isCurrentlyOccupied()) {
             performFlowDrawing(gl);
         }
@@ -77,8 +75,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
      *
      * @param gl the context on which the node is drawn
      */
-    public void performFlowDrawing(GL2 gl) {
-        super.performDrawing(gl);
+    protected void performFlowDrawing(GL2 gl) {
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, flowDisplayMode);
 
         gl.glColor4d(1.0, 0.0, 0.0, 1.0);
@@ -95,8 +92,6 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 
     @Override
     public void performStaticDrawing(GL2 gl) {
-        beginDraw(gl);
-
 //        if( getModel().isCurrentlyOccupied() ) {
 //            performFlowDrawing( drawable );
 //        }
@@ -168,10 +163,6 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 //        //if( enableLight )
 //        //    gl.glEnable( GL.GL_LIGHTING );
 //        gl.glPopMatrix();
-//
-
-        staticDrawAllChildren(gl);
-        endDraw(gl);
     }
     static Image[] n = new Image[10];
 
@@ -183,7 +174,6 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
         } catch (IOException ex) {
             System.out.println("Image not found");
         }
-
     }
 
     private void createTexture(int number) {

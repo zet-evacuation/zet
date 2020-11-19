@@ -17,13 +17,13 @@
 package de.zet_evakuierung.visualization.building.draw;
 
 import org.zetool.opengl.drawingutils.GLVector;
-import org.zetool.opengl.framework.abs.HierarchyDrawable;
+import org.zetool.opengl.framework.abs.HierarchyRoot;
 
 /**
  * @author Daniel R. Schmidt
  * @author Jan-Philipp Kappmeier
  */
-public class GLBuilding extends HierarchyDrawable<GLWall> {
+public class GLBuilding extends HierarchyRoot<GLWall> {
 
     /**
      * @param model

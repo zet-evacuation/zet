@@ -42,22 +42,11 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
         this.radius = 13 * 0.1;
     }
 
-    @Override
-    public void performDrawing(GL2 gl) {
-        super.performDrawing(gl);
-    }
-
-    @Override
-    public void performStaticDrawing(GL2 gl) {
-        beginDraw(gl);
-        drawNode(gl);
-        staticDrawAllChildren(gl);
-        endDraw(gl);
-    }
 
     final GLColor lineColor = new GLColor(Color.black);
 
-    protected void drawNode(GL2 gl) {
+    @Override
+    public void performStaticDrawing(GL2 gl) {
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
 
         double xOffset = -this.getModel().getXPosition();
@@ -79,7 +68,6 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 
     @Override
     public void update() {
-
     }
 
 }

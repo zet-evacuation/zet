@@ -51,11 +51,9 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	}
 
 	@Override
-	public void performDrawing( GL2 gl ) {
-		super.performDrawing( gl );
-		
+	public void performDynamicDrawing( GL2 gl ) {
 		for( GLIndividualControl ic : model.getIndividualControls() )
 			if( ic.onFloor() == floorID )
-				ic.getView().performDrawing( gl );
+				ic.getView().performDynamicDrawing(gl);
 	}
 }

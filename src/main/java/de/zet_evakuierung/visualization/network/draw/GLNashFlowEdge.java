@@ -81,7 +81,7 @@ public class GLNashFlowEdge extends GLEdge {
      * @param gl the {@code OpenGL} drawable object
      */
     @Override
-    public void performDrawing(GL2 gl) {
+    public void performDynamicDrawing(GL2 gl) {
         currentTime = Conversion.NANO_SECONDS_TO_SEC * nmodel.getTimeSinceStart() * acceleration;
 
         for (FlowData flowData : nmodel.getNashFlowEdgeData()) {

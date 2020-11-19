@@ -51,8 +51,7 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 	}
 
 	@Override
-	public void performDrawing( GL2 gl ) {
-		super.performDrawing( gl );
+	public void performDynamicDrawing( GL2 gl ) {
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 			// draw a floor
 			VisualizationOptionManager.getCellSeperationColor().draw( gl );

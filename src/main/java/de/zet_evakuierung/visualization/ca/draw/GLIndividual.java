@@ -56,7 +56,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
     static GLColor green = new GLColor(Color.green);
 
     @Override
-    public void performDrawing(GL2 gl) {
+    public void performDynamicDrawing(GL2 gl) {
         model.stepUpdate();
         if (model.isInvisible()) {
             return;
