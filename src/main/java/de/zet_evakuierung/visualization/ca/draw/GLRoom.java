@@ -17,56 +17,99 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import com.google.common.annotations.VisibleForTesting;
+import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
 import gui.visualization.VisualizationOptionManager;
+import io.visualization.CellularAutomatonVisualizationResults;
+import org.zet.cellularautomaton.Room;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * Draws a room. That is, it draws a ground rectangle for the room.
+ *
  * @author Jan-Philipp Kappmeier
  */
-public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
-	/** Upper left coordinate of the room. */
-	private GLVector ul;
-	/** Upper right coordinate of the room. */
-	private GLVector ur;
-	/** Lower left coordinate of the room. */
-	private GLVector ll;
-	/** Lower right coordinate of the room. */
-	private GLVector lr;
+public class GLRoom extends AbstractDrawable<GLCell, Room> {
 
-	public GLRoom( GLRoomControl model ) {
-		super( model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
-		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-			ul = new GLVector( 0, 0, -0.1 );
-			ur = new GLVector( model.getWidth(), 0 , -0.1 );
-			ll = new GLVector( 0, -model.getHeight(), -0.1 );
-			lr = new GLVector( model.getWidth(), -model.getHeight(), -0.1 );
-		}
-	}
+    /** Top left coordinate of the room bounding box. */
+    private GLVector topLeft;
+    /** Top right coordinate of the room bounding box. */
+    private GLVector topRight;
+    /** Bottom right coordinate of the room bounding box. */
+    private GLVector bottomRight;
+    /** Bottom left coordinate of the room bounding box. */
+    private GLVector bottomLeft;
 
-	@Override
-	public void update() {
-	}
+    /**
+     * Draws the room. The top left corner of the room will be located at {@code  (0, 0, z)}.
+     *
+     * @param model
+     * @param caVisResults
+     * @param visualizationModel
+     */
+    public GLRoom(Room model, CellularAutomatonVisualizationResults caVisResults, CellularAutomatonVisualizationModel visualizationModel) {
+        super(model, computePosition(model, caVisResults, visualizationModel.scaling));
+        if (VisualizationOptionManager.showSpaceBetweenCells()) {
+            topLeft = new GLVector(0, 0, -0.1);
+            topRight = new GLVector(model.getWidth(), 0, -0.1);
+            bottomLeft = new GLVector(0, -model.getHeight(), -0.1);
+            bottomRight = new GLVector(model.getWidth(), -model.getHeight(), -0.1);
+        }
+    }
 
-	@Override
-	public void performDynamicDrawing( GL2 gl ) {
-		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-			// draw a floor
-			VisualizationOptionManager.getCellSeperationColor().draw( gl );
-			gl.glBegin( GL2.GL_QUADS );
-			gl.glNormal3d( 0, 0, 1 );
-			ul.draw( gl );
-			ur.draw( gl );
-			lr.draw( gl );
-			ll.draw( gl );
-			gl.glEnd();
-		}
-	}
+    private static GLVector computePosition(Room model, CellularAutomatonVisualizationResults caVisResults, double scaling) {
+        double xPosition = caVisResults.get(model).x * scaling;
+        double yPosition = -caVisResults.get(model).y * scaling;
+        return new GLVector(xPosition, yPosition, 0);
+    }
 
-	@Override
-	public String toString() {
-		return "GLRoom";
-	}
+    @Override
+    public void update() {
+    }
+
+    /**
+     * Draws the underlying floor of the room.
+     *
+     * @param gl the Java OpenGL object
+     */
+    @Override
+    public void performDynamicDrawing(GL2 gl) {
+        if (VisualizationOptionManager.showSpaceBetweenCells()) {
+            // draw a floor
+            VisualizationOptionManager.getCellSeperationColor().draw(gl);
+            gl.glBegin(GL2.GL_QUADS);
+            gl.glNormal3d(0, 0, 1);
+            topLeft.draw(gl);
+            topRight.draw(gl);
+            bottomRight.draw(gl);
+            bottomLeft.draw(gl);
+            gl.glEnd();
+        }
+    }
+
+    @VisibleForTesting
+    GLVector getTopLeft() {
+        return topLeft;
+    }
+
+    @VisibleForTesting
+    GLVector getTopRight() {
+        return topRight;
+    }
+
+    @VisibleForTesting
+    GLVector getBottomRight() {
+        return bottomRight;
+    }
+
+    @VisibleForTesting
+    GLVector getBottomLeft() {
+        return bottomLeft;
+    }
+
+    @Override
+    public String toString() {
+        return "GLRoom";
+    }
 }

@@ -33,19 +33,19 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
     private final double yPosition;
     Room controlled;
 
-    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, CellularAutomatonVisualizationModel glControl) {
-        super(glControl);
+    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, CellularAutomatonVisualizationModel visualizationModel) {
+        super(visualizationModel);
         controlled = room;
         xPosition = caVisResults.get(room).x * visualizationModel.scaling;
         yPosition = caVisResults.get(room).y * visualizationModel.scaling;
         this.glCAFloorControlObject = glCAFloorControl;
 
         for (EvacCell cell : room.getAllCells()) {
-            GLCellControl cellControl = new GLCellControl(caVisResults, cell, this, glControl);
+            GLCellControl cellControl = new GLCellControl(caVisResults, cell, this, visualizationModel);
             cellControls.put(cell, cellControl);
             add(cellControl);
         }
-        this.setView(new GLRoom(this));
+        this.setView(new GLRoom(room, caVisResults, visualizationModel));
         for (GLCellControl cell : this) {
             view.addChild(cell.getView());
         }
