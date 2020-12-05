@@ -49,7 +49,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
             add(roomControl);
         }
 
-        setView(new GLCAFloor(this));
+        setView(new GLCAFloor(this, visualizationModel.getIndividuals()));
         for (GLRoomControl room : this) {
             view.addChild(room.getView());
         }

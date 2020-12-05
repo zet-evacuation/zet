@@ -20,40 +20,40 @@ import java.util.List;
 import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
-import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
- *  @author Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
  */
 public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 
-	private List<GLIndividualControl> individuals;
-	private final int floorID;
+    private Iterable<GLIndividual> allIndividuals;
 
-	public GLCAFloor( GLCAFloorControl model ) {
-		super( model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
-		floorID = model.getFloorNumber();
-	}
+    public GLCAFloor(GLCAFloorControl model, Iterable<GLIndividual> allIndividuals) {
+        super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
+        this.allIndividuals = allIndividuals;
+    }
 
-	@Override
-	public void update() {
-	}
+    @Override
+    public void update() {
+    }
 
-	public void setIndividuals( List<GLIndividualControl> li ) {
-		individuals = li;
-	}
+    public void setIndividuals(List<GLIndividual> allIndividuals) {
+        this.allIndividuals = allIndividuals;
+    }
 
-	@Override
-	public String toString() {
-		return "GLCAFloor";
-	}
+    @Override
+    public String toString() {
+        return "GLCAFloor";
+    }
 
-	@Override
-	public void performDynamicDrawing( GL2 gl ) {
-		for( GLIndividualControl ic : model.getIndividualControls() )
-			if( ic.onFloor() == floorID )
-				ic.getView().performDynamicDrawing(gl);
-	}
+    @Override
+    public void performDynamicDrawing(GL2 gl) {
+        for (GLIndividual individual : allIndividuals) {
+            if (individual.getModel().onFloor() == model.getFloorNumber()) {
+                individual.performDynamicDrawing(gl);
+            }
+        }
+    }
 }

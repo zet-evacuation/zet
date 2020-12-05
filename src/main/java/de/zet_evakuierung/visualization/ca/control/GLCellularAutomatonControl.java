@@ -106,7 +106,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         convertIndividualMovements();
         evacuationResults.getRecording().rewind();
         for (GLCAFloorControl floor : this) {
-            floor.getView().setIndividuals(visualizationModel.getIndividualControls());
+            floor.getView().setIndividuals(visualizationModel.getIndividuals());
         }
     }
 
