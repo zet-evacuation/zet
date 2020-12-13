@@ -44,8 +44,8 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
             GLCellControl cellControl = new GLCellControl(caVisResults, cell, this, visualizationModel);
             cellControls.put(cell, cellControl);
             add(cellControl);
-        }
-        this.setView(new GLRoom(room, caVisResults, visualizationModel));
+    }
+        this.setView(new GLRoom(this));
         for (GLCellControl cell : this) {
             view.addChild(cell.getView());
         }
@@ -93,6 +93,6 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
     void setPotentialDisplay(CellInformationDisplay potentialDisplay) {
         for (GLCellControl cellControl : cellControls.values()) {
             cellControl.setPotentialDisplay(potentialDisplay);
-        }
+}
     }
 }

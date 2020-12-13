@@ -18,10 +18,8 @@ package de.zet_evakuierung.visualization.ca.draw;
 import javax.media.opengl.GL2;
 
 import com.google.common.annotations.VisibleForTesting;
-import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
 import gui.visualization.VisualizationOptionManager;
-import io.visualization.CellularAutomatonVisualizationResults;
-import org.zet.cellularautomaton.Room;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
@@ -30,7 +28,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLRoom extends AbstractDrawable<GLCell, Room> {
+public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 
     /** Top left coordinate of the room bounding box. */
     private GLVector topLeft;
@@ -45,22 +43,21 @@ public class GLRoom extends AbstractDrawable<GLCell, Room> {
      * Draws the room. The top left corner of the room will be located at {@code  (0, 0, z)}.
      *
      * @param model
-     * @param caVisResults
-     * @param visualizationModel
      */
-    public GLRoom(Room model, CellularAutomatonVisualizationResults caVisResults, CellularAutomatonVisualizationModel visualizationModel) {
-        super(model, computePosition(model, caVisResults, visualizationModel.scaling));
+    public GLRoom(GLRoomControl model) {
+        super(model, computePosition(model));
+        System.out.println("GRID Property is: " + VisualizationOptionManager.showSpaceBetweenCells());
         if (VisualizationOptionManager.showSpaceBetweenCells()) {
             topLeft = new GLVector(0, 0, -0.1);
-            topRight = new GLVector(model.getWidth(), 0, -0.1);
-            bottomLeft = new GLVector(0, -model.getHeight(), -0.1);
-            bottomRight = new GLVector(model.getWidth(), -model.getHeight(), -0.1);
+            topRight = new GLVector(model.getWidth() , 0, -0.1);
+            bottomLeft = new GLVector(0, model.getHeight(), -0.1);
+            bottomRight = new GLVector(model.getWidth(), model.getHeight(), -0.1);
         }
     }
 
-    private static GLVector computePosition(Room model, CellularAutomatonVisualizationResults caVisResults, double scaling) {
-        double xPosition = caVisResults.get(model).x * scaling;
-        double yPosition = -caVisResults.get(model).y * scaling;
+    private static GLVector computePosition(GLRoomControl model) {
+        double xPosition = model.getXPosition();
+        double yPosition = model.getYPosition();
         return new GLVector(xPosition, yPosition, 0);
     }
 

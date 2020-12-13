@@ -25,12 +25,10 @@ import static org.mockito.Mockito.when;
 import static org.zetool.opengl.framework.util.GLContextAwareThread.createWithGLContext;
 import static org.zetool.test.math.geom.NDimensionalIsCloseTo.closeTo;
 
-import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
 import ds.PropertyContainer;
-import io.visualization.CellularAutomatonVisualizationResults;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zet.cellularautomaton.Room;
 import org.zetool.math.vectormath.Vector3;
 
 /**
@@ -48,12 +46,9 @@ public class GLRoomTest {
 
     @Test
     public void initialization() throws InterruptedException {
-        Room model = mock(Room.class);
-        CellularAutomatonVisualizationResults caVisResults = mock(CellularAutomatonVisualizationResults.class);
-        when(caVisResults.get(model)).thenReturn(new Vector3());
-        CellularAutomatonVisualizationModel visualizationModel = mock(CellularAutomatonVisualizationModel.class);
+        GLRoomControl model = mock(GLRoomControl.class);
 
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, caVisResults, visualizationModel));
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
 
         assertThat(fixture.getModel(), is(sameInstance(model)));
     }
@@ -66,22 +61,19 @@ public class GLRoomTest {
      */
     @Test
     public void coordinatesCorrect() throws InterruptedException {
-        Room model = mock(Room.class);
-        int width = 232;
-        int height = 422;
+        GLRoomControl model = mock(GLRoomControl.class);
+        double width = 232;
+        double height = 422;
         when(model.getWidth()).thenReturn(width);
         when(model.getHeight()).thenReturn(height);
-        CellularAutomatonVisualizationResults caVisResults = mock(CellularAutomatonVisualizationResults.class);
-        when(caVisResults.get(model)).thenReturn(new Vector3());
-        CellularAutomatonVisualizationModel visualizationModel = mock(CellularAutomatonVisualizationModel.class);
 
         PropertyContainer.getGlobal().set(GRID_PROPERTY, true);
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, caVisResults, visualizationModel));
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
 
         assertThat(fixture.getTopLeft(), is(closeTo(new Vector3(0, 0, -0.1), 0.001)));
         assertThat(fixture.getTopRight(), is(closeTo(new Vector3(width, 0, -0.1), 0.001)));
-        assertThat(fixture.getBottomLeft(), is(closeTo(new Vector3(0, -height, -0.1), 0.001)));
-        assertThat(fixture.getBottomRight(), is(closeTo(new Vector3(width, -height, -0.1), 0.001)));
+        assertThat(fixture.getBottomLeft(), is(closeTo(new Vector3(0, height, -0.1), 0.001)));
+        assertThat(fixture.getBottomRight(), is(closeTo(new Vector3(width, height, -0.1), 0.001)));
     }
 
     /**
@@ -91,13 +83,10 @@ public class GLRoomTest {
      */
     @Test
     public void coordinatesNotDefined() throws InterruptedException {
-        Room model = mock(Room.class);
-        CellularAutomatonVisualizationResults caVisResults = mock(CellularAutomatonVisualizationResults.class);
-        when(caVisResults.get(model)).thenReturn(new Vector3());
-        CellularAutomatonVisualizationModel visualizationModel = mock(CellularAutomatonVisualizationModel.class);
+        GLRoomControl model = mock(GLRoomControl.class);
 
-        PropertyContainer.getGlobal().set(GRID_PROPERTY, true);
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, caVisResults, visualizationModel));
+        PropertyContainer.getGlobal().set(GRID_PROPERTY, false);
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
 
         assertThat(fixture.getTopLeft(), is(nullValue()));
         assertThat(fixture.getTopRight(), is(nullValue()));
