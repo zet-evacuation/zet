@@ -19,8 +19,7 @@ import de.zet_evakuierung.visualization.ca.control.GLCellControl;
 
 public class GLPotentialCell extends GLCell {
 
-	public GLPotentialCell( GLCellControl model ) {
-		super( model );
-	}
+    public GLPotentialCell(GLCellControl model) {
+        super(model);
+    }
 }
-

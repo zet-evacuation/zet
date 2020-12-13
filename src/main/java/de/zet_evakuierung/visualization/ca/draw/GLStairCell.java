@@ -19,30 +19,32 @@ import de.zet_evakuierung.visualization.ca.control.GLCellControl;
 import gui.visualization.VisualizationOptionManager;
 
 /**
- * This class represents the graphical representation of a {@link ds.ca.StairCell}.
- * The only difference between this type and the general cell type is that it
- * can have the color of stair cells.
+ * This class represents the graphical representation of a {@link ds.ca.StairCell}. The only difference between this
+ * type and the general cell type is that it can have the color of stair cells.
+ *
  * @author Jan-Philipp Kappmeier
  */
 public class GLStairCell extends GLCell {
 
-	/**
-	 * Creates a new instance of a stair cell.
-	 * @param model
-	 */
-	public GLStairCell( GLCellControl model ) {
-		super( model, VisualizationOptionManager.getStairCellFloorColor() );
-	}
+    /**
+     * Creates a new instance of a stair cell.
+     *
+     * @param model
+     */
+    public GLStairCell(GLCellControl model) {
+        super(model, VisualizationOptionManager.getStairCellFloorColor());
+    }
 
-	/**
-	 * Overriden version of {@code updateFloorColor}. It can switch between
-	 * showing the natural stair color of the color of a given potential.
-	 */
-	@Override
-	protected void updateFloorColor() {
-		if( VisualizationOptionManager.getAlwaysDisplayCellType() )
-			color = getDefaultColor();
-		else
-			super.updateFloorColor();
-	}
+    /**
+     * Overriden version of {@code updateFloorColor}. It can switch between showing the natural stair color of the color
+     * of a given potential.
+     */
+    @Override
+    protected void updateFloorColor() {
+        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+            color = getDefaultColor();
+        } else {
+            super.updateFloorColor();
+        }
+    }
 }

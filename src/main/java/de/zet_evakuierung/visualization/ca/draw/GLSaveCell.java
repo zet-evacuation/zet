@@ -20,16 +20,16 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLSaveCell extends GLCell {
 
-	public GLSaveCell( GLCellControl model ) {
-		super( model, VisualizationOptionManager.getSaveCellFloorColor() );
-	}
+    public GLSaveCell(GLCellControl model) {
+        super(model, VisualizationOptionManager.getSaveCellFloorColor());
+    }
 
-	@Override
-	protected void updateFloorColor() {
-		if( VisualizationOptionManager.getAlwaysDisplayCellType() )
-			color = getDefaultColor();
-		else
-			super.updateFloorColor();
-	}
+    @Override
+    protected void updateFloorColor() {
+        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+            color = getDefaultColor();
+        } else {
+            super.updateFloorColor();
+        }
+    }
 }
-

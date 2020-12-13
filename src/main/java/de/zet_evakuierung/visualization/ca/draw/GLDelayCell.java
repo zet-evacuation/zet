@@ -20,16 +20,16 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLDelayCell extends GLCell {
 
-	public GLDelayCell( GLCellControl model ) {
-		super( model, VisualizationOptionManager.getDelayCellFloorColor() );
-	}
+    public GLDelayCell(GLCellControl model) {
+        super(model, VisualizationOptionManager.getDelayCellFloorColor());
+    }
 
-	@Override
-	protected void updateFloorColor() {
-		if( VisualizationOptionManager.getAlwaysDisplayCellType() )
-			color = getDefaultColor();
-		else
-			super.updateFloorColor();
-	}
+    @Override
+    protected void updateFloorColor() {
+        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+            color = getDefaultColor();
+        } else {
+            super.updateFloorColor();
+        }
+    }
 }
-

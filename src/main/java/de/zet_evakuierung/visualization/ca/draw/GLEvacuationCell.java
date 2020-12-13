@@ -20,16 +20,16 @@ import gui.visualization.VisualizationOptionManager;
 
 public class GLEvacuationCell extends GLCell {
 
-	public GLEvacuationCell( GLCellControl model ) {
-		super( model, VisualizationOptionManager.getEvacuationCellFloorColor() );
-	}
+    public GLEvacuationCell(GLCellControl model) {
+        super(model, VisualizationOptionManager.getEvacuationCellFloorColor());
+    }
 
-	@Override
-	protected void updateFloorColor() {
-		if( VisualizationOptionManager.getAlwaysDisplayCellType() )
-			color = getDefaultColor();
-		else
-			super.updateFloorColor();
-	}
+    @Override
+    protected void updateFloorColor() {
+        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+            color = getDefaultColor();
+        } else {
+            super.updateFloorColor();
+        }
+    }
 }
-
