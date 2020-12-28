@@ -16,22 +16,22 @@
 package de.zet_evakuierung.visualization.ca.control;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.media.opengl.GL2;
+
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
+import de.zet_evakuierung.visualization.ca.draw.GLCell;
+import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
-import io.visualization.CellularAutomatonVisualizationResults;
+import gui.visualization.util.Tuple;
 import io.visualization.EvacuationSimulationResults;
 import org.zet.cellularautomaton.EvacCellInterface;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
 import org.zet.cellularautomaton.Individual;
-import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 import org.zet.cellularautomaton.results.DieAction;
 import org.zet.cellularautomaton.results.EvacuationRecording;
 import org.zet.cellularautomaton.results.MoveAction;
@@ -41,55 +41,38 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, CellularAutomatonVisualizationModel> implements HierarchyNode {
+public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA,
+        CellularAutomatonVisualizationModel> implements HierarchyNode<GLCAFloorControl> {
 
     /**
      * The logger.
      */
     private static final Logger LOG = Logger.getGlobal();
 
-    // general control stuff
-    private HashMap<Integer, GLCAFloorControl> allFloorsByID;
+    /**
+     * Gives access to the model objects used by visualization views.
+     */
+    private final GLCellularAutomatonModel cellularAutomatonModel;
+    /**
+     * Gives access to all view objects drawing the OpenGL scene.
+     */
+    private final GLCellularAutomatonViews views;
+
     // Dynamic CA visualization
-    private int recordingCount;
-    private int recordingDone;
+    private int recordingCount = 0;
+    private int recordingDone = 0;
     boolean containsRecording = false;
     double scaling = 1;
 
-    private CellularAutomatonVisualizationResults caVisResults;
-
     private EvacuationSimulationResults evacuationResults;
 
-    public GLCellularAutomatonControl(CellularAutomatonVisualizationResults caVisResults, CellularAutomatonVisualizationModel visualizationModel) {
+    public GLCellularAutomatonControl( CellularAutomatonVisualizationModel visualizationModel,
+            GLCellularAutomatonModel cellularAutomatonModel, GLCellularAutomatonViews views) {
         super(visualizationModel);
-        this.caVisResults = caVisResults;
-    }
 
-    public void build() {
-        if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
-            throw new IllegalStateException("Only multi floor automaton supported");
-        }
-        MultiFloorEvacuationCellularAutomaton mfca = (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa();
-        containsRecording = false;
-        visualizationModel.init(MultiFloorEvacuationCellularAutomaton.getCellCount(caVisResults.getCa()));
-        //AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
-
-        recordingCount = 0;
-        recordingDone = 0;
-
-        allFloorsByID = new HashMap<>();
-
-        Collection<String> floors = mfca.getFloors();
-        for (int i = 0; i < floors.size(); ++i) {
-            add(new GLCAFloorControl(caVisResults, mfca.getRoomsOnFloor(i), i, visualizationModel));
-        }
-
-        this.setView(new GLCA(this, visualizationModel));
-        for (GLCAFloorControl floor : this) {
-            view.addChild(floor.getView());
-        }
-
-        showAllFloors();
+        this.cellularAutomatonModel = cellularAutomatonModel;
+        this.views = views;
+        setView(views.getView());
     }
 
     public void setEvacuationSimulationResults(EvacuationSimulationResults esr) {
@@ -110,61 +93,41 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         }
     }
 
-    public Collection<GLCAFloorControl> getAllFloors() {
-        return allFloorsByID.values();
-    }
-
-    public void showOnlyFloor(Integer floorID) {
+    public void showOnlyFloor(Integer floorId) {
         childControls.clear();
-        //childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
-        childControls.add(allFloorsByID.get(floorID)); // add the floor if possible, otherwise the first
+        childControls.add(cellularAutomatonModel.getFloorModel(floorId)); // add the floor if possible, otherwise the first
         view.clear();
         for (GLCAFloorControl floor : this) {
-            view.addChild(floor.getView());
+            view.addChild(views.getView(floor));
         }
     }
 
     public void showAllFloors() {
         childControls.clear();
-        childControls.addAll(allFloorsByID.values());
+        cellularAutomatonModel.floors().forEach(childControls::add);
         view.clear();
         for (GLCAFloorControl floor : this) {
-            view.addChild(floor.getView());
+            view.addChild(views.getView(floor));
         }
+    }
+
+    @Override
+    public void draw(GL2 gl) {
+        getView().draw(gl);
     }
 
     @Override
     public void add(GLCAFloorControl childControl) {
-        super.add(childControl);
-        System.out.println("FLoor hinzugefügt");
-        allFloorsByID.put(childControl.getFloorNumber(), childControl);
+        throw new IllegalStateException("Adding not supported any more");
     }
 
     @Override
     public void clear() {
-        allFloorsByID.clear();
         childControls.clear();
     }
 
-    @Override
-    public Iterator<GLCAFloorControl> fullIterator() {
-        return allFloorsByID.values().iterator();
-    }
-
     public void setPotentialDisplay(CellInformationDisplay potentialDisplay) {
-        for (GLCAFloorControl floorControl : allFloorsByID.values()) {
-            floorControl.setPotentialDisplay(potentialDisplay);
-        }
-    }
-
-    GLCAFloorControl getFloorControl(Integer floorID) {
-        return this.allFloorsByID.get(floorID);
-    }
-
-    private GLCellControl getCellControl(EvacCellInterface cell) {
-        GLCAFloorControl floor = getFloorControl(cell.getRoom().getFloor());
-        GLRoomControl room = floor.getRoomControl(cell.getRoom());
-        return room.getCellControl(cell);
+        cellularAutomatonModel.cells().forEach(cell -> cell.setPotentialDisplay(potentialDisplay));
     }
 
     private void convertIndividualMovements() {
@@ -178,8 +141,9 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         for (int k = 0; k < evacuationResults.getEs().getInitialIndividualCount(); k++) {
             individuals.add(null);
         }
+
         for (Individual individual : evacuationResults.getEs()) {
-            GLIndividualControl control = new GLIndividualControl(individual, visualizationModel);
+            GLIndividualControl control = new GLIndividualControl(individual, visualizationModel, this::computeAbsoluteCellPosition);
             individuals.set(individual.getNumber(), control);
         }
 
@@ -189,16 +153,16 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
             recording.nextActions();
             Vector<MoveAction> movements = recording.filterActions(MoveAction.class);
             for (MoveAction movement : movements) {
-                GLCellControl fromCell = getCellControl(movement.from());
-                GLCellControl endCell = getCellControl(movement.to());
+                GLCellControl fromCell = cellularAutomatonModel.getCellModel(movement.from());
+                GLCellControl endCell = cellularAutomatonModel.getCellModel(movement.to());
                 double arrivalTime = movement.arrivalTime();
                 double startTime = movement.startTime();
                 individuals.get(movement.getIndividualNumber()).addHistoryTriple(fromCell, endCell, startTime, arrivalTime);
             }
             Vector<SwapAction> swaps = recording.filterActions(SwapAction.class);
             for (SwapAction swap : swaps) {
-                GLCellControl cell1 = getCellControl(swap.cell1());
-                GLCellControl cell2 = getCellControl(swap.cell2());
+                GLCellControl cell1 = cellularAutomatonModel.getCellModel(swap.cell1());
+                GLCellControl cell2 = cellularAutomatonModel.getCellModel(swap.cell2());
                 double arrivalTime1 = swap.arrivalTime1();
                 double startTime1 = swap.startTime1();
                 double arrivalTime2 = swap.arrivalTime2();
@@ -209,7 +173,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
             Vector<DieAction> deaths = recording.filterActions(DieAction.class);
             // Individuen, die schon von anfang an tot sind:
             for (DieAction death : deaths) {
-                GLCellControl cell = getCellControl(death.placeOfDeath());
+                GLCellControl cell = cellularAutomatonModel.getCellModel(death.placeOfDeath());
                 individuals.get(death.getIndividualNumber()).addHistoryTriple(cell, cell, 0, 0);
             }
             this.recordingProgress();
@@ -220,6 +184,24 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         }
 
         visualizationModel.setIndividuals(individuals, glIndividuals);
+    }
+
+    /**
+     * Returns the absolute position of the cell in the graphics world.
+     *
+     * @param cellVisualizationModel the cell for which the absolute position is computed
+     * @return the absolute position. of the cell in the graphics world
+     */
+    private Tuple computeAbsoluteCellPosition(GLCellControl cellVisualizationModel) {
+        double cellX = cellVisualizationModel.getXPosition();
+        double cellY = cellVisualizationModel.getYPosition();
+        EvacCellInterface cell = cellVisualizationModel.getBackingCell();
+        double roomX = cellularAutomatonModel.getRoomModel(cell.getRoom()).getXPosition();
+        double roomY = cellularAutomatonModel.getRoomModel(cell.getRoom()).getYPosition();
+        int floorId = cell.getRoom().getFloor();
+        double floorX = cellularAutomatonModel.getFloorModel(floorId).getXPosition();
+        double floorY = cellularAutomatonModel.getFloorModel(floorId).getYPosition();
+        return new Tuple(cellX + roomX + floorX, cellY + roomY + floorY);
     }
 
     /**
@@ -238,20 +220,12 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
     @Override
     public void delete() {
-        for (GLCAFloorControl floor : this) {
-            //floor.delete();
-        }
         view.delete();
-        caVisResults = null;
     }
 
-    public void stepUpdate() {
-        for (GLCAFloorControl floor : this) {
-            for (GLRoomControl room : floor) {
-                for (GLCellControl cell : room) {
-                    cell.stepUpdate();
-                }
-            }
+    public void update() {
+        for (GLCell cellView : views.cellViews()) {
+            cellView.update();
         }
     }
 }

@@ -34,7 +34,7 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode {
+public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode<GLWallControl> {
 
     /**
      * Null object for the non existing building model to pass to the {@code GLBuilding} view class.

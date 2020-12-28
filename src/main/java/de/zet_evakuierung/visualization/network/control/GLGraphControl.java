@@ -29,7 +29,7 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, HierarchyNode {
+public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, HierarchyNode<GLSimpleNodeControl> {
 
     protected NodePositionMapping<Vector3> nodePositionMapping;
     protected DirectedGraph graph;

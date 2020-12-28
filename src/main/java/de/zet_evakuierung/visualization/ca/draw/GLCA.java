@@ -18,16 +18,16 @@ package de.zet_evakuierung.visualization.ca.draw;
 import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonControl;
+import de.zet_evakuierung.visualization.ca.control.GLCAControl;
 import org.zetool.opengl.framework.abs.HierarchyRoot;
 
 public class GLCA extends HierarchyRoot<GLCAFloor> {
 
     private final CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
     private long lastStep = 0;
-    private final GLCellularAutomatonControl model;
+    private final GLCAControl model;
 
-    public GLCA(GLCellularAutomatonControl model, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
+    public GLCA(GLCAControl model, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
         super();
         this.model = model;
         this.cellularAutomatonVisualizationModel = cellularAutomatonVisualizationModel;

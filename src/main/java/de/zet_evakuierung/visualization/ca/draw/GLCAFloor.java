@@ -16,6 +16,7 @@
 package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.media.opengl.GL2;
 
@@ -32,7 +33,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 
     public GLCAFloor(GLCAFloorControl model, Iterable<GLIndividual> allIndividuals) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
-        this.allIndividuals = allIndividuals;
+        this.allIndividuals = Objects.requireNonNull(allIndividuals);
     }
 
     @Override

@@ -15,44 +15,27 @@
  */
 package de.zet_evakuierung.visualization.ca.control;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import de.zet_evakuierung.visualization.ca.draw.GLCAFloor;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.visualization.CellularAutomatonVisualizationResults;
-import org.zet.cellularautomaton.Room;
 
-public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor, CellularAutomatonVisualizationModel> {
-
-    private final HashMap<org.zet.cellularautomaton.Room, GLRoomControl> roomControls;
+public class GLCAFloorControl extends AbstractZETVisualizationControl<Void, GLCAFloor, CellularAutomatonVisualizationModel>
+        implements VisualizationNodeModel {
 
     private double xPosition = 0.0d;
     private double yPosition = 0.0d;
 
     private int floorNumber = 0;
 
-    public GLCAFloorControl(CellularAutomatonVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, CellularAutomatonVisualizationModel visualizationModel) {
+    public GLCAFloorControl(CellularAutomatonVisualizationResults caVisResults, int floorID, CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
 
         xPosition = caVisResults.get(floorID).x;
         yPosition = caVisResults.get(floorID).y;
-        roomControls = new HashMap<>();
 
         this.floorNumber = floorID;
-
-        for (Room room : roomsOnTheFloor) {
-            GLRoomControl roomControl = new GLRoomControl(caVisResults, room, this, visualizationModel);
-            roomControls.put(room, roomControl);
-            add(roomControl);
-        }
-
-        setView(new GLCAFloor(this, visualizationModel.getIndividuals()));
-        for (GLRoomControl room : this) {
-            view.addChild(room.getView());
-        }
     }
 
     /**
@@ -60,6 +43,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
      *
      * @return the y offset
      */
+    @Override
     public double getXPosition() {
         return xPosition;
     }
@@ -69,8 +53,9 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
      *
      * @return the x offset
      */
+    @Override
     public double getYPosition() {
-        return yPosition;
+        return -yPosition;
     }
 
     /**
@@ -80,16 +65,6 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
      */
     public int getFloorNumber() {
         return floorNumber;
-    }
-
-    GLRoomControl getRoomControl(org.zet.cellularautomaton.Room room) {
-        return roomControls.get(room);
-    }
-
-    void setPotentialDisplay(CellInformationDisplay potentialDisplay) {
-        for (GLRoomControl roomControl : roomControls.values()) {
-            roomControl.setPotentialDisplay(potentialDisplay);
-        }
     }
 
     public List<GLIndividualControl> getIndividualControls() {

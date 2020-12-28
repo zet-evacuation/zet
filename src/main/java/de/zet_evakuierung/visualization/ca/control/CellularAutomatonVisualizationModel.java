@@ -79,6 +79,10 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
         //AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Zellen...", "Zelle " + cellsDone + " von " + cellCount + " erzeugt." );
     }
 
+    public int getCellCount() {
+        return cellCount;
+    }
+
     @Override
     public void addTime(long timeNanoSeconds) {
         time += timeNanoSeconds * speedFactor;

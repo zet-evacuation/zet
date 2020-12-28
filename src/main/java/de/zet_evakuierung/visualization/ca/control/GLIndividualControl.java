@@ -16,6 +16,7 @@
 package de.zet_evakuierung.visualization.ca.control;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import de.zet_evakuierung.visualization.VisHistoryTriple;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
@@ -60,22 +61,25 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
     /** The floor on which the individual is standing in the current moment of simulation. */
     private int onFloor = 0;
     EvacuationState es;
+    private final Function<GLCellControl, Tuple> query;
 
     /**
      * Creates a new individual control class for an {@link Individual}.
      *
      * @param individual the controlled individual
      * @param visualizationModel the general control class
+     * @param query queries the 2 dimensional {@code x}-{@code y} position of a cell
      */
-    public GLIndividualControl(Individual individual, CellularAutomatonVisualizationModel visualizationModel) {
+    public GLIndividualControl(Individual individual, CellularAutomatonVisualizationModel visualizationModel,
+            Function<GLCellControl, Tuple> query) {
         super(visualizationModel);
+        this.query = query;
         this.setView(new GLIndividual(this));
         visualizationModel.setFrustum(visualizationModel.getFrustum());
         controlled = individual;
         path = new ArrayList<>();
         moveVector = new Tuple(0, 0);
         sourcePos = new Tuple(0, 0);        
-        //onFloor = es.propertyFor(controlled).getCell().getRoom().getFloor();
         onFloor = visualizationModel.floorFor(individual);
     }
 
@@ -235,8 +239,8 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * @param destination the destination cell of the individual
      */
     public void calcPos(double time, double start, double end, GLCellControl source, GLCellControl destination) {
-        sourcePos = source.getAbsolutePosition();
-        Tuple destinationPos = destination.getAbsolutePosition();
+        sourcePos = query.apply(source);
+        Tuple destinationPos = query.apply(destination);
         moveVector = new Tuple(destinationPos.x - sourcePos.x, destinationPos.y - sourcePos.y);
         timeForMove = end - start;
     }

@@ -18,6 +18,7 @@ package gui.visualization.control;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,12 +29,12 @@ import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
 import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
 import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
 import de.zet_evakuierung.visualization.ca.control.GLCellControl;
 import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonControl;
+import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonModel;
 import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
+import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
@@ -49,6 +50,7 @@ import io.visualization.BuildingResults.Floor;
 import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
+import org.zet.cellularautomaton.MultiFloorEvacuationCellularAutomaton;
 import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zetool.common.localization.Localization;
@@ -65,6 +67,7 @@ import zet.gui.main.tabs.JVisualizationView;
  * @author Jan-Philipp Kappmeier
  */
 public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode {
+
     private static final Logger log = Logger.getGlobal();
     Frustum frustum;
 
@@ -102,10 +105,15 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         // Also has simulation not only static
         ca = evacResults.getRecording().getInitialConfig().getCellularAutomaton();
         absoluteMaxSpeed = evacResults.getRecording().getInitialConfig().getAbsoluteMaxSpeed();
-        
+
         caControl.setEvacuationSimulationResults(evacResults);
 
         estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
+    }
+
+    @Override
+    public Iterator iterator() {
+        return List.of(buildingControl.getView(), caControl.getView(), graphControl.getView()).iterator();
     }
 
     /**
@@ -201,7 +209,8 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         showWalls = false;
         iscompared = false;
     }
-double absoluteMaxSpeed = 1;
+    double absoluteMaxSpeed = 1;
+
     /**
      * Initializes a new instance of the general control class for the visualization of an evacuation simulation.
      *
@@ -227,9 +236,17 @@ double absoluteMaxSpeed = 1;
             }
             cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
             cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
-            caControl = new GLCellularAutomatonControl(caVisResults, cellularAutomatonVisualizationModel);
             cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
-            caControl.build();
+            if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
+                throw new IllegalStateException("Only multi floor automaton supported");
+            }
+            GLCellularAutomatonModel caModel = new GLCellularAutomatonModel.Builder(
+                    (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
+                    .withVisualizationModel(cellularAutomatonVisualizationModel)
+                    .build();
+            GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
+                    (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
+            caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, caModel, caViews);
 
             estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
         } else {
@@ -284,21 +301,27 @@ double absoluteMaxSpeed = 1;
     /**
      * Resets the cellular automaton control for this graphics control class.
      *
-     * @param caVis
-     * @param ca
+     * @param caVisResults
      */
-    public void setCellularAutomatonControl(CellularAutomatonVisualizationResults caVis) {
+    public void setCellularAutomatonControl(CellularAutomatonVisualizationResults caVisResults) {
         if (caControl != null) {
             caControl.delete();
         }
         hasCellularAutomaton = true;
-        this.ca = caVis.getCa();
+        this.ca = caVisResults.getCa();
         cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
         cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
-        caControl = new GLCellularAutomatonControl(caVis, cellularAutomatonVisualizationModel);
-        log.warning("Setting caControl to " + caControl);
         cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
-        caControl.build();
+        if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
+            throw new IllegalStateException("Only multi floor automaton supported");
+        }
+        GLCellularAutomatonModel caModel = new GLCellularAutomatonModel.Builder(
+                (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
+                .withVisualizationModel(cellularAutomatonVisualizationModel)
+                .build();
+        GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
+                (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
+        caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, caModel, caViews);
         estimatedTime = 0;
         showCellularAutomaton(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.cellularAutomaton"));
         if (visibleFloor == -1) {
@@ -730,15 +753,7 @@ double absoluteMaxSpeed = 1;
      */
     @Override
     public void update() {
-        for (GLCAFloorControl floor : caControl.getChildControls()) {
-            for (GLRoomControl room : floor) {
-                for (GLCellControl cell : room) {
-                    cell.getView().update();
-                }
-            }
-        }
-        //		for( GLCellControl cell : cells )
-//			cell.getView().update();
+        caControl.update();
     }
 
     /**

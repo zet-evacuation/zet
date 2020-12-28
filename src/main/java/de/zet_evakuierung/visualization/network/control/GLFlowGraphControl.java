@@ -28,7 +28,7 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode {
+public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode<GLGraphFloorControl> {
 
     private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
     private boolean supportsFloors = false;
@@ -85,15 +85,6 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
     public void clear() {
         allFloorsByID.clear();
         childControls.clear();
-    }
-
-    @Override
-    public Iterator<GLGraphFloorControl> fullIterator() {
-        return allFloorsByID.values().iterator();
-    }
-
-    GLGraphFloorControl getFloorControl(Integer floorID) {
-        return this.allFloorsByID.get(floorID);
     }
 
     public void showOnlyFloor(Integer floorID) {

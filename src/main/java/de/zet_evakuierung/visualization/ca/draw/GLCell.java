@@ -16,6 +16,8 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
+import java.util.function.Function;
+
 import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.ca.control.GLCellControl;
@@ -40,13 +42,15 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
     protected GLColor color;
     /** Default color of the cell floor. */
     private final GLColor defaultColor;
+    /** Function that allows to query for a neighbor color. */
+    private final Function<Direction8, GLColor> neighborColor;
 
-    public GLCell(GLCellControl model) {
+    public GLCell(GLCellControl model, Function<Direction8, GLColor> neighbourColour) {
         //this( model, VisualizationOptionManager.getCellFloorColor() );
-        this(model, VisualizationOptionManager.getCellWallColor());
+        this(model, VisualizationOptionManager.getCellWallColor(), neighbourColour);
     }
 
-    public GLCell(GLCellControl control, GLColor color) {
+    public GLCell(GLCellControl control, GLColor color, Function<Direction8, GLColor> neighbourColour) {
         super(control, new GLVector(control.getXPosition(), control.getYPosition(), 0));
         if (topLeft == null) {
             topLeft = new GLVector(control.getOffset(), -control.getOffset(), 0);
@@ -56,6 +60,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
         }
         this.color = color;
         this.defaultColor = color;
+        this.neighborColor = neighbourColour;
     }
 
     @Override
@@ -64,13 +69,13 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
             boolean lighting = gl.glIsEnabled(GL2.GL_LIGHTING);
             gl.glBegin(GL2.GL_QUADS);
             gl.glNormal3d(0, 0, 1);
-            getModel().mixColorWithNeighbours(Direction8.TopLeft).draw(gl, lighting);
+            mixColorWithNeighbours(Direction8.TopLeft).draw(gl, lighting);
             topLeft.draw(gl);
-            getModel().mixColorWithNeighbours(Direction8.TopRight).draw(gl, lighting);
+            mixColorWithNeighbours(Direction8.TopRight).draw(gl, lighting);
             topRight.draw(gl);
-            getModel().mixColorWithNeighbours(Direction8.DownLeft).draw(gl, lighting);
+            mixColorWithNeighbours(Direction8.DownLeft).draw(gl, lighting);
             bottomRight.draw(gl);
-            getModel().mixColorWithNeighbours(Direction8.DownRight).draw(gl, lighting);
+            mixColorWithNeighbours(Direction8.DownRight).draw(gl, lighting);
             bottomLeft.draw(gl);
             gl.glEnd();
         } else {
@@ -84,6 +89,59 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
             gl.glEnd();
         }
     }
+    
+    /**
+     * Creates a mixed colour for the cell. The direction indicates for which edge of the cell the colour is calculated.
+     *
+     * @param direction the edge of the cell
+     * @return the mixed color for that edge
+     */
+    public GLColor mixColorWithNeighbours(Direction8 direction) {
+        double r = color.getRed();
+        double g = color.getGreen();
+        double b = color.getBlue();
+
+        Direction8[] adjacentNeighbours = new Direction8[3];
+        switch (direction) {
+            case TopLeft:
+                adjacentNeighbours[0] = Direction8.Top;
+                adjacentNeighbours[1] = Direction8.TopLeft;
+                adjacentNeighbours[2] = Direction8.Left;
+                break;
+            case TopRight:
+                adjacentNeighbours[0] = Direction8.Top;
+                adjacentNeighbours[1] = Direction8.TopRight;
+                adjacentNeighbours[2] = Direction8.Right;
+                break;
+            case DownRight:
+                adjacentNeighbours[0] = Direction8.Down;
+                adjacentNeighbours[1] = Direction8.DownLeft;
+                adjacentNeighbours[2] = Direction8.Left;
+                break;
+            case DownLeft:
+                adjacentNeighbours[0] = Direction8.Down;
+                adjacentNeighbours[1] = Direction8.DownRight;
+                adjacentNeighbours[2] = Direction8.Right;
+                break;
+            default:
+                return new GLColor(1, 1, 1);
+        }
+        int count = 1;
+        for (int i = 0; i < 3; i++) {
+            Direction8 currentNeighbor = adjacentNeighbours[i];
+            if (model.isNeighborPresent(currentNeighbor)) {
+                count++;
+                GLColor neighbourColor = neighborColor.apply(currentNeighbor);
+                r += neighbourColor.getRed();
+                g += neighbourColor.getGreen();
+                b += neighbourColor.getBlue();
+            }
+        }
+        r /= count;
+        g /= count;
+        b /= count;
+        return new GLColor(r, g, b, 1);
+    }    
 
     /**
      * Updates the graphical representation of the cell. The current floor color is calculated.
