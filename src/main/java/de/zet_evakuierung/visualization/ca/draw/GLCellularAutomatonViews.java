@@ -20,12 +20,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.control.GLCAControl;
-import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonModel;
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.model.GLRootModel;
+import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
+import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import org.zet.cellularautomaton.DoorCell;
 import org.zet.cellularautomaton.EvacCell;
 import org.zet.cellularautomaton.EvacCellInterface;
@@ -46,8 +46,8 @@ import org.zetool.opengl.drawingutils.GLColor;
  */
 public class GLCellularAutomatonViews {
 
-    private final Map<GLCAFloorControl, GLCAFloor> floorViews;
-    private final Map<GLCellControl, GLCell> cellViews;
+    private final Map<GLFloorModel, GLCAFloor> floorViews;
+    private final Map<GLCellModel, GLCell> cellViews;
     private final GLCA rootView;
 
     private GLCellularAutomatonViews(GLCellularAutomatonViewFactory builder) {
@@ -57,7 +57,7 @@ public class GLCellularAutomatonViews {
     }
 
     /**
-     * Returns the {@link GLCA root view} for the {@link GLCAControl model root} of the visualization hierarchy.
+     * Returns the {@link GLCA root view} for the {@link GLRootModel model root} of the visualization hierarchy.
      *
      * @return the root view object
      */
@@ -65,7 +65,7 @@ public class GLCellularAutomatonViews {
         return rootView;
     }
 
-    public GLCAFloor getView(GLCAFloorControl model) {
+    public GLCAFloor getView(GLFloorModel model) {
         return floorViews.get(model);
     }
 
@@ -89,8 +89,8 @@ public class GLCellularAutomatonViews {
         private final CellularAutomatonVisualizationModel visualizationModel;
         private final MultiFloorEvacuationCellularAutomaton cellularAutomaton;
         private final GLCellularAutomatonModel cellularAutomatonModel;
-        private Map<GLCAFloorControl, GLCAFloor> floorViews;
-        private Map<GLCellControl, GLCell> cellViews;
+        private Map<GLFloorModel, GLCAFloor> floorViews;
+        private Map<GLCellModel, GLCell> cellViews;
         private GLCA rootView;
 
         GLCellularAutomatonViewFactory(CellularAutomatonVisualizationModel visualizationModel,
@@ -110,7 +110,7 @@ public class GLCellularAutomatonViews {
 
             // Create the view hierarchy
             for (int i = 0; i < cellularAutomatonModel.getFloorCount(); ++i) {
-                GLCAFloorControl floorModel = cellularAutomatonModel.getFloorModel(i);
+                GLFloorModel floorModel = cellularAutomatonModel.getFloorModel(i);
                 GLCAFloor floorView = new GLCAFloor(floorModel, visualizationModel.getIndividuals());
                 floorViews.put(floorModel, floorView);
                 System.out.println("ADding floor view " + floorView + " to main view " + rootView);
@@ -121,7 +121,7 @@ public class GLCellularAutomatonViews {
 
         private void createRoomViews(int floorId, GLCAFloor parentFloor) {
             for (Room room : cellularAutomaton.getRoomsOnFloor(floorId)) {
-                GLRoomControl roomModel = cellularAutomatonModel.getRoomModel(room);
+                GLRoomModel roomModel = cellularAutomatonModel.getRoomModel(room);
                 GLRoom roomView = new GLRoom(roomModel);
                 System.out.println("Adding a room view to " + parentFloor);
                 parentFloor.addChild(roomView);
@@ -131,17 +131,17 @@ public class GLCellularAutomatonViews {
 
         private void createCellViews(Room roomModel, GLRoom parentRoom) {
             for (EvacCell cell : roomModel.getAllCells()) {
-                GLCellControl cellModel = cellularAutomatonModel.getCellModel(cell);
+                GLCellModel cellModel = cellularAutomatonModel.getCellModel(cell);
                 GLCell cellView = createCell(cell, cellModel);
                 cellViews.put(cellModel, cellView);
                 parentRoom.addChild(cellView);
             }
         }
 
-        private GLCell createCell(EvacCell cell, GLCellControl cellModel) {
+        private GLCell createCell(EvacCell cell, GLCellModel cellModel) {
             Function<Direction8, GLColor> neighborColor = (Direction8 direction) -> {
                 EvacCellInterface neighborCell = cell.getNeighbor(direction);
-                GLCellControl cellModel1 = cellularAutomatonModel.getCellModel(neighborCell);
+                GLCellModel cellModel1 = cellularAutomatonModel.getCellModel(neighborCell);
                 GLCell cellView = cellViews.get(cellModel1);
                 return cellView.getColor();
             };

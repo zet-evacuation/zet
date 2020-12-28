@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -41,8 +41,8 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA,
-        CellularAutomatonVisualizationModel> implements HierarchyNode<GLCAFloorControl> {
+public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLFloorModel, GLCA,
+        CellularAutomatonVisualizationModel> implements HierarchyNode<GLFloorModel> {
 
     /**
      * The logger.
@@ -88,7 +88,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         // Load recording
         convertIndividualMovements();
         evacuationResults.getRecording().rewind();
-        for (GLCAFloorControl floor : this) {
+        for (GLFloorModel floor : this) {
             floor.getView().setIndividuals(visualizationModel.getIndividuals());
         }
     }
@@ -97,7 +97,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         childControls.clear();
         childControls.add(cellularAutomatonModel.getFloorModel(floorId)); // add the floor if possible, otherwise the first
         view.clear();
-        for (GLCAFloorControl floor : this) {
+        for (GLFloorModel floor : this) {
             view.addChild(views.getView(floor));
         }
     }
@@ -106,7 +106,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         childControls.clear();
         cellularAutomatonModel.floors().forEach(childControls::add);
         view.clear();
-        for (GLCAFloorControl floor : this) {
+        for (GLFloorModel floor : this) {
             view.addChild(views.getView(floor));
         }
     }
@@ -117,7 +117,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     }
 
     @Override
-    public void add(GLCAFloorControl childControl) {
+    public void add(GLFloorModel childControl) {
         throw new IllegalStateException("Adding not supported any more");
     }
 
@@ -133,7 +133,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     private void convertIndividualMovements() {
         LOG.info("Converting indivudal movements");
         ArrayList<GLIndividual> glIndividuals = new ArrayList<>();
-        ArrayList<GLIndividualControl> individuals = new ArrayList<>();
+        ArrayList<GLIndividualModel> individuals = new ArrayList<>();
 
         EvacuationRecording recording = evacuationResults.getRecording();
         EvacuationCellularAutomaton ca = recording.getInitialConfig().getCellularAutomaton();
@@ -143,7 +143,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         }
 
         for (Individual individual : evacuationResults.getEs()) {
-            GLIndividualControl control = new GLIndividualControl(individual, visualizationModel, this::computeAbsoluteCellPosition);
+            GLIndividualModel control = new GLIndividualModel(individual, visualizationModel, this::computeAbsoluteCellPosition);
             individuals.set(individual.getNumber(), control);
         }
 
@@ -153,16 +153,16 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
             recording.nextActions();
             Vector<MoveAction> movements = recording.filterActions(MoveAction.class);
             for (MoveAction movement : movements) {
-                GLCellControl fromCell = cellularAutomatonModel.getCellModel(movement.from());
-                GLCellControl endCell = cellularAutomatonModel.getCellModel(movement.to());
+                GLCellModel fromCell = cellularAutomatonModel.getCellModel(movement.from());
+                GLCellModel endCell = cellularAutomatonModel.getCellModel(movement.to());
                 double arrivalTime = movement.arrivalTime();
                 double startTime = movement.startTime();
                 individuals.get(movement.getIndividualNumber()).addHistoryTriple(fromCell, endCell, startTime, arrivalTime);
             }
             Vector<SwapAction> swaps = recording.filterActions(SwapAction.class);
             for (SwapAction swap : swaps) {
-                GLCellControl cell1 = cellularAutomatonModel.getCellModel(swap.cell1());
-                GLCellControl cell2 = cellularAutomatonModel.getCellModel(swap.cell2());
+                GLCellModel cell1 = cellularAutomatonModel.getCellModel(swap.cell1());
+                GLCellModel cell2 = cellularAutomatonModel.getCellModel(swap.cell2());
                 double arrivalTime1 = swap.arrivalTime1();
                 double startTime1 = swap.startTime1();
                 double arrivalTime2 = swap.arrivalTime2();
@@ -173,7 +173,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
             Vector<DieAction> deaths = recording.filterActions(DieAction.class);
             // Individuen, die schon von anfang an tot sind:
             for (DieAction death : deaths) {
-                GLCellControl cell = cellularAutomatonModel.getCellModel(death.placeOfDeath());
+                GLCellModel cell = cellularAutomatonModel.getCellModel(death.placeOfDeath());
                 individuals.get(death.getIndividualNumber()).addHistoryTriple(cell, cell, 0, 0);
             }
             this.recordingProgress();
@@ -192,7 +192,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
      * @param cellVisualizationModel the cell for which the absolute position is computed
      * @return the absolute position. of the cell in the graphics world
      */
-    private Tuple computeAbsoluteCellPosition(GLCellControl cellVisualizationModel) {
+    private Tuple computeAbsoluteCellPosition(GLCellModel cellVisualizationModel) {
         double cellX = cellVisualizationModel.getXPosition();
         double cellY = cellVisualizationModel.getYPosition();
         EvacCellInterface cell = cellVisualizationModel.getBackingCell();

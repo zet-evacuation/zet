@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -41,6 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.junit.Test;
 import org.zet.cellularautomaton.EvacCell;

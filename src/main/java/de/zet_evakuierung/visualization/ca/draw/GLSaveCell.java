@@ -17,14 +17,14 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLSaveCell extends GLCell {
 
-    public GLSaveCell(GLCellControl model, Function<Direction8, GLColor> neighborColor) {
+    public GLSaveCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
         super(model, VisualizationOptionManager.getSaveCellFloorColor(), neighborColor);
     }
 

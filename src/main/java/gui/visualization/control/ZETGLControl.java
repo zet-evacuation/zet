@@ -28,14 +28,14 @@ import javax.media.opengl.GLAutoDrawable;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
 import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
-import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonModel;
-import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
+import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
+import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
 import de.zet_evakuierung.visualization.network.control.GLNodeControl;
@@ -226,7 +226,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         this.caStatistic = caStatistic;
         this.buildingResults = buildingResults;
 
-        GLCellControl.invalidateMergedPotential();
+        GLCellModel.invalidateMergedPotential();
         if (caVisResults != null) {
             hasCellularAutomaton = true;
             if (evacResults != null) {
@@ -601,11 +601,11 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
     }
 
     public void activateMergedPotential() {
-        GLCellControl.setActivePotential(GLCellControl.getMergedPotential());
+        GLCellModel.setActivePotential(GLCellModel.getMergedPotential());
     }
 
     public void activatePotential(Potential potential) {
-        GLCellControl.setActivePotential(potential);
+        GLCellModel.setActivePotential(potential);
     }
 
     /**
@@ -694,7 +694,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         if (!hasCellularAutomaton) {
             return;
         }
-        for (GLIndividualControl control : getIndividualControls()) {
+        for (GLIndividualModel control : getIndividualControls()) {
             control.setHeadInformation(idm);
         }
         update();
@@ -776,7 +776,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         return cellularAutomatonVisualizationModel.getIndividuals();
     }
 
-    public List<GLIndividualControl> getIndividualControls() {
+    public List<GLIndividualModel> getIndividualControls() {
         return cellularAutomatonVisualizationModel.getIndividualControls();
     }
 

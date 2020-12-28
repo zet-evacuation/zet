@@ -13,21 +13,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
+import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.ca.draw.GLRoom;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.cellularautomaton.Room;
 
-public class GLRoomControl extends AbstractZETVisualizationControl<Void, GLRoom, CellularAutomatonVisualizationModel>
+public class GLRoomModel extends AbstractZETVisualizationControl<Void, GLRoom, CellularAutomatonVisualizationModel>
         implements VisualizationNodeModel {
 
     private final double xPosition;
     private final double yPosition;
     Room controlled;
 
-    public GLRoomControl(CellularAutomatonVisualizationResults caVisResults, Room room,
+    public GLRoomModel(CellularAutomatonVisualizationResults caVisResults, Room room,
             CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
         controlled = room;

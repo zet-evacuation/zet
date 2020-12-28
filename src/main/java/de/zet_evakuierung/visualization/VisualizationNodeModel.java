@@ -1,4 +1,5 @@
-/* zet evacuation tool copyright © 2007-20 zet evacuation team
+/*
+ * zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,17 +14,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.draw;
+package de.zet_evakuierung.visualization;
 
-import java.util.function.Function;
+/**
+ *
+ * @author Jan-Philipp Kappmeier 
+*/
+public interface VisualizationNodeModel {
 
-import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import org.zetool.common.util.Direction8;
-import org.zetool.opengl.drawingutils.GLColor;
+    public double getXPosition();
 
-public class GLPotentialCell extends GLCell {
-
-    public GLPotentialCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
-        super(model, neighborColor);
-    }
+    /**
+     * Returns the offset of this room. The offset is in real (z-format) coordinates
+     *
+     * @return the x offset
+     */
+    public double getYPosition();
 }

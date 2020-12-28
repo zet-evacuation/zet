@@ -13,11 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
 import static java.util.stream.Collectors.toList;
 
+import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.ca.draw.GLCell;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.VisualizationOptionManager;
@@ -33,7 +34,7 @@ import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zetool.common.util.Direction8;
 
-public class GLCellControl extends AbstractZETVisualizationControl<Void, GLCell, CellularAutomatonVisualizationModel>
+public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, CellularAutomatonVisualizationModel>
         implements StepUpdateListener, VisualizationNodeModel {
 
     private final double xPosition;
@@ -52,7 +53,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<Void, GLCell,
 
     CAStatistic statistic;
 
-    public GLCellControl(CellularAutomatonVisualizationResults caVisResults, EvacCell cell,
+    public GLCellModel(CellularAutomatonVisualizationResults caVisResults, EvacCell cell,
             CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
         this.statistic = null;
@@ -124,7 +125,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<Void, GLCell,
     }
 
     public static void setActivePotential(Potential activePotential) {
-        GLCellControl.activePotential = activePotential;
+        GLCellModel.activePotential = activePotential;
     }
 
     public static Potential getMergedPotential() {

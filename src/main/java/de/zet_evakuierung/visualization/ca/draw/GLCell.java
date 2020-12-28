@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import org.zetool.common.util.Direction8;
@@ -28,7 +28,7 @@ import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
-public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
+public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
 
     /** Top left coordinate of the squre cell. */
     private static GLVector topLeft;
@@ -45,12 +45,12 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
     /** Function that allows to query for a neighbor color. */
     private final Function<Direction8, GLColor> neighborColor;
 
-    public GLCell(GLCellControl model, Function<Direction8, GLColor> neighbourColour) {
+    public GLCell(GLCellModel model, Function<Direction8, GLColor> neighbourColour) {
         //this( model, VisualizationOptionManager.getCellFloorColor() );
         this(model, VisualizationOptionManager.getCellWallColor(), neighbourColour);
     }
 
-    public GLCell(GLCellControl control, GLColor color, Function<Direction8, GLColor> neighbourColour) {
+    public GLCell(GLCellModel control, GLColor color, Function<Direction8, GLColor> neighbourColour) {
         super(control, new GLVector(control.getXPosition(), control.getYPosition(), 0));
         if (topLeft == null) {
             topLeft = new GLVector(control.getOffset(), -control.getOffset(), 0);

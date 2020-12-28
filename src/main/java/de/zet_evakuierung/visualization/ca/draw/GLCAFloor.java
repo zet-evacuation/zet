@@ -20,18 +20,18 @@ import java.util.Objects;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
+import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
+public class GLCAFloor extends AbstractDrawable<GLRoom, GLFloorModel> {
 
     private Iterable<GLIndividual> allIndividuals;
 
-    public GLCAFloor(GLCAFloorControl model, Iterable<GLIndividual> allIndividuals) {
+    public GLCAFloor(GLFloorModel model, Iterable<GLIndividual> allIndividuals) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
         this.allIndividuals = Objects.requireNonNull(allIndividuals);
     }

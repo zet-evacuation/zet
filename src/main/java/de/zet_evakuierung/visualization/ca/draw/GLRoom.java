@@ -18,7 +18,7 @@ package de.zet_evakuierung.visualization.ca.draw;
 import javax.media.opengl.GL2;
 
 import com.google.common.annotations.VisibleForTesting;
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
@@ -28,7 +28,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
+public class GLRoom extends AbstractDrawable<GLCell, GLRoomModel> {
 
     /** Top left coordinate of the room bounding box. */
     private GLVector topLeft;
@@ -44,18 +44,18 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
      *
      * @param model
      */
-    public GLRoom(GLRoomControl model) {
+    public GLRoom(GLRoomModel model) {
         super(model, computePosition(model));
         System.out.println("GRID Property is: " + VisualizationOptionManager.showSpaceBetweenCells());
         if (VisualizationOptionManager.showSpaceBetweenCells()) {
             topLeft = new GLVector(0, 0, -0.1);
-            topRight = new GLVector(model.getWidth() , 0, -0.1);
+            topRight = new GLVector(model.getWidth(), 0, -0.1);
             bottomLeft = new GLVector(0, model.getHeight(), -0.1);
             bottomRight = new GLVector(model.getWidth(), model.getHeight(), -0.1);
         }
     }
 
-    private static GLVector computePosition(GLRoomControl model) {
+    private static GLVector computePosition(GLRoomModel model) {
         double xPosition = model.getXPosition();
         double yPosition = model.getYPosition();
         return new GLVector(xPosition, yPosition, 0);

@@ -17,7 +17,7 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
@@ -36,7 +36,7 @@ public class GLStairCell extends GLCell {
      * @param model the model class for this stair cell instance
      * @param neighborColor calculates the color of neighbor cells in a given direction
      */
-    public GLStairCell(GLCellControl model, Function<Direction8, GLColor> neighborColor) {
+    public GLStairCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
         super(model, VisualizationOptionManager.getStairCellFloorColor(), neighborColor);
     }
 

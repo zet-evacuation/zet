@@ -16,7 +16,7 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
-import static de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonModelTest.createMockList;
+import static de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModelTest.createMockList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -35,11 +35,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import de.zet_evakuierung.visualization.ca.control.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.control.GLCAFloorControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellControl;
-import de.zet_evakuierung.visualization.ca.control.GLCellularAutomatonModel;
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellModel;
+import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
+import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import ds.PropertyContainer;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -110,7 +110,7 @@ public class GLCellularAutomatonViewsTest {
     public void testFactoryRooms() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLCAFloorControl> mockFloors = setUpFloors(baseMocks, 1);
+        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
         setUpRooms(baseMocks, mockFloors, 2);
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
@@ -125,7 +125,7 @@ public class GLCellularAutomatonViewsTest {
     public void testFactoryCells() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLCAFloorControl> mockFloors = setUpFloors(baseMocks, 1);
+        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
         List<Room> mockRooms = setUpRooms(baseMocks, mockFloors, 1);
         setUpCells(baseMocks, mockRooms, 2);
 
@@ -165,7 +165,7 @@ public class GLCellularAutomatonViewsTest {
             Consumer<EvacCell> cellPreparation) {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLCAFloorControl> mockFloors = setUpFloors(baseMocks, 1);
+        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
         List<Room> mockRooms = setUpRooms(baseMocks, mockFloors, 1);
         List<EvacCell> mockCells = setUpCells(baseMocks, mockRooms, cellType, 1);
 
@@ -190,11 +190,11 @@ public class GLCellularAutomatonViewsTest {
      * @param baseMocks the base mocks that are set up
      * @param floorCount the number of floor mocks to be created
      */
-    private static List<GLCAFloorControl> setUpFloors(FactoryBaseMocks baseMocks, int floorCount) {
+    private static List<GLFloorModel> setUpFloors(FactoryBaseMocks baseMocks, int floorCount) {
         when(baseMocks.cellularAutomatonModel.getFloorCount()).thenReturn(floorCount);
-        List<GLCAFloorControl> floorMocks = new ArrayList<>(floorCount);
+        List<GLFloorModel> floorMocks = new ArrayList<>(floorCount);
         for (int i = 0; i < floorCount; ++i) {
-            GLCAFloorControl mockFloor = mock(GLCAFloorControl.class);
+            GLFloorModel mockFloor = mock(GLFloorModel.class);
             floorMocks.add(mockFloor);
             when(baseMocks.cellularAutomatonModel.getFloorModel(i)).thenReturn(mockFloor);
         }
@@ -206,24 +206,24 @@ public class GLCellularAutomatonViewsTest {
     }
 
     /**
-     * Sets up the mocks for room models. Creates {@link Room} mocks and {@link GLRoomControl} mocks that correspond to
+     * Sets up the mocks for room models. Creates {@link Room} mocks and {@link GLRoomModel} mocks that correspond to
      * each other.
      * <p>
      * Sets up the cellular automaton mock to return the respective list of {@link Room rooms} for each floor and the
-     * model to retrieve the {@link GLRoomControl} for its corresponding room.</p>
+     * model to retrieve the {@link GLRoomModel} for its corresponding room.</p>
      *
      * @param baseMocks the base mocks that are set up
      * @param floorMocks list of floor mocks that have been mocked already
      * @param roomsOnFloor number of rooms for each floor; must have the same size as {@code floorMocks}
      * @return a list of all created mocked rooms, ordered by floor
      */
-    private static List<Room> setUpRooms(FactoryBaseMocks baseMocks, List<GLCAFloorControl> floorMocks,
+    private static List<Room> setUpRooms(FactoryBaseMocks baseMocks, List<GLFloorModel> floorMocks,
             int... roomsOnFloor) {
         Function<Integer, List<Room>> cellMockSupplier
                 = i -> (List<Room>) baseMocks.cellularAutomaton.getRoomsOnFloor(i);
-        Function<Room, GLRoomControl> intermalMockFunction
+        Function<Room, GLRoomModel> intermalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getRoomModel(evacCellMock);
-        return setUp(floorMocks, Room.class, cellMockSupplier, GLRoomControl.class, intermalMockFunction, roomsOnFloor);
+        return setUp(floorMocks, Room.class, cellMockSupplier, GLRoomModel.class, intermalMockFunction, roomsOnFloor);
     }
 
     private static List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
@@ -232,11 +232,11 @@ public class GLCellularAutomatonViewsTest {
     }
 
     /**
-     * Sets up the mocks for cell models. Creates {@link EvacCell} mocks and {@link GLCellControl} mocks that correspond
+     * Sets up the mocks for cell models. Creates {@link EvacCell} mocks and {@link GLCellModel} mocks that correspond
      * to each other.
      * <p>
      * Sets up the room mocks to return the respective list of created {@link EvacCell} mocks. Sets up the cellular
-     * automaton model to return the {@link GLCellControl cell model} class for each created cell.</p>
+     * automaton model to return the {@link GLCellModel cell model} class for each created cell.</p>
      * <p>
      * Supports to set up the view factory to create different {@link GLCell cell view} types depending on the model.
      * The type of model is specified by the {@code cellType}.</p>
@@ -250,9 +250,9 @@ public class GLCellularAutomatonViewsTest {
     private static List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
             Class<? extends EvacCell> cellType, int... cellsInRoom) {
         Function<Integer, List<EvacCell>> cellMockSupplier = i -> roomMocks.get(i).getAllCells();
-        Function<EvacCell, GLCellControl> intermalMockFunction
+        Function<EvacCell, GLCellModel> intermalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getCellModel(evacCellMock);
-        return setUp(roomMocks, cellType, cellMockSupplier, GLCellControl.class, intermalMockFunction, cellsInRoom);
+        return setUp(roomMocks, cellType, cellMockSupplier, GLCellModel.class, intermalMockFunction, cellsInRoom);
     }
 
     /**
@@ -265,7 +265,7 @@ public class GLCellularAutomatonViewsTest {
      * The number of {@code parentMocks} must be equal as the number of {@code childrenInParent}.</p>
      * <p>
      * Implementations are for example {@link Room} as parent type and {@link EvacCell} as created model type, or
-     * {@link GLCAFloorControl floors} as parent type and {@link Room} as created child models. Multiple such set ups
+     * {@link GLFloorModel floors} as parent type and {@link Room} as created child models. Multiple such set ups
      * create a hierarchy of mocks. </p>
      *
      * @param <M> result model mock type

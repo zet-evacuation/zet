@@ -14,20 +14,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 /**
  *
- * @author Jan-Philipp Kappmeier 
-*/
-public interface VisualizationNodeModel {
-
-    public double getXPosition();
-
-    /**
-     * Returns the offset of this room. The offset is in real (z-format) coordinates
-     *
-     * @return the x offset
-     */
-    public double getYPosition();
+ * @author Jan-Philipp Kappmeier
+ */
+public class GLCellularAutomatonControlTest {
+    
 }

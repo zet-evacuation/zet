@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
     double speedFactor = 1;
 
     private ArrayList<GLIndividual> glIndividuals = new ArrayList<>();
-    private ArrayList<GLIndividualControl> individuals = new ArrayList<>();
+    private ArrayList<GLIndividualModel> individuals = new ArrayList<>();
     private InitialConfiguration initialConfiguration;
 
     void init(int cellCount) {
@@ -152,7 +152,7 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
         return time * Conversion.NANO_SECONDS_TO_SEC;
     }
 
-    public final List<GLIndividualControl> getIndividualControls() {
+    public final List<GLIndividualModel> getIndividualControls() {
         return Collections.unmodifiableList(individuals);
     }
 
@@ -180,7 +180,7 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
         this.maxStep = maxStep;
     }
 
-    void setIndividuals(ArrayList<GLIndividualControl> individuals, ArrayList<GLIndividual> glIndividuals) {
+    void setIndividuals(ArrayList<GLIndividualModel> individuals, ArrayList<GLIndividual> glIndividuals) {
         if (individuals.size() != glIndividuals.size()) {
             throw new IllegalArgumentException("Individual lists must be of same size");
         }

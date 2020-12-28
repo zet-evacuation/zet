@@ -19,7 +19,7 @@ import java.awt.Color;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.ca.control.GLIndividualControl;
+import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.util.Tuple;
@@ -32,7 +32,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
+public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualModel> {
 
     //public static double individualHeight = 150 * 0.1; // TODO: use the scaling value, original 30
     //public static double individualRadius = 100 * 0.1; // original 10
@@ -44,7 +44,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
     public static GLColor deadColor = new GLColor(130, 55, 101);
     public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
-    public GLIndividual(GLIndividualControl model) {
+    public GLIndividual(GLIndividualModel model) {
         super(model);
     }
 

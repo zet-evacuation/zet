@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -33,10 +33,10 @@ import zet.gui.main.tabs.JVisualizationView;
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, CellularAutomatonVisualizationModel> implements StepUpdateListener {
+public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndividualModel, GLIndividual, CellularAutomatonVisualizationModel> implements StepUpdateListener {
     
     /** The history data structure that stores information about the positions of the individual at given times */
-    private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
+    private ArrayList<VisHistoryTriple<Double, GLCellModel, GLCellModel>> path;
     /** The last time at that the individual moves. */
     private double lastEnd;
     /** The current index on the history data structure that is reached during linear search. */
@@ -61,7 +61,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
     /** The floor on which the individual is standing in the current moment of simulation. */
     private int onFloor = 0;
     EvacuationState es;
-    private final Function<GLCellControl, Tuple> query;
+    private final Function<GLCellModel, Tuple> query;
 
     /**
      * Creates a new individual control class for an {@link Individual}.
@@ -70,8 +70,8 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * @param visualizationModel the general control class
      * @param query queries the 2 dimensional {@code x}-{@code y} position of a cell
      */
-    public GLIndividualControl(Individual individual, CellularAutomatonVisualizationModel visualizationModel,
-            Function<GLCellControl, Tuple> query) {
+    public GLIndividualModel(Individual individual, CellularAutomatonVisualizationModel visualizationModel,
+            Function<GLCellModel, Tuple> query) {
         super(visualizationModel);
         this.query = query;
         this.setView(new GLIndividual(this));
@@ -109,8 +109,8 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
         }
         double stepEnd = -1;
         double stepStart = -1;
-        GLCellControl source = null;
-        GLCellControl destination = null;
+        GLCellModel source = null;
+        GLCellModel destination = null;
         while (index < path.size() && this.path.get(index).getFirstValue() <= step) {
             stepStart = this.path.get(index).getFirstValue();
             source = this.path.get(index).getSecondValue();
@@ -238,7 +238,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * @param source the source cell on which the individual starts moving
      * @param destination the destination cell of the individual
      */
-    public void calcPos(double time, double start, double end, GLCellControl source, GLCellControl destination) {
+    public void calcPos(double time, double start, double end, GLCellModel source, GLCellModel destination) {
         sourcePos = query.apply(source);
         Tuple destinationPos = query.apply(destination);
         moveVector = new Tuple(destinationPos.x - sourcePos.x, destinationPos.y - sourcePos.y);
@@ -254,7 +254,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
      * @param start the time when the individual starts moving
      * @param arrival the time when the individual arrives at the destination
      */
-    public void addHistoryTriple(GLCellControl from, GLCellControl to, double start, double arrival) {
+    public void addHistoryTriple(GLCellModel from, GLCellModel to, double start, double arrival) {
         if (Math.abs(start - lastEnd) > 0.001) {
             path.add(new VisHistoryTriple<>(lastEnd, from, from));
         }

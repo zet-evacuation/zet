@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.zetool.opengl.framework.util.GLContextAwareThread.createWithGLContext;
 import static org.zetool.test.math.geom.NDimensionalIsCloseTo.closeTo;
 
-import de.zet_evakuierung.visualization.ca.control.GLRoomControl;
+import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import ds.PropertyContainer;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class GLRoomTest {
 
     @Test
     public void initialization() throws InterruptedException {
-        GLRoomControl model = mock(GLRoomControl.class);
+        GLRoomModel model = mock(GLRoomModel.class);
 
         GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
 
@@ -61,7 +61,7 @@ public class GLRoomTest {
      */
     @Test
     public void coordinatesCorrect() throws InterruptedException {
-        GLRoomControl model = mock(GLRoomControl.class);
+        GLRoomModel model = mock(GLRoomModel.class);
         double width = 232;
         double height = 422;
         when(model.getWidth()).thenReturn(width);
@@ -83,7 +83,7 @@ public class GLRoomTest {
      */
     @Test
     public void coordinatesNotDefined() throws InterruptedException {
-        GLRoomControl model = mock(GLRoomControl.class);
+        GLRoomModel model = mock(GLRoomModel.class);
 
         PropertyContainer.getGlobal().set(GRID_PROPERTY, false);
         GLRoom fixture = createWithGLContext(() -> new GLRoom(model));

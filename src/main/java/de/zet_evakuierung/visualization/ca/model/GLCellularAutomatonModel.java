@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -41,10 +41,10 @@ import org.zet.cellularautomaton.Room;
 public class GLCellularAutomatonModel {
 
     private final static String ILLEGAL_NULL_OBJECT_ERROR = "Erroneous builder returned null.";
-    private final GLCAControl cellularAutomaton;
-    private final List<GLCAFloorControl> floors;
-    private final Map<Room, GLRoomControl> roomModelMap;
-    private final Map<EvacCellInterface, GLCellControl> cellModelMap;
+    private final GLRootModel cellularAutomaton;
+    private final List<GLFloorModel> floors;
+    private final Map<Room, GLRoomModel> roomModelMap;
+    private final Map<EvacCellInterface, GLCellModel> cellModelMap;
 
     private GLCellularAutomatonModel(Builder builder) {
         this.cellularAutomaton = Objects.requireNonNull(builder.cellularAutomatonModel, ILLEGAL_NULL_OBJECT_ERROR);
@@ -58,7 +58,7 @@ public class GLCellularAutomatonModel {
      *
      * @return the cellular automaton root instance
      */
-    public GLCAControl getCAModel() {
+    public GLRootModel getCAModel() {
         return cellularAutomaton;
     }
 
@@ -69,7 +69,7 @@ public class GLCellularAutomatonModel {
      * @param floor the floor number for which the model is returned
      * @return the floor visualization model instance
      */
-    public GLCAFloorControl getFloorModel(int floor) {
+    public GLFloorModel getFloorModel(int floor) {
         return floors.get(floor);
     }
 
@@ -90,7 +90,7 @@ public class GLCellularAutomatonModel {
      * @param room the instane for which the corresponding model should be returned; not {@code null}
      * @return the room visualization model instance
      */
-    public GLRoomControl getRoomModel(Room room) {
+    public GLRoomModel getRoomModel(Room room) {
         return roomModelMap.get(room);
     }
 
@@ -101,7 +101,7 @@ public class GLCellularAutomatonModel {
      * @param cell the instance for which the corresponding model should be returned; not {@code null}
      * @return the cell visualization model instance
      */
-    public GLCellControl getCellModel(EvacCellInterface cell) {
+    public GLCellModel getCellModel(EvacCellInterface cell) {
         return cellModelMap.get(cell);
     }
 
@@ -111,7 +111,7 @@ public class GLCellularAutomatonModel {
      * @see #getFloorModel(int)
      * @return iterable of all floor visualization model instances
      */
-    Iterable<GLCAFloorControl> floors() {
+    Iterable<GLFloorModel> floors() {
         return floors;
     }
 
@@ -121,7 +121,7 @@ public class GLCellularAutomatonModel {
      * @see #getRoomModel(org.zet.cellularautomaton.Room)
      * @return iterable of all room visualization model instances
      */
-    Iterable<GLRoomControl> rooms() {
+    Iterable<GLRoomModel> rooms() {
         return roomModelMap.values();
     }
 
@@ -131,7 +131,7 @@ public class GLCellularAutomatonModel {
      * @see #getCellModel(org.zet.cellularautomaton.EvacCellInterface)
      * @return iterable of all cell visualization model instances
      */
-    Iterable<GLCellControl> cells() {
+    Iterable<GLCellModel> cells() {
         return cellModelMap.values();
     }
 
@@ -157,19 +157,19 @@ public class GLCellularAutomatonModel {
         /**
          * The {@link #build() built} root visualization model instance.
          */
-        private GLCAControl cellularAutomatonModel;
+        private GLRootModel cellularAutomatonModel;
         /**
          * The {@link #build() built} floor visualization model instances.
          */
-        private List<GLCAFloorControl> floors;
+        private List<GLFloorModel> floors;
         /**
          * Map of the {@link #build() built} room visualization model instances.
          */
-        private Map<Room, GLRoomControl> roomMap;
+        private Map<Room, GLRoomModel> roomMap;
         /**
          * Map of the {@link #build() built} cell visualization model instances.
          */
-        private Map<EvacCellInterface, GLCellControl> cellMap;
+        private Map<EvacCellInterface, GLCellModel> cellMap;
 
         public Builder(MultiFloorEvacuationCellularAutomaton cellularAutomaton, CellularAutomatonVisualizationResults caVisResults) {
             this.cellularAutomaton = Objects.requireNonNull(cellularAutomaton);
@@ -183,7 +183,7 @@ public class GLCellularAutomatonModel {
 
         /**
          * Builds the complete model instances for the {@link GLCA cellular automaton root}, the
-         * {@link GLCAFloorControl floors}, the {@link GLRoomControl rooms}, and the {@link GLCellControl cells}.
+         * {@link GLFloorModel floors}, the {@link GLRoomControl rooms}, and the {@link GLCellModel cells}.
          *
          * @return the container object instance for all the built visualization model instances
          */
@@ -191,15 +191,15 @@ public class GLCellularAutomatonModel {
             this.floors = buildFloorModels();
             this.roomMap = createRoomMapping();
             this.cellMap = buildCells(roomMap.keySet());
-            this.cellularAutomatonModel = new GLCAControl(visualizationModel, cellMap.values());
+            this.cellularAutomatonModel = new GLRootModel(visualizationModel, cellMap.values());
 
             return new GLCellularAutomatonModel(this);
         }
 
-        private List<GLCAFloorControl> buildFloorModels() {
-            ArrayList<GLCAFloorControl> floorModels = new ArrayList<>(cellularAutomaton.getFloors().size());
+        private List<GLFloorModel> buildFloorModels() {
+            ArrayList<GLFloorModel> floorModels = new ArrayList<>(cellularAutomaton.getFloors().size());
             for (int i = 0; i < cellularAutomaton.getFloors().size(); ++i) {
-                GLCAFloorControl floormodel = new GLCAFloorControl(caVisResults, i, visualizationModel);
+                GLFloorModel floormodel = new GLFloorModel(caVisResults, i, visualizationModel);
                 floorModels.add(floormodel);
             }
             return floorModels;
@@ -210,10 +210,10 @@ public class GLCellularAutomatonModel {
          *
          * @return a mapping of all rooms
          */
-        private Map<Room, GLRoomControl> createRoomMapping() {
-            List<Map<Room, GLRoomControl>> roomModels = new ArrayList<>();
+        private Map<Room, GLRoomModel> createRoomMapping() {
+            List<Map<Room, GLRoomModel>> roomModels = new ArrayList<>();
             for (int i = 0; i < cellularAutomaton.getFloors().size(); ++i) {
-                Map<Room, GLRoomControl> roomModelsOnFloor = buildRoomModels(cellularAutomaton.getRoomsOnFloor(i));
+                Map<Room, GLRoomModel> roomModelsOnFloor = buildRoomModels(cellularAutomaton.getRoomsOnFloor(i));
                 roomModels.add(roomModelsOnFloor);
             }
             return roomModels.stream()
@@ -222,10 +222,10 @@ public class GLCellularAutomatonModel {
                     .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
 
-        private Map<Room, GLRoomControl> buildRoomModels(Collection<Room> roomsOnTheFloor) {
-            HashMap<Room, GLRoomControl> result = new HashMap<>();
+        private Map<Room, GLRoomModel> buildRoomModels(Collection<Room> roomsOnTheFloor) {
+            HashMap<Room, GLRoomModel> result = new HashMap<>();
             roomsOnTheFloor.forEach(
-                    room -> result.put(room, new GLRoomControl(caVisResults, room, visualizationModel)));
+                    room -> result.put(room, new GLRoomModel(caVisResults, room, visualizationModel)));
             return result;
         }
 
@@ -237,15 +237,15 @@ public class GLCellularAutomatonModel {
          * ({@code Integer.MAX_VALUE})
          * @return
          */
-        private Map<EvacCellInterface, GLCellControl> buildCells(Iterable<Room> rooms) throws ArithmeticException {
+        private Map<EvacCellInterface, GLCellModel> buildCells(Iterable<Room> rooms) throws ArithmeticException {
             long cellCount = StreamSupport.stream(rooms.spliterator(), false)
                     .map(Room::getAllCells)
                     .map(List::size)
                     .count();
-            HashMap<EvacCellInterface, GLCellControl> result = new HashMap<>(Math.toIntExact(cellCount));
+            HashMap<EvacCellInterface, GLCellModel> result = new HashMap<>(Math.toIntExact(cellCount));
             for (Room room : rooms) {
                 room.getAllCells().forEach(
-                        cell -> result.put(cell, new GLCellControl(caVisResults, cell, visualizationModel)));
+                        cell -> result.put(cell, new GLCellModel(caVisResults, cell, visualizationModel)));
             }
             return result;
         }

@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.ca.control;
+package de.zet_evakuierung.visualization.ca.model;
 
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import gui.visualization.control.AbstractZETVisualizationControl;
@@ -24,11 +24,11 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, CellularAutomatonVisualizationModel> implements HierarchyNode<GLCAFloorControl> {
+public class GLRootModel extends AbstractZETVisualizationControl<GLFloorModel, GLCA, CellularAutomatonVisualizationModel> implements HierarchyNode<GLFloorModel> {
 
-    private final Iterable<GLCellControl> cells;
+    private final Iterable<GLCellModel> cells;
 
-    public GLCAControl(CellularAutomatonVisualizationModel visualizationModel, Iterable<GLCellControl> cells) {
+    public GLRootModel(CellularAutomatonVisualizationModel visualizationModel, Iterable<GLCellModel> cells) {
         super(visualizationModel);
         this.cells = cells;
     }
@@ -39,7 +39,7 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
     }
 
     public void stepUpdate() {
-        for (GLCellControl cell : cells) {
+        for (GLCellModel cell : cells) {
             cell.stepUpdate();
         }
     }
