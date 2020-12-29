@@ -41,8 +41,7 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLFloorModel, GLCA,
-        CellularAutomatonVisualizationModel> implements HierarchyNode<GLFloorModel> {
+public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLFloorModel, GLCA, CellularAutomatonVisualizationModel> implements HierarchyNode<GLFloorModel> {
 
     /**
      * The logger.
@@ -66,7 +65,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
     private EvacuationSimulationResults evacuationResults;
 
-    public GLCellularAutomatonControl( CellularAutomatonVisualizationModel visualizationModel,
+    public GLCellularAutomatonControl(CellularAutomatonVisualizationModel visualizationModel,
             GLCellularAutomatonModel cellularAutomatonModel, GLCellularAutomatonViews views) {
         super(visualizationModel);
 
@@ -89,7 +88,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
         convertIndividualMovements();
         evacuationResults.getRecording().rewind();
         for (GLFloorModel floor : this) {
-            floor.getView().setIndividuals(visualizationModel.getIndividuals());
+            views.getView(floor).setIndividuals(visualizationModel.getIndividuals());
         }
     }
 

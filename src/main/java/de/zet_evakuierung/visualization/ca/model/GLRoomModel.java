@@ -15,23 +15,21 @@
  */
 package de.zet_evakuierung.visualization.ca.model;
 
+import de.zet_evakuierung.visualization.VisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
-import de.zet_evakuierung.visualization.ca.draw.GLRoom;
-import gui.visualization.control.AbstractZETVisualizationControl;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.cellularautomaton.Room;
 
-public class GLRoomModel extends AbstractZETVisualizationControl<Void, GLRoom, CellularAutomatonVisualizationModel>
-        implements VisualizationNodeModel {
+public class GLRoomModel extends VisualizationModel<CellularAutomatonVisualizationModel> implements VisualizationNodeModel {
 
     private final double xPosition;
     private final double yPosition;
-    Room controlled;
+    private final Room backingRoom;
 
     public GLRoomModel(CellularAutomatonVisualizationResults caVisResults, Room room,
             CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
-        controlled = room;
+        backingRoom = room;
         xPosition = caVisResults.get(room).x * visualizationModel.scaling;
         yPosition = caVisResults.get(room).y * visualizationModel.scaling;
     }
@@ -57,11 +55,11 @@ public class GLRoomModel extends AbstractZETVisualizationControl<Void, GLRoom, C
     }
 
     public double getWidth() {
-        return controlled.getWidth() * visualizationModel.scaling * 400;
+        return backingRoom.getWidth() * visualizationModel.scaling * 400;
     }
 
     public double getHeight() {
-        return -controlled.getHeight() * visualizationModel.scaling * 400;
+        return -backingRoom.getHeight() * visualizationModel.scaling * 400;
     }
 
 }

@@ -39,11 +39,4 @@ public abstract class AbstractZETVisualizationControl<U, V extends Drawable, W e
         this.visualizationModel = visualizationModel;
     }
 
-    /**
-     * Does not set main control. Need to set it manually!
-     */
-//    public AbstractZETVisualizationControl() {
-//
-//    }
-
 }

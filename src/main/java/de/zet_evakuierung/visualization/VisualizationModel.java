@@ -1,5 +1,4 @@
-/*
- * zet evacuation tool copyright © 2007-20 zet evacuation team
+/* zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -13,28 +12,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-package de.zet_evakuierung.visualization.ca.model;
+ */package de.zet_evakuierung.visualization;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import org.zetool.opengl.framework.abs.VisualizationModelProvider;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
+ * @param <W>
  */
-public class GLRootModel extends VisualizationModel<CellularAutomatonVisualizationModel> {
+public class VisualizationModel<W extends VisualizationModelProvider> {
 
-    private final Iterable<GLCellModel> cells;
+    protected final W visualizationModel;
 
-    public GLRootModel(CellularAutomatonVisualizationModel visualizationModel, Iterable<GLCellModel> cells) {
-        super(visualizationModel);
-        this.cells = cells;
-    }
-
-    public void stepUpdate() {
-        for (GLCellModel cell : cells) {
-            cell.stepUpdate();
-        }
+    public VisualizationModel(W visualizationModel) {
+        this.visualizationModel = visualizationModel;
     }
 
 }
