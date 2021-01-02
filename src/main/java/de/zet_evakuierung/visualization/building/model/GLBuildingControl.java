@@ -13,14 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.building.control;
-
-import de.zet_evakuierung.visualization.building.draw.GLBuildingViews;
+package de.zet_evakuierung.visualization.building.model;
 
 import java.util.List;
 import java.util.Objects;
 
 import de.zet_evakuierung.visualization.building.draw.GLBuilding;
+import de.zet_evakuierung.visualization.building.draw.GLBuildingViews;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.opengl.framework.abs.HierarchyNode;
 
@@ -30,7 +29,9 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode<GLWallControl> {
+public class GLBuildingControl
+        extends AbstractZETVisualizationControl<GLWallModel, GLBuilding, BuildingVisualizationModel>
+        implements HierarchyNode<GLWallModel> {
 
     /**
      * Gives access to the model objects used by visualization views.
@@ -66,10 +67,10 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
      */
     public void showOnlyFloor(int floorID) {
         childControls.clear();
-        List<GLWallControl> floor = buildingModel.getWallModels(floorID);
+        List<GLWallModel> floor = buildingModel.getWallModels(floorID);
         childControls.addAll(floor);
         view.clear();
-        for (GLWallControl wall : this) {
+        for (GLWallModel wall : this) {
             view.addChild(views.getView(wall));
         }
 
@@ -85,7 +86,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
             childControls.addAll(buildingModel.getWallModels(i));
         }
         view.clear();
-        for (GLWallControl wall : this) {
+        for (GLWallModel wall : this) {
             view.addChild(views.getView(wall));
         }
         getView().update();
@@ -104,7 +105,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
      */
     @Override
     public void delete() {
-        for (GLWallControl wall : this) {
+        for (GLWallModel wall : this) {
             wall.delete();
         }
         view.delete();

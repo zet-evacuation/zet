@@ -29,7 +29,7 @@ import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.PlanPoint;
 import de.zet_evakuierung.model.RelativePosition;
 import de.zet_evakuierung.model.Room;
-import de.zet_evakuierung.visualization.building.control.GLWallControl;
+import de.zet_evakuierung.visualization.building.model.GLWallModel;
 
 /**
  * @author Daniel R. Schmidt
@@ -37,7 +37,7 @@ import de.zet_evakuierung.visualization.building.control.GLWallControl;
  */
 public class BuildingResults {
 
-	public static class Wall implements GLWallControl, Iterable<Point2D.Double> {
+	public static class Wall implements GLWallModel, Iterable<Point2D.Double> {
 
 		/** An enumeration describing the different types of walls that can be visualized. */
 		public static enum ElementType {

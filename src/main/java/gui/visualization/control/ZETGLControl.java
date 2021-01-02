@@ -25,10 +25,10 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
-import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
-import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
-import de.zet_evakuierung.visualization.building.control.GLBuildingModel;
 import de.zet_evakuierung.visualization.building.draw.GLBuildingViews;
+import de.zet_evakuierung.visualization.building.model.BuildingVisualizationModel;
+import de.zet_evakuierung.visualization.building.model.GLBuildingControl;
+import de.zet_evakuierung.visualization.building.model.GLBuildingModel;
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;

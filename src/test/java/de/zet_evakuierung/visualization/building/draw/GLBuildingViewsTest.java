@@ -33,13 +33,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
-import de.zet_evakuierung.visualization.building.control.GLBuildingModel;
-import de.zet_evakuierung.visualization.building.control.GLWallControl;
-import ds.PropertyContainer;
-import io.visualization.BuildingResults.Floor;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.zet_evakuierung.visualization.building.model.BuildingVisualizationModel;
+import de.zet_evakuierung.visualization.building.model.GLBuildingModel;
+import de.zet_evakuierung.visualization.building.model.GLWallModel;
+import ds.PropertyContainer;
+import io.visualization.BuildingResults.Floor;
 
 /**
  *
@@ -91,7 +92,7 @@ public class GLBuildingViewsTest {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
         List<Floor> floors = setUpFloors(baseMocks, 3);
-        List<GLWallControl> walls = setUpWalls(baseMocks, floors, 1, 4, 2);
+        List<GLWallModel> walls = setUpWalls(baseMocks, floors, 1, 4, 2);
 
         GLBuildingViews result = createWithGLContext(() -> baseMocks.createResult());
 
@@ -127,15 +128,15 @@ public class GLBuildingViewsTest {
      * @param wallsOnFloor the number of floor mocks to be created
      * @return the mocks
      */
-    private static List<GLWallControl> setUpWalls(FactoryBaseMocks baseMocks, final List<Floor> floors,
+    private static List<GLWallModel> setUpWalls(FactoryBaseMocks baseMocks, final List<Floor> floors,
             int... wallsOnFloor) {
         assertThat(floors.size(), is(equalTo(wallsOnFloor.length)));
-        List<GLWallControl> wallMocks = new ArrayList<>(Arrays.stream(wallsOnFloor).sum());
+        List<GLWallModel> wallMocks = new ArrayList<>(Arrays.stream(wallsOnFloor).sum());
         for (int i = 0; i < wallsOnFloor.length; ++i) {
-            final List<GLWallControl> modelMocksForParent = createMockList(GLWallControl.class, wallsOnFloor[i]);
+            final List<GLWallModel> modelMocksForParent = createMockList(GLWallModel.class, wallsOnFloor[i]);
             wallMocks.addAll(modelMocksForParent);
             when(baseMocks.buildingModel.getWallModels(i)).thenReturn(modelMocksForParent);
-            for (GLWallControl mock : modelMocksForParent) {
+            for (GLWallModel mock : modelMocksForParent) {
                 when(mock.getFloor()).thenReturn(floors.get(i));
                 when(mock.iterator()).thenReturn(Collections.emptyIterator());
             }
@@ -150,7 +151,7 @@ public class GLBuildingViewsTest {
      * @param wallCount the expected number of walls per floor
      * @param total the expected number of wall view objects
      */
-    private static void assertCounts(GLBuildingViews views, List<GLWallControl> walls, int total) {
+    private static void assertCounts(GLBuildingViews views, List<GLWallModel> walls, int total) {
         assertThat(views.wallViews(), is(iterableWithSize(total)));
         walls.forEach(wall -> assertThat(views.getView(wall), is(not(nullValue()))));
     }

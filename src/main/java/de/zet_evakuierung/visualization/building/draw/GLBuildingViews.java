@@ -23,10 +23,10 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
-import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
-import de.zet_evakuierung.visualization.building.control.GLBuildingModel;
-import de.zet_evakuierung.visualization.building.control.GLWallControl;
+import de.zet_evakuierung.visualization.building.model.BuildingVisualizationModel;
+import de.zet_evakuierung.visualization.building.model.GLBuildingControl;
+import de.zet_evakuierung.visualization.building.model.GLBuildingModel;
+import de.zet_evakuierung.visualization.building.model.GLWallModel;
 
 /**
  * Container giving access to the created OpenGL building visualization view objects.
@@ -36,7 +36,7 @@ import de.zet_evakuierung.visualization.building.control.GLWallControl;
 public class GLBuildingViews {
 
     private final GLBuilding rootView;
-    private final Map<GLWallControl, GLWall> wallViews;
+    private final Map<GLWallModel, GLWall> wallViews;
 
     /**
      * Private constructor initializeng the view container from the builder.
@@ -64,7 +64,7 @@ public class GLBuildingViews {
      * @param model the visualization model instance
      * @return the view instance
      */
-    public GLWall getView(GLWallControl model) {
+    public GLWall getView(GLWallModel model) {
         return wallViews.get(model);
     }
 
@@ -120,9 +120,9 @@ public class GLBuildingViews {
         private GLBuilding rootView;
         /**
          * The created {@link GLWall wall view} instances mapped by the respective
-         * {@link GLWallControl visualization model} classes; valid after vies {@link #createViews() have been created}.
+         * {@link GLWallModel visualization model} classes; valid after vies {@link #createViews() have been created}.
          */
-        private Map<GLWallControl, GLWall> wallViews;
+        private Map<GLWallModel, GLWall> wallViews;
 
         GLBuildingViewFactory(BuildingVisualizationModel visualizationModel,
                 GLBuildingModel buildingModel) {

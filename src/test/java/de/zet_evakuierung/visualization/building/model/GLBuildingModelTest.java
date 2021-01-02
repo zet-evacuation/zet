@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.building.control;
+package de.zet_evakuierung.visualization.building.model;
 
 import static de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModelTest.createMockList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,10 +34,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
+
 import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Floor;
 import io.visualization.BuildingResults.Wall;
-import org.junit.Test;
 
 /**
  *

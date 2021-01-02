@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.building.control;
+package de.zet_evakuierung.visualization.building.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +30,7 @@ import io.visualization.BuildingResults;
  */
 public class GLBuildingModel {
 
-    private final List<ArrayList<GLWallControl>> floors;
+    private final List<ArrayList<GLWallModel>> floors;
 
     private GLBuildingModel(Builder builder) {
         this.floors = builder.floors;
@@ -43,7 +43,7 @@ public class GLBuildingModel {
      * @return a view of all the walls on the floor
      * @throws IndexOutOfBoundsException if the floor does not exist
      */
-    public List<GLWallControl> getWallModels(int floor) throws IndexOutOfBoundsException {
+    public List<GLWallModel> getWallModels(int floor) throws IndexOutOfBoundsException {
         return Collections.unmodifiableList(floors.get(floor));
     }
 
@@ -72,7 +72,7 @@ public class GLBuildingModel {
          */
         private BuildingVisualizationModel visualizationModel = new BuildingVisualizationModel();
 
-        private List<ArrayList<GLWallControl>> floors;
+        private List<ArrayList<GLWallModel>> floors;
 
         public Builder(BuildingResults buildingResults) {
             this.buildingResults = Objects.requireNonNull(buildingResults);
@@ -85,7 +85,7 @@ public class GLBuildingModel {
 
         /**
          * Builds the complete model instances for the {@link GLBuildingControl building root}, and the
-         * {@link GLWallControl walls}.
+         * {@link GLWallModel walls}.
          *
          * @return the container object instance for all the built visualization model instances
          */
@@ -98,8 +98,8 @@ public class GLBuildingModel {
             return new GLBuildingModel(this);
         }
 
-        private List<ArrayList<GLWallControl>> buildFloorModels() {
-            List<ArrayList<GLWallControl>> allFloorsByID = new ArrayList<>(buildingResults.getFloors().size());
+        private List<ArrayList<GLWallModel>> buildFloorModels() {
+            List<ArrayList<GLWallModel>> allFloorsByID = new ArrayList<>(buildingResults.getFloors().size());
             for (int i = 0; i < buildingResults.getFloors().size(); ++i) {
                 allFloorsByID.add(new ArrayList<>());
             }

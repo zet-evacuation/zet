@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.building.control;
+package de.zet_evakuierung.visualization.building.model;
 
 import java.awt.geom.Point2D;
 
@@ -23,7 +23,7 @@ import io.visualization.BuildingResults;
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public interface GLWallControl extends Iterable<Point2D.Double> {
+public interface GLWallModel extends Iterable<Point2D.Double> {
 
     boolean isBarrier();
 
