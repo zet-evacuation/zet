@@ -15,30 +15,27 @@
  */
 package de.zet_evakuierung.visualization.building.control;
 
-import de.zet_evakuierung.visualization.building.draw.GLWall;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import io.visualization.BuildingResults.Wall;
-import org.zetool.opengl.framework.abs.HierarchyNode;
+import java.awt.geom.Point2D;
+
+import io.visualization.BuildingResults;
 
 /**
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, BuildingVisualizationModel> implements HierarchyNode<GLWallControl> {
+public interface GLWallControl extends Iterable<Point2D.Double> {
 
-    /**
-     * @param controlled
-     * @param visualizationModel
-     */
-    public GLWallControl(Wall controlled, BuildingVisualizationModel visualizationModel) {
-        super(visualizationModel);
+    boolean isBarrier();
 
-        this.setView(new GLWall(controlled, visualizationModel));
-        visualizationModel.wallProgress();
-    }
+    boolean isRoomLeft();
 
-    @Override
-    public void delete() {
-        view.delete();
+    boolean isRoomRight();
+
+    BuildingResults.Wall.ElementType getWallType(int i);
+
+    BuildingResults.Floor getFloor();
+
+    default void delete() {
+        // will be removed
     }
 }

@@ -15,7 +15,7 @@
  */
 package io.visualization;
 
-import de.zet_evakuierung.model.FloorInterface;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,11 +23,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
+
+import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.PlanPoint;
 import de.zet_evakuierung.model.RelativePosition;
 import de.zet_evakuierung.model.Room;
-import java.awt.Rectangle;
-import java.util.Vector;
+import de.zet_evakuierung.visualization.building.control.GLWallControl;
 
 /**
  * @author Daniel R. Schmidt
@@ -35,7 +37,7 @@ import java.util.Vector;
  */
 public class BuildingResults {
 
-	public static class Wall implements Iterable<Point2D.Double> {
+	public static class Wall implements GLWallControl, Iterable<Point2D.Double> {
 
 		/** An enumeration describing the different types of walls that can be visualized. */
 		public static enum ElementType {
@@ -61,6 +63,7 @@ public class BuildingResults {
 			this.floor = floor;
 		}
 
+        @Override
 		public boolean isBarrier() {
 			return barrier;
 		}
@@ -74,6 +77,7 @@ public class BuildingResults {
 		 *
 		 * @return true if the room is on the left side, false otherwise.
 		 */
+        @Override
 		public boolean isRoomLeft() {
 			return roomIsLeft;
 		}
@@ -87,6 +91,7 @@ public class BuildingResults {
 		 *
 		 * @return true if the room is on the right side, false otherwise
 		 */
+        @Override
 		public boolean isRoomRight() {
 			return roomIsRight;
 		}
@@ -96,7 +101,7 @@ public class BuildingResults {
 		}
 
 		public void addPoint( double x, double y, ElementType type ) {
-			if( points.size() == 0 ) {
+			if( points.isEmpty() ) {
 				// nothing
 			} else
 				wallTypes.add( type );
@@ -118,10 +123,12 @@ public class BuildingResults {
 		 * @param wallSegment the segment of the wall which type should be returned
 		 * @return the wall type of the wall segment in the controlled class.
 		 */
+        @Override
 		public ElementType getWallType( int wallSegment ) {
 			return wallTypes.get( wallSegment );
 		}
 
+        @Override
 		public Floor getFloor() {
 			return floor;
 		}
@@ -147,6 +154,7 @@ public class BuildingResults {
 			return id;
 		}
 
+        @Override
 		public String getName() {
 			return name;
 		}

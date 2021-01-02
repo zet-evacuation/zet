@@ -17,7 +17,6 @@ package gui.visualization.control;
 
 import static java.util.stream.Collectors.toList;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,13 +27,15 @@ import javax.media.opengl.GLAutoDrawable;
 import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.zet_evakuierung.visualization.building.control.BuildingVisualizationModel;
 import de.zet_evakuierung.visualization.building.control.GLBuildingControl;
+import de.zet_evakuierung.visualization.building.control.GLBuildingModel;
+import de.zet_evakuierung.visualization.building.draw.GLBuildingViews;
+import de.zet_evakuierung.visualization.ca.draw.GLCA;
+import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
+import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
-import de.zet_evakuierung.visualization.ca.draw.GLCA;
-import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
-import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
@@ -46,7 +47,6 @@ import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import gui.visualization.VisualizationOptionManager;
 import io.visualization.BuildingResults;
-import io.visualization.BuildingResults.Floor;
 import io.visualization.CellularAutomatonVisualizationResults;
 import io.visualization.EvacuationSimulationResults;
 import org.zet.cellularautomaton.EvacuationCellularAutomaton;
@@ -275,8 +275,11 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         time = 0;
         buildingVisualizationModel = new BuildingVisualizationModel();
         buildingVisualizationModel.setScaling(sizeMultiplicator);
-        buildingControl = new GLBuildingControl(buildingResults, buildingVisualizationModel);
-        buildingControl.build();
+        GLBuildingModel buildingModel = new GLBuildingModel.Builder(buildingResults)
+                .withVisualizationModel(buildingVisualizationModel)
+                .build();
+        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
+        buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
         //AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
         initSettings();
     }
@@ -293,8 +296,11 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         System.gc();
         buildingVisualizationModel = new BuildingVisualizationModel();
         buildingVisualizationModel.setScaling(sizeMultiplicator);
-        buildingControl = new GLBuildingControl(buildingResults, buildingVisualizationModel);
-        buildingControl.build();
+        GLBuildingModel buildingModel = new GLBuildingModel.Builder(buildingResults)
+                .withVisualizationModel(buildingVisualizationModel)
+                .build();
+        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
+        buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
         showWalls(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.walls"));
     }
 
@@ -754,22 +760,6 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
     @Override
     public void update() {
         caControl.update();
-    }
-
-    /**
-     * Returns a {@code Map} that assigns floor names to their ids. Floor ids are enumerated from 0 to n-1. if there are
-     * n floors. Note that the (possibly) hidden evacuation floor is also includeded in the n floors.
-     *
-     * @return a map that assigns floor names to their ids
-     */
-    public Collection<Floor> getFloorNames() {
-        //List<String> floorNames = new LinkedList<>( );
-        //for( BuildingResults.Floor floor : buildingResults.getFloors() )
-        //	floorNames.add( floor.getName() );
-        return buildingControl.getFloors();
-        //return buildingResults.getFloors();
-        //return Collections.unmodifiableCollection( buildingResults.getFloors() );
-        //return Collections.unmodifiableCollection( floors.values() );
     }
 
     public final List<GLIndividual> getIndividuals() {

@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.building.control.GLWallControl;
 import gui.visualization.EvacuationVisualizationModel;
 import gui.visualization.VisualizationOptionManager;
 import io.visualization.BuildingResults.Wall;
@@ -38,7 +39,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  * @author Jan-Philipp Kappmeier
  *
  */
-public class GLWall extends AbstractDrawable<GLWall, Wall> {
+public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 
     private List<GLVector> basePoints;
     private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * 0.01;
@@ -46,18 +47,18 @@ public class GLWall extends AbstractDrawable<GLWall, Wall> {
     private boolean barrier = false;
 
     /**
-     * @param control
-     * @param visualizationModel
+     * @param model the visualization model that is drawn
+     * @param visualizationModel the overall visualization model
      */
-    public GLWall(Wall control, EvacuationVisualizationModel visualizationModel) {
-        super(control);
-        basePoints = getBasePoints(control, visualizationModel);
+    public GLWall(GLWallControl model, EvacuationVisualizationModel visualizationModel) {
+        super(model);
+        basePoints = getBasePoints(model, visualizationModel);
         //wallColor = VisualizationOptionManager.getCellWallColor();
         wallColor = VisualizationOptionManager.getCellFloorColor();
-        barrier = control.isBarrier();
+        barrier = model.isBarrier();
     }
 
-    private List<GLVector> getBasePoints(Wall visualized, EvacuationVisualizationModel visualizationModel) {
+    private List<GLVector> getBasePoints(GLWallControl visualized, EvacuationVisualizationModel visualizationModel) {
         final int floor = visualized.getFloor().id();
         final double height = floor * VisualizationOptionManager.getFloorDistance();
         List<GLVector> result = new LinkedList<>();

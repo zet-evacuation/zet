@@ -113,7 +113,6 @@ public class GLCellularAutomatonViews {
                 GLFloorModel floorModel = cellularAutomatonModel.getFloorModel(i);
                 GLCAFloor floorView = new GLCAFloor(floorModel, visualizationModel.getIndividuals());
                 floorViews.put(floorModel, floorView);
-                System.out.println("ADding floor view " + floorView + " to main view " + rootView);
                 rootView.addChild(floorView);
                 createRoomViews(i, floorView);
             }
@@ -123,7 +122,6 @@ public class GLCellularAutomatonViews {
             for (Room room : cellularAutomaton.getRoomsOnFloor(floorId)) {
                 GLRoomModel roomModel = cellularAutomatonModel.getRoomModel(room);
                 GLRoom roomView = new GLRoom(roomModel);
-                System.out.println("Adding a room view to " + parentFloor);
                 parentFloor.addChild(roomView);
                 createCellViews(room, roomView);
             }

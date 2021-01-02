@@ -273,14 +273,14 @@ public class GLCellularAutomatonViewsTest {
      * @param <V> visualization model mock type
      * @param parentMocks a list of parent mocks for which model mocks are set up
      * @param modelType the type of mocks that is to be created, can be sub types of {@code M}
-     * @param modelMockAccessor the function that returns the created list of mocks for a perent; to be mocked
+     * @param modelMockAccessor the function that returns the created list of mocks for a parent; to be mocked
      * @param viewMocelMockType the type of the internal view model; used to create mocks
      * @param viewModelMockAccessor the function that returns the mock model for a given (created) view model mock; to
      * be mocked
      * @param childrenInParent the number of child mocks to be created for the respective parents
      * @return the list of created model mocks, ordered by their parents
      */
-    private static <M, P, V> List<M> setUp(List<P> parentMocks, Class<? extends M> modelType,
+    public static <M, P, V> List<M> setUp(List<P> parentMocks, Class<? extends M> modelType,
             Function<Integer, List<M>> modelMockAccessor, Class<V> viewMocelMockType,
             Function<M, V> viewModelMockAccessor, int... childrenInParent) {
         List<M> modelMocks = new ArrayList<>();
@@ -303,7 +303,7 @@ public class GLCellularAutomatonViewsTest {
     /**
      * Asserts the numbers of {@code floor}s, {@code room}s, and {@code cell}s in a created model object.
      *
-     * @param fixture resultView that is asserted
+     * @param resultView that is asserted
      * @param floorCount the expected number of floors
      * @param roomCount the expected number of rooms
      * @param cellCounts the expected number of cells

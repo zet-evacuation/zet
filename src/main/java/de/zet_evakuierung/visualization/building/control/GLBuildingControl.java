@@ -15,17 +15,13 @@
  */
 package de.zet_evakuierung.visualization.building.control;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
+import de.zet_evakuierung.visualization.building.draw.GLBuildingViews;
+
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Objects;
 
 import de.zet_evakuierung.visualization.building.draw.GLBuilding;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import io.visualization.BuildingResults;
-import io.visualization.BuildingResults.Floor;
-import io.visualization.BuildingResults.Wall;
 import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
@@ -37,52 +33,30 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, BuildingVisualizationModel> implements HierarchyNode<GLWallControl> {
 
     /**
-     * Null object for the non existing building model to pass to the {@code GLBuilding} view class.
+     * Gives access to the model objects used by visualization views.
      */
-    private static final Void MODEL = ((Supplier<Void>) () -> {
-        try {
-            Constructor<Void> voidConstructor = Void.class.getDeclaredConstructor();
-            voidConstructor.setAccessible(true);
-            return voidConstructor.newInstance();
-        } catch (Exception ex) {
-            // Does not happen
-            throw new AssertionError(ex);
-        }
-    }).get();
-
-    private List<ArrayList<GLWallControl>> allFloorsByID;
-    private BuildingResults visResult;
+    private final GLBuildingModel buildingModel;
+    /**
+     * Gives access to all view objects drawing the OpenGL scene.
+     */
+    private final GLBuildingViews views;
 
     /**
      * Creates a new object of this control class.The wall objects (a control and the corresponding view object) are
-     * created and stored in data structures to easily assign them by their floor id. Note that no default floor is
-     * enabled!
+     * created and stored in data structures to easily assign them by their floor id.Note that no default floor is
+ enabled!
      *
-     * @param visResult
-     * @param visualizationModel
+     * @param buildingVisualizationModel
+     * @param buildingModel
+     * @param views
      */
-    public GLBuildingControl(BuildingResults visResult, BuildingVisualizationModel visualizationModel) {
-        super(visualizationModel);
-        this.visResult = visResult;
-    }
-
-    public void build() {
-        //AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
-        visualizationModel.init(visResult.getWalls().size());
-
-        allFloorsByID = new ArrayList<>(visResult.getFloors().size());
-        for (int i = 0; i < visResult.getFloors().size(); ++i) {
-            allFloorsByID.add(new ArrayList<>());
-        }
-        for (Wall wall : visResult.getWalls()) {
-            final GLWallControl child = new GLWallControl(wall, visualizationModel);
-            add(child);
-            allFloorsByID.get(wall.getFloor().id()).add(child);
-        }
-        setView(new GLBuilding(MODEL));
-        for (GLWallControl wall : this) {
-            view.addChild(wall.getView());
-        }
+    public GLBuildingControl(BuildingVisualizationModel buildingVisualizationModel, GLBuildingModel buildingModel,
+            GLBuildingViews views) {
+        super(buildingVisualizationModel);
+        this.buildingModel = Objects.requireNonNull(buildingModel);
+        this.views = Objects.requireNonNull(views);
+        setView(views.getView());
+        
     }
 
     /**
@@ -90,13 +64,13 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
      *
      * @param floorID the specified floor as its id in the visual results.
      */
-    public void showOnlyFloor(Integer floorID) {
+    public void showOnlyFloor(int floorID) {
         childControls.clear();
-        ArrayList<GLWallControl> floor = allFloorsByID.get(floorID);
+        List<GLWallControl> floor = buildingModel.getWallModels(floorID);
         childControls.addAll(floor);
         view.clear();
         for (GLWallControl wall : this) {
-            view.addChild(wall.getView());
+            view.addChild(views.getView(wall));
         }
 
         getView().update();
@@ -107,12 +81,12 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
      */
     public void showAllFloors() {
         childControls.clear();
-        for (ArrayList<GLWallControl> floor : allFloorsByID) {
-            childControls.addAll(floor);
+        for (int i = 0; i < buildingModel.getFloorCount(); ++i) {
+            childControls.addAll(buildingModel.getWallModels(i));
         }
         view.clear();
         for (GLWallControl wall : this) {
-            view.addChild(wall.getView());
+            view.addChild(views.getView(wall));
         }
         getView().update();
     }
@@ -135,9 +109,5 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
         }
         view.delete();
         view = null;
-    }
-
-    public Collection<Floor> getFloors() {
-        return visResult.getFloors();
     }
 }
