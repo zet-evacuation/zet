@@ -16,7 +16,7 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
-import static de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModelTest.createMockList;
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.createMockList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -81,12 +81,13 @@ public class GLCellularAutomatonViewsTest {
     public void testEmpty() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        setUpFloors(baseMocks, 0);
+        int floorCount = 0;
+        setUpFloors(baseMocks, floorCount);
 
         GLCellularAutomatonViews result = baseMocks.createResult();
 
         assertThat(result.getView(), is(not(nullValue())));
-        assertCounts(result.getView(), 0, Collections.emptyList(), Collections.emptyList());
+        assertCounts(result.getView(), floorCount, Collections.emptyList(), Collections.emptyList());
     }
 
     /**
@@ -96,11 +97,12 @@ public class GLCellularAutomatonViewsTest {
     public void testFactoryFloors() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        setUpFloors(baseMocks, 1);
+        int floorCount = 1;
+        setUpFloors(baseMocks, floorCount);
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), 1, List.of(0), Collections.emptyList());
+        assertCounts(result.getView(), floorCount, List.of(0), Collections.emptyList());
     }
 
     /**
@@ -110,8 +112,9 @@ public class GLCellularAutomatonViewsTest {
     public void testFactoryRooms() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
-        setUpRooms(baseMocks, mockFloors, 2);
+        int floorCount = 1;
+        setUpFloors(baseMocks, floorCount);
+        setUpRooms(baseMocks, floorCount, 2);
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
@@ -125,13 +128,14 @@ public class GLCellularAutomatonViewsTest {
     public void testFactoryCells() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
-        List<Room> mockRooms = setUpRooms(baseMocks, mockFloors, 1);
+        int floorCount = 1;
+        setUpFloors(baseMocks, floorCount);
+        List<Room> mockRooms = setUpRooms(baseMocks, floorCount, 1);
         setUpCells(baseMocks, mockRooms, 2);
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), 1, List.of(1), List.of(2));
+        assertCounts(result.getView(), floorCount, List.of(1), List.of(2));
     }
 
     /**
@@ -165,8 +169,9 @@ public class GLCellularAutomatonViewsTest {
             Consumer<EvacCell> cellPreparation) {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLFloorModel> mockFloors = setUpFloors(baseMocks, 1);
-        List<Room> mockRooms = setUpRooms(baseMocks, mockFloors, 1);
+        int floorCount = 1;
+        setUpFloors(baseMocks, floorCount);
+        List<Room> mockRooms = setUpRooms(baseMocks, floorCount, 1);
         List<EvacCell> mockCells = setUpCells(baseMocks, mockRooms, cellType, 1);
 
         // Addiitonal mocking for the single created mock cell model
@@ -174,7 +179,7 @@ public class GLCellularAutomatonViewsTest {
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), 1, List.of(1), List.of(1));
+        assertCounts(result.getView(), floorCount, List.of(1), List.of(1));
 
         GLCell createdCellView = result.getView().iterator().next().iterator().next().iterator().next();
         assertThat(createdCellView.getClass(), is(equalTo(viewType)));
@@ -213,17 +218,17 @@ public class GLCellularAutomatonViewsTest {
      * model to retrieve the {@link GLRoomModel} for its corresponding room.</p>
      *
      * @param baseMocks the base mocks that are set up
-     * @param floorMocks list of floor mocks that have been mocked already
+     * @param floorCount the number floors
      * @param roomsOnFloor number of rooms for each floor; must have the same size as {@code floorMocks}
      * @return a list of all created mocked rooms, ordered by floor
      */
-    private static List<Room> setUpRooms(FactoryBaseMocks baseMocks, List<GLFloorModel> floorMocks,
+    private static List<Room> setUpRooms(FactoryBaseMocks baseMocks, int floorCount,
             int... roomsOnFloor) {
         Function<Integer, List<Room>> cellMockSupplier
                 = i -> (List<Room>) baseMocks.cellularAutomaton.getRoomsOnFloor(i);
         Function<Room, GLRoomModel> intermalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getRoomModel(evacCellMock);
-        return setUp(floorMocks, Room.class, cellMockSupplier, GLRoomModel.class, intermalMockFunction, roomsOnFloor);
+        return setUp(floorCount, Room.class, cellMockSupplier, GLRoomModel.class, intermalMockFunction, roomsOnFloor);
     }
 
     private static List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
@@ -252,7 +257,7 @@ public class GLCellularAutomatonViewsTest {
         Function<Integer, List<EvacCell>> cellMockSupplier = i -> roomMocks.get(i).getAllCells();
         Function<EvacCell, GLCellModel> intermalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getCellModel(evacCellMock);
-        return setUp(roomMocks, cellType, cellMockSupplier, GLCellModel.class, intermalMockFunction, cellsInRoom);
+        return setUp(roomMocks.size(), cellType, cellMockSupplier, GLCellModel.class, intermalMockFunction, cellsInRoom);
     }
 
     /**
@@ -269,29 +274,28 @@ public class GLCellularAutomatonViewsTest {
      * create a hierarchy of mocks. </p>
      *
      * @param <M> result model mock type
-     * @param <P> parent model type
      * @param <V> visualization model mock type
-     * @param parentMocks a list of parent mocks for which model mocks are set up
+     * @param parentMockCount a list of parent mocks for which model mocks are set up
      * @param modelType the type of mocks that is to be created, can be sub types of {@code M}
      * @param modelMockAccessor the function that returns the created list of mocks for a parent; to be mocked
-     * @param viewMocelMockType the type of the internal view model; used to create mocks
+     * @param viewModelMockType the type of the internal view model; used to create mocks
      * @param viewModelMockAccessor the function that returns the mock model for a given (created) view model mock; to
      * be mocked
      * @param childrenInParent the number of child mocks to be created for the respective parents
      * @return the list of created model mocks, ordered by their parents
      */
-    public static <M, P, V> List<M> setUp(List<P> parentMocks, Class<? extends M> modelType,
-            Function<Integer, List<M>> modelMockAccessor, Class<V> viewMocelMockType,
+    public static <M, V> List<M> setUp(int parentMockCount, Class<? extends M> modelType,
+            Function<Integer, List<M>> modelMockAccessor, Class<V> viewModelMockType,
             Function<M, V> viewModelMockAccessor, int... childrenInParent) {
         List<M> modelMocks = new ArrayList<>();
 
-        for (int i = 0; i < parentMocks.size(); ++i) {
+        for (int i = 0; i < parentMockCount; ++i) {
             int children = childrenInParent[i];
             List<M> modelMocksForParent = createMockList(modelType, children);
             when(modelMockAccessor.apply(i)).thenReturn(modelMocksForParent);
 
             for (int j = 0; j < children; ++j) {
-                V viewModelMock = mock(viewMocelMockType);
+                V viewModelMock = mock(viewModelMockType);
                 modelMocks.add(modelMocksForParent.get(j));
                 when(viewModelMockAccessor.apply(modelMocksForParent.get(j))).thenReturn(viewModelMock);
             }

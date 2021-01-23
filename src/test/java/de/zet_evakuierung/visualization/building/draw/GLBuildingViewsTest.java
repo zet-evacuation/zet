@@ -16,7 +16,7 @@
  */
 package de.zet_evakuierung.visualization.building.draw;
 
-import static de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModelTest.createMockList;
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.createMockList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

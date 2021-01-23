@@ -16,6 +16,9 @@
  */
 package de.zet_evakuierung.visualization.ca.model;
 
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.assertObjectsFromIteratorAndMapAreEqual;
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.assertPositions;
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.createMockList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,8 +26,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.atLeast;
@@ -34,14 +35,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.junit.Test;
 import org.zet.cellularautomaton.EvacCell;
@@ -56,13 +55,10 @@ import org.zetool.math.vectormath.Vector3;
 public class GLCellularAutomatonModelTest {
 
     /**
-     * Some pre-defined {@code x} coordinates of objects; allows to create 3 test objects.
+     * Some pre-defined coordinates of objects; allows to create 3 test objects.
      */
-    private static final List<Integer> X_POSITIONS = List.of(100, 0, 1000);
-    /**
-     * Some pre-defined {@code <} coordinates of objects; allows to create 3 test objects.
-     */
-    private static final List<Integer> Y_POSITIONS = List.of(200, 0, 3000);
+    private static final List<Point2D> POSITIONS = List.of(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
+            new Point2D.Double(1000, 3000));
 
     @Test
     public void builderInitialization() {
@@ -113,7 +109,7 @@ public class GLCellularAutomatonModelTest {
 
         // Assert each floor object
         assertObjectsFromIteratorAndMapAreEqual(fixture.floors(), List.of(0, 1, 2), fixture::getFloorModel);
-        assertPositions(fixture::getFloorModel, List.of(0, 1, 2));
+        assertPositions(fixture::getFloorModel, List.of(0, 1, 2), POSITIONS);
 
         // Assert floor indices and z position based on them
         double defaultFloorHeight = 10;
@@ -176,7 +172,7 @@ public class GLCellularAutomatonModelTest {
 
         assertCounts(fixture, 2, 3, 0);
         assertObjectsFromIteratorAndMapAreEqual(fixture.rooms(), rooms, fixture::getRoomModel);
-        assertPositions(fixture::getRoomModel, rooms);
+        assertPositions(fixture::getRoomModel, rooms, POSITIONS);
     }
 
     @Test
@@ -205,7 +201,7 @@ public class GLCellularAutomatonModelTest {
 
         assertCounts(fixture, 1, 1, 3);
         assertObjectsFromIteratorAndMapAreEqual(fixture.cells(), cells, fixture::getCellModel);
-        assertPositions(fixture::getCellModel, cells);
+        assertPositions(fixture::getCellModel, cells, POSITIONS);
     }
 
     /**
@@ -223,7 +219,7 @@ public class GLCellularAutomatonModelTest {
         when(baseMocks.cellularAutomaton.getFloors()).thenReturn(floors);
         for (int i = 0; i < floors.size(); ++i) {
             when(baseMocks.visualizationResults.get(i))
-                    .thenReturn(new Vector3(X_POSITIONS.get(i), Y_POSITIONS.get(i), -1 /* ignored */));
+                    .thenReturn(new Vector3(POSITIONS.get(i).getX(), POSITIONS.get(i).getY(), -1 /* ignored */));
             when(baseMocks.cellularAutomaton.getRoomsOnFloor(i)).thenReturn(Collections.emptyList());
         }
         return floors;
@@ -265,8 +261,8 @@ public class GLCellularAutomatonModelTest {
         }
 
         for (int i = 0; i < rooms.size(); ++i) {
-            when(baseMocks.visualizationResults.get(rooms.get(i))).thenReturn(new Vector3(X_POSITIONS.get(i),
-                    Y_POSITIONS.get(i), -1 /* ignored */));
+            when(baseMocks.visualizationResults.get(rooms.get(i)))
+                    .thenReturn(new Vector3(POSITIONS.get(i).getX(), POSITIONS.get(i).getY(), -1 /* ignored */));
         }
 
         return rooms;
@@ -291,16 +287,12 @@ public class GLCellularAutomatonModelTest {
 
         for (int i = 0; i < cells.size(); ++i) {
             when(baseMocks.visualizationResults.get(cells.get(i)))
-                    .thenReturn(new Vector3(X_POSITIONS.get(i), Y_POSITIONS.get(i), -1 /* ignored */));
+                    .thenReturn(new Vector3(POSITIONS.get(i).getX(), POSITIONS.get(i).getY(), -1 /* ignored */));
         }
 
         when(baseMocks.cellularAutomaton.getExits()).thenReturn(Collections.emptyList());
 
         return cells;
-    }
-
-    public static <T> List<T> createMockList(Class<? extends T> mockType, int count) {
-        return Stream.generate(() -> mock(mockType)).limit(count).collect(toList());
     }
 
     /**
@@ -328,37 +320,6 @@ public class GLCellularAutomatonModelTest {
         assertThat(fixture.floors(), is(iterableWithSize(floorCount)));
         assertThat(fixture.rooms(), is(iterableWithSize(roomCount)));
         assertThat(fixture.cells(), is(iterableWithSize(cellCount)));
-    }
-
-    /**
-     *
-     * @param <I> the input model object type
-     * @param <O> the created model type
-     * @param iterable iterable of all generated output objects
-     * @param inputObjects list of all input obects
-     * @param fromMap extracts output objects for input objects from map
-     */
-    private static <I, O> void assertObjectsFromIteratorAndMapAreEqual(Iterable<O> iterable, List<I> inputObjects,
-            Function<I, O> fromMap) {
-        List<O> cellsFromIterator = StreamSupport.stream(iterable.spliterator(), false).collect(toList());
-        List<O> cellsFromMap = inputObjects.stream().map(fromMap).collect(toList());
-        assertThat(cellsFromIterator, hasSize(cellsFromMap.size()));
-        assertThat(cellsFromIterator, containsInAnyOrder(cellsFromMap.toArray()));
-    }
-
-    /**
-     * Asserts that objects have positions as specified in {@link #X_POSITIONS} and {@link #Y_POSITIONS}.
-     *
-     * @param <T> the input model object type
-     * @param <R> the created model type that is asserted
-     * @param accessor retrieves a created model object for an input model object
-     * @param objects the input model objects
-     */
-    private static <T, R extends VisualizationNodeModel> void assertPositions(Function<T, R> accessor, List<T> objects) {
-        for (int i = 0; i < objects.size(); ++i) {
-            assertThat(accessor.apply(objects.get(i)).getXPosition(), is(closeTo(X_POSITIONS.get(i), 0.1)));
-            assertThat(accessor.apply(objects.get(i)).getYPosition(), is(closeTo(-Y_POSITIONS.get(i), 0.1)));
-        }
     }
 
     /**
