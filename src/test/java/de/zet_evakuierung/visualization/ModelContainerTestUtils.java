@@ -17,10 +17,12 @@
 package de.zet_evakuierung.visualization;
 
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,6 +30,8 @@ import static org.mockito.Mockito.when;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -73,49 +77,165 @@ public class ModelContainerTestUtils {
     }
 
     /**
-     * Sets up one level in the object hierarchy. Creates mocks of the original cellular automaton model of type
-     * {@link modelType}. For each created mock also a view model mock of type {@code V} is generated.
+     * Factory class that sets up one level in the object hierarchy. Creates mocks of the model of type
+     * {@link modelType}. For each created mock a corresponding internal view model mock of type {@code V} is generated.
      * <p>
      * Sets up the parent mocks to return the respective list of created {@code M} mocks. Sets up the cellular automaton
      * model to return the {@code V} view model mocks for each created model mock.</p>
-     * <p>
-     * The number of {@code parentMocks} must be equal as the number of {@code childrenInParent}.</p>
      * <p>
      * Implementations are for example {@link org.zet.cellularautomaton.Room} as parent type and
      * {@link org.zet.cellularautomaton.EvacCell} as created model type, or
      * {@link de.zet_evakuierung.visualization.ca.model.GLFloorModel floors} as parent type and
      * {@link org.zet.cellularautomaton.Room} as created child models. Multiple such set ups create a hierarchy of
-     * mocks. </p>
+     * mocks.
+     * </p>
      *
-     * @param <M> result model mock type
-     * @param <V> visualization model mock type
-     * @param parentMockCount a list of parent mocks for which model mocks are set up
-     * @param modelType the type of mocks that is to be created, can be sub types of {@code M}
-     * @param modelMockAccessor the function that returns the created list of mocks for a parent; to be mocked
-     * @param viewModelMockType the type of the internal view model; used to create mocks
-     * @param viewModelMockAccessor the function that returns the mock model for a given (created) view model mock; to
-     * be mocked
-     * @param childrenInParent the number of child mocks to be created for the respective parents
-     * @return the list of created model mocks, ordered by their parents
+     * @param <M> type of created model mocks
+     * @param <V> type of created internal view model mocks
      */
-    public static <M, V> List<M> setUp(int parentMockCount, Class<? extends M> modelType,
-            Function<Integer, List<M>> modelMockAccessor, Class<V> viewModelMockType,
-            Function<M, V> viewModelMockAccessor, int... childrenInParent) {
-        List<M> modelMocks = new ArrayList<>();
+    public static class MockHierarchyBuilder<M, V> {
 
-        for (int i = 0; i < parentMockCount; ++i) {
-            int children = childrenInParent[i];
-            List<M> modelMocksForParent = createMockList(modelType, children);
-            when(modelMockAccessor.apply(i)).thenReturn(modelMocksForParent);
+        /**
+         * The type of model mocks that is to be created, can be a subclass of actual model.
+         */
+        private final Class<? extends M> modelType;
+        /**
+         * The type of view model mocks that is to be created, can be a subclass of the actual model.
+         */
+        private final Class<? extends V> viewModelMockType;
+        private int parentCount;
+        private Function<Integer, ? extends Iterable<M>> modelMockAccessor;
+        private BiFunction<Class<? extends M>, Integer, Iterable<M>> mockListFactory
+                = ModelContainerTestUtils::createMockList;
+        private Function<M, V> viewModelMockAccessor;
+        private int[] childrenInParent;
 
-            for (int j = 0; j < children; ++j) {
-                V viewModelMock = mock(viewModelMockType);
-                modelMocks.add(modelMocksForParent.get(j));
-                when(viewModelMockAccessor.apply(modelMocksForParent.get(j))).thenReturn(viewModelMock);
+        private MockHierarchyBuilder(Class<? extends M> modelType, Class<V> viewModelMockType) {
+            this.modelType = Objects.requireNonNull(modelType);
+            this.viewModelMockType = Objects.requireNonNull(viewModelMockType);
+        }
+
+        /**
+         *
+         * @param <M> type of created model mocks
+         * @param <V> type of created internal view model mocks
+         * @param modelType the type of mocks that is to be created, can be sub types of {@code M}
+         * @param viewModelMockType the type of the internal view model; used to create mocks
+         * @return
+         */
+        public static <M, V> MockHierarchyBuilder<M, V> hierarchyMocks(
+                Class<? extends M> modelType, Class<V> viewModelMockType) {
+            return new MockHierarchyBuilder<>(modelType, viewModelMockType);
+        }
+
+        /**
+         *
+         * @param parentCount a list of parent mocks for which model mocks are set up
+         * @return
+         */
+        public MockHierarchyBuilder<M, V> forParentCount(int parentCount) {
+            assertThat(parentCount, is(greaterThanOrEqualTo(0)));
+            this.parentCount = parentCount;
+            return this;
+        }
+
+        /**
+         * Sets a function that provides a mocked method returning a list of model mocks. The input values are the
+         * indices of {@link #forParentCount(int) parents}, and the function returns a mocked method call. The method
+         * call is set up such, that it returns
+         * {@link #withMockListFactory(java.util.function.BiFunction) created model mocks} for the respective parents.
+         *
+         * @param modelMockAccessor the function that returns the created list of mocks for a parent; to be mocked
+         * @return the builder instance
+         */
+        public MockHierarchyBuilder<M, V> withModelMockAccessor(
+                Function<Integer, ? extends Iterable<M>> modelMockAccessor) {
+            this.modelMockAccessor = Objects.requireNonNull(modelMockAccessor);
+            return this;
+        }
+
+        /**
+         * Creates a number of mocks of a subtype of the model mock type. Will be called for each
+         * {@link #forParentCount(int) parent} to create the respective
+         * {@link #withChildrenInParent(int[]) number of children}.
+         * <p>
+         * Not required to be set, by default {@link #createMockList(java.lang.Class, int) } a list of mocks will be
+         * created.</p>
+         *
+         * @param mockListFactory
+         * @return the builder instance
+         */
+        public MockHierarchyBuilder<M, V> withMockListFactory(
+                BiFunction<Class<? extends M>, Integer, Iterable<M>> mockListFactory) {
+            this.mockListFactory = Objects.requireNonNull(mockListFactory);
+            return this;
+        }
+
+        /**
+         * Sets a function that provides a mocked method returning a list of internal view model mocks. The input values
+         * are the {@link #withMockListFactory(java.util.function.BiFunction) created mock instances}, and the function
+         * returns a mocked method call. The method call is set up such, that it returns the corresponding internal view
+         * model mock.
+         *
+         * @param viewModelMockAccessor the function that returns the mock model for a given (created) view model mock;
+         * to be mocked
+         * @return the builder instance
+         */
+        public MockHierarchyBuilder<M, V> withViewModelMockAccessor(Function<M, V> viewModelMockAccessor) {
+            this.viewModelMockAccessor = Objects.requireNonNull(viewModelMockAccessor);
+            return this;
+        }
+
+        /**
+         * Specifies the number of child model and view mock pairs that should be created for each parent. The length
+         * must be equal to the {@link #forParentCount(int) number of parents}.
+         *
+         * @param childrenInParent the number of child mocks to be created for the respective parents
+         * @return the builder instance
+         */
+        public MockHierarchyBuilder<M, V> withChildrenInParent(int[] childrenInParent) {
+            this.childrenInParent = Objects.requireNonNull(childrenInParent);
+            return this;
+        }
+
+        /**
+         * Creates the hierarchy mocks.
+         *
+         * @return the list of created model mocks, ordered by their parents
+         */
+        public List<M> build() {
+            assertThat(childrenInParent.length, is(equalTo(parentCount)));
+
+            List<M> modelMocks = new ArrayList<>();
+
+            for (int i = 0; i < parentCount; ++i) {
+                appendToParent(modelMocks, i);
+            }
+
+            return modelMocks;
+        }
+
+        private void appendToParent(List<M> modelMocks, int parent) {
+            int children = childrenInParent[parent];
+
+            Iterable<M> modelMocksForParent = createModelMocks(parent, children);
+            for (M modelMock : modelMocksForParent) {
+                modelMocks.add(modelMock);
+                createviewModelMock(modelMock);
             }
         }
 
-        return modelMocks;
+        private Iterable<M> createModelMocks(int parent, int children) {
+            Iterable<M> modelMocksForParent = mockListFactory.apply(modelType, children);
+            when(modelMockAccessor.apply(parent)).thenReturn(modelMocksForParent);
+            return modelMocksForParent;
+        }
+
+        private void createviewModelMock(M modelMock) {
+            V viewModelMock = mock(viewModelMockType);
+            when(viewModelMockAccessor.apply(modelMock)).thenReturn(viewModelMock);
+        }
+
     }
 
     public static <T> List<T> createMockList(Class<? extends T> mockType, int count) {

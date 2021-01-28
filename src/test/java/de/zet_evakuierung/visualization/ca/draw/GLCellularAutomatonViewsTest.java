@@ -16,7 +16,6 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
-import static de.zet_evakuierung.visualization.ModelContainerTestUtils.setUp;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -52,6 +51,10 @@ import org.zet.cellularautomaton.RoomCell;
 import org.zet.cellularautomaton.SaveCell;
 import org.zet.cellularautomaton.StairCell;
 import org.zet.cellularautomaton.TeleportCell;
+
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder.hierarchyMocks;
+
+import de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder;
 
 /**
  *
@@ -154,7 +157,8 @@ public class GLCellularAutomatonViewsTest {
         );
 
         for (Map.Entry<Class<? extends EvacCell>, Class<? extends GLCell>> testCase : standardViewCreation.entrySet()) {
-            testFactoryCellType(testCase.getKey(), testCase.getValue(), unused -> {});
+            testFactoryCellType(testCase.getKey(), testCase.getValue(), unused -> {
+            });
         }
 
         // Additional test case for room and door cells with standard speed factor
@@ -224,14 +228,19 @@ public class GLCellularAutomatonViewsTest {
      */
     private static List<Room> setUpRooms(FactoryBaseMocks baseMocks, int floorCount,
             int... roomsOnFloor) {
-        Function<Integer, List<Room>> cellMockSupplier
+        Function<Integer, Iterable<Room>> roomMockSupplier
                 = i -> (List<Room>) baseMocks.cellularAutomaton.getRoomsOnFloor(i);
-        Function<Room, GLRoomModel> intermalMockFunction
+        Function<Room, GLRoomModel> internalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getRoomModel(evacCellMock);
-        return setUp(floorCount, Room.class, cellMockSupplier, GLRoomModel.class, intermalMockFunction, roomsOnFloor);
+        return hierarchyMocks(Room.class, GLRoomModel.class)
+                .forParentCount(floorCount)
+                .withModelMockAccessor(roomMockSupplier)
+                .withViewModelMockAccessor(internalMockFunction)
+                .withChildrenInParent(roomsOnFloor)
+                .build();
     }
 
-    private static List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
+    private static List<? extends EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
             int... cellsInRoom) {
         return setUpCells(baseMocks, roomMocks, RoomCell.class, cellsInRoom);
     }
@@ -252,12 +261,17 @@ public class GLCellularAutomatonViewsTest {
      * @param cellsInRoom the number of cell mocks created for the respective rooms
      * @return the list of created cells, ordered by room
      */
-    private static List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
+    private static <T> List<EvacCell> setUpCells(FactoryBaseMocks baseMocks, List<Room> roomMocks,
             Class<? extends EvacCell> cellType, int... cellsInRoom) {
         Function<Integer, List<EvacCell>> cellMockSupplier = i -> roomMocks.get(i).getAllCells();
         Function<EvacCell, GLCellModel> intermalMockFunction
                 = evacCellMock -> baseMocks.cellularAutomatonModel.getCellModel(evacCellMock);
-        return setUp(roomMocks.size(), cellType, cellMockSupplier, GLCellModel.class, intermalMockFunction, cellsInRoom);
+        return MockHierarchyBuilder.<EvacCell, GLCellModel>hierarchyMocks(cellType, GLCellModel.class)
+                .forParentCount(roomMocks.size())
+                .withModelMockAccessor(cellMockSupplier)
+                .withViewModelMockAccessor(intermalMockFunction)
+                .withChildrenInParent(cellsInRoom)
+                .build();
     }
 
     /**
