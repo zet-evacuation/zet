@@ -15,12 +15,12 @@
  */
 package de.zet_evakuierung.visualization.network.control;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.zet_evakuierung.visualization.network.draw.GLFlowGraph;
-import ds.GraphVisualizationResults;
+import de.zet_evakuierung.visualization.network.draw.GLGraphViews;
+import de.zet_evakuierung.visualization.network.draw.GLNode;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.graph.Node;
 import org.zetool.opengl.framework.abs.HierarchyNode;
@@ -30,34 +30,25 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  */
 public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode<GLGraphFloorControl> {
 
-    private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
-    private boolean supportsFloors = false;
+    /**
+     * Gives access to the model objects used by visualization views.
+     */
+    private GraphVisualizationModelContainer graphModel;
+    /**
+     * Gives access to all view objects drawing the OpenGL scene.
+     */
+    private GLGraphViews views;
+
     double scaling = 1;
     double defaultFloorHeight = 25;
-    private GraphVisualizationResults graphVisResult;
 
-    public GLFlowGraphControl(GraphVisualizationResults graphVisResult, NetworkVisualizationModel visualizationModel) {
+    public GLFlowGraphControl(NetworkVisualizationModel visualizationModel, GraphVisualizationModelContainer graphModel,
+            GLGraphViews views) {
         super(visualizationModel);
-        this.graphVisResult = graphVisResult;
-    }
 
-    public void build() {
-        //AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
-        visualizationModel.init(graphVisResult.getNetwork().nodes().size(), graphVisResult.getSupersink().id());
-        allFloorsByID = new HashMap<>();
-        supportsFloors = true;
-        int floorCount = graphVisResult.getFloorToNodeMapping().size();
-        clear();
-
-        for (int i = 0; i < floorCount; i++) {
-            GLGraphFloorControl floorControl = new GLGraphFloorControl(graphVisResult, graphVisResult.getFloorToNodeMapping().get(i), i, visualizationModel);
-            add(floorControl);
-            allFloorsByID.put(i, floorControl);
-        }
-        this.setView(new GLFlowGraph(this, visualizationModel));
-        for (GLGraphFloorControl floor : this) {
-            view.addChild(floor.getView());
-        }
+        this.graphModel = graphModel;
+        this.views = views;
+        setView(views.getView());
     }
 
     public GLFlowGraphControl(FlowVisualization fv, NetworkVisualizationModel visualizationModel) {
@@ -72,36 +63,34 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         GLGraphFloorControl floorControl = new GLGraphFloorControl(fv, fv.getNetwork().nodes(), visualizationModel);
         add(floorControl);
 
-        allFloorsByID = new HashMap<>();
-        allFloorsByID.put(0, floorControl);
-
-        this.setView(new GLFlowGraph(this, visualizationModel));
-        for (GLGraphFloorControl floor : this) {
-            view.addChild(floor.getView());
-        }
+//        allFloorsByID.put(0, floorControl);
+//        this.setView(new GLFlowGraph(this, visualizationModel));
+//        for (GLGraphFloorControl floor : this) {
+//            view.addChild(floor.getView());
+//        }
+        throw new AssertionError("Not implemented");
     }
 
     @Override
     public void clear() {
-        allFloorsByID.clear();
         childControls.clear();
     }
 
-    public void showOnlyFloor(Integer floorID) {
+    public void showOnlyFloor(Integer floorId) {
         childControls.clear();
-        childControls.add(allFloorsByID.get(floorID));
+        childControls.add(graphModel.getFloorModel(floorId));
         view.clear();
         for (GLGraphFloorControl floor : this) {
-            view.addChild(floor.getView());
+            view.addChild(views.getView(floor));
         }
     }
 
     public void showAllFloors() {
         childControls.clear();
-        childControls.addAll(allFloorsByID.values());
+        graphModel.floors().forEach(childControls::add);
         view.clear();
         for (GLGraphFloorControl floor : this) {
-            view.addChild(floor.getView());
+            view.addChild(views.getView(floor));
         }
     }
 
@@ -110,15 +99,10 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         view.delete();
     }
 
-    public void stepUpdate() {
-        int step = (int) visualizationModel.getStep();
-        for (GLGraphFloorControl g : this) {
-            for (GLNodeControl node : g) {
-                for (GLFlowEdgeControl edge : node) {
-                    edge.stepUpdate();
-                }
-                node.stepUpdate((int) step);
-            }
+    public void showNodeRectangles(boolean selected) {
+        graphModel.nodes().forEach(n -> n.setRectangleVisible(selected));
+        for (GLNode nodeView : views.nodeViews()) {
+            nodeView.update();
         }
     }
 }

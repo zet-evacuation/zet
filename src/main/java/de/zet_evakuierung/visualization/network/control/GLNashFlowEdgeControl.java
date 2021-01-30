@@ -17,7 +17,6 @@ package de.zet_evakuierung.visualization.network.control;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import de.zet_evakuierung.visualization.network.draw.GLNashFlowEdge;
 import org.zetool.graph.Edge;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.opengl.drawingutils.RainbowGradient;
@@ -34,12 +33,6 @@ public class GLNashFlowEdgeControl extends GLEdgeControl {
 		super( nodePositionMapping, edge, false );
 		this.flowDatas = flowDatas;
 		this.nfv = nfv;
-		setView();
-	}
-
-	@Override
-	protected void setView() {
-		setView( new GLNashFlowEdge( this ) );
 	}
 
 	public NashFlowEdgeData getNashFlowEdgeData() {

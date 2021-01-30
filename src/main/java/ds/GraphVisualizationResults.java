@@ -16,6 +16,7 @@
 package ds;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
@@ -374,6 +375,11 @@ public class GraphVisualizationResults extends FlowVisualization {
 	public ArrayList<ArrayList<Node>> getFloorToNodeMapping() {
 		return floorToNodeMapping;
 	}
+    
+    public List<Node> getNodesOnFloor(int floorId) {
+        return getFloorToNodeMapping().get(floorId);
+    }
+    
 //
 //	/**
 //	 * Returns whether {@code node} is an evacuation node.

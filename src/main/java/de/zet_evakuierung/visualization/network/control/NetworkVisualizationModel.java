@@ -64,7 +64,11 @@ public class NetworkVisualizationModel extends EvacuationVisualizationModel {
         //AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Graph...", "Knoten " + nodesDone + " von " + nodeCount + " erzeugt." );
     }
 
-    void init(int nodeCount, int superSinkId) {
+    public int getNodeCount() {
+        return nodeCount;
+    }
+
+    public void init(int nodeCount, int superSinkId) {
         this.superSinkID = superSinkId;
         this.nodeCount = nodeCount;
         nodesDone = 0;

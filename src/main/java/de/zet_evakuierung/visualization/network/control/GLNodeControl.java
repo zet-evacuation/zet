@@ -18,6 +18,7 @@ package de.zet_evakuierung.visualization.network.control;
 import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
 import de.zet_evakuierung.visualization.network.draw.GLNode;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
@@ -26,7 +27,8 @@ import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
-public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, NetworkVisualizationModel> {
+public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, NetworkVisualizationModel>
+        implements VisualizationNodeModel {
 	private double xPosition;
 	private double yPosition;
 	// TODO read data from file in ZET
@@ -60,17 +62,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * visualizationModel.scaling;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
-		final boolean showEdgesBetweenFloors = false;
-
-		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
-			if( edge.start().id() != visualizationModel.superSinkID() && edge.end().id() != visualizationModel.superSinkID() ) {
-				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
-				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
-				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors && !drawInterFloorEdges)
-					System.out.println( "Knoten auf verschiedenen Etagen." );
-				else
-					add( new GLFlowEdgeControl( graphVisResult, edge, visualizationModel ) );
-			}
 		id = node.id();
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
 		isSourceNode = graphVisResult.isSourceNode( node );
@@ -80,12 +71,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 
 		zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
 		zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
-
-		setView( new GLNode( this ) );
-		for( GLFlowEdgeControl edge : this ) {
-			view.addChild( edge.getView() );
-			edge.getView().update();
-		}
 
 		flowCalculator = new FlowCalculator();
 		visualizationModel.nodeProgress();
@@ -169,10 +154,12 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		return capacity;
 	}
 
+    @Override
 	public double getXPosition() {
 		return xPosition;
 	}
 
+    @Override
 	public double getYPosition() {
 		return yPosition;
 	}

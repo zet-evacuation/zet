@@ -15,73 +15,55 @@
  */
 package de.zet_evakuierung.visualization.network.control;
 
-import java.util.Iterator;
-
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import de.zet_evakuierung.visualization.network.draw.GLGraphFloor;
+import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import ds.GraphVisualizationResults;
-import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;
 
 /**
- * The {@code GLGraphFloorControl} class represents an floor of the
- * graph network in an MVC-design. It guarantees that the nodes belonging to
- * the floor are created and submitted to the view object.
+ * The {@code GLGraphFloorControl} class represents an floor of the graph network in an MVC-design. It guarantees that
+ * the nodes belonging to the floor are created and submitted to the view object.
+ *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, NetworkVisualizationModel> {
+public class GLGraphFloorControl extends VisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
 
-	/**
-	 * Creates a new instance of {@code GLGraphFloorControl}. Therefore for
-	 * any node in the list {@code nodesOnTheFloor} the related control and
-	 * visualization objects are created.
-	 * @param graphVisResult the graph visualization results
-	 * @param nodesOnTheFloor the nodes that lie on this floor
-	 * @param floor the number of the floor
-	 * @param visualizationModel the general control object for visualization
-	 */
-	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, NetworkVisualizationModel visualizationModel ) {
-		super( visualizationModel );
-		Iterator<Node> it = nodesOnTheFloor.iterator();
-		Node supersink = graphVisResult.getSupersink();
-		while( it.hasNext() ) {
-			Node n = it.next();
-			if( !n.equals(supersink) /*&& floor != 0*/ )
-				add( new GLNodeControl( graphVisResult, n, visualizationModel ) );
-		}
-		setView( new GLGraphFloor( this ) );
-		for( GLNodeControl node : this )
-			view.addChild( node.getView() );
-	}
+    /**
+     * Creates a new instance of {@code GLGraphFloorControl}. Therefore for any node in the list {@code nodesOnTheFloor}
+     * the related control and visualization objects are created.
+     *
+     * @param graphVisResult the graph visualization results
+     * @param nodesOnTheFloor the nodes that lie on this floor
+     * @param floor the number of the floor
+     * @param visualizationModel the general control object for visualization
+     */
+    public GLGraphFloorControl(GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, NetworkVisualizationModel visualizationModel) {
+        super(visualizationModel);
+    }
 
-	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, NetworkVisualizationModel visualizationModel ) {
-		super( visualizationModel );
-		Iterator<Node> it = nodes.iterator();
-		Node supersink = fv.getSinks().get( 0 );
-		while( it.hasNext() ) {
-			Node n = it.next();
-			//if( !n.equals(supersink) )
-				add( new GLNodeControl( fv, n, visualizationModel ) );
-		}
-		setView( new GLGraphFloor( this ) );
-		for( GLNodeControl node : this )
-			view.addChild( node.getView() );
-	}
+    GLGraphFloorControl(FlowVisualization fv, IdentifiableCollection<Node> nodes, NetworkVisualizationModel visualizationModel) {
+        super(visualizationModel);
+    }
 
-	/**
-	 * Returns the x-offset of the floor.
-	 * @return the x-offset of the floor
-	 */
-	public double getXPosition(){
-		return 0.0d;
-	}
-	
-	/**
-	 * Returns the y-offset of the floor.
-	 * @return the y-offset of the floor
-	 */
-	public double getYPosition(){
-		return 0.0d;
-	}
+    /**
+     * Returns the x-offset of the floor.
+     *
+     * @return the x-offset of the floor
+     */
+    @Override
+    public double getXPosition() {
+        return 0.0d;
+    }
+
+    /**
+     * Returns the y-offset of the floor.
+     *
+     * @return the y-offset of the floor
+     */
+    @Override
+    public double getYPosition() {
+        return 0.0d;
+    }
 }

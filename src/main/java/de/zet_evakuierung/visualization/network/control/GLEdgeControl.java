@@ -44,21 +44,10 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	public GLEdgeControl( NodePositionMapping<Vector3> nodePositionMapping, Edge edge, boolean setView ) {
 		super();
 
-		// Do not set a view here. maybe changed later on
-		if( setView )
-			setView();
-
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
 			isFirst = true;
 
 		init( nodePositionMapping.get( edge.start() ), nodePositionMapping.get( edge.end() ) );
-		if( setView )
-			view.update();
-	}
-
-	protected void setView() {
-		System.out.println( "A normal edge was set" );
-		setView( new GLEdge( this ) );
 	}
 
 	private void init( Vector3 startPos, Vector3 endPos ) {

@@ -38,10 +38,10 @@ import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
-import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
-import de.zet_evakuierung.visualization.network.control.GLNodeControl;
+import de.zet_evakuierung.visualization.network.control.GraphVisualizationModelContainer;
 import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
 import de.zet_evakuierung.visualization.network.draw.GLGraph;
+import de.zet_evakuierung.visualization.network.draw.GLGraphViews;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
@@ -255,10 +255,15 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         if (graphVisResult != null) {
             hasGraph = true;
             networkVisualizationModel = new NetworkVisualizationModel();
+            networkVisualizationModel.init(graphVisResult.getNetwork().nodes().size(), graphVisResult.getSupersink().id());
             networkVisualizationModel.setScaling(sizeMultiplicator);
             networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
-            graphControl = new GLFlowGraphControl(graphVisResult, networkVisualizationModel);
-            graphControl.build();
+
+            GraphVisualizationModelContainer graphModel
+                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel).build();
+            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
+                    graphModel, false);
+            graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);
 
             this.secondsPerStepGraph();
 
@@ -351,10 +356,15 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         if (graphVisResult != null) {
             hasGraph = true;
             networkVisualizationModel = new NetworkVisualizationModel();
+            networkVisualizationModel.init(graphVisResult.getNetwork().nodes().size(), graphVisResult.getSupersink().id());
             networkVisualizationModel.setScaling(sizeMultiplicator);
             networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
-            graphControl = new GLFlowGraphControl(graphVisResult, networkVisualizationModel);
-            graphControl.build();
+
+            GraphVisualizationModelContainer graphModel
+                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel).build();
+            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
+                    graphModel, false);
+            graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);
 
             this.secondsPerStepGraph();
 
@@ -682,12 +692,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         if (!hasGraph()) {
             return;
         }
-        for (GLGraphFloorControl g : graphControl.getChildControls()) {
-            for (GLNodeControl node : g) {
-                node.setRectangleVisible(selected);
-                g.getView().update();
-            }
-        }
+        graphControl.showNodeRectangles(selected);
     }
 
     /**

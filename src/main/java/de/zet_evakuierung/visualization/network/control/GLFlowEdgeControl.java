@@ -38,7 +38,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	private int transitTime;
 	private int capacity;
 	private static final double Z_TO_OPENGL_SCALING = 0.01d;
-  public Edge edge;
+    public Edge edge;
 
 	/**
 	 * Creates a new {@code GLFlowEdgeControl} object for the edge {@code edge} using data from
@@ -54,20 +54,13 @@ public class GLFlowEdgeControl extends GLEdgeControl {
     this.edge = edge;
 
 		this.visualizationModel = visualizationModel;
-		//controlled = edge;
-		setView( new GLFlowEdge( this ) );
-    //System.out.println( "Edge " + edge );
 
 		// general edge attributes
 		maxFlowRate = graphVisResult.getMaxFlowRate();
-    //System.out.println( " - max flow rate: " + maxFlowRate );
 
 		transitTime = graphVisResult.getTransitTimes().get( edge );
-    //System.out.println( " - transit time: " + transitTime );
-    //transitTime = 1;
 
 		capacity = graphVisResult.getEdgeCapacities().get( edge );
-    //capacity = 1;
 
 		// calculate flow on the edge
 		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
@@ -75,7 +68,6 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
 
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-    //System.out.println( " - max time with non zero value: " + maxT);
 		int transit = transitTimes.get( edge );
 		if( maxT > 0 )
 			visualizationModel.setMaxTime( maxT + transit );
@@ -125,11 +117,6 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 				flowOnEdge.add( new Integer( 0 ) );
 		} else
 			flowOnEdge = new ArrayList<>();
-	}
-
-	@Override
-	protected void setView() {
-		setView( new GLFlowEdge( this ) );
 	}
 
 	/**
