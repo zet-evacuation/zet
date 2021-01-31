@@ -15,7 +15,7 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
-import de.zet_evakuierung.visualization.network.model.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
@@ -32,9 +32,9 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  * @see AbstractDrawable
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> {
+public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorModel> {
 
-    public GLGraphFloor(GLGraphFloorControl model) {
+    public GLGraphFloor(GLGraphFloorModel model) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
     }
 

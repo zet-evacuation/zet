@@ -24,7 +24,7 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode<GLGraphFloorControl> {
+public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorModel, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode<GLGraphFloorModel> {
 
     /**
      * Gives access to the model objects used by visualization views.
@@ -56,7 +56,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         childControls.clear();
         childControls.add(graphModel.getFloorModel(floorId));
         view.clear();
-        for (GLGraphFloorControl floor : this) {
+        for (GLGraphFloorModel floor : this) {
             view.addChild(views.getView(floor));
         }
     }
@@ -65,7 +65,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         childControls.clear();
         graphModel.floors().forEach(childControls::add);
         view.clear();
-        for (GLGraphFloorControl floor : this) {
+        for (GLGraphFloorModel floor : this) {
             view.addChild(views.getView(floor));
         }
     }

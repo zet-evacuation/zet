@@ -41,7 +41,7 @@ public class GraphVisualizationModelContainer {
 
     private final static String ILLEGAL_NULL_OBJECT_ERROR = "Graph model container builder returned null.";
     private final GLFlowGraphModel network;
-    private final List<GLGraphFloorControl> floors;
+    private final List<GLGraphFloorModel> floors;
     private final Map<Node, GLNodeModel> nodeModelMap;
     private final Map<Edge, GLFlowEdgeModel> edgeModelMap;
 
@@ -69,7 +69,7 @@ public class GraphVisualizationModelContainer {
      * @param floor the floor number for which the model is returned
      * @return the floor visualization model instance
      */
-    public GLGraphFloorControl getFloorModel(int floor) {
+    public GLGraphFloorModel getFloorModel(int floor) {
         return floors.get(floor);
     }
 
@@ -113,7 +113,7 @@ public class GraphVisualizationModelContainer {
      * @see #getFloorModel(int)
      * @return iterable of all floor visualization model instances
      */
-    public Iterable<GLGraphFloorControl> floors() {
+    public Iterable<GLGraphFloorModel> floors() {
         return floors;
     }
 
@@ -152,7 +152,7 @@ public class GraphVisualizationModelContainer {
         /**
          * The {@link #build() built} floor visualization model instances.
          */
-        private List<GLGraphFloorControl> floors;
+        private List<GLGraphFloorModel> floors;
         /**
          * Map of the {@link #build() built} node visualization model instances.
          */
@@ -182,12 +182,12 @@ public class GraphVisualizationModelContainer {
             return new GraphVisualizationModelContainer(this);
         }
 
-        private List<GLGraphFloorControl> buildFloorModels() {
+        private List<GLGraphFloorModel> buildFloorModels() {
             int floorCount = visualizationResults.getFloorToNodeMapping().size();
 
-            ArrayList<GLGraphFloorControl> floorModels = new ArrayList<>(floorCount);
+            ArrayList<GLGraphFloorModel> floorModels = new ArrayList<>(floorCount);
             for (int i = 0; i < floorCount; ++i) {
-                GLGraphFloorControl floorModel = new GLGraphFloorControl(visualizationResults,
+                GLGraphFloorModel floorModel = new GLGraphFloorModel(visualizationResults,
                         visualizationResults.getFloorToNodeMapping().get(i), i, visualizationModel);
                 floorModels.add(floorModel);
             }

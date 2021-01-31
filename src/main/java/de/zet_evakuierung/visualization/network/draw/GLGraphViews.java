@@ -25,7 +25,7 @@ import java.util.Set;
 
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLFlowGraphControl;
-import de.zet_evakuierung.visualization.network.model.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
 import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
@@ -40,7 +40,7 @@ import org.zetool.graph.Node;
 public class GLGraphViews {
 
     private final GLFlowGraph rootView;
-    private final Map<GLGraphFloorControl, GLGraphFloor> floorViews;
+    private final Map<GLGraphFloorModel, GLGraphFloor> floorViews;
     private final Set<GLNode> nodeViews;
     private final Set<GLEdge> edgeViews;
 
@@ -61,7 +61,7 @@ public class GLGraphViews {
         return rootView;
     }
 
-    public GLGraphFloor getView(GLGraphFloorControl model) {
+    public GLGraphFloor getView(GLGraphFloorModel model) {
         return floorViews.get(model);
     }
 
@@ -109,7 +109,7 @@ public class GLGraphViews {
          * {@link #createViews() have been created}.
          */
         private GLFlowGraph rootView;
-        private Map<GLGraphFloorControl, GLGraphFloor> floorViews;
+        private Map<GLGraphFloorModel, GLGraphFloor> floorViews;
         private Set<GLNode> nodeViews;
         private Set<GLEdge> edgeViews;
 
@@ -143,7 +143,7 @@ public class GLGraphViews {
 
             // Create the view hierarchy
             for (int i = 0; i < modelContainer.getFloorCount(); ++i) {
-                GLGraphFloorControl floorModel = modelContainer.getFloorModel(i);
+                GLGraphFloorModel floorModel = modelContainer.getFloorModel(i);
                 GLGraphFloor floorView = new GLGraphFloor(floorModel);
                 floorViews.put(floorModel, floorView);
                 rootView.addChild(floorView);

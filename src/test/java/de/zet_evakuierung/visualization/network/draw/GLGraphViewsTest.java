@@ -47,7 +47,7 @@ import java.util.stream.StreamSupport;
 
 import de.zet_evakuierung.visualization.ModelContainerTestUtils;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
-import de.zet_evakuierung.visualization.network.model.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
 import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
@@ -119,7 +119,7 @@ public class GLGraphViewsTest {
     public void testFactoryNodes() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLGraphFloorControl> mockFloors = setUpFloors(baseMocks, 1);
+        List<GLGraphFloorModel> mockFloors = setUpFloors(baseMocks, 1);
         List<Node> mockNodes = setUpNodes(baseMocks, mockFloors, 2);
         setUpEdges(baseMocks, mockNodes, 0, 0);
 
@@ -139,7 +139,7 @@ public class GLGraphViewsTest {
         int floorCount = 1;
         int superSink = 1;
         int nodeCount = 3;
-        List<GLGraphFloorControl> mockFloors = setUpFloors(baseMocks, floorCount);
+        List<GLGraphFloorModel> mockFloors = setUpFloors(baseMocks, floorCount);
         List<Node> mockNodes = setUpNodes(baseMocks, mockFloors, nodeCount);
         setUpEdges(baseMocks, mockNodes, 0, 0, 0);
 
@@ -163,7 +163,7 @@ public class GLGraphViewsTest {
     public void testFactoryEdges() {
         FactoryBaseMocks baseMocks = new FactoryBaseMocks();
 
-        List<GLGraphFloorControl> mockFloors = setUpFloors(baseMocks, 1);
+        List<GLGraphFloorModel> mockFloors = setUpFloors(baseMocks, 1);
         List<Node> mockNodes = setUpNodes(baseMocks, mockFloors, 2);
         setUpEdges(baseMocks, mockNodes, 0, 0);
 
@@ -179,7 +179,7 @@ public class GLGraphViewsTest {
         // Set up a single floor with three nodes connected by 2 edges
         int superSink = 1;
         int floorCount = 1;
-        List<GLGraphFloorControl> mockFloors = setUpFloors(baseMocks, floorCount);
+        List<GLGraphFloorModel> mockFloors = setUpFloors(baseMocks, floorCount);
         int nodeCount = 3;
         List<Node> nodes = setUpNodes(baseMocks, mockFloors, nodeCount);
         when(baseMocks.visualizationResults.getSupersink()).thenReturn(nodes.get(superSink));
@@ -242,7 +242,7 @@ public class GLGraphViewsTest {
 
         // Set up a single floor with three nodes connected by 2 edges
         int floorCount = 2;
-        List<GLGraphFloorControl> floorMocks = setUpFloors(baseMocks, floorCount);
+        List<GLGraphFloorModel> floorMocks = setUpFloors(baseMocks, floorCount);
         List<Node> nodes = setUpNodes(baseMocks, floorMocks, 2, 2);
 
         // Connect the nodes on a floor and the two nodes on different floors (different direction)
@@ -275,11 +275,11 @@ public class GLGraphViewsTest {
      * @param baseMocks the base mocks that are set up
      * @param floorCount the number of floor mocks to be created
      */
-    private List<GLGraphFloorControl> setUpFloors(FactoryBaseMocks baseMocks, int floorCount) {
+    private List<GLGraphFloorModel> setUpFloors(FactoryBaseMocks baseMocks, int floorCount) {
         when(baseMocks.graphModel.getFloorCount()).thenReturn(floorCount);
-        List<GLGraphFloorControl> floorMocks = new ArrayList<>(floorCount);
+        List<GLGraphFloorModel> floorMocks = new ArrayList<>(floorCount);
         for (int i = 0; i < floorCount; ++i) {
-            GLGraphFloorControl mockFloor = mock(GLGraphFloorControl.class);
+            GLGraphFloorModel mockFloor = mock(GLGraphFloorModel.class);
             floorMocks.add(mockFloor);
             when(baseMocks.graphModel.getFloorModel(i)).thenReturn(mockFloor);
         }
@@ -300,7 +300,7 @@ public class GLGraphViewsTest {
      * @param nodesOnFloor number of nodes for each floor; must have the same size as {@code floorMocks}
      * @return a list of all created nodes, ordered by floor
      */
-    private static List<Node> setUpNodes(FactoryBaseMocks baseMocks, List<GLGraphFloorControl> floorMocks,
+    private static List<Node> setUpNodes(FactoryBaseMocks baseMocks, List<GLGraphFloorModel> floorMocks,
             int... nodesOnFloor) {
 
         assertThat(floorMocks.size(), is(equalTo(nodesOnFloor.length)));
