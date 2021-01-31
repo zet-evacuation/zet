@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
@@ -29,11 +29,11 @@ import org.zetool.math.vectormath.Vector3;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLNashNodeControl extends GLSimpleNodeControl {
+public class GLNashNodeModel extends GLSimpleNodeModel {
 	private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
 	private final NashFlowVisualization nfv;
 
-	public GLNashNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
+	public GLNashNodeModel( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
 		super( graph, node, nodePositionMapping, false );
 		this.nashFlowMapping = nashFlowMapping;
 		this.nfv = nfv;
@@ -44,12 +44,12 @@ public class GLNashNodeControl extends GLSimpleNodeControl {
 	protected void setUpEdges() {
 		// add outgoing edges as children
 		for( Edge edge : graph.outgoingEdges( node ) ) {
-			GLEdgeControl edgeControl = new GLNashFlowEdgeControl( nodePositionMapping, edge, nashFlowMapping.get( edge ), nfv );
+			GLEdgeModel edgeControl = new GLNashFlowEdgeModel( nodePositionMapping, edge, nashFlowMapping.get( edge ), nfv );
 			add( edgeControl );
 		}
 
 		setView( new GLNashNode( this ) );
-		for( GLEdgeControl edgeControl : this ) {
+		for( GLEdgeModel edgeControl : this ) {
 			view.addChild( edgeControl.getView() );
 		}
 	}

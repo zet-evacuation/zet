@@ -17,8 +17,8 @@ package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.network.control.GLFlowGraphModel;
-import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
+import de.zet_evakuierung.visualization.network.model.GLFlowGraphModel;
+import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
 import org.zetool.opengl.framework.abs.HierarchyRoot;
 
 public class GLFlowGraph extends HierarchyRoot<GLGraphFloor> {

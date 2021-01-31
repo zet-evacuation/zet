@@ -2,7 +2,7 @@
  * GLSimpleNodeControl.java
  * Created: Aug 18, 2010,3:32:10 PM
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ import org.zetool.opengl.framework.abs.AbstractControl;
  * {@link GLSimpleNode}.
  * @author Jan-Philipp Kappmeier
  */
-public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimpleNode> {
+public class GLSimpleNodeModel extends AbstractControl<GLEdgeModel, GLSimpleNode> {
 
 	Vector3 position;
 	private int capacity;
@@ -37,7 +37,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	protected final NodePositionMapping nodePositionMapping;
 	protected final Node node;
 
-	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping ) {
+	public GLSimpleNodeModel( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;
@@ -45,7 +45,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 		setUpEdges();
 	}
 
-	public GLSimpleNodeControl( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpEdges ) {
+	public GLSimpleNodeModel( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpEdges ) {
 		this.position = nodePositionMapping.get( node );
 		this.graph = graph;
 		this.nodePositionMapping = nodePositionMapping;
@@ -58,13 +58,13 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 		// add outgoing edges as children
 		for( Edge edge : graph.outgoingEdges( node ) ) {
 			// TODO skip first
-			GLEdgeControl edgeControl = new GLEdgeControl( nodePositionMapping, edge );
+			GLEdgeModel edgeControl = new GLEdgeModel( nodePositionMapping, edge );
 			add( edgeControl );
 
 		}
 
 		setView( new GLSimpleNode( this ) );
-		for( GLEdgeControl edgeControl : this ) {
+		for( GLEdgeModel edgeControl : this ) {
 			view.addChild( edgeControl.getView() );
 		}
 	}

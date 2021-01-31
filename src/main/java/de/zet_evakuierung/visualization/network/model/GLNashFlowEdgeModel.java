@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
@@ -25,11 +25,11 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLNashFlowEdgeControl extends GLEdgeControl {
+public class GLNashFlowEdgeModel extends GLEdgeModel {
 	NashFlowEdgeData flowDatas;
 	private final NashFlowVisualization nfv;
 
-	public GLNashFlowEdgeControl( NodePositionMapping nodePositionMapping, Edge edge, NashFlowEdgeData flowDatas, NashFlowVisualization nfv ) {
+	public GLNashFlowEdgeModel( NodePositionMapping nodePositionMapping, Edge edge, NashFlowEdgeData flowDatas, NashFlowVisualization nfv ) {
 		super( nodePositionMapping, edge, false );
 		this.flowDatas = flowDatas;
 		this.nfv = nfv;

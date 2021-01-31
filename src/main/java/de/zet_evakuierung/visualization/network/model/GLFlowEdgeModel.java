@@ -13,11 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.zet_evakuierung.visualization.network.draw.GLFlowEdge;
 import ds.GraphVisualizationResults;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
@@ -29,7 +28,7 @@ import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
  * by {@code GLFlowEdge}. That means it sets the correct positions depending on the time of the visualization.
  * @author Jan-Philipp Kappmeier
  */
-public class GLFlowEdgeControl extends GLEdgeControl {
+public class GLFlowEdgeModel extends GLEdgeModel {
 	protected final NetworkVisualizationModel visualizationModel;
 	private double time;
 	private ArrayList<Integer> flowOnEdge;
@@ -47,7 +46,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	 * @param edge the edge for this control object.
 	 * @param visualizationModel the main control class.
 	 */
-	public GLFlowEdgeControl( GraphVisualizationResults graphVisResult, Edge edge, NetworkVisualizationModel visualizationModel ) {
+	public GLFlowEdgeModel( GraphVisualizationResults graphVisResult, Edge edge, NetworkVisualizationModel visualizationModel ) {
 		super( graphVisResult.getNodePositionMapping(), edge );
 		setScaling( Z_TO_OPENGL_SCALING );
 
@@ -83,43 +82,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 			flowOnEdge = new ArrayList<>();
 	}
 
-	GLFlowEdgeControl( FlowVisualization fv, Edge edge, NetworkVisualizationModel visualizationModel ) {
-		super( fv.getNodePositionMapping(), edge );
-		this.visualizationModel = visualizationModel;
-
-		// todo: usage of isFirst by flag...
-		isFirst = !fv.isEdgesDoubled() || edge.start().id() < edge.end().id() ? true : false;
-
-		// store general edge attributes
-		maxFlowRate = fv.getMaxFlowRate();
-		visualizationModel.setMaxTime( fv.getTimeHorizon() + 1 );
-		transitTime = fv.getTransitTimes().get( edge );
-		capacity = fv.getEdgeCapacities().get( edge );
-
-
-		// compute flow visualization data structure
-		IdentifiableIntegerMapping<Edge> transitTimes = fv.getTransitTimes();
-
-		EdgeBasedFlowOverTime flowOverTime = fv.getFlow();
-		if( flowOverTime != null ) {
-
-		}
-		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-		int transit = transitTimes.get( edge );
-
-		if( maxT > 0 ) {
-			flowOnEdge = new ArrayList<>( maxT + transit + transit );
-			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add( new Integer( 0 ) );
-			for( int i = 0; i <= maxT; i++ )
-				flowOnEdge.add( new Integer( flowOverTime.get( edge ).get( i ) ) );
-			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add( new Integer( 0 ) );
-		} else
-			flowOnEdge = new ArrayList<>();
-	}
-
-	/**
+    /**
 	 * Returns the transit time of this edge.
 	 * @return the transit time of this edge.
 	 */

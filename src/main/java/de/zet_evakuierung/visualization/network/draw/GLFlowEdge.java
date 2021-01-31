@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
+import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.math.vectormath.Vector3;
@@ -28,7 +28,7 @@ import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLFlowEdge extends GLEdge {
 
-    GLFlowEdgeControl fmodel;
+    GLFlowEdgeModel fmodel;
 
     /** The edgeLength of single flow units. If set to 1 no single units are displayed. */
     static double factor = 0.7;
@@ -55,7 +55,7 @@ public class GLFlowEdge extends GLEdge {
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
-    public GLFlowEdge(GLFlowEdgeControl model) {
+    public GLFlowEdge(GLFlowEdgeModel model) {
         super(model);
         fmodel = model;
         maxFlowRate = model.getMaxFlowRate();
@@ -282,7 +282,7 @@ public class GLFlowEdge extends GLEdge {
     @Override
     public void update() {
         super.update();
-        GLFlowEdgeControl model = (GLFlowEdgeControl) super.model;
+        GLFlowEdgeModel model = (GLFlowEdgeModel) super.model;
         transitTime = model.getTransitTime();
         capacity = model.getCapacity();
         //maxCapacity = model.getMaxCapacity();

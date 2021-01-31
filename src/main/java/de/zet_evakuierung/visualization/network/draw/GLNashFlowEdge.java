@@ -18,8 +18,8 @@ package de.zet_evakuierung.visualization.network.draw;
 import javax.media.opengl.GL2;
 
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
-import de.zet_evakuierung.visualization.network.control.GLEdgeControl;
-import de.zet_evakuierung.visualization.network.control.GLNashFlowEdgeControl;
+import de.zet_evakuierung.visualization.network.model.GLEdgeModel;
+import de.zet_evakuierung.visualization.network.model.GLNashFlowEdgeModel;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
@@ -33,7 +33,7 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
 public class GLNashFlowEdge extends GLEdge {
 
     /** The model class for the Nash edge. */
-    GLNashFlowEdgeControl nmodel;
+    GLNashFlowEdgeModel nmodel;
     /** An acceleration factor. */
     final static double acceleration = 1;
     /** The current time during visualization. */
@@ -64,9 +64,9 @@ public class GLNashFlowEdge extends GLEdge {
     /** The angle used to rotate to display the edges. */
     final double rotateAngle;
 
-    public GLNashFlowEdge(GLEdgeControl model) {
+    public GLNashFlowEdge(GLEdgeModel model) {
         super(model);
-        nmodel = (GLNashFlowEdgeControl) model;
+        nmodel = (GLNashFlowEdgeModel) model;
         edgeColor = GLColor.gray;
         final Vector3 b = new Vector3(0, 0, 1);
         final Vector3 a = model.getDifferenceVectorInOpenGlScaling();

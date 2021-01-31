@@ -23,12 +23,12 @@ import java.util.Objects;
 
 import java.util.Set;
 
-import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
-import de.zet_evakuierung.visualization.network.control.GLFlowGraphControl;
-import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
-import de.zet_evakuierung.visualization.network.control.GLNodeControl;
-import de.zet_evakuierung.visualization.network.control.GraphVisualizationModelContainer;
-import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
+import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
+import de.zet_evakuierung.visualization.network.model.GLFlowGraphControl;
+import de.zet_evakuierung.visualization.network.model.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.model.GLNodeModel;
+import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
+import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
 import ds.GraphVisualizationResults;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
@@ -157,7 +157,7 @@ public class GLGraphViews {
                 if (node.equals(supersink)) {
                     continue;
                 }
-                GLNodeControl nodeModel = modelContainer.getNodeModel(node);
+                GLNodeModel nodeModel = modelContainer.getNodeModel(node);
                 GLNode nodeView = new GLNode(nodeModel);
                 parentFloor.addChild(nodeView);
                 nodeViews.add(nodeView);
@@ -171,7 +171,7 @@ public class GLGraphViews {
                     int nodeFloor1 = visualizationResults.getNodeToFloorMapping().get(edge.start());
                     int nodeFloor2 = visualizationResults.getNodeToFloorMapping().get(edge.end());
                     if (nodeFloor1 == nodeFloor2 || showEdgesBetweenFloors) {
-                        GLFlowEdgeControl edgeModel = modelContainer.getEdgeModel(edge);
+                        GLFlowEdgeModel edgeModel = modelContainer.getEdgeModel(edge);
                         GLFlowEdge edgeView = new GLFlowEdge(edgeModel);
                         parentNode.addChild(edgeView);
                         edgeViews.add(edgeView);

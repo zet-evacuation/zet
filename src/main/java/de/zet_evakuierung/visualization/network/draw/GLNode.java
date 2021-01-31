@@ -30,7 +30,7 @@ import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.awt.TextureRenderer;
 
-import de.zet_evakuierung.visualization.network.control.GLNodeControl;
+import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLColor;
@@ -39,7 +39,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
 import org.zetool.opengl.helper.Texture;
 import org.zetool.opengl.helper.TextureManager;
 
-public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
+public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeModel> {
 
     private double graphHeight = 70.0;
     private double radius;
@@ -55,7 +55,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;// QualityPreset.MediumQuality;
 
-    public GLNode(GLNodeControl model) {
+    public GLNode(GLNodeModel model) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
         
         radius = nodeRadius;

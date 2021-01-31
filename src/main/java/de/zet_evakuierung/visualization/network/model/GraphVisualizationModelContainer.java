@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
@@ -42,8 +42,8 @@ public class GraphVisualizationModelContainer {
     private final static String ILLEGAL_NULL_OBJECT_ERROR = "Graph model container builder returned null.";
     private final GLFlowGraphModel network;
     private final List<GLGraphFloorControl> floors;
-    private final Map<Node, GLNodeControl> nodeModelMap;
-    private final Map<Edge, GLFlowEdgeControl> edgeModelMap;
+    private final Map<Node, GLNodeModel> nodeModelMap;
+    private final Map<Edge, GLFlowEdgeModel> edgeModelMap;
 
     private GraphVisualizationModelContainer(Builder builder) {
         this.network = Objects.requireNonNull(builder.network, ILLEGAL_NULL_OBJECT_ERROR);
@@ -91,7 +91,7 @@ public class GraphVisualizationModelContainer {
      * @param node the instane for which the corresponding model should be returned; not {@code null}
      * @return the node visualization model instance
      */
-    public GLNodeControl getNodeModel(Node node) {
+    public GLNodeModel getNodeModel(Node node) {
         return nodeModelMap.get(node);
     }
 
@@ -103,7 +103,7 @@ public class GraphVisualizationModelContainer {
      * @param edge the instance for which the corresponding model should be returned; not {@code null}
      * @return the edge visualization model instance
      */
-    public GLFlowEdgeControl getEdgeModel(Edge edge) {
+    public GLFlowEdgeModel getEdgeModel(Edge edge) {
         return edgeModelMap.get(edge);
     }
 
@@ -123,7 +123,7 @@ public class GraphVisualizationModelContainer {
      * @see #getNodeModel(org.zetool.graph.Node)
      * @return iterable of all node visualization model instances
      */
-    public Iterable<GLNodeControl> nodes() {
+    public Iterable<GLNodeModel> nodes() {
         return nodeModelMap.values();
     }
 
@@ -133,7 +133,7 @@ public class GraphVisualizationModelContainer {
      * @see #getEdgeModel(org.zetool.graph.Edge)
      * @return iterable of all edge visualization model instances
      */
-    public Iterable<GLFlowEdgeControl> edges() {
+    public Iterable<GLFlowEdgeModel> edges() {
         return edgeModelMap.values();
     }
 
@@ -156,11 +156,11 @@ public class GraphVisualizationModelContainer {
         /**
          * Map of the {@link #build() built} node visualization model instances.
          */
-        private Map<Node, GLNodeControl> nodeMap;
+        private Map<Node, GLNodeModel> nodeMap;
         /**
          * Map of the {@link #build() built} edge visualization model instances.
          */
-        private Map<Edge, GLFlowEdgeControl> edgeMap;
+        private Map<Edge, GLFlowEdgeModel> edgeMap;
 
         public Builder(GraphVisualizationResults graphVisResult, NetworkVisualizationModel networkVisualizationModel) {
             this.visualizationResults = Objects.requireNonNull(graphVisResult);
@@ -169,7 +169,7 @@ public class GraphVisualizationModelContainer {
 
         /**
          * Builds the complete model instances for the {@link GLFlowGraphModel graph root}, the
-         * {@link GLGraphControl floors}, the {@link GLNodeControl nodes}, and the {@link GLFlowEdgeControl edges}.
+         * {@link GLGraphControl floors}, the {@link GLNodeModel nodes}, and the {@link GLFlowEdgeModel edges}.
          *
          * @return the container object instance for all the built graph visualization model instances
          */
@@ -200,12 +200,12 @@ public class GraphVisualizationModelContainer {
          *
          * @return a mapping of all nodes for visualization (i.e. without supersink)
          */
-        private Map<Node, GLNodeControl> createNodeMapping() {
+        private Map<Node, GLNodeModel> createNodeMapping() {
             int floorCount = visualizationResults.getFloorToNodeMapping().size();
-            List<Map<Node, GLNodeControl>> nodeModels = new ArrayList<>();
+            List<Map<Node, GLNodeModel>> nodeModels = new ArrayList<>();
             for (int i = 0; i < floorCount; ++i) {
                 Collection<Node> nodesOnTheFloor = visualizationResults.getNodesOnFloor(i);
-                Map<Node, GLNodeControl> nodesOnFloor = buildNodeModels(nodesOnTheFloor);
+                Map<Node, GLNodeModel> nodesOnFloor = buildNodeModels(nodesOnTheFloor);
                 nodeModels.add(nodesOnFloor);
             }
             return nodeModels.stream()
@@ -214,9 +214,9 @@ public class GraphVisualizationModelContainer {
                     .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
 
-        private Map<Node, GLNodeControl> buildNodeModels(Collection<Node> nodesOnTheFloor) {
-            Map<Node, GLNodeControl> result = nodesOnTheFloor.stream()
-                    .collect(toMap(identity(), n -> new GLNodeControl(visualizationResults, n, visualizationModel)));
+        private Map<Node, GLNodeModel> buildNodeModels(Collection<Node> nodesOnTheFloor) {
+            Map<Node, GLNodeModel> result = nodesOnTheFloor.stream()
+                    .collect(toMap(identity(), n -> new GLNodeModel(visualizationResults, n, visualizationModel)));
             return result;
         }
 
@@ -229,15 +229,15 @@ public class GraphVisualizationModelContainer {
          * ({@code Integer.MAX_VALUE})
          * @return a map of the incident edges of the nodes to the created edge model instances
          */
-        private Map<Edge, GLFlowEdgeControl> createEdgeMapping(Iterable<Node> nodes) {
+        private Map<Edge, GLFlowEdgeModel> createEdgeMapping(Iterable<Node> nodes) {
             long edgeCount = StreamSupport.stream(nodes.spliterator(), false)
                     .map(visualizationResults.getNetwork()::outDegree)
                     .count();
-            HashMap<Edge, GLFlowEdgeControl> result = new HashMap<>(Math.toIntExact(edgeCount));
+            HashMap<Edge, GLFlowEdgeModel> result = new HashMap<>(Math.toIntExact(edgeCount));
 
             for (Node node : nodes) {
                 for (Edge edge : visualizationResults.getNetwork().outgoingEdges(node)) {
-                    result.put(edge, new GLFlowEdgeControl(visualizationResults, edge, visualizationModel));
+                    result.put(edge, new GLFlowEdgeModel(visualizationResults, edge, visualizationModel));
                 }
             }
             return result;

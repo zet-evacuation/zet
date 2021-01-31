@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import de.zet_evakuierung.visualization.network.draw.GLGraph;
 import org.zetool.graph.DirectedGraph;
@@ -29,16 +29,16 @@ import org.zetool.opengl.framework.abs.HierarchyNode;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements Drawable, HierarchyNode<GLSimpleNodeControl> {
+public class GLGraphModel extends AbstractControl<GLSimpleNodeModel, GLGraph> implements Drawable, HierarchyNode<GLSimpleNodeModel> {
 
     protected NodePositionMapping<Vector3> nodePositionMapping;
     protected DirectedGraph graph;
 
-    public GLGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping) {
+    public GLGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping) {
         this(graph, nodePositionMapping, true);
     }
 
-    public GLGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes) {
+    public GLGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes) {
         this.nodePositionMapping = nodePositionMapping;
         this.graph = graph;
         if (setUpNodes) {
@@ -48,12 +48,12 @@ public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph
 
     protected void setUpNodes() {
         for (Node n : graph.nodes()) {
-            GLSimpleNodeControl nodeControl = new GLSimpleNodeControl(graph, n, nodePositionMapping);
+            GLSimpleNodeModel nodeControl = new GLSimpleNodeModel(graph, n, nodePositionMapping);
             add(nodeControl);
         }
 
         this.setView(new GLGraph(this));
-        for (GLSimpleNodeControl nodeControl : this) {
+        for (GLSimpleNodeModel nodeControl : this) {
             view.addChild(nodeControl.getView());
         }
     }

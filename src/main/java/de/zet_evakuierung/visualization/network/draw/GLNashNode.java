@@ -17,7 +17,7 @@ package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.network.control.GLNashNodeControl;
+import de.zet_evakuierung.visualization.network.model.GLNashNodeModel;
 
 /**
  *
@@ -25,7 +25,7 @@ import de.zet_evakuierung.visualization.network.control.GLNashNodeControl;
  */
 public class GLNashNode extends GLSimpleNode {
 
-    public GLNashNode(GLNashNodeControl model) {
+    public GLNashNode(GLNashNodeModel model) {
         super(model);
     }
 

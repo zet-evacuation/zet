@@ -15,7 +15,7 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
-import de.zet_evakuierung.visualization.network.control.GLGraphControl;
+import de.zet_evakuierung.visualization.network.model.GLGraphModel;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.HierarchyRoot;
 
@@ -25,7 +25,7 @@ import org.zetool.opengl.framework.abs.HierarchyRoot;
  */
 public class GLGraph extends HierarchyRoot<GLSimpleNode> {
 
-    public GLGraph(GLGraphControl model) {
+    public GLGraph(GLGraphModel model) {
         super();
     }
 }

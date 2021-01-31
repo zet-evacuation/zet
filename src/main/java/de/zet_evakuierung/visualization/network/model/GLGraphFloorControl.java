@@ -13,13 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.zet_evakuierung.visualization.VisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import ds.GraphVisualizationResults;
-import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.graph.Node;
 
 /**
@@ -40,10 +38,6 @@ public class GLGraphFloorControl extends VisualizationModel<NetworkVisualization
      * @param visualizationModel the general control object for visualization
      */
     public GLGraphFloorControl(GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, NetworkVisualizationModel visualizationModel) {
-        super(visualizationModel);
-    }
-
-    GLGraphFloorControl(FlowVisualization fv, IdentifiableCollection<Node> nodes, NetworkVisualizationModel visualizationModel) {
         super(visualizationModel);
     }
 

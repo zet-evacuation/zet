@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import java.util.Map;
 
@@ -28,11 +28,11 @@ import org.zetool.graph.Node;
  */
 public class GLFlowGraphModel extends VisualizationModel<NetworkVisualizationModel> {
 
-    private final Map<Node, GLNodeControl> nodeMap;
-    private final Iterable<GLFlowEdgeControl> edges;
+    private final Map<Node, GLNodeModel> nodeMap;
+    private final Iterable<GLFlowEdgeModel> edges;
 
-    public GLFlowGraphModel(NetworkVisualizationModel visualizationModel, Map<Node, GLNodeControl> nodeMap,
-            Iterable<GLFlowEdgeControl> edges) {
+    public GLFlowGraphModel(NetworkVisualizationModel visualizationModel, Map<Node, GLNodeModel> nodeMap,
+            Iterable<GLFlowEdgeModel> edges) {
         super(visualizationModel);
         this.nodeMap = nodeMap;
         this.edges = edges;
@@ -41,7 +41,7 @@ public class GLFlowGraphModel extends VisualizationModel<NetworkVisualizationMod
     public void stepUpdate() {
         int step = (int) visualizationModel.getStep();
         nodeMap.values().forEach(node -> node.stepUpdate(step));
-        edges.forEach(GLFlowEdgeControl::stepUpdate);
+        edges.forEach(GLFlowEdgeModel::stepUpdate);
     }
 
 }

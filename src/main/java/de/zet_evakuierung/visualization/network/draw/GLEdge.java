@@ -17,8 +17,8 @@ package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
-import de.zet_evakuierung.visualization.network.control.GLEdgeControl;
-import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
+import de.zet_evakuierung.visualization.network.model.GLEdgeModel;
+import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.math.vectormath.Vector3;
@@ -29,7 +29,7 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
+public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeModel> {
     static GLColor edgeColor;
     /* The thickness of the edges and pieces of flow according to their capacities. */
   static double thickness = 1.5;// factor of 1.5 used for test evacuation report
@@ -40,7 +40,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
     /* The edgeLength of the edge in {@code OpenGL} scaling. */
     double edgeLength;
 
-    public GLEdge( GLEdgeControl model ) {
+    public GLEdge( GLEdgeModel model ) {
         super( model );
         //update();
     }
@@ -49,7 +49,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
     /**
      * Draws the static structure of the edge that means the edge, if it is the first one
      * of the two edges. The flow is not painted.
-     * @see GLFlowEdgeControl#isFirstEdge()
+     * @see GLFlowEdgeModel#isFirstEdge()
      * @param gl the {@code OpenGL} drawable object
      */
     @Override

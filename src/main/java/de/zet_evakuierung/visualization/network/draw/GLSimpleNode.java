@@ -20,7 +20,7 @@ import java.awt.Color;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import de.zet_evakuierung.visualization.network.control.GLSimpleNodeControl;
+import de.zet_evakuierung.visualization.network.model.GLSimpleNodeModel;
 import gui.visualization.QualityPreset;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.drawingutils.GLVector;
@@ -30,14 +30,14 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> {
+public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeModel> {
 
     int nodeDisplayMode = GLU.GLU_FILL;
     GLColor nodeColor = new GLColor(154, 154, 147);
     double radius;
     private static final QualityPreset QUALITY_PRESET = QualityPreset.MediumQuality;
 
-    public GLSimpleNode(GLSimpleNodeControl model) {
+    public GLSimpleNode(GLSimpleNodeModel model) {
         super(model, new GLVector(model.getPosition()));
         this.radius = 13 * 0.1;
     }

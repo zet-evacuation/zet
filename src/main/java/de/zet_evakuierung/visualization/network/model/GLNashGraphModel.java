@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
@@ -32,12 +32,12 @@ import org.zetool.opengl.helper.Frustum;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLNashGraphControl extends GLGraphControl implements Drawable, VisualizationModel {
+public class GLNashGraphModel extends GLGraphModel implements Drawable, VisualizationModel {
 
     private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
     private final NashFlowVisualization nfv;
 
-    public GLNashGraphControl(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv) {
+    public GLNashGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv) {
         super(graph, nodePositionMapping, false);
         this.nashFlowMapping = nashFlowMapping;
         this.nfv = nfv;
@@ -47,12 +47,12 @@ public class GLNashGraphControl extends GLGraphControl implements Drawable, Visu
     @Override
     protected void setUpNodes() {
         for (Node n : graph.nodes()) {
-            GLNashNodeControl nodeControl = new GLNashNodeControl(graph, n, nodePositionMapping, nashFlowMapping, nfv);
+            GLNashNodeModel nodeControl = new GLNashNodeModel(graph, n, nodePositionMapping, nashFlowMapping, nfv);
             add(nodeControl);
         }
 
         this.setView(new GLNashGraph(this));
-        for (GLSimpleNodeControl nodeControl : this) {
+        for (GLSimpleNodeModel nodeControl : this) {
             view.addChild(nodeControl.getView());
         }
     }

@@ -15,7 +15,7 @@
  */
 package de.zet_evakuierung.visualization.network.draw;
 
-import de.zet_evakuierung.visualization.network.control.GLNashGraphControl;
+import de.zet_evakuierung.visualization.network.model.GLNashGraphModel;
 
 /**
  *
@@ -23,9 +23,8 @@ import de.zet_evakuierung.visualization.network.control.GLNashGraphControl;
  */
 public class GLNashGraph extends GLGraph {
 
-	public GLNashGraph( GLNashGraphControl model ) {
-		super( model );
-	}
-
+    public GLNashGraph(GLNashGraphModel model) {
+        super(model);
+    }
 
 }

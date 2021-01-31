@@ -13,16 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
-import java.util.Iterator;
-
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.zet_evakuierung.visualization.network.draw.GLFlowGraph;
 import de.zet_evakuierung.visualization.network.draw.GLGraphViews;
 import de.zet_evakuierung.visualization.network.draw.GLNode;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import org.zetool.graph.Node;
 import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
@@ -49,26 +45,6 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         this.graphModel = graphModel;
         this.views = views;
         setView(views.getView());
-    }
-
-    public GLFlowGraphControl(FlowVisualization fv, NetworkVisualizationModel visualizationModel) {
-        super(visualizationModel);
-
-        //AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
-        visualizationModel.init(fv.getNetwork().nodes().size(), fv.getSinks().get(0).id());
-
-        Iterator<Node> it = fv.getNetwork().nodes().iterator();
-        Node supersink = fv.getSinks().get(0);  // graphVisResult.getSupersink();
-
-        GLGraphFloorControl floorControl = new GLGraphFloorControl(fv, fv.getNetwork().nodes(), visualizationModel);
-        add(floorControl);
-
-//        allFloorsByID.put(0, floorControl);
-//        this.setView(new GLFlowGraph(this, visualizationModel));
-//        for (GLGraphFloorControl floor : this) {
-//            view.addChild(floor.getView());
-//        }
-        throw new AssertionError("Not implemented");
     }
 
     @Override

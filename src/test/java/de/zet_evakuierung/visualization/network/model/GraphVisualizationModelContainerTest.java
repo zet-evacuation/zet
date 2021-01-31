@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import static de.zet_evakuierung.visualization.ModelContainerTestUtils.assertObjectsFromIteratorAndMapAreEqual;
 import static de.zet_evakuierung.visualization.ModelContainerTestUtils.assertPositions;
@@ -188,7 +188,7 @@ public class GraphVisualizationModelContainerTest {
     /**
      * Sets up the mocks for Nodes. Prepares the mocked data in the {@link GraphVisualizationResults visualization
      * results} to prepare simple or empty values for each node. These values are required to instantiate
-     * {@link GLNodeControl node model} objects.
+     * {@link GLNodeModel node model} objects.
      *
      * @param baseMocks the base mocks that are set up
      * @param floorCount the number of floors
@@ -332,7 +332,7 @@ public class GraphVisualizationModelContainerTest {
 
         /**
          * Verifies base mock interactions for nodes. Verifies both, interactions happening in the
-         * {@link GraphVisualizationModelContainer class under test} as well as in created {@link GLNodeControl node}
+         * {@link GraphVisualizationModelContainer class under test} as well as in created {@link GLNodeModel node}
          * instances.
          *
          * If a super sink is present, the interactions for it are not verified (as it is excluded in the builder).

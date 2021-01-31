@@ -46,11 +46,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import de.zet_evakuierung.visualization.ModelContainerTestUtils;
-import de.zet_evakuierung.visualization.network.control.GLFlowEdgeControl;
-import de.zet_evakuierung.visualization.network.control.GLGraphFloorControl;
-import de.zet_evakuierung.visualization.network.control.GLNodeControl;
-import de.zet_evakuierung.visualization.network.control.GraphVisualizationModelContainer;
-import de.zet_evakuierung.visualization.network.control.NetworkVisualizationModel;
+import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
+import de.zet_evakuierung.visualization.network.model.GLGraphFloorControl;
+import de.zet_evakuierung.visualization.network.model.GLNodeModel;
+import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
+import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import org.junit.BeforeClass;
@@ -152,7 +152,7 @@ public class GLGraphViewsTest {
         List<Integer> nodeIds = StreamSupport.stream(Spliterators
                 .spliteratorUnknownSize(result.nodeViews().iterator(), Spliterator.ORDERED), false)
                 .map(GLNode::getModel)
-                .map(GLNodeControl::getNumber)
+                .map(GLNodeModel::getNumber)
                 .collect(toList());
         assertThat(nodeIds, containsInAnyOrder(0, 2));
     }
@@ -288,11 +288,11 @@ public class GLGraphViewsTest {
     }
 
     /**
-     * Sets up the mocks for node models. Creates {@link Node} instances and {@link GLNodeControl} mocks corresponding
+     * Sets up the mocks for node models. Creates {@link Node} instances and {@link GLNodeModel} mocks corresponding
      * to each other.
      * <p>
      * Sets up the {@link GraphVisualizationResults graph results} mock to return the respective list of
-     * {@link Node nodes} for each floor and the model to retrieve the {@link GLNodeControl} for its corresponding
+     * {@link Node nodes} for each floor and the model to retrieve the {@link GLNodeModel} for its corresponding
      * node.</p>
      *
      * @param baseMocks the base mocks that are set up
@@ -320,9 +320,9 @@ public class GLGraphViewsTest {
 
         Function<Integer, Iterable<Node>> nodeMockSupplier
                 = i -> baseMocks.visualizationResults.getNodesOnFloor(i);
-        Function<Node, GLNodeControl> internalMockFunction
+        Function<Node, GLNodeModel> internalMockFunction
                 = nodeMock -> baseMocks.graphModel.getNodeModel(nodeMock);
-        hierarchyMocks(Node.class, GLNodeControl.class)
+        hierarchyMocks(Node.class, GLNodeModel.class)
                 .forParentCount(floorMocks.size())
                 .withModelMockAccessor(nodeMockSupplier)
                 .withMockListFactory(mockListFactory)
@@ -332,7 +332,7 @@ public class GLGraphViewsTest {
 
         // Set up the node model instances to know their id
         for (int i = 0; i < nodes.size(); ++i) {
-            GLNodeControl nodeModel = internalMockFunction.apply(nodes.get(i));
+            GLNodeModel nodeModel = internalMockFunction.apply(nodes.get(i));
             when(nodeModel.getNumber()).thenReturn(i);
         }
 
@@ -351,10 +351,10 @@ public class GLGraphViewsTest {
 
         Function<Integer, Iterable<Edge>> edgeMockSupplier
                 = i -> baseMocks.network.outgoingEdges(nodeMock.get(i));
-        Function<Edge, GLFlowEdgeControl> internalMockFunction
+        Function<Edge, GLFlowEdgeModel> internalMockFunction
                 = edgeMock -> baseMocks.graphModel.getEdgeModel(edgeMock);
 
-        return hierarchyMocks(Edge.class, GLFlowEdgeControl.class)
+        return hierarchyMocks(Edge.class, GLFlowEdgeModel.class)
                 .forParentCount(nodeMock.size())
                 .withModelMockAccessor(edgeMockSupplier)
                 .withMockListFactory(GLGraphViewsTest::createMockIdentifiableCollection)

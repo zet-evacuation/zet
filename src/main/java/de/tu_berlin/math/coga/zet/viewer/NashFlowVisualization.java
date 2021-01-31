@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 
-import de.zet_evakuierung.visualization.network.control.GLNashGraphControl;
+import de.zet_evakuierung.visualization.network.model.GLNashGraphModel;
 import de.zet_evakuierung.visualization.network.draw.GLEdge;
 import gui.visualization.Visualization;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
@@ -38,7 +38,7 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class NashFlowVisualization extends Visualization<GLNashGraphControl, GLNashGraphControl> {
+public class NashFlowVisualization extends Visualization<GLNashGraphModel, GLNashGraphModel> {
 
     RainbowGradient rainbowGradient;
     NashFlowEdgeData flowDatas0 = new NashFlowEdgeData(2, 1);
@@ -47,7 +47,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl, GLN
     NashFlowEdgeData flowDatas3 = new NashFlowEdgeData(2, 9.125);
     NashFlowEdgeData flowDatas4 = new NashFlowEdgeData(1, 1);
     ArrayList<GLEdge> edges = new ArrayList<>();
-    GLNashGraphControl graphControl;
+    GLNashGraphModel graphControl;
     GLColor[] colors = {GLColor.red, GLColor.yellow, GLColor.green, GLColor.magenta, GLColor.blue, GLColor.orange, GLColor.indigo, GLColor.cyan, GLColor.violet};
 
     public NashFlowVisualization(GLCapabilities capabilities) {
@@ -108,7 +108,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl, GLN
         mapping.set(e3, flowDatas3);
         mapping.set(e4, flowDatas4);
 
-        graphControl = new GLNashGraphControl(network, nodePositionMapping, mapping, this);
+        graphControl = new GLNashGraphModel(network, nodePositionMapping, mapping, this);
 
         setControl(graphControl, graphControl);
 

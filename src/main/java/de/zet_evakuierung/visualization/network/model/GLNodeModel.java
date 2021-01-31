@@ -13,21 +13,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package de.zet_evakuierung.visualization.network.control;
+package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
 import de.zet_evakuierung.visualization.network.draw.GLNode;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
 import ds.GraphVisualizationResults;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
-public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, NetworkVisualizationModel>
+public class GLNodeModel extends AbstractZETVisualizationControl<GLFlowEdgeModel, GLNode, NetworkVisualizationModel>
         implements VisualizationNodeModel {
 	private double xPosition;
 	private double yPosition;
@@ -50,7 +48,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	private boolean drawInterFloorEdges = true;
 	private int id = 0;
 
-	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, NetworkVisualizationModel visualizationModel ) {
+	public GLNodeModel( GraphVisualizationResults graphVisResult, Node node, NetworkVisualizationModel visualizationModel ) {
 		super( visualizationModel );
 
 		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX() * visualizationModel.scaling;
@@ -76,49 +74,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		visualizationModel.nodeProgress();
 	}
 
-	GLNodeControl( FlowVisualization fv, Node node, NetworkVisualizationModel visualizationModel ) {
-		super( visualizationModel );
-
-		nwX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * visualizationModel.scaling;
-		nwY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * visualizationModel.scaling;
-		seX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * visualizationModel.scaling;
-		seY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * visualizationModel.scaling;
-
-		xPosition = (nwX + 0.5 * (seX - nwX)) * visualizationModel.scaling;
-		yPosition = (nwY + 0.5 * (seY - nwY)) * visualizationModel.scaling;
-
-		xPosition = (fv.getNodePositionMapping().get( node ).x + fv.getEffectiveOffset().x) * fv.getScale() * visualizationModel.scaling;
-		yPosition = (fv.getNodePositionMapping().get( node ).y + fv.getEffectiveOffset().y) * fv.getScale() * visualizationModel.scaling;
-		capacity = fv.getNodeCapacities().get( node );
-
-		//final boolean showEdgesBetweenFloors = true;
-
-		for( Edge edge : fv.getNetwork().outgoingEdges( node ) )
-			if( !fv.isContainsSuperSink() )
-				add( new GLFlowEdgeControl( fv, edge, visualizationModel ) );
-			else if( edge.start().id() != visualizationModel.superSinkID() && edge.end().id() != visualizationModel.superSinkID() ) {
-				// edit ignore floors
-				add( new GLFlowEdgeControl( fv, edge, visualizationModel ) );
-			}
-		isEvacuationNode = fv.isEvacuationNode( node );
-		isSourceNode = fv.isSourceNode( node );
-		//isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
-
-		floor = 0; // ignore floors at the moment
-
-		zPosition = fv.getNodePositionMapping().get( node ).z * fv.getScale() * visualizationModel.scaling;
-
-		setView( new GLNode( this ) );
-		for( GLFlowEdgeControl edge : this ) {
-			view.addChild( edge.getView() );
-			edge.getView().update();
-		}
-
-		flowCalculator = new FlowCalculator();
-		visualizationModel.nodeProgress();
-	}
-
-	public boolean isEvacuationNode() {
+    public boolean isEvacuationNode() {
 		return isEvacuationNode;
 	}
 
