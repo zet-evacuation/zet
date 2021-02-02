@@ -15,7 +15,7 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import ds.GraphVisualizationResults;
 import org.zetool.graph.Node;
@@ -26,7 +26,7 @@ import org.zetool.graph.Node;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorModel extends VisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
+public class GLGraphFloorModel extends AbstractVisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
 
     /**
      * Creates a new instance of {@code GLGraphFloorControl}. Therefore for any node in the list {@code nodesOnTheFloor}

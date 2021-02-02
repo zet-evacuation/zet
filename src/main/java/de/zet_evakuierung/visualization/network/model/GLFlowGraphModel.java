@@ -18,7 +18,7 @@ package de.zet_evakuierung.visualization.network.model;
 
 import java.util.Map;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import org.zetool.graph.Node;
 
 /**
@@ -26,7 +26,7 @@ import org.zetool.graph.Node;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLFlowGraphModel extends VisualizationModel<NetworkVisualizationModel> {
+public class GLFlowGraphModel extends AbstractVisualizationModel<NetworkVisualizationModel> {
 
     private final Map<Node, GLNodeModel> nodeMap;
     private final Iterable<GLFlowEdgeModel> edges;

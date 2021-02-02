@@ -15,12 +15,12 @@
  */
 package de.zet_evakuierung.visualization.ca.model;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.cellularautomaton.Room;
 
-public class GLRoomModel extends VisualizationModel<CellularAutomatonVisualizationModel> implements VisualizationNodeModel {
+public class GLRoomModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel> implements VisualizationNodeModel {
 
     private final double xPosition;
     private final double yPosition;

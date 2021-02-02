@@ -16,56 +16,24 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
-import de.zet_evakuierung.visualization.network.draw.GLGraph;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import org.zetool.graph.DirectedGraph;
-import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
-import org.zetool.opengl.framework.abs.AbstractControl;
-import org.zetool.opengl.framework.abs.Drawable;
-import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphModel extends AbstractControl<GLSimpleNodeModel, GLGraph> implements Drawable, HierarchyNode<GLSimpleNodeModel> {
+public class GLGraphModel extends AbstractVisualizationModel<NetworkVisualizationModel> {
 
     protected NodePositionMapping<Vector3> nodePositionMapping;
     protected DirectedGraph graph;
 
     public GLGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping) {
-        this(graph, nodePositionMapping, true);
-    }
-
-    public GLGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, boolean setUpNodes) {
+        super(new NetworkVisualizationModel());
         this.nodePositionMapping = nodePositionMapping;
         this.graph = graph;
-        if (setUpNodes) {
-            setUpNodes();
-        }
-    }
-
-    protected void setUpNodes() {
-        for (Node n : graph.nodes()) {
-            GLSimpleNodeModel nodeControl = new GLSimpleNodeModel(graph, n, nodePositionMapping);
-            add(nodeControl);
-        }
-
-        this.setView(new GLGraph(this));
-        for (GLSimpleNodeModel nodeControl : this) {
-            view.addChild(nodeControl.getView());
-        }
-    }
-
-    @Override
-    public void update() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void delete() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

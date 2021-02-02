@@ -15,18 +15,16 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
-import de.zet_evakuierung.visualization.network.draw.GLEdge;
 import org.zetool.graph.Edge;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
-import org.zetool.opengl.framework.abs.AbstractControl;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLEdgeModel extends AbstractControl<GLEdgeModel, GLEdge> {
+public class GLEdgeModel {
 
 	/** Decides whether this edge is the one from the node with lower id to the one with higher id of the two edges between two nodes. */
 	protected boolean isFirst = false;
@@ -38,10 +36,6 @@ public class GLEdgeModel extends AbstractControl<GLEdgeModel, GLEdge> {
 	double scaling = 1;
 
 	public GLEdgeModel( NodePositionMapping<Vector3> nodePositionMapping, Edge edge ) {
-		this( nodePositionMapping, edge, true );
-	}
-
-	public GLEdgeModel( NodePositionMapping<Vector3> nodePositionMapping, Edge edge, boolean setView ) {
 		super();
 
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge

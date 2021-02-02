@@ -16,13 +16,13 @@
  */
 package de.zet_evakuierung.visualization.ca.model;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLRootModel extends VisualizationModel<CellularAutomatonVisualizationModel> {
+public class GLRootModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel> {
 
     private final Iterable<GLCellModel> cells;
 

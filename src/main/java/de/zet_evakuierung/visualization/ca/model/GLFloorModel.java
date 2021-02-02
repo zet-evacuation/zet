@@ -17,11 +17,11 @@ package de.zet_evakuierung.visualization.ca.model;
 
 import java.util.List;
 
-import de.zet_evakuierung.visualization.VisualizationModel;
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import io.visualization.CellularAutomatonVisualizationResults;
 
-public class GLFloorModel extends VisualizationModel<CellularAutomatonVisualizationModel>
+public class GLFloorModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel>
         implements VisualizationNodeModel {
 
     private double xPosition = 0.0d;

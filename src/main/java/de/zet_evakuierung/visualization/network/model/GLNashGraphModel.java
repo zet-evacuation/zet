@@ -15,9 +15,10 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
+import javax.media.opengl.GL2;
+
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import de.zet_evakuierung.visualization.network.draw.GLNashGraph;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
@@ -25,8 +26,8 @@ import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.Drawable;
-import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
+import org.zetool.opengl.framework.abs.VisualizationModel;
 
 /**
  *
@@ -38,23 +39,9 @@ public class GLNashGraphModel extends GLGraphModel implements Drawable, Visualiz
     private final NashFlowVisualization nfv;
 
     public GLNashGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv) {
-        super(graph, nodePositionMapping, false);
+        super(graph, nodePositionMapping);
         this.nashFlowMapping = nashFlowMapping;
         this.nfv = nfv;
-        setUpNodes();
-    }
-
-    @Override
-    protected void setUpNodes() {
-        for (Node n : graph.nodes()) {
-            GLNashNodeModel nodeControl = new GLNashNodeModel(graph, n, nodePositionMapping, nashFlowMapping, nfv);
-            add(nodeControl);
-        }
-
-        this.setView(new GLNashGraph(this));
-        for (GLSimpleNodeModel nodeControl : this) {
-            view.addChild(nodeControl.getView());
-        }
     }
 
     @Override
@@ -91,6 +78,16 @@ public class GLNashGraphModel extends GLGraphModel implements Drawable, Visualiz
 
     @Override
     public Frustum getFrustum() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void draw(GL2 gl) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void update() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -17,7 +17,6 @@ package de.zet_evakuierung.visualization.network.model;
 
 import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
 import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import de.zet_evakuierung.visualization.network.draw.GLNashNode;
 import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
@@ -34,24 +33,9 @@ public class GLNashNodeModel extends GLSimpleNodeModel {
 	private final NashFlowVisualization nfv;
 
 	public GLNashNodeModel( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
-		super( graph, node, nodePositionMapping, false );
+		super( graph, node, nodePositionMapping );
 		this.nashFlowMapping = nashFlowMapping;
 		this.nfv = nfv;
-		setUpEdges();
-	}
-
-	@Override
-	protected void setUpEdges() {
-		// add outgoing edges as children
-		for( Edge edge : graph.outgoingEdges( node ) ) {
-			GLEdgeModel edgeControl = new GLNashFlowEdgeModel( nodePositionMapping, edge, nashFlowMapping.get( edge ), nfv );
-			add( edgeControl );
-		}
-
-		setView( new GLNashNode( this ) );
-		for( GLEdgeModel edgeControl : this ) {
-			view.addChild( edgeControl.getView() );
-		}
 	}
 
 }

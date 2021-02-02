@@ -140,9 +140,4 @@ public class GLFlowEdgeModel extends GLEdgeModel {
 		time = visualizationModel.getStep();
 		deltaStep = time - Math.floor( time );
 	}
-
-	@Override
-	public GLFlowEdge getView() {
-		return (GLFlowEdge)super.getView();
-	}
 }

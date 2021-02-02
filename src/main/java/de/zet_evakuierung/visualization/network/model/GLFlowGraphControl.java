@@ -19,12 +19,14 @@ import de.zet_evakuierung.visualization.network.draw.GLFlowGraph;
 import de.zet_evakuierung.visualization.network.draw.GLGraphViews;
 import de.zet_evakuierung.visualization.network.draw.GLNode;
 import gui.visualization.control.AbstractZETVisualizationControl;
+import org.zetool.opengl.framework.abs.Drawable;
 import org.zetool.opengl.framework.abs.HierarchyNode;
 
 /**
  * @author Jan-Philipp Kappmeier
  */
-public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorModel, GLFlowGraph, NetworkVisualizationModel> implements HierarchyNode<GLGraphFloorModel> {
+public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorModel, GLFlowGraph, NetworkVisualizationModel>
+        implements HierarchyNode<GLGraphFloorModel>, Drawable {
 
     /**
      * Gives access to the model objects used by visualization views.
@@ -80,5 +82,10 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
         for (GLNode nodeView : views.nodeViews()) {
             nodeView.update();
         }
+    }
+
+    @Override
+    public void update() {
+        throw new UnsupportedOperationException("Not supported.");
     }
 }

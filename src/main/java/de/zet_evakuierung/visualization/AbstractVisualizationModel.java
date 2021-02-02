@@ -17,15 +17,16 @@
 import org.zetool.opengl.framework.abs.VisualizationModelProvider;
 
 /**
+ * Base class for visualizations. Stores the {@link VisualizationModelProvider} suitable for the implementing models.
  *
  * @author Jan-Philipp Kappmeier
- * @param <W>
+ * @param <W> the {@link VisualizationModelProvider}
  */
-public class VisualizationModel<W extends VisualizationModelProvider> {
+public class AbstractVisualizationModel<W extends VisualizationModelProvider> {
 
     protected final W visualizationModel;
 
-    public VisualizationModel(W visualizationModel) {
+    public AbstractVisualizationModel(W visualizationModel) {
         this.visualizationModel = visualizationModel;
     }
 

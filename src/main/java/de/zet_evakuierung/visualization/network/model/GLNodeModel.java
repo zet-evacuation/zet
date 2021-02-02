@@ -17,36 +17,35 @@ package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
-import de.zet_evakuierung.visualization.network.draw.GLNode;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
 import ds.GraphVisualizationResults;
-import gui.visualization.control.AbstractZETVisualizationControl;
 import org.zetool.graph.Node;
 
-public class GLNodeModel extends AbstractZETVisualizationControl<GLFlowEdgeModel, GLNode, NetworkVisualizationModel>
-        implements VisualizationNodeModel {
-	private double xPosition;
-	private double yPosition;
-	// TODO read data from file in ZET
-	private double zPosition = 0;
-	private int capacity;
-	private FlowCalculator flowCalculator;
-	double nwX;
-	double nwY;
-	double seX;
-	double seY;
-	private double time;
-	private int index;
-	private ArrayList<FlowHistroryTriple> graphHistory;
+public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
+
+    private double xPosition;
+    private double yPosition;
+    // TODO read data from file in ZET
+    private double zPosition = 0;
+    private int capacity;
+    private FlowCalculator flowCalculator;
+    double nwX;
+    double nwY;
+    double seX;
+    double seY;
+    private double time;
+    private int index;
+    private ArrayList<FlowHistroryTriple> graphHistory;
 	private boolean isEvacuationNode,  isSourceNode,  isDeletedSourceNode = false;
-	private int duration;
-	private int startTime;
-	private int floor;
-	private boolean gridVisible = true;
-	private boolean drawInterFloorEdges = true;
-	private int id = 0;
+    private int duration;
+    private int startTime;
+    private int floor;
+    private boolean gridVisible = true;
+    private boolean drawInterFloorEdges = true;
+    private int id = 0;
 
 	public GLNodeModel( GraphVisualizationResults graphVisResult, Node node, NetworkVisualizationModel visualizationModel ) {
 		super( visualizationModel );
@@ -60,114 +59,110 @@ public class GLNodeModel extends AbstractZETVisualizationControl<GLFlowEdgeModel
 		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * visualizationModel.scaling;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
-		id = node.id();
+        id = node.id();
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
 		isSourceNode = graphVisResult.isSourceNode( node );
 		isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
 
 		floor = graphVisResult.getNodeToFloorMapping().get( node );
 
-		zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
-		zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
+        zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
+        zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
 
-		flowCalculator = new FlowCalculator();
-		visualizationModel.nodeProgress();
-	}
+        flowCalculator = new FlowCalculator();
+        visualizationModel.nodeProgress();
+    }
 
     public boolean isEvacuationNode() {
-		return isEvacuationNode;
-	}
+        return isEvacuationNode;
+    }
 
-	public boolean isSourceNode() {
-		return isSourceNode;
-	}
+    public boolean isSourceNode() {
+        return isSourceNode;
+    }
 
-	public boolean isDeletedSourceNode() {
-		return isDeletedSourceNode;
-	}
+    public boolean isDeletedSourceNode() {
+        return isDeletedSourceNode;
+    }
 
-	public double getNwX() {
+    public double getNwX() {
 		return nwX ;
-	}
+    }
 
-	public double getNwY() {
+    public double getNwY() {
 		return nwY ;
-	}
+    }
 
-	public double getSeX() {
+    public double getSeX() {
 		return seX ;
-	}
+    }
 
-	public double getSeY() {
+    public double getSeY() {
 		return seY ;
-	}
+    }
 
-	public GLNode getGLNode() {
-		return this.getView();
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
+    public int getCapacity() {
+        return capacity;
+    }
 
     @Override
-	public double getXPosition() {
-		return xPosition;
-	}
+    public double getXPosition() {
+        return xPosition;
+    }
 
     @Override
-	public double getYPosition() {
-		return yPosition;
-	}
+    public double getYPosition() {
+        return yPosition;
+    }
 
-	public double getZPosition() {
-		return zPosition;
-	}
+    public double getZPosition() {
+        return zPosition;
+    }
 
-	public FlowCalculator getFlowCalculator() {
-		return flowCalculator;
-	}
+    public FlowCalculator getFlowCalculator() {
+        return flowCalculator;
+    }
 
 	public void stepUpdate( int step ) {
-		time = visualizationModel.getStep();
-		graphHistory = flowCalculator.getCalculatedFlow();
+        time = visualizationModel.getStep();
+        graphHistory = flowCalculator.getCalculatedFlow();
 
 		if( graphHistory.size() <= 0 )
-			return;
+            return;
 		if( index < graphHistory.size() && this.graphHistory.get( index ).getFirstValue() <= step ) {
 			this.startTime = this.graphHistory.get( index ).getTime();
 			this.duration = this.graphHistory.get( index ).getDuration();
-			//this.flow = this.graphHistory.get( index ).getFlow();
-			index++;
-		}
-	}
+            //this.flow = this.graphHistory.get( index ).getFlow();
+            index++;
+        }
+    }
 
-	public final boolean isCurrentlyOccupied() {
-		return startTime < time && startTime + duration > time;
-	}
+    public final boolean isCurrentlyOccupied() {
+        return startTime < time && startTime + duration > time;
+    }
 
 	public void setRectangleVisible( boolean val ) {
-		this.gridVisible = val;
-	}
+        this.gridVisible = val;
+    }
 
-	/**
-	 * Returns {@code true} if the rectangular area belonging to the node is visible.
-	 * @return {@code true} if the rectangular node area is visible, {@code false} otherwise
-	 */
-	public boolean isRectangleVisible() {
-		return gridVisible;
-	}
+    /**
+     * Returns {@code true} if the rectangular area belonging to the node is visible.
+     * @return {@code true} if the rectangular node area is visible, {@code false} otherwise
+     */
+    public boolean isRectangleVisible() {
+        return gridVisible;
+    }
 
-	/**
+    /**
 	 * Returns the default floor height. Thus, the rectangles can be drawn under
 	 * the nodes by exactly this amount
-	 * @return 
-	 */
-	public double getFloorHeight() {
+     * @return
+     */
+    public double getFloorHeight() {
 		return visualizationModel.defaultFloorHeight*visualizationModel.scaling*0.1;
-	}
-	
-	public int getNumber() {
-		return id;
-	}
+    }
+
+    public int getNumber() {
+        return id;
+    }
 }

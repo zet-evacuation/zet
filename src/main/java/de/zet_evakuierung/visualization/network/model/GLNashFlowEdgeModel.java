@@ -30,7 +30,7 @@ public class GLNashFlowEdgeModel extends GLEdgeModel {
 	private final NashFlowVisualization nfv;
 
 	public GLNashFlowEdgeModel( NodePositionMapping nodePositionMapping, Edge edge, NashFlowEdgeData flowDatas, NashFlowVisualization nfv ) {
-		super( nodePositionMapping, edge, false );
+		super( nodePositionMapping, edge );
 		this.flowDatas = flowDatas;
 		this.nfv = nfv;
 	}
