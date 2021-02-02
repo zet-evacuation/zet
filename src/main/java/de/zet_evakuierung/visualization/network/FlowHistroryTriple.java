@@ -21,105 +21,78 @@ import de.zet_evakuierung.visualization.VisHistoryTriple;
  *
  * @author Moukarram Kabbash
  */
-public class FlowHistroryTriple extends VisHistoryTriple<Integer, Double, Integer>
-{
-    public FlowHistroryTriple(int time, double flow, int duration)
-    {
-        super(new Integer(time), new Double(flow), new Integer(duration));
+public class FlowHistroryTriple extends VisHistoryTriple<Integer, Double, Integer> {
 
-        _time = time;
-        _flow = flow;
-        _duration = duration;
-    }
-    
-    public FlowHistroryTriple(int time, Double flow, int duration)
-    {
-        super(new Integer(time), flow, new Integer(duration));
+    private int time;
+    private double flow;
+    private int duration;
 
-        _time = time;
-        _flow = flow;
-        _duration = duration;
-    }
-
-    public FlowHistroryTriple(Integer time, Double flow, Integer duration)
-    {
+    public FlowHistroryTriple(int time, double flow, int duration) {
         super(time, flow, duration);
 
-        _time = time.intValue();
-        _flow = flow.doubleValue();
-        _duration = duration.intValue();
+        this.time = time;
+        this.flow = flow;
+        this.duration = duration;
     }
 
-    private int _time;
-    private double _flow;
-    private int _duration;
-
-    public int getTime()
-    {
-        return _time;
+    public int getTime() {
+        return time;
     }
 
-    public void setTime(int time)
-    {
-        this._time = time;
-        super.setFirstValue(new Integer(time));
+    public void setTime(int time) {
+        this.time = time;
+        super.setFirstValue(time);
     }
 
-    public double getFlow()
-    {
-        return _flow;
+    public double getFlow() {
+        return flow;
     }
 
-    public void setFlow(double flow)
-    {
-        this._flow = flow;
-        super.setSecondValue(new Double(flow));
+    public void setFlow(double flow) {
+        this.flow = flow;
+        super.setSecondValue(flow);
     }
 
-    public int getDuration()
-    {
-        return _duration;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setDuration(int duration)
-    {
-        this._duration = duration;
-        super.setThirdValue(new Integer(duration));
+    public void setDuration(int duration) {
+        this.duration = duration;
+        super.setThirdValue(duration);
     }
 
     /**
      * Sets the first value to vale of parameter v1
+     *
      * @param v1
      */
     @Override
-    public void setFirstValue(Integer v1)
-    {
+    public void setFirstValue(Integer v1) {
         super.setFirstValue(v1);
-        _time = v1.intValue();
+        time = v1;
     }
 
     /**
      * Sets the second value to vale of parameter v2
+     *
      * @param v2
      */
     @Override
-    public void setSecondValue(Double v2)
-    {
-        setSecondValue(v2);
-        _flow = v2.doubleValue();
+    public void setSecondValue(Double v2) {
+        super.setSecondValue(v2);
+        flow = v2;
     }
 
     /**
      * Sets the third value to vale of parameter v3
+     *
      * @param v3
      */
     @Override
-    public void setThirdValue(Integer v3)
-    {
-        setThirdValue(v3);
-        _duration = v3.intValue();
+    public void setThirdValue(Integer v3) {
+        super.setThirdValue(v3);
+        duration = v3;
     }
 
-    
-    
 }

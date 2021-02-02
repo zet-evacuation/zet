@@ -20,9 +20,8 @@ import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 /**
- * <p>
  * This class draws a floor in the graph (which does not explicitly exist in the graph itself). It consists of the nodes
- * belonging to rooms on one floor in a {@link ds.Project}.</p>
+ * belonging to rooms on one floor in a {@link ds.Project}.
  * <p>
  * The nodes are stored in a display list to speed up the visualization, the display list is created if
  * {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is called. During normal visualization (when

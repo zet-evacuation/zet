@@ -42,7 +42,6 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeModel> {
         this.radius = 13 * 0.1;
     }
 
-
     final GLColor lineColor = new GLColor(Color.black);
 
     @Override

@@ -68,7 +68,7 @@ public class GLGraphViews {
     public Iterable<GLNode> nodeViews() {
         return nodeViews;
     }
-    
+
     public Iterable<GLEdge> edgeViews() {
         return edgeViews;
     }

@@ -46,7 +46,6 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
     private final Function<Direction8, GLColor> neighborColor;
 
     public GLCell(GLCellModel model, Function<Direction8, GLColor> neighbourColour) {
-        //this( model, VisualizationOptionManager.getCellFloorColor() );
         this(model, VisualizationOptionManager.getCellWallColor(), neighbourColour);
     }
 
@@ -89,7 +88,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
             gl.glEnd();
         }
     }
-    
+
     /**
      * Creates a mixed colour for the cell. The direction indicates for which edge of the cell the colour is calculated.
      *
@@ -141,7 +140,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
         g /= count;
         b /= count;
         return new GLColor(r, g, b, 1);
-    }    
+    }
 
     /**
      * Updates the graphical representation of the cell. The current floor color is calculated.

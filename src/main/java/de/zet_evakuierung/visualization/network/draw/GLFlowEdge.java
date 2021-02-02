@@ -30,7 +30,9 @@ public class GLFlowEdge extends GLEdge {
 
     GLFlowEdgeModel fmodel;
 
-    /** The edgeLength of single flow units. If set to 1 no single units are displayed. */
+    /**
+     * The edgeLength of single flow units. If set to 1 no single units are displayed.
+     */
     static double factor = 0.7;
     static int edgeDisplayMode = GLU.GLU_FILL;
     static GLColor flowColor;
@@ -47,7 +49,9 @@ public class GLFlowEdge extends GLEdge {
     private ArrayList<Integer> flowOnEdge;
     /* The capacity of the edge */
     double capacity;
-    /** The transit time of the edge. */
+    /**
+     * The transit time of the edge.
+     */
     int transitTime;
     /* not used */
     //double maxCapacity;
@@ -60,7 +64,7 @@ public class GLFlowEdge extends GLEdge {
         fmodel = model;
         maxFlowRate = model.getMaxFlowRate();
         update();
-        GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, edgeDisplayMode);        // Fill, points, lines
+        GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, edgeDisplayMode); // Fill, points, lines
     }
 
     /**
@@ -71,7 +75,8 @@ public class GLFlowEdge extends GLEdge {
      * @param diskAtStart tells whether there shall be a disk at the start of the piece.
      * @param diskAtEnd tells whether there shall be a disk at the end of the piece.
      */
-    private void drawPieceOfFlowComplete(GL2 gl, double length, double calculatedFlowThickness, boolean diskAtStart, boolean diskAtEnd) {
+    private void drawPieceOfFlowComplete(GL2 gl, double length, double calculatedFlowThickness, boolean diskAtStart,
+            boolean diskAtEnd) {
         diskAtStart = diskAtStart && (factor < 1);
         diskAtEnd = diskAtEnd && (factor < 1);
         if (diskAtEnd) {
@@ -79,7 +84,8 @@ public class GLFlowEdge extends GLEdge {
             GLU_INSTANCE.gluDisk(GLU_QUADRIC, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1);
         }
         flowColor.draw(gl);
-        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, calculatedFlowThickness, calculatedFlowThickness, length, qualityPreset.edgeSlices, 1);
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, calculatedFlowThickness, calculatedFlowThickness, length,
+                qualityPreset.edgeSlices, 1);
         if (diskAtStart) {
             gl.glPushMatrix();
             gl.glTranslated(0.0, 0.0, length);
@@ -150,7 +156,10 @@ public class GLFlowEdge extends GLEdge {
                 // draw only a delta-part if translate was negative (flow would start before the edge start),
                 // otherwise draw the complete length (visibleLen)
                 if (start > 0) {
-                    drawPieceOfFlowComplete(gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get(pointer) * flowThicknessOfOneCapacityStep, true, false);
+                    drawPieceOfFlowComplete(gl, translateDiff < 0
+                            ? visibleLen + translateDiff
+                            : visibleLen, flowThickness + flowOnEdge.get(pointer)
+                            * flowThicknessOfOneCapacityStep, true, false);
                 }
                 // move further on the z-axis (depending if a translation already has been done)
                 gl.glTranslated(0, 0, translateDiff > 0 ? flowUnitLength - translateDiff : flowUnitLength);
@@ -171,7 +180,8 @@ public class GLFlowEdge extends GLEdge {
                     // thats no problem as we are in the middle of the edge!
                     gl.glTranslated(0, 0, translateDiff);
                     // draw a complete flow element with lengh visibleLen
-                    drawPieceOfFlowComplete(gl, visibleLen, flowThickness + flowOnEdge.get(pointer) * flowThicknessOfOneCapacityStep, true, true);
+                    drawPieceOfFlowComplete(gl, visibleLen, flowThickness + flowOnEdge.get(pointer)
+                            * flowThicknessOfOneCapacityStep, true, true);
                     gl.glTranslated(0.0, 0.0, flowUnitLength - translateDiff);
                 } else {
                     gl.glTranslated(0, 0, flowUnitLength);
@@ -181,15 +191,16 @@ public class GLFlowEdge extends GLEdge {
             }
 
             // draw the last part of flow, if it exists
-            if (flowOnEdge.get(pointer) != 0) // do not draw anything if translation is positive (would lie behind the edge)
-            {
+            // do not draw anything if translation is positive (would lie behind the edge)
+            if (flowOnEdge.get(pointer) != 0) {
                 if (translateDiff < 0) {
                     // translate to the correct starting position. can be negative here,
                     // thats no problem as we are at the end of the edge!
                     gl.glTranslated(0, 0, translateDiff);
                     // if start is negative, enough space for the complete visibleLen is left
                     // on the edge, if it is positive, it should be reduced
-                    drawPieceOfFlowComplete(gl, start < 0 ? visibleLen : visibleLen - start, flowThickness + flowOnEdge.get(pointer) * flowThicknessOfOneCapacityStep, false, true);
+                    drawPieceOfFlowComplete(gl, start < 0 ? visibleLen : visibleLen - start,
+                            flowThickness + flowOnEdge.get(pointer) * flowThicknessOfOneCapacityStep, false, true);
                 }
             }
         }

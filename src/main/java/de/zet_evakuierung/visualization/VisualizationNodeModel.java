@@ -18,8 +18,8 @@ package de.zet_evakuierung.visualization;
 
 /**
  *
- * @author Jan-Philipp Kappmeier 
-*/
+ * @author Jan-Philipp Kappmeier
+ */
 public interface VisualizationNodeModel {
 
     public double getXPosition();

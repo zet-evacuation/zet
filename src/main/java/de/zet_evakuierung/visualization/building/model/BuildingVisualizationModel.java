@@ -28,9 +28,8 @@ public class BuildingVisualizationModel extends EvacuationVisualizationModel {
     private int wallsDone;
 
     /**
-     * <p>
      * This method increases the number of cells that are created and calculates a new progress. The progress will at
-     * most reach 99% so that after all objects are created a final "Done" message can be submitted.</p>
+     * most reach 99% so that after all objects are created a final "Done" message can be submitted.
      * <p>
      * Note that before this method can be used in the proper way the private variable {@code wallsDone} and
      * {@code WallCount} should be initialized correct. However, it is guaranteed to calculate a value from 0 to 99.
@@ -70,5 +69,5 @@ public class BuildingVisualizationModel extends EvacuationVisualizationModel {
     public boolean isFinished() {
         return true;
     }
-    
+
 }

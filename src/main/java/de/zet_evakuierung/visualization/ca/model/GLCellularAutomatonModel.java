@@ -87,7 +87,7 @@ public class GLCellularAutomatonModel {
      * Returns room model instances for the cellular automaton visualization hierarchy. The {@code room} specifies the
      * corresponding instance in the cellular automaton.
      *
-     * @param room the instane for which the corresponding model should be returned; not {@code null}
+     * @param room the instance for which the corresponding model should be returned; not {@code null}
      * @return the room visualization model instance
      */
     public GLRoomModel getRoomModel(Room room) {

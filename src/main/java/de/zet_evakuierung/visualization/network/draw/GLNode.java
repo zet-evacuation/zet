@@ -57,7 +57,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeModel> {
 
     public GLNode(GLNodeModel model) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
-        
+
         radius = nodeRadius;
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
         GLU_INSTANCE.gluQuadricOrientation(GLU_QUADRIC, GLU.GLU_OUTSIDE);

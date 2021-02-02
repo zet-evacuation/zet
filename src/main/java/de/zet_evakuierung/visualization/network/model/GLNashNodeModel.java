@@ -15,11 +15,7 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
-import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
-import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
-import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
@@ -29,13 +25,9 @@ import org.zetool.math.vectormath.Vector3;
  * @author Jan-Philipp Kappmeier
  */
 public class GLNashNodeModel extends GLSimpleNodeModel {
-	private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
-	private final NashFlowVisualization nfv;
 
-	public GLNashNodeModel( DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv ) {
-		super( graph, node, nodePositionMapping );
-		this.nashFlowMapping = nashFlowMapping;
-		this.nfv = nfv;
-	}
+    public GLNashNodeModel(DirectedGraph graph, Node node, NodePositionMapping<Vector3> nodePositionMapping) {
+        super(graph, node, nodePositionMapping);
+    }
 
 }

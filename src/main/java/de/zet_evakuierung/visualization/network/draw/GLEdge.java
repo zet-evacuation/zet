@@ -30,9 +30,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  * @author Jan-Philipp Kappmeier
  */
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeModel> {
+
     static GLColor edgeColor;
     /* The thickness of the edges and pieces of flow according to their capacities. */
-  static double thickness = 1.5;// factor of 1.5 used for test evacuation report
+    static double thickness = 1.5;// factor of 1.5 used for test evacuation report
     // TODO read quality from VisualOptionManager
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
@@ -40,49 +41,49 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeModel> {
     /* The edgeLength of the edge in {@code OpenGL} scaling. */
     double edgeLength;
 
-    public GLEdge( GLEdgeModel model ) {
-        super( model );
+    public GLEdge(GLEdgeModel model) {
+        super(model);
         //update();
     }
 
-
     /**
-     * Draws the static structure of the edge that means the edge, if it is the first one
-     * of the two edges. The flow is not painted.
+     * Draws the static structure of the edge that means the edge, if it is the first one of the two edges. The flow is
+     * not painted.
+     *
      * @see GLFlowEdgeModel#isFirstEdge()
      * @param gl the {@code OpenGL} drawable object
      */
     @Override
-    public void performStaticDrawing( GL2 gl ) {
-        beginDraw( gl );
-        edgeColor.draw( gl );
-        if( model.isFirstEdge() )
-            drawStaticStructure( gl );
-        endDraw( gl );
+    public void performStaticDrawing(GL2 gl) {
+        beginDraw(gl);
+        edgeColor.draw(gl);
+        if (model.isFirstEdge()) {
+            drawStaticStructure(gl);
+        }
+        endDraw(gl);
     }
 
     /**
-     * Draws all edges (without flow).
-     * Therefore, the coordinate system is rotated in such a  way that the cylinder is drawn into the direction
-     * of the difference vector of start and end node. Usually {@code OpenGL} draws cylinders into the direction
-     * (0,0,1), so the difference vector has to be rotated into this vector.
+     * Draws all edges (without flow). Therefore, the coordinate system is rotated in such a way that the cylinder is
+     * drawn into the direction of the difference vector of start and end node. Usually {@code OpenGL} draws cylinders
+     * into the direction (0,0,1), so the difference vector has to be rotated into this vector.
+     *
      * @param drawable a {@code GLAutoDrawable} on which the edges are drawn.
      */
-    private void drawStaticStructure( GL2 gl ) {
+    private void drawStaticStructure(GL2 gl) {
         gl.glPushMatrix();
         //gl.glEnable( gl.GL_BLEND );
         //gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
-        Vector3 b = new Vector3( 0, 0, 1 );
+        Vector3 b = new Vector3(0, 0, 1);
         Vector3 a = model.getDifferenceVectorInOpenGlScaling();
-        Vector3 axis = model.getRotationAxis( a, b );
-        gl.glRotated( model.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+        Vector3 axis = model.getRotationAxis(a, b);
+        gl.glRotated(model.getAngleBetween(a, b), axis.x, axis.y, axis.z);
 
-        GLU_INSTANCE.gluCylinder( GLU_QUADRIC, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1 );
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1);
         //gl.glDisable( GL.GL_BLEND );
         gl.glPopMatrix();
     }
-
 
     @Override
     public void update() {

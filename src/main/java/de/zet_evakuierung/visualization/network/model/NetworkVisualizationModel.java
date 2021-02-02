@@ -36,7 +36,6 @@ public class NetworkVisualizationModel extends EvacuationVisualizationModel {
     // Timing variables
     private long time;
     private double realStep;
-//	private long timeSinceLastStep = 0;
     private long nanoSecondsPerStep = Conversion.SEC_TO_NANO_SECONDS;
     private double secondsPerStep = 1;
     private long step;

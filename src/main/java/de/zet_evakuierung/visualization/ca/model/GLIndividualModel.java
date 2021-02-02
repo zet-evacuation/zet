@@ -28,13 +28,14 @@ import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 import zet.gui.main.tabs.JVisualizationView;
 
 /**
- * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton}
- * and is used by the visualization class {@link GLIndividual} which draws
- * the individual on the screen.
+ * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton} and is used by the visualization
+ * class {@link GLIndividual} which draws the individual on the screen.
+ *
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndividualModel, GLIndividual, CellularAutomatonVisualizationModel> implements StepUpdateListener {
-    
+public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndividualModel, GLIndividual, CellularAutomatonVisualizationModel>
+        implements StepUpdateListener {
+
     /** The history data structure that stores information about the positions of the individual at given times */
     private ArrayList<VisHistoryTriple<Double, GLCellModel, GLCellModel>> path;
     /** The last time at that the individual moves. */
@@ -79,7 +80,7 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
         controlled = individual;
         path = new ArrayList<>();
         moveVector = new Tuple(0, 0);
-        sourcePos = new Tuple(0, 0);        
+        sourcePos = new Tuple(0, 0);
         onFloor = visualizationModel.floorFor(individual);
     }
 

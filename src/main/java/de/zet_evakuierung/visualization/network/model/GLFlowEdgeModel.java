@@ -1,4 +1,4 @@
- /* zet evacuation tool copyright © 2007-20 zet evacuation team
+/* zet evacuation tool copyright © 2007-20 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -17,127 +17,141 @@ package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
-import de.zet_evakuierung.visualization.network.draw.GLFlowEdge;
 import ds.GraphVisualizationResults;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.Edge;
 import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
 
 /**
- * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented
- * by {@code GLFlowEdge}. That means it sets the correct positions depending on the time of the visualization.
+ * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented by
+ * {@code GLFlowEdge}. That means it sets the correct positions depending on the time of the visualization.
+ *
  * @author Jan-Philipp Kappmeier
  */
 public class GLFlowEdgeModel extends GLEdgeModel {
-	protected final NetworkVisualizationModel visualizationModel;
-	private double time;
-	private ArrayList<Integer> flowOnEdge;
-	private int maxFlowRate;
-	private double deltaStep;
-	private int transitTime;
-	private int capacity;
-	private static final double Z_TO_OPENGL_SCALING = 0.01d;
+
+    protected final NetworkVisualizationModel visualizationModel;
+    private double time;
+    private ArrayList<Integer> flowOnEdge;
+    private int maxFlowRate;
+    private double deltaStep;
+    private int transitTime;
+    private int capacity;
+    private static final double Z_TO_OPENGL_SCALING = 0.01d;
     public Edge edge;
 
-	/**
-	 * Creates a new {@code GLFlowEdgeControl} object for the edge {@code edge} using data from
-	 * the {@code graphVisResult} object.
-	 * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
-	 * @param edge the edge for this control object.
-	 * @param visualizationModel the main control class.
-	 */
-	public GLFlowEdgeModel( GraphVisualizationResults graphVisResult, Edge edge, NetworkVisualizationModel visualizationModel ) {
-		super( graphVisResult.getNodePositionMapping(), edge );
-		setScaling( Z_TO_OPENGL_SCALING );
+    /**
+     * Creates a new {@code GLFlowEdgeControl} object for the edge {@code edge} using data from the
+     * {@code graphVisResult} object.
+     *
+     * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
+     * @param edge the edge for this control object.
+     * @param visualizationModel the main control class.
+     */
+    public GLFlowEdgeModel(GraphVisualizationResults graphVisResult, Edge edge,
+            NetworkVisualizationModel visualizationModel) {
+        super(graphVisResult.getNodePositionMapping(), edge);
+        setScaling(Z_TO_OPENGL_SCALING);
 
-    this.edge = edge;
+        this.edge = edge;
 
-		this.visualizationModel = visualizationModel;
+        this.visualizationModel = visualizationModel;
 
-		// general edge attributes
-		maxFlowRate = graphVisResult.getMaxFlowRate();
+        // general edge attributes
+        maxFlowRate = graphVisResult.getMaxFlowRate();
 
-		transitTime = graphVisResult.getTransitTimes().get( edge );
+        transitTime = graphVisResult.getTransitTimes().get(edge);
 
-		capacity = graphVisResult.getEdgeCapacities().get( edge );
+        capacity = graphVisResult.getEdgeCapacities().get(edge);
 
-		// calculate flow on the edge
-		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
+        // calculate flow on the edge
+        IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
 
-		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
+        EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
 
-		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-		int transit = transitTimes.get( edge );
-		if( maxT > 0 )
-			visualizationModel.setMaxTime( maxT + transit );
-		if( maxT > 0 ) {
-			flowOnEdge = new ArrayList<>( maxT + transit + transit );
-			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add(0);
-			for( int i = 0; i <= maxT; i++ )
-				flowOnEdge.add(flowOverTime.get( edge ).get( i ));
-			for( int i = 0; i < transit; i++ )
-				flowOnEdge.add(0);
-		} else
-			flowOnEdge = new ArrayList<>();
-	}
+        int maxT = flowOverTime.get(edge).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
+        int transit = transitTimes.get(edge);
+        if (maxT > 0) {
+            visualizationModel.setMaxTime(maxT + transit);
+        }
+        if (maxT > 0) {
+            flowOnEdge = new ArrayList<>(maxT + transit + transit);
+            for (int i = 0; i < transit; i++) {
+                flowOnEdge.add(0);
+            }
+            for (int i = 0; i <= maxT; i++) {
+                flowOnEdge.add(flowOverTime.get(edge).get(i));
+            }
+            for (int i = 0; i < transit; i++) {
+                flowOnEdge.add(0);
+            }
+        } else {
+            flowOnEdge = new ArrayList<>();
+        }
+    }
 
     /**
-	 * Returns the transit time of this edge.
-	 * @return the transit time of this edge.
-	 */
-	public int getTransitTime() {
-		return transitTime;
-	}
+     * Returns the transit time of this edge.
+     *
+     * @return the transit time of this edge.
+     */
+    public int getTransitTime() {
+        return transitTime;
+    }
 
-	/**
-	 * Returns an array list containing the amount of flow going into
-	 * the edge for each time step within 0 and time horizon + transit time of the edge.
-	 * @return an array list giving the amount of flow going into the edge for each point in time.
-	 */
-	public ArrayList<Integer> getFlowOnEdge() {
-		return flowOnEdge;
-	}
+    /**
+     * Returns an array list containing the amount of flow going into the edge for each time step within 0 and time
+     * horizon + transit time of the edge.
+     *
+     * @return an array list giving the amount of flow going into the edge for each point in time.
+     */
+    public ArrayList<Integer> getFlowOnEdge() {
+        return flowOnEdge;
+    }
 
-	/**
-	 * Returns the capacity of this edge.
-	 * @return the capacity of this edge.
-	 */
-	public int getCapacity() {
-		return capacity;
-	}
+    /**
+     * Returns the capacity of this edge.
+     *
+     * @return the capacity of this edge.
+     */
+    public int getCapacity() {
+        return capacity;
+    }
 
-	/**
-	 * Returns the maximal flow rate (taking the flow on all edges into account).
-	 * @return the maximal flow rate.
-	 */
-	public int getMaxFlowRate() {
-		return maxFlowRate;
-	}
+    /**
+     * Returns the maximal flow rate (taking the flow on all edges into account).
+     *
+     * @return the maximal flow rate.
+     */
+    public int getMaxFlowRate() {
+        return maxFlowRate;
+    }
 
-	/**
-	 * The real visualization time used for fluid visualization.
-	 * @return the real visualization time
-	 */
-	public double getTime() {
-		return time;
-	}
+    /**
+     * The real visualization time used for fluid visualization.
+     *
+     * @return the real visualization time
+     */
+    public double getTime() {
+        return time;
+    }
 
-	/**
-	 * Returns the current delta step. That means the real value for the progress of the current step
-	 * for a fluid visualization.
-	 * @return the current real step.
-	 */
-	public double getDeltaStep() {
-		return deltaStep;
-	}
+    /**
+     * Returns the current delta step. That means the real value for the progress of the current step for a fluid
+     * visualization.
+     *
+     * @return the current real step.
+     */
+    public double getDeltaStep() {
+        return deltaStep;
+    }
 
-	/**
-	 * Calculates the current time and delta information used for fluid visualization depending
-	 * of the graph step in the main control class.
-	 */
-	public void stepUpdate() {
-		time = visualizationModel.getStep();
-		deltaStep = time - Math.floor( time );
-	}
+    /**
+     * Calculates the current time and delta information used for fluid visualization depending of the graph step in the
+     * main control class.
+     */
+    public void stepUpdate() {
+        time = visualizationModel.getStep();
+        deltaStep = time - Math.floor(time);
+    }
 }

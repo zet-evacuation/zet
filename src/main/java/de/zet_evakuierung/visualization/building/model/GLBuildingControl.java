@@ -45,7 +45,7 @@ public class GLBuildingControl
     /**
      * Creates a new object of this control class.The wall objects (a control and the corresponding view object) are
      * created and stored in data structures to easily assign them by their floor id.Note that no default floor is
- enabled!
+     * enabled!
      *
      * @param buildingVisualizationModel
      * @param buildingModel
@@ -57,7 +57,7 @@ public class GLBuildingControl
         this.buildingModel = Objects.requireNonNull(buildingModel);
         this.views = Objects.requireNonNull(views);
         setView(views.getView());
-        
+
     }
 
     /**

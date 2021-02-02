@@ -26,24 +26,26 @@ import org.zetool.opengl.drawingutils.RainbowGradient;
  * @author Jan-Philipp Kappmeier
  */
 public class GLNashFlowEdgeModel extends GLEdgeModel {
-	NashFlowEdgeData flowDatas;
-	private final NashFlowVisualization nfv;
 
-	public GLNashFlowEdgeModel( NodePositionMapping nodePositionMapping, Edge edge, NashFlowEdgeData flowDatas, NashFlowVisualization nfv ) {
-		super( nodePositionMapping, edge );
-		this.flowDatas = flowDatas;
-		this.nfv = nfv;
-	}
+    NashFlowEdgeData flowDatas;
+    private final NashFlowVisualization nfv;
 
-	public NashFlowEdgeData getNashFlowEdgeData() {
-		return flowDatas;
-	}
+    public GLNashFlowEdgeModel(NodePositionMapping nodePositionMapping, Edge edge, NashFlowEdgeData flowDatas,
+            NashFlowVisualization nfv) {
+        super(nodePositionMapping, edge);
+        this.flowDatas = flowDatas;
+        this.nfv = nfv;
+    }
 
-	public double getTimeSinceStart() {
-		return nfv.getTimeSinceStart();
-	}
+    public NashFlowEdgeData getNashFlowEdgeData() {
+        return flowDatas;
+    }
 
-	public RainbowGradient getRainbowGradient() {
-		return nfv.getRainbowGradient();
-	}
+    public double getTimeSinceStart() {
+        return nfv.getTimeSinceStart();
+    }
+
+    public RainbowGradient getRainbowGradient() {
+        return nfv.getRainbowGradient();
+    }
 }

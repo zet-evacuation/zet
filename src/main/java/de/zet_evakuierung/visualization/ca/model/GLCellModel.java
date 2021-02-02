@@ -46,7 +46,7 @@ public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, C
     private final EvacCell controlled;
     // Initially unset
     private EvacuationState es;
-    
+
     public static void invalidateMergedPotential() {
         mergedPotential = null;
     }
@@ -79,7 +79,7 @@ public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, C
     public EvacCellInterface getBackingCell() {
         return controlled;
     }
-    
+
     public int getFloorID() {
         return controlled.getRoom().getFloor();
     }
@@ -142,7 +142,7 @@ public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, C
     public long getCellInformation(CellInformationDisplay cid) {
         switch (cid) {
             case DynamicPotential:
-                return (long)es.getDynamicPotential(controlled);
+                return (long) es.getDynamicPotential(controlled);
             case StaticPotential:
                 return activePotential.getPotential(controlled);
             case Utilization:

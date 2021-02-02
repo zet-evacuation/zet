@@ -17,12 +17,7 @@ package de.zet_evakuierung.visualization.network.model;
 
 import javax.media.opengl.GL2;
 
-import de.tu_berlin.math.coga.zet.viewer.NashFlowEdgeData;
-import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
-import org.zetool.container.mapping.IdentifiableObjectMapping;
 import org.zetool.graph.DirectedGraph;
-import org.zetool.graph.Edge;
-import org.zetool.graph.Node;
 import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.framework.abs.Drawable;
@@ -35,13 +30,8 @@ import org.zetool.opengl.framework.abs.VisualizationModel;
  */
 public class GLNashGraphModel extends GLGraphModel implements Drawable, VisualizationModel {
 
-    private final IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping;
-    private final NashFlowVisualization nfv;
-
-    public GLNashGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableObjectMapping<Edge, NashFlowEdgeData> nashFlowMapping, NashFlowVisualization nfv) {
+    public GLNashGraphModel(DirectedGraph graph, NodePositionMapping<Vector3> nodePositionMapping) {
         super(graph, nodePositionMapping);
-        this.nashFlowMapping = nashFlowMapping;
-        this.nfv = nfv;
     }
 
     @Override

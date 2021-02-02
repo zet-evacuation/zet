@@ -26,7 +26,8 @@ import org.zetool.graph.Node;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorModel extends AbstractVisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
+public class GLGraphFloorModel extends AbstractVisualizationModel<NetworkVisualizationModel>
+        implements VisualizationNodeModel {
 
     /**
      * Creates a new instance of {@code GLGraphFloorControl}. Therefore for any node in the list {@code nodesOnTheFloor}
@@ -37,7 +38,8 @@ public class GLGraphFloorModel extends AbstractVisualizationModel<NetworkVisuali
      * @param floor the number of the floor
      * @param visualizationModel the general control object for visualization
      */
-    public GLGraphFloorModel(GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, NetworkVisualizationModel visualizationModel) {
+    public GLGraphFloorModel(GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor,
+            NetworkVisualizationModel visualizationModel) {
         super(visualizationModel);
     }
 
