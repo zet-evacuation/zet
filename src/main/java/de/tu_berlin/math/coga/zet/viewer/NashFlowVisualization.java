@@ -108,7 +108,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphModel, GLNas
         mapping.set(e3, flowDatas3);
         mapping.set(e4, flowDatas4);
 
-        graphControl = new GLNashGraphModel(network, nodePositionMapping, mapping, this);
+        graphControl = new GLNashGraphModel(network, nodePositionMapping);
 
         setControl(graphControl, graphControl);
 
