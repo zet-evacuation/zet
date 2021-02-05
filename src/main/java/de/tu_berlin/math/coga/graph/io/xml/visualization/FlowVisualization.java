@@ -31,60 +31,61 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
  * @author Jan-Philipp Kappmeier
  */
 public class FlowVisualization extends GraphVisualization {
-	private EdgeBasedFlowOverTime flow;
-	int timeHorizon;
-	int maxFlowRate;
-	boolean edgesDoubled = false;
 
-	public FlowVisualization( DirectedGraph network, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
-		super( network, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks );
-		flow = new EdgeBasedFlowOverTime( getNetwork() );
-	}
+    private EdgeBasedFlowOverTime flow;
+    int timeHorizon;
+    int maxFlowRate;
+    boolean edgesDoubled = false;
 
-	public FlowVisualization( EarliestArrivalFlowProblem eafp, NodePositionMapping nodePositionMapping ) {
-		super( eafp, nodePositionMapping );
-		flow = new EdgeBasedFlowOverTime( getNetwork() );
-	}
+    public FlowVisualization(DirectedGraph network, NodePositionMapping<Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks) {
+        super(network, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks);
+        flow = new EdgeBasedFlowOverTime(getNetwork());
+    }
 
-	public FlowVisualization( GraphVisualization gv ) {
-		super( gv );
-		flow = new EdgeBasedFlowOverTime( getNetwork() );
-	}
+    public FlowVisualization(EarliestArrivalFlowProblem eafp, NodePositionMapping nodePositionMapping) {
+        super(eafp, nodePositionMapping);
+        flow = new EdgeBasedFlowOverTime(getNetwork());
+    }
 
-	public EdgeBasedFlowOverTime getFlow() {
-		return flow;
-	}
+    public FlowVisualization(GraphVisualization gv) {
+        super(gv);
+        flow = new EdgeBasedFlowOverTime(getNetwork());
+    }
 
-	public void setFlow( EdgeBasedFlowOverTime flow ) {
-		this.flow = flow;
-	}
+    public EdgeBasedFlowOverTime getFlow() {
+        return flow;
+    }
 
-	public void setFlow( EdgeBasedFlowOverTime flow, int maxFlowRate ) {
-		setFlow( flow );
-		setMaxFlowRate( maxFlowRate );
-	}
+    public void setFlow(EdgeBasedFlowOverTime flow) {
+        this.flow = flow;
+    }
 
-	public int getTimeHorizon() {
-		return timeHorizon;
-	}
+    public void setFlow(EdgeBasedFlowOverTime flow, int maxFlowRate) {
+        setFlow(flow);
+        setMaxFlowRate(maxFlowRate);
+    }
 
-	public void setTimeHorizon( int timeHorizon ) {
-		this.timeHorizon = timeHorizon;
-	}
+    public int getTimeHorizon() {
+        return timeHorizon;
+    }
 
-	public int getMaxFlowRate() {
-		return maxFlowRate;
-	}
+    public void setTimeHorizon(int timeHorizon) {
+        this.timeHorizon = timeHorizon;
+    }
 
-	protected void setMaxFlowRate( int maxFlowRate ) {
-		this.maxFlowRate = maxFlowRate;
-	}
+    public int getMaxFlowRate() {
+        return maxFlowRate;
+    }
 
-	public boolean isEdgesDoubled() {
-		return edgesDoubled;
-	}
+    protected void setMaxFlowRate(int maxFlowRate) {
+        this.maxFlowRate = maxFlowRate;
+    }
 
-	public void setEdgesDoubled( boolean edgesDoubled ) {
-		this.edgesDoubled = edgesDoubled;
-	}
+    public boolean isEdgesDoubled() {
+        return edgesDoubled;
+    }
+
+    public void setEdgesDoubled(boolean edgesDoubled) {
+        this.edgesDoubled = edgesDoubled;
+    }
 }
