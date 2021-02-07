@@ -17,7 +17,6 @@ package de.zet_evakuierung.visualization.network.model;
 
 import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
-import ds.GraphVisualizationResults;
 import org.zetool.graph.Node;
 
 /**
@@ -33,12 +32,11 @@ public class GLGraphFloorModel extends AbstractVisualizationModel<NetworkVisuali
      * Creates a new instance of {@code GLGraphFloorControl}. Therefore for any node in the list {@code nodesOnTheFloor}
      * the related control and visualization objects are created.
      *
-     * @param graphVisResult the graph visualization results
      * @param nodesOnTheFloor the nodes that lie on this floor
      * @param floor the number of the floor
      * @param visualizationModel the general control object for visualization
      */
-    public GLGraphFloorModel(GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor,
+    public GLGraphFloorModel(Iterable<Node> nodesOnTheFloor, Integer floor,
             NetworkVisualizationModel visualizationModel) {
         super(visualizationModel);
     }

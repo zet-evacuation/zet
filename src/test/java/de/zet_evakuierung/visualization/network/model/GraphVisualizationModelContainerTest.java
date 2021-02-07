@@ -39,25 +39,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
-import ds.GraphVisualizationResults;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import ds.graph.NodeRectangle;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.collection.ListSequence;
-import org.zetool.container.mapping.IdentifiableConstantMapping;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
-import org.zetool.container.mapping.IdentifiableObjectMapping;
-import org.zetool.container.mapping.TimeIntegerMapping;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
-import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.vectormath.Vector3;
-import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
 
 /**
  * Tests that the {@link GraphVisualizationModelContainer.Builder builder} creates correct model containers.
@@ -72,12 +67,12 @@ public class GraphVisualizationModelContainerTest {
     private static final List<Point2D> POSITIONS = List.of(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
             new Point2D.Double(1000, 3000));
 
-//    @Test
+    @Test
     public void builderInitialization() {
         assertThrows(NullPointerException.class,
                 () -> new GraphVisualizationModelContainer.Builder(null, mock(NetworkVisualizationModel.class)));
         assertThrows(NullPointerException.class,
-                () -> new GraphVisualizationModelContainer.Builder(mock(GraphVisualizationResults.class), null));
+                () -> new GraphVisualizationModelContainer.Builder(mock(GraphVisualizationData.class), null));
     }
 
     /**
@@ -175,19 +170,15 @@ public class GraphVisualizationModelContainerTest {
      * @param baseMocks the base mocks that are set up
      * @param names the floor names, if none present the result is empty
      */
-    private static List<String> setUpFloors(BuilderBaseMocks baseMocks, int floorCount) {
-        List<String> floors = List.of();
-
-        ArrayList<ArrayList<Node>> resultList = new ArrayList<>(floorCount);
-        IntStream.range(0, floorCount).forEach(i -> resultList.add(new ArrayList<>()));
-        when(baseMocks.visualizationResults.getFloorToNodeMapping()).thenReturn(resultList);
-
-        return floors;
+    private static void setUpFloors(BuilderBaseMocks baseMocks, int floorCount) {
+        when(baseMocks.visualizationData.getLayerCount()).thenReturn(floorCount);
+        IntStream.range(0, floorCount)
+                .forEach(i -> when(baseMocks.visualizationData.getNodesOnLayer(i)).thenReturn(new ArrayList<>()));
     }
 
     /**
-     * Sets up the mocks for Nodes. Prepares the mocked data in the {@link GraphVisualizationResults visualization
-     * results} to prepare simple or empty values for each node. These values are required to instantiate
+     * Sets up the mocks for Nodes. Prepares the mocked data in the {@link GraphVisualizationData visualization
+     * data} to prepare simple or empty values for each node. These values are required to instantiate
      * {@link GLNodeModel node model} objects.
      *
      * @param baseMocks the base mocks that are set up
@@ -200,22 +191,15 @@ public class GraphVisualizationModelContainerTest {
 
         List<Node> nodes = IntStream.range(0, Arrays.stream(nodesOnFloor).sum()).mapToObj(Node::new).collect(toList());
 
-        IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles = mock(IdentifiableObjectMapping.class);
-        NodePositionMapping<Vector3> nodePositionMapping = mock(NodePositionMapping.class);
-        IdentifiableIntegerMapping<Node> nodeCapacities = mock(IdentifiableIntegerMapping.class);
-        when(nodeRectangles.get(any())).thenReturn(new NodeRectangle(1, 2, 3, 4));
-        when(nodePositionMapping.get(any())).thenReturn(new Vector3());
-        when(nodeCapacities.get(any())).thenReturn(0);
-
         IdentifiableCollection<Edge> emptyCollection = new ListSequence<>();
         when(baseMocks.network.outgoingEdges(any())).thenReturn(emptyCollection);
 
-        mockNodeFloorMapping(baseMocks.visualizationResults, nodes, nodesOnFloor);
+        mockNodeFloorMapping(baseMocks.visualizationData, nodes, nodesOnFloor);
 
         for (int i = 0; i < nodes.size(); ++i) {
-            when(baseMocks.visualizationResults.getNodeRectangles()).thenReturn(nodeRectangles);
-            when(baseMocks.visualizationResults.getNodePositionMapping()).thenReturn(nodePositionMapping);
-            when(baseMocks.visualizationResults.getNodeCapacities()).thenReturn(nodeCapacities);
+            when(baseMocks.visualizationData.getNodeRectangle(any())).thenReturn(Optional.of(new NodeRectangle(1, 2, 3, 4)));
+            when(baseMocks.visualizationData.getPosition(any())).thenReturn(new Vector3());
+            when(baseMocks.visualizationData.getCapacity(any(Node.class))).thenReturn(0);
         }
 
         return nodes;
@@ -251,19 +235,9 @@ public class GraphVisualizationModelContainerTest {
             }
         }
 
-        IdentifiableIntegerMapping<Edge> mockTransitTimes = new IdentifiableConstantMapping<>(3);
-        when(baseMocks.visualizationResults.getTransitTimes()).thenReturn(mockTransitTimes);
-
-        IdentifiableIntegerMapping<Edge> mockEdgeCapacities = new IdentifiableConstantMapping<>(3);
-        when(baseMocks.visualizationResults.getEdgeCapacities()).thenReturn(mockEdgeCapacities);
-
-        // calculate flow on the edge
-        EdgeBasedFlowOverTime mockFlowOverTime = mock(EdgeBasedFlowOverTime.class);
-        when(baseMocks.visualizationResults.getFlow()).thenReturn(mockFlowOverTime);
-
-        TimeIntegerMapping mockTimeIntegerMapping = mock(TimeIntegerMapping.class);
-        when(mockTimeIntegerMapping.getLastTimeWithNonZeroValue()).thenReturn(0);
-        edges.forEach(edge -> when(mockFlowOverTime.get(edge)).thenReturn(mockTimeIntegerMapping));
+        when(baseMocks.visualizationData.getTransitTime(any())).thenReturn(3);
+        when(baseMocks.visualizationData.getLastFlowTime(any())).thenReturn(0);
+        when(baseMocks.visualizationData.getCapacity(any(Edge.class))).thenReturn(3);
 
         return edges;
     }
@@ -276,7 +250,7 @@ public class GraphVisualizationModelContainerTest {
      */
     private static GraphVisualizationModelContainer buildFixture(BuilderBaseMocks baseMocks) {
         return new GraphVisualizationModelContainer.Builder(
-                baseMocks.visualizationResults, baseMocks.visualizationModel).build();
+                baseMocks.visualizationData, baseMocks.visualizationModel).build();
     }
 
     /**
@@ -300,23 +274,23 @@ public class GraphVisualizationModelContainerTest {
      */
     private static class BuilderBaseMocks {
 
-        final GraphVisualizationResults visualizationResults;
+        final GraphVisualizationData visualizationData;
         final NetworkVisualizationModel visualizationModel;
         final DirectedGraph network;
 
         public BuilderBaseMocks() {
-            visualizationResults = mock(GraphVisualizationResults.class);
+            visualizationData = mock(GraphVisualizationData.class);
             visualizationModel = mock(NetworkVisualizationModel.class);
             network = mock(DirectedGraph.class);
-            when(visualizationResults.getNetwork()).thenReturn(network);
+            when(visualizationData.getNetwork()).thenReturn(network);
         }
 
         /**
          * Sets up interactions that happen always during build.
          */
         private void verifyGeneral() {
-            verify(visualizationResults, atLeastOnce()).getFloorToNodeMapping();
-            verify(visualizationResults, atLeastOnce()).getNetwork();
+            verify(visualizationData, atLeastOnce()).getFloorCount();
+            verify(visualizationData, atLeastOnce()).getNetwork();
         }
 
         /**
@@ -326,7 +300,7 @@ public class GraphVisualizationModelContainerTest {
          */
         private void verifyFloors(int floorCount) {
             for (int i = 0; i < floorCount; ++i) {
-                verify(visualizationResults, atLeastOnce()).getNodesOnFloor(i);
+                verify(visualizationData, atLeastOnce()).getNodesOnFloor(i);
             }
         }
 
@@ -341,10 +315,10 @@ public class GraphVisualizationModelContainerTest {
          * @param superSink the super sink node, can be {@code null}
          */
         private void verifyNodes(List<Node> nodes, @Nullable Node superSink) {
-            verify(visualizationResults, atLeastOnce()).getNodeRectangles();
-            verify(visualizationResults, atLeastOnce()).getNodePositionMapping();
-            verify(visualizationResults, atLeastOnce()).getNodeCapacities();
-            verify(visualizationResults, atLeastOnce()).getNodeToFloorMapping();
+            verify(visualizationData, atLeastOnce()).getNodeRectangle(any());
+            verify(visualizationData, atLeastOnce()).getPosition(any());
+            verify(visualizationData, atLeastOnce()).getCapacity(any(Node.class));
+            verify(visualizationData, atLeastOnce()).getFloor(any());
 
             for (Node node : nodes) {
                 if (node == superSink) {
@@ -353,9 +327,9 @@ public class GraphVisualizationModelContainerTest {
                 // This is the only verification for the class under test
                 verify(network, atLeastOnce()).outgoingEdges(node);
 
-                verify(visualizationResults, atLeastOnce()).isEvacuationNode(node);
-                verify(visualizationResults, atLeastOnce()).isSourceNode(node);
-                verify(visualizationResults, atLeastOnce()).isDeletedSourceNode(node);
+                verify(visualizationData, atLeastOnce()).isSink(node);
+                verify(visualizationData, atLeastOnce()).isSource(node);
+                verify(visualizationData, atLeastOnce()).isDeletedSource(node);
             }
 
             verify(visualizationModel, atLeastOnce()).nodeProgress();
@@ -367,15 +341,14 @@ public class GraphVisualizationModelContainerTest {
          */
         private void verifyEdges() {
             // Verifications in the created edge instances
-            verify(visualizationResults, atLeastOnce()).getMaxFlowRate();
-            verify(visualizationResults, atLeastOnce()).getTransitTimes();
-            verify(visualizationResults, atLeastOnce()).getFlow();
-            verify(visualizationResults, atLeastOnce()).getTransitTimes();
-            verify(visualizationResults, atLeastOnce()).getEdgeCapacities();
+            verify(visualizationData, atLeastOnce()).getMaximumFlowValue();
+            verify(visualizationData, atLeastOnce()).getLastFlowTime(any());
+            verify(visualizationData, atLeastOnce()).getTransitTime(any());
+            verify(visualizationData, atLeastOnce()).getCapacity(any(Edge.class));
         }
 
         void verifyNoMoreInteractions() {
-            Mockito.verifyNoMoreInteractions(visualizationResults);
+            Mockito.verifyNoMoreInteractions(visualizationData);
             Mockito.verifyNoMoreInteractions(visualizationModel);
             Mockito.verifyNoMoreInteractions(network);
         }

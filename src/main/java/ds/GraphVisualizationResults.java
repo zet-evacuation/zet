@@ -17,10 +17,12 @@ package ds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.zet_evakuierung.network.model.NetworkFlowModel;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import ds.graph.NodeRectangle;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
@@ -40,7 +42,7 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
  * rectangle in the real world that each node is covering. Also the floor that each node belongs to is saved. The floors
  * have indices according to their position in the list of floors in the z-format.
  */
-public class GraphVisualizationResults extends FlowVisualization {
+public class GraphVisualizationResults extends FlowVisualization implements GraphVisualizationData {
 	/** A mapping saving a rectangle in the real world for each node. */
 	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles;
 	/** Mapping of nodes located on which floor. */
@@ -63,7 +65,8 @@ public class GraphVisualizationResults extends FlowVisualization {
         for (Node node : getNetwork().nodes()) {
             int x = xPos.get(node);
             int y = yPos.get(node);
-            getNodePositionMapping().set(node, new Vector3(x, y, 0));
+// TODO:
+//            getNodePositionMapping().set(node, new Vector3(x, y, 0));
             NodeRectangle nodeRectangle = new NodeRectangle(x, y, x, y);
             nodeRectangles.set(node, nodeRectangle);
         }
@@ -98,7 +101,7 @@ public class GraphVisualizationResults extends FlowVisualization {
                 this.floorToNodeMapping.get(floor).add(node);
             }
         }
-        setMaxFlowRate(0);
+        setMaximumFlowValue(0);
         setFlow(new EdgeBasedFlowOverTime(getNetwork()));
     }
 
@@ -123,32 +126,39 @@ public class GraphVisualizationResults extends FlowVisualization {
     /**
      * Returns a mapping that assigns nodes to rectangles in the real world.
      *
+     * @param node
      * @return a mapping that assigns nodes to rectangles in the real world.
      */
-    public IdentifiableObjectMapping<Node, NodeRectangle> getNodeRectangles() {
-        return nodeRectangles;
+    @Override
+    public Optional<NodeRectangle> getNodeRectangle(Node node) {
+        return Optional.of(nodeRectangles.get(node));
     }
 
     /**
-     * Returns a mapping that assigns a flor number to each node.
+     * Returns a mapping that assigns a floor number to each node.
      *
-     * @return a mapping that assigns a flor number to each node.
+     * @param node the node
+     * @return a mapping that assigns a floor number to each node.
      */
-    public IdentifiableIntegerMapping<Node> getNodeToFloorMapping() {
-        return nodeToFloorMapping;
+    @Override
+    public int getLayer(Node node) {
+        return nodeToFloorMapping.get(node);
+    }
+
+    @Override
+    public int getLayerCount() {
+        return floorToNodeMapping.size();
     }
 
     /**
-     * Returns a mapping that contains all nodes connected to a floor.
+     * Returns a mapping that contains all nodes lying on a floor.
      *
-     * @return a mapping that contains all nodes connected to a floor.
+     * @param floorId the id of the floor
+     * @return a list of all nodes connected to a floor
      */
-    public ArrayList<ArrayList<Node>> getFloorToNodeMapping() {
-        return floorToNodeMapping;
-    }
-
-    public List<Node> getNodesOnFloor(int floorId) {
-        return getFloorToNodeMapping().get(floorId);
+    @Override
+    public List<Node> getNodesOnLayer(int floorId) {
+        return floorToNodeMapping.get(floorId);
     }
 
     /**
@@ -157,7 +167,8 @@ public class GraphVisualizationResults extends FlowVisualization {
      * @param node a node
      * @return whether {@code node} has been a source node that was deleted.
      */
-    public boolean isDeletedSourceNode(Node node) {
+    @Override
+    public boolean isDeletedSource(Node node) {
         return isDeletedSourceNode.get(node);
     }
 
@@ -166,10 +177,10 @@ public class GraphVisualizationResults extends FlowVisualization {
             PathComposition pathComposition = new PathComposition(getNetwork(), getTransitTimes(), flowOverTime);
             pathComposition.run();
             this.setFlow(pathComposition.getEdgeFlows());
-            setMaxFlowRate(pathComposition.getMaxFlowRate());
+            setMaximumFlowValue(pathComposition.getMaxFlowRate());
         } else {
             setFlow(new EdgeBasedFlowOverTime(getNetwork()));
-            setMaxFlowRate(0);
+            setMaximumFlowValue(0);
         }
     }
 

@@ -20,7 +20,6 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
-import ds.GraphVisualizationResults;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
@@ -142,7 +141,7 @@ public class GraphVisualizationModelContainer {
      */
     public static class Builder {
 
-        private final GraphVisualizationResults visualizationResults;
+        private final GraphVisualizationData visualizationData;
         private final NetworkVisualizationModel visualizationModel;
 
         /**
@@ -162,8 +161,8 @@ public class GraphVisualizationModelContainer {
          */
         private Map<Edge, GLFlowEdgeModel> edgeMap;
 
-        public Builder(GraphVisualizationResults graphVisResult, NetworkVisualizationModel networkVisualizationModel) {
-            this.visualizationResults = Objects.requireNonNull(graphVisResult);
+        public Builder(GraphVisualizationData visualizationData, NetworkVisualizationModel networkVisualizationModel) {
+            this.visualizationData = Objects.requireNonNull(visualizationData);
             this.visualizationModel = Objects.requireNonNull(networkVisualizationModel);
         }
 
@@ -183,12 +182,12 @@ public class GraphVisualizationModelContainer {
         }
 
         private List<GLGraphFloorModel> buildFloorModels() {
-            int floorCount = visualizationResults.getFloorToNodeMapping().size();
+            int floorCount = visualizationData.getLayerCount();
 
             ArrayList<GLGraphFloorModel> floorModels = new ArrayList<>(floorCount);
             for (int i = 0; i < floorCount; ++i) {
-                GLGraphFloorModel floorModel = new GLGraphFloorModel(visualizationResults,
-                        visualizationResults.getFloorToNodeMapping().get(i), i, visualizationModel);
+                GLGraphFloorModel floorModel = new GLGraphFloorModel(visualizationData.getNodesOnLayer(i), i,
+                        visualizationModel);
                 floorModels.add(floorModel);
             }
             return floorModels;
@@ -201,10 +200,10 @@ public class GraphVisualizationModelContainer {
          * @return a mapping of all nodes for visualization (i.e. without supersink)
          */
         private Map<Node, GLNodeModel> createNodeMapping() {
-            int floorCount = visualizationResults.getFloorToNodeMapping().size();
+            int floorCount = visualizationData.getLayerCount();
             List<Map<Node, GLNodeModel>> nodeModels = new ArrayList<>();
             for (int i = 0; i < floorCount; ++i) {
-                Collection<Node> nodesOnTheFloor = visualizationResults.getNodesOnFloor(i);
+                Iterable<Node> nodesOnTheFloor = visualizationData.getNodesOnLayer(i);
                 Map<Node, GLNodeModel> nodesOnFloor = buildNodeModels(nodesOnTheFloor);
                 nodeModels.add(nodesOnFloor);
             }
@@ -214,9 +213,9 @@ public class GraphVisualizationModelContainer {
                     .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
 
-        private Map<Node, GLNodeModel> buildNodeModels(Collection<Node> nodesOnTheFloor) {
-            Map<Node, GLNodeModel> result = nodesOnTheFloor.stream()
-                    .collect(toMap(identity(), n -> new GLNodeModel(visualizationResults, n, visualizationModel)));
+        private Map<Node, GLNodeModel> buildNodeModels(Iterable<Node> nodesOnTheFloor) {
+            Map<Node, GLNodeModel> result = StreamSupport.stream(nodesOnTheFloor.spliterator(), false)
+                    .collect(toMap(identity(), n -> new GLNodeModel(visualizationData, n, visualizationModel)));
             return result;
         }
 
@@ -231,13 +230,13 @@ public class GraphVisualizationModelContainer {
          */
         private Map<Edge, GLFlowEdgeModel> createEdgeMapping(Iterable<Node> nodes) {
             long edgeCount = StreamSupport.stream(nodes.spliterator(), false)
-                    .map(visualizationResults.getNetwork()::outDegree)
+                    .map(visualizationData.getNetwork()::outDegree)
                     .count();
             HashMap<Edge, GLFlowEdgeModel> result = new HashMap<>(Math.toIntExact(edgeCount));
 
             for (Node node : nodes) {
-                for (Edge edge : visualizationResults.getNetwork().outgoingEdges(node)) {
-                    result.put(edge, new GLFlowEdgeModel(visualizationResults, edge, visualizationModel));
+                for (Edge edge : visualizationData.getNetwork().outgoingEdges(node)) {
+                    result.put(edge, new GLFlowEdgeModel(visualizationData, edge, visualizationModel));
                 }
             }
             return result;

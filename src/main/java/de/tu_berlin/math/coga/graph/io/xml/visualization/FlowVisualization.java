@@ -17,6 +17,7 @@ package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
 import java.util.List;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.DirectedGraph;
 import org.zetool.graph.Edge;
@@ -30,7 +31,7 @@ import org.zetool.netflow.dynamic.problems.EarliestArrivalFlowProblem;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class FlowVisualization extends GraphVisualization {
+public class FlowVisualization extends GraphVisualization implements GraphVisualizationData {
 
     private EdgeBasedFlowOverTime flow;
     int timeHorizon;
@@ -52,6 +53,31 @@ public class FlowVisualization extends GraphVisualization {
         flow = new EdgeBasedFlowOverTime(getNetwork());
     }
 
+    @Override
+    public Vector3 getPosition(Node node) {
+        return nodePositionMapping.get(node);
+    }
+
+    @Override
+    public int getCapacity(Edge edge) {
+        return edgeCapacities.get(edge);
+    }
+
+    @Override
+    public int getCapacity(Node node) {
+        return nodeCapacities.get(node);
+    }
+
+    @Override
+    public int getTransitTime(Edge edge) {
+        return transitTimes.get(edge);
+    }
+
+    @Override
+    public int getFlow(Edge edge, int time) {
+        return flow.get(edge).get(time);
+    }
+
     public EdgeBasedFlowOverTime getFlow() {
         return flow;
     }
@@ -62,7 +88,7 @@ public class FlowVisualization extends GraphVisualization {
 
     public void setFlow(EdgeBasedFlowOverTime flow, int maxFlowRate) {
         setFlow(flow);
-        setMaxFlowRate(maxFlowRate);
+        setMaximumFlowValue(maxFlowRate);
     }
 
     public int getTimeHorizon() {
@@ -73,11 +99,12 @@ public class FlowVisualization extends GraphVisualization {
         this.timeHorizon = timeHorizon;
     }
 
-    public int getMaxFlowRate() {
+    @Override
+    public int getMaximumFlowValue() {
         return maxFlowRate;
     }
 
-    protected void setMaxFlowRate(int maxFlowRate) {
+    protected void setMaximumFlowValue(int maxFlowRate) {
         this.maxFlowRate = maxFlowRate;
     }
 
@@ -87,5 +114,10 @@ public class FlowVisualization extends GraphVisualization {
 
     public void setEdgesDoubled(boolean edgesDoubled) {
         this.edgesDoubled = edgesDoubled;
+    }
+
+    @Override
+    public int getLastFlowTime(Edge edge) {
+        return flow.get(edge).getLastTimeWithNonZeroValue();
     }
 }

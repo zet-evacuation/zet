@@ -16,15 +16,20 @@
 package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
-import ds.GraphVisualizationResults;
+import ds.graph.NodeRectangle;
 import org.zetool.graph.Node;
+import org.zetool.math.vectormath.Vector3;
 
 public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualizationModel> implements VisualizationNodeModel {
+
+    private static final NodeRectangle DEFAULT_NODE_RECTANGLE = new NodeRectangle(0, 0, 0, 0);
 
     private double xPosition;
     private double yPosition;
@@ -46,24 +51,27 @@ public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualization
     private boolean gridVisible = true;
     private int id = 0;
 
-    public GLNodeModel(GraphVisualizationResults graphVisResult, Node node, NetworkVisualizationModel visualizationModel) {
+    public GLNodeModel(GraphVisualizationData visualizationData, Node node,
+            NetworkVisualizationModel visualizationModel) {
         super(visualizationModel);
 
-        nwX = graphVisResult.getNodeRectangles().get(node).get_nw_point().getX() * visualizationModel.scaling;
-        nwY = graphVisResult.getNodeRectangles().get(node).get_nw_point().getY() * visualizationModel.scaling;
-        seX = graphVisResult.getNodeRectangles().get(node).get_se_point().getX() * visualizationModel.scaling;
-        seY = graphVisResult.getNodeRectangles().get(node).get_se_point().getY() * visualizationModel.scaling;
+        Optional<NodeRectangle> rectangle = visualizationData.getNodeRectangle(node);
+        nwX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getX() * visualizationModel.scaling;
+        nwY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getY() * visualizationModel.scaling;
+        seX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getX() * visualizationModel.scaling;
+        seY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getY() * visualizationModel.scaling;
 
-        xPosition = graphVisResult.getNodePositionMapping().get(node).x * visualizationModel.scaling;
-        yPosition = graphVisResult.getNodePositionMapping().get(node).y * visualizationModel.scaling;
-        capacity = graphVisResult.getNodeCapacities().get(node);
+        Vector3 position = visualizationData.getPosition(node);
+        xPosition = position.x * visualizationModel.scaling;
+        yPosition = position.y * visualizationModel.scaling;
+        capacity = visualizationData.getCapacity(node);
 
         id = node.id();
-        isEvacuationNode = graphVisResult.isEvacuationNode(node);
-        isSourceNode = graphVisResult.isSourceNode(node);
-        isDeletedSourceNode = graphVisResult.isDeletedSourceNode(node);
+        isEvacuationNode = visualizationData.isSink(node);
+        isSourceNode = visualizationData.isSource(node);
+        isDeletedSourceNode = visualizationData.isDeletedSource(node);
 
-        floor = graphVisResult.getNodeToFloorMapping().get(node);
+        floor = visualizationData.getLayer(node);
 
         zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
         zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;

@@ -17,10 +17,8 @@ package de.zet_evakuierung.visualization.network.model;
 
 import java.util.ArrayList;
 
-import ds.GraphVisualizationResults;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import org.zetool.graph.Edge;
-import org.zetool.netflow.ds.flow.EdgeBasedFlowOverTime;
 
 /**
  * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented by
@@ -44,13 +42,13 @@ public class GLFlowEdgeModel extends GLEdgeModel {
      * Creates a new {@code GLFlowEdgeControl} object for the edge {@code edge} using data from the
      * {@code graphVisResult} object.
      *
-     * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
+     * @param visualizationData contains all information necessary to visualize a result of a flow algorithm.
      * @param edge the edge for this control object.
      * @param visualizationModel the main control class.
      */
-    public GLFlowEdgeModel(GraphVisualizationResults graphVisResult, Edge edge,
+    public GLFlowEdgeModel(GraphVisualizationData visualizationData, Edge edge,
             NetworkVisualizationModel visualizationModel) {
-        super(graphVisResult.getNodePositionMapping(), edge);
+        super(visualizationData, edge);
         setScaling(Z_TO_OPENGL_SCALING);
 
         this.edge = edge;
@@ -58,19 +56,16 @@ public class GLFlowEdgeModel extends GLEdgeModel {
         this.visualizationModel = visualizationModel;
 
         // general edge attributes
-        maxFlowRate = graphVisResult.getMaxFlowRate();
+        maxFlowRate = visualizationData.getMaximumFlowValue();
 
-        transitTime = graphVisResult.getTransitTimes().get(edge);
+        transitTime = visualizationData.getTransitTime(edge);
 
-        capacity = graphVisResult.getEdgeCapacities().get(edge);
+        capacity = visualizationData.getCapacity(edge);
 
         // calculate flow on the edge
-        IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
 
-        EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
-
-        int maxT = flowOverTime.get(edge).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-        int transit = transitTimes.get(edge);
+        int maxT = visualizationData.getLastFlowTime(edge); // maximaler Zeithorizont
+        int transit = visualizationData.getTransitTime(edge);
         if (maxT > 0) {
             visualizationModel.setMaxTime(maxT + transit);
         }
@@ -80,7 +75,7 @@ public class GLFlowEdgeModel extends GLEdgeModel {
                 flowOnEdge.add(0);
             }
             for (int i = 0; i <= maxT; i++) {
-                flowOnEdge.add(flowOverTime.get(edge).get(i));
+                flowOnEdge.add(visualizationData.getFlow(edge, i));
             }
             for (int i = 0; i < transit; i++) {
                 flowOnEdge.add(0);

@@ -46,6 +46,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import de.zet_evakuierung.visualization.ModelContainerTestUtils;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
@@ -143,7 +144,7 @@ public class GLGraphViewsTest {
         List<Node> mockNodes = setUpNodes(baseMocks, mockFloors, nodeCount);
         setUpEdges(baseMocks, mockNodes, 0, 0, 0);
 
-        when(baseMocks.visualizationResults.getSupersink()).thenReturn(mockNodes.get(superSink));
+        when(baseMocks.visualizationData.getSupersink()).thenReturn(mockNodes.get(superSink));
 
         GLGraphViews result = createWithGLContext(baseMocks::createResult);
 
@@ -182,7 +183,7 @@ public class GLGraphViewsTest {
         List<GLGraphFloorModel> mockFloors = setUpFloors(baseMocks, floorCount);
         int nodeCount = 3;
         List<Node> nodes = setUpNodes(baseMocks, mockFloors, nodeCount);
-        when(baseMocks.visualizationResults.getSupersink()).thenReturn(nodes.get(superSink));
+        when(baseMocks.visualizationData.getSupersink()).thenReturn(nodes.get(superSink));
         // Connect nodes as circle 0 to supersink (1), supersink (1) to 2, 2 to 0. The last edge remains
         List<Edge> edges = setUpEdges(baseMocks, nodes, 1, 1, 1);
         when(edges.get(0).start()).thenReturn(nodes.get(0));
@@ -288,8 +289,8 @@ public class GLGraphViewsTest {
     }
 
     /**
-     * Sets up the mocks for node models. Creates {@link Node} instances and {@link GLNodeModel} mocks corresponding
-     * to each other.
+     * Sets up the mocks for node models. Creates {@link Node} instances and {@link GLNodeModel} mocks corresponding to
+     * each other.
      * <p>
      * Sets up the {@link GraphVisualizationResults graph results} mock to return the respective list of
      * {@link Node nodes} for each floor and the model to retrieve the {@link GLNodeModel} for its corresponding
@@ -307,7 +308,7 @@ public class GLGraphViewsTest {
 
         List<Node> nodes = IntStream.range(0, Arrays.stream(nodesOnFloor).sum()).mapToObj(Node::new).collect(toList());
 
-        mockNodeFloorMapping(baseMocks.visualizationResults, nodes, nodesOnFloor);
+        mockNodeFloorMapping(baseMocks.visualizationData, nodes, nodesOnFloor);
 
         // Set up a hacked injection of the real objects in the mock factory
         AtomicInteger count = new AtomicInteger();
@@ -319,7 +320,7 @@ public class GLGraphViewsTest {
                 };
 
         Function<Integer, Iterable<Node>> nodeMockSupplier
-                = i -> baseMocks.visualizationResults.getNodesOnFloor(i);
+                = i -> baseMocks.visualizationData.getNodesOnLayer(i);
         Function<Node, GLNodeModel> internalMockFunction
                 = nodeMock -> baseMocks.graphModel.getNodeModel(nodeMock);
         hierarchyMocks(Node.class, GLNodeModel.class)
@@ -409,15 +410,15 @@ public class GLGraphViewsTest {
 
         final NetworkVisualizationModel visualizationModel;
         final GraphVisualizationModelContainer graphModel;
-        final GraphVisualizationResults visualizationResults;
+        final GraphVisualizationData visualizationData;
         final DirectedGraph network;
 
         public FactoryBaseMocks() {
             visualizationModel = mock(NetworkVisualizationModel.class);
             graphModel = mock(GraphVisualizationModelContainer.class);
-            visualizationResults = mock(GraphVisualizationResults.class);
+            visualizationData = mock(GraphVisualizationData.class);
             network = mock(DirectedGraph.class);
-            when(visualizationResults.getNetwork()).thenReturn(network);
+            when(visualizationData.getNetwork()).thenReturn(network);
         }
 
         /**
@@ -438,7 +439,7 @@ public class GLGraphViewsTest {
          * @return the created instance
          */
         private GLGraphViews createResult(boolean interFloorEdges) {
-            return GLGraphViews.createInstance(visualizationModel, visualizationResults, graphModel, interFloorEdges);
+            return GLGraphViews.createInstance(visualizationModel, visualizationData, graphModel, interFloorEdges);
         }
     }
 }

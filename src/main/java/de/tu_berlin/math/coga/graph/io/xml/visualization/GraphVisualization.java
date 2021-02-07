@@ -242,7 +242,7 @@ public class GraphVisualization {
         return sinks.get(0);
     }
 
-    public boolean isEvacuationNode(Node node) {
+    public boolean isSink(Node node) {
         if (containsSuperSink) {
             return network.adjacentNodes(node).contains(getSupersink());
         } else {
@@ -250,7 +250,7 @@ public class GraphVisualization {
         }
     }
 
-    public boolean isSourceNode(Node node) {
+    public boolean isSource(Node node) {
         return sources.contains(node);
     }
 

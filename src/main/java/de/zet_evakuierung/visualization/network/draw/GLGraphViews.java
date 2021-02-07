@@ -23,13 +23,13 @@ import java.util.Objects;
 
 import java.util.Set;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLFlowGraphControl;
 import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
 import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
-import ds.GraphVisualizationResults;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
@@ -77,15 +77,15 @@ public class GLGraphViews {
      * Factory method creating a {@link GLGraphViews graph views container} instance.
      *
      * @param networkVisualizationModel the visualization model with basic visualization settings
-     * @param graphVisualizationResults the actual network model
+     * @param graphVisualizationData the actual network model
      * @param graphModel the input visualization models for graph visualization
      * @param showEdgesBetweenFloors enables or disables creation of inter floor edge view instances
      * @return the created instance
      */
     public static GLGraphViews createInstance(NetworkVisualizationModel networkVisualizationModel,
-            GraphVisualizationResults graphVisualizationResults, GraphVisualizationModelContainer graphModel,
+            GraphVisualizationData graphVisualizationData, GraphVisualizationModelContainer graphModel,
             boolean showEdgesBetweenFloors) {
-        GLGraphViewFactory factory = new GLGraphViewFactory(networkVisualizationModel, graphVisualizationResults,
+        GLGraphViewFactory factory = new GLGraphViewFactory(networkVisualizationModel, graphVisualizationData,
                 graphModel);
         factory.withEdgesBetweenFloors(showEdgesBetweenFloors).createViews();
         return new GLGraphViews(factory);
@@ -98,7 +98,7 @@ public class GLGraphViews {
 
         private final NetworkVisualizationModel visualizationModel;
         private final GraphVisualizationModelContainer modelContainer;
-        private final GraphVisualizationResults visualizationResults;
+        private final GraphVisualizationData visualizationData;
         /**
          * Wether edge model instances for inter floor edges should be created.
          */
@@ -114,11 +114,11 @@ public class GLGraphViews {
         private Set<GLEdge> edgeViews;
 
         private GLGraphViewFactory(NetworkVisualizationModel visualizationModel,
-                GraphVisualizationResults graphVisualizationResults,
+                GraphVisualizationData graphVisualizationData,
                 GraphVisualizationModelContainer graphModelContainer) {
             this.visualizationModel = visualizationModel;
             this.modelContainer = graphModelContainer;
-            this.visualizationResults = graphVisualizationResults;
+            this.visualizationData = graphVisualizationData;
         }
 
         /**
@@ -152,8 +152,8 @@ public class GLGraphViews {
         }
 
         private void createNodeViews(int floorId, GLGraphFloor parentFloor) {
-            Node supersink = visualizationResults.getSupersink();
-            for (Node node : visualizationResults.getNodesOnFloor(floorId)) {
+            Node supersink = visualizationData.getSupersink();
+            for (Node node : visualizationData.getNodesOnLayer(floorId)) {
                 if (node.equals(supersink)) {
                     continue;
                 }
@@ -166,10 +166,10 @@ public class GLGraphViews {
         }
 
         private void createEdgeViews(Node nodeModel, GLNode parentNode) {
-            for (Edge edge : visualizationResults.getNetwork().outgoingEdges(nodeModel)) {
+            for (Edge edge : visualizationData.getNetwork().outgoingEdges(nodeModel)) {
                 if (edge.end().id() != visualizationModel.superSinkID()) {
-                    int nodeFloor1 = visualizationResults.getNodeToFloorMapping().get(edge.start());
-                    int nodeFloor2 = visualizationResults.getNodeToFloorMapping().get(edge.end());
+                    int nodeFloor1 = visualizationData.getLayer(edge.start());
+                    int nodeFloor2 = visualizationData.getLayer(edge.end());
                     if (nodeFloor1 == nodeFloor2 || showEdgesBetweenFloors) {
                         GLFlowEdgeModel edgeModel = modelContainer.getEdgeModel(edge);
                         GLFlowEdge edgeView = new GLFlowEdge(edgeModel);

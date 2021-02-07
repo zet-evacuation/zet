@@ -15,8 +15,8 @@
  */
 package de.zet_evakuierung.visualization.network.model;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import org.zetool.graph.Edge;
-import org.zetool.graph.visualization.NodePositionMapping;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
 
@@ -38,7 +38,7 @@ public class GLEdgeModel {
     private Vector3 endPoint;
     double scaling = 1;
 
-    public GLEdgeModel(NodePositionMapping<Vector3> nodePositionMapping, Edge edge) {
+    public GLEdgeModel(GraphVisualizationData visualizationData, Edge edge) {
         super();
 
         // checks weather this edge is the first one of the two representing one undirected edge
@@ -46,7 +46,7 @@ public class GLEdgeModel {
             isFirst = true;
         }
 
-        init(nodePositionMapping.get(edge.start()), nodePositionMapping.get(edge.end()));
+        init(visualizationData.getPosition(edge.start()), visualizationData.getPosition(edge.end()));
     }
 
     private void init(Vector3 startPos, Vector3 endPos) {

@@ -150,11 +150,11 @@ public class TikZOut extends AbstractOutput implements TreeListItem {
         Set<Node> sources = new HashSet<>();
         Set<Node> fake = new HashSet<>();
         for (Edge e : graph.edges()) {
-            if (gvr.isSourceNode(e.start())) {
+            if (gvr.isSource(e.start())) {
                 System.out.println("source: " + e.end());
                 sources.add(e.end());
                 fake.add(e.start());
-            } else if (gvr.isSourceNode(e.end())) {
+            } else if (gvr.isSource(e.end())) {
                 System.out.println("source: " + e.start());
                 sources.add(e.start());
                 fake.add(e.end());
@@ -163,13 +163,13 @@ public class TikZOut extends AbstractOutput implements TreeListItem {
 
         for (Node n : graph) {
             if (!fake.contains(n) && !(n.id() == 0)) {
-                int nodeFloor = gvr.getNodeToFloorMapping().get(n);
-                Vector3 position = gvr.getNodePositionMapping().get(n);
+                int nodeFloor = gvr.getLayer(n);
+                Vector3 position = gvr.getPosition(n);
                 StringBuilder sb = this.getSb(nodeFloor);
                 if (sources.contains(n)) {
                     // source
                     sb.append("  \\node[emptyNodeBuilding,sourceBuilding,anchor=center] (").append(n.id()).append(") at (").append(position.x / 400).append(",").append(position.y / 400).append(") {};\n");
-                } else if (gvr.isEvacuationNode(n)) {
+                } else if (gvr.isSink(n)) {
                     // sink
                     sb.append("  \\node[emptyNodeBuilding,sinkBuilding,anchor=center] (").append(n.id()).append(") at (").append(position.x / 400).append(",").append(position.y / 400).append(") {};\n");
                 } else {
@@ -182,8 +182,8 @@ public class TikZOut extends AbstractOutput implements TreeListItem {
         for (Edge e : graph.edges()) {
             if (!(fake.contains(e.start()) || fake.contains(e.end()) || e.start().id() == 0 || e.end().id() == 0 || e.end().id() < e.start().id())) {
                 // \draw[thick] (2) to node[near,right,pos=0.8]{\tiny{}6} (10);
-                int nodeFloor1 = gvr.getNodeToFloorMapping().get(e.start());
-                int nodeFloor2 = gvr.getNodeToFloorMapping().get(e.end());
+                int nodeFloor1 = gvr.getLayer(e.start());
+                int nodeFloor2 = gvr.getLayer(e.end());
                 if (nodeFloor1 == nodeFloor2) {
                     StringBuilder sb = getSb(nodeFloor1);//sbs.get( nodeFloor1 );
                     if (sb == null) {

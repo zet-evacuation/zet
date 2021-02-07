@@ -36,8 +36,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import ds.GraphVisualizationResults;
-import org.zetool.container.mapping.IdentifiableIntegerMapping;
+import de.zet_evakuierung.visualization.network.GraphVisualizationData;
 import org.zetool.graph.Node;
 
 /**
@@ -81,33 +80,31 @@ public class ModelContainerTestUtils {
     }
 
     /**
-     * Sets up a {@link GraphVisualizationResults graph visualization results} mock to return a valid node mapping.
-     * Calls to retrieve {@link GraphVisualizationResults#getNodesOnFloor(int) nodes by floor} and to get
-     * {@link GraphVisualizationResults#getNodeToFloorMapping() complete mapping} are mocked.
+     * Sets up a {@link GraphVisualizationData graph visualization data} mock to return a valid node mapping. Calls to
+     * retrieve {@link GraphVisualizationData#getNodesOnLayer(int) nodes by floor} and to get the
+     * {@link GraphVisualizationData#getLayer(org.zetool.graph.Node) floor} are mocked.
      *
      * @param visualizationResults the mock object
      * @param nodes the existing nodes, can be mocks or real objects
      * @param nodesOnFloor counts for mocks on which floor
      */
-    public static void mockNodeFloorMapping(GraphVisualizationResults visualizationResults, List<Node> nodes,
+    public static void mockNodeFloorMapping(GraphVisualizationData visualizationResults, List<Node> nodes,
             int... nodesOnFloor) {
         List<List<Node>> nodesByFloor = new ArrayList<>(nodesOnFloor.length);
 
-        IdentifiableIntegerMapping<Node> nodeToFloorMapping = new IdentifiableIntegerMapping(nodes);
         int start = 0;
         for (int floor = 0; floor < nodesOnFloor.length; ++floor) {
             List<Node> onCurrentFloor = nodes.subList(start, start + nodesOnFloor[floor]);
             nodesByFloor.add(onCurrentFloor);
             for (Node n : onCurrentFloor) {
-                nodeToFloorMapping.add(n, floor);
+                when(visualizationResults.getLayer(n)).thenReturn(floor);
             }
             start += nodesOnFloor[floor];
         }
         for (int i = 0; i < nodesOnFloor.length; ++i) {
-            when(visualizationResults.getNodesOnFloor(i)).thenReturn(nodesByFloor.get(i));
+            when(visualizationResults.getNodesOnLayer(i)).thenReturn(nodesByFloor.get(i));
         }
 
-        when(visualizationResults.getNodeToFloorMapping()).thenReturn(nodeToFloorMapping);
     }
 
     /**
@@ -121,8 +118,7 @@ public class ModelContainerTestUtils {
      * {@link org.zet.cellularautomaton.EvacCell} as created model type, or
      * {@link de.zet_evakuierung.visualization.ca.model.GLFloorModel floors} as parent type and
      * {@link org.zet.cellularautomaton.Room} as created child models. Multiple such set ups create a hierarchy of
-     * mocks.
-     * </p>
+     * mocks.</p>
      *
      * @param <M> type of created model mocks
      * @param <V> type of created internal view model mocks
