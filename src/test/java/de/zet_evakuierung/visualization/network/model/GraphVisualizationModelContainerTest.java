@@ -289,7 +289,7 @@ public class GraphVisualizationModelContainerTest {
          * Sets up interactions that happen always during build.
          */
         private void verifyGeneral() {
-            verify(visualizationData, atLeastOnce()).getFloorCount();
+            verify(visualizationData, atLeastOnce()).getLayerCount();
             verify(visualizationData, atLeastOnce()).getNetwork();
         }
 
@@ -300,7 +300,7 @@ public class GraphVisualizationModelContainerTest {
          */
         private void verifyFloors(int floorCount) {
             for (int i = 0; i < floorCount; ++i) {
-                verify(visualizationData, atLeastOnce()).getNodesOnFloor(i);
+                verify(visualizationData, atLeastOnce()).getNodesOnLayer(i);
             }
         }
 
@@ -318,7 +318,7 @@ public class GraphVisualizationModelContainerTest {
             verify(visualizationData, atLeastOnce()).getNodeRectangle(any());
             verify(visualizationData, atLeastOnce()).getPosition(any());
             verify(visualizationData, atLeastOnce()).getCapacity(any(Node.class));
-            verify(visualizationData, atLeastOnce()).getFloor(any());
+            verify(visualizationData, atLeastOnce()).getLayer(any());
 
             for (Node node : nodes) {
                 if (node == superSink) {
