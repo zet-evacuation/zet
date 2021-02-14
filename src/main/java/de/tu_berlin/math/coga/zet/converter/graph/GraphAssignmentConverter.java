@@ -64,69 +64,51 @@ public class GraphAssignmentConverter extends AbstractAlgorithm<ConcreteAssignme
         // the new converted node assignment
         List<Person> persons = assignment.getPersons();
 
-        // setting the people requirement (negative assignment) to the number of persons in the building
-        //Node superSink = model.getSupersink();
-        modelBuilder.setNodeAssignment(model.getSupersink(), -persons.size());
-        //nodeAssignment.set( superSink, -persons.size() );
-
         HashMap<Room, Double> roomMaxTime = new HashMap<>();
-        HashMap<Node, Integer> nodeCount = new HashMap<>();
-        HashMap<Node, Room> nodeRoom = new HashMap<>();
+        HashMap<Node, Integer> nodeAssignment = new HashMap<>();
 
         // for every person do
         for (int i = 0; i < persons.size(); i++) {
-            // get the room that is inhabited by the current person
             Room room = persons.get(i).getRoom();
-            ZToGraphRoomRaster roomRaster = raster.getRasteredRoom(room);
+            Node node = getNode(persons.get(i), raster);
 
-            // calculate the coordinates of the person inside of it's room
-            PlanPoint pos = persons.get(i).getPosition();
-            int XPos = pos.getXInt();
-            int YPos = pos.getYInt();
-            // get the square the person is located
-            ZToGraphRasterSquare square = roomRaster.getSquareWithGlobalCoordinates(XPos, YPos);
-            //System.out.println("Square in Assignment: " + square);
-            //ZToGraphRasterSquare square = roomRaster.getSquare((int)Math.floor(XPos/400), (int)Math.floor(YPos/400));
-            // get the square's associated node
-            Node node = square.getNode();
-
-            // increase the nodes assignment if already defined or set it's assignment to 1
-            //normal:
-            //model.increaseNodeAssignment( node ); 
             //max-in-room-assignment
             final double maxTimeForRoom = roomMaxTime.getOrDefault(room, 0d);
             roomMaxTime.put(room, Math.max(maxTimeForRoom, persons.get(i).getReaction()));
-            final int count = nodeCount.getOrDefault(node, 0);
-            nodeCount.put(node, count + 1);
-            nodeRoom.put(node, room);
+            final int count = nodeAssignment.getOrDefault(node, 0);
+            nodeAssignment.put(node, count + 1);
         }
 
-        for (Node n : nodeRoom.keySet()) {
-            int count = nodeCount.get(n);
-            double delay = roomMaxTime.get(nodeRoom.get(n));
+        for (int i = 0; i < persons.size(); i++) {
+            Room room = persons.get(i).getRoom();
+            Node node = getNode(persons.get(i), raster);
+            int count = nodeAssignment.get(node);
+            double delay = roomMaxTime.get(room);
             // Delay in sekunden
             double factor = 1 / 0.26425707443;
 
-            for (int i = 0; i < count; ++i) {
-                Node assignmentNode = modelBuilder.increaseNodeAssignment(n, delay * factor);
-                NodeRectangle rect = new NodeRectangle(400 * count, -800, 400 * (count + 1), -400);
-                mapping.setNodeRectangle(assignmentNode, rect);
-
-                System.out.println("Setting delay: " + (delay * factor) + " for delay " + delay + " in room " + nodeRoom.get(n));
-            }
+            double commonDelay = delay * factor;
+            double personalDelay = persons.get(i).getReaction();
+            Node assignmentNode = modelBuilder.increaseNodeAssignment(node, commonDelay + personalDelay);
+            NodeRectangle rect = new NodeRectangle(400 * count, -800, 400 * (count + 1), -400);
+            mapping.setNodeRectangle(assignmentNode, rect);
         }
 
-        // set node assignment to 0 for every node the assignment has not already defined for
-//		IdentifiableCollection<Node> nodes = model.getGraph().nodes();
-//		for( int i = 0; i < nodes.size(); i++ )
-//			if( !nodeAssignment.isDefinedFor( nodes.get( i ) ) )
-//				nodeAssignment.set( nodes.get( i ), 0 );
-        // set the network flow model's assignment to the calculated node assignment
-//		model.setCurrentAssignment( nodeAssignment );
-//		if( progress )
-//			System.out.println( ": A concrete assignment has been converted into supplies and demands for the graph." );
         return modelBuilder.build();
 
     }
 
+    private Node getNode(Person p, ZToGraphRasterContainer raster) {
+        Room room = p.getRoom();
+        ZToGraphRoomRaster roomRaster = raster.getRasteredRoom(room);
+
+        // calculate the coordinates of the person inside of it's room
+        PlanPoint pos = p.getPosition();
+        int XPos = pos.getXInt();
+        int YPos = pos.getYInt();
+        // get the square the person is located
+        ZToGraphRasterSquare square = roomRaster.getSquareWithGlobalCoordinates(XPos, YPos);
+        // get the square's associated node
+        return square.getNode();
+    }
 }
