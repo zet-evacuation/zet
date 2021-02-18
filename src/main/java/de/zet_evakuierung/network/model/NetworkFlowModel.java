@@ -879,7 +879,7 @@ public class NetworkFlowModel implements Iterable<Node> {
             currentAssignment.set(virtualSource, count);
             currentAssignment.decrease(supersink, diff);
         }
-
+        
         void increaseNodeAssignment(Node node) {
             Node virtualSNode = getOrCreateVirtualSource(node);
             currentAssignment.increase(virtualSNode, 1);
@@ -964,13 +964,11 @@ public class NetworkFlowModel implements Iterable<Node> {
          */
         private void checkSupplies() {
             DirectedGraph newNetwork = this.network.getAsStaticNetwork();
-            IdentifiableIntegerMapping<Node> supplies = currentAssignment;
 
-            GraphInstanceChecker checker = new GraphInstanceChecker(newNetwork, supplies);
+            GraphInstanceChecker checker = new GraphInstanceChecker(newNetwork, currentAssignment);
             checker.supplyChecker();
 
             if (checker.hasRun()) {
-                IdentifiableIntegerMapping<Node> checkedAssignment = checker.getNewSupplies();
                 List<Node> newSources = checker.getNewSources();
                 for (Node oldSource : checker.getDeletedSources()) {
                     // TODO pass mapping
