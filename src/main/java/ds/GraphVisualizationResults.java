@@ -89,7 +89,8 @@ public class GraphVisualizationResults extends FlowVisualization implements Grap
         DirectedGraph network = networkFlowModel.getEAFP().getNetwork();
 
         for (Node node : network.nodes()) {
-            int floor = this.nodeToFloorMapping.get(node);
+            
+            int floor = isOriginalNode(mapping, node) ? this.nodeToFloorMapping.get(node) : this.nodeToFloorMapping.get(getOriginalNode(network, node));
 
             if (floor != -1) {
                 while (this.floorToNodeMapping.size() < floor) {
@@ -115,14 +116,52 @@ public class GraphVisualizationResults extends FlowVisualization implements Grap
         NodePositionMapping<Vector3> nodePositionMapping = new NodePositionMapping<>(3, model.graph().nodeCount());
         for (Node n : model.graph().nodes()) {
             final Vector3 v;
-            NodeRectangle rect = model.getZToGraphMapping().getNodeRectangles().get(n);
-            final double zs = model.getZToGraphMapping().getNodeFloorMapping().get(n) * VisualizationOptionManager.getFloorDistance();
-            v = new Vector3(rect.getCenterX(), rect.getCenterY(), zs);
+            final ZToGraphMapping mapping = model.getZToGraphMapping();
+            if (isOriginalNode(mapping, n)) {
+                v = computePositionForOriginalNode(mapping, n);
+            } else {
+                v = createPositionForSourceNode(mapping, model.graph(), n);
+            }
+            
             nodePositionMapping.set(n, v);
         }
         return nodePositionMapping;
     }
 
+    private static boolean isOriginalNode(ZToGraphMapping mapping, Node n) {
+        return mapping.getNodeFloorMapping().isDefinedFor(n);
+    }
+
+    /**
+     * Computes the position for additional source nodes.
+     *
+     * @param mapping a mapping that contains information about node {@code n}
+     * @param network the network
+     * @param n a node in the {@code mapping}
+     */
+    private static Vector3 createPositionForSourceNode(ZToGraphMapping mapping, DirectedGraph network, Node n) {
+        Node targetNode = getOriginalNode(network, n);
+        Vector3 position = computePositionForOriginalNode(mapping, targetNode);
+        return position.add(new Vector3(0, 0, VisualizationOptionManager.getFloorDistance() * 0.5));
+    }
+
+    private static Node getOriginalNode(DirectedGraph network, Node n) {
+        return network.outgoingEdges(n).get(0).end();        
+    }
+
+    /**
+     * Computes the position for nodes from the original network.
+     *
+     * @param mapping a mapping that contains information about node {@code n}
+     * @param n a node in the {@code mapping}
+     * @return the position of the node
+     */
+    private static Vector3 computePositionForOriginalNode(ZToGraphMapping mapping, Node n) {
+        NodeRectangle rect = mapping.getNodeRectangles().get(n);
+        final double zs = mapping.getNodeFloorMapping().get(n) * VisualizationOptionManager.getFloorDistance();
+        return new Vector3(rect.getCenterX(), rect.getCenterY(), zs);
+    }
+    
     /**
      * Returns a mapping that assigns nodes to rectangles in the real world.
      *
@@ -142,7 +181,9 @@ public class GraphVisualizationResults extends FlowVisualization implements Grap
      */
     @Override
     public int getLayer(Node node) {
-        return nodeToFloorMapping.get(node);
+        return nodeToFloorMapping.isDefinedFor(node)
+                ? nodeToFloorMapping.get(node)
+                : nodeToFloorMapping.get(getOriginalNode(getNetwork(), node));
     }
 
     @Override
@@ -169,7 +210,9 @@ public class GraphVisualizationResults extends FlowVisualization implements Grap
      */
     @Override
     public boolean isDeletedSource(Node node) {
-        return isDeletedSourceNode.get(node);
+        return isDeletedSourceNode.isDefinedFor(node)
+                ? isDeletedSourceNode.get(node)
+                : isDeletedSourceNode.get(getOriginalNode(getNetwork(), node));
     }
 
     private void setFlowOverTime(PathBasedFlowOverTime flowOverTime) {
