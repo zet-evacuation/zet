@@ -38,7 +38,7 @@ import org.zet.cellularautomaton.Room;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GLCellularAutomatonModel {
+public class CellularAutomatonVisualizationModelContainer {
 
     private final static String ILLEGAL_NULL_OBJECT_ERROR = "Erroneous builder returned null.";
     private final GLRootModel cellularAutomaton;
@@ -46,7 +46,7 @@ public class GLCellularAutomatonModel {
     private final Map<Room, GLRoomModel> roomModelMap;
     private final Map<EvacCellInterface, GLCellModel> cellModelMap;
 
-    private GLCellularAutomatonModel(Builder builder) {
+    private CellularAutomatonVisualizationModelContainer(Builder builder) {
         this.cellularAutomaton = Objects.requireNonNull(builder.cellularAutomatonModel, ILLEGAL_NULL_OBJECT_ERROR);
         this.floors = Objects.requireNonNull(builder.floors, ILLEGAL_NULL_OBJECT_ERROR);
         this.roomModelMap = Objects.requireNonNull(builder.roomMap, ILLEGAL_NULL_OBJECT_ERROR);
@@ -136,7 +136,7 @@ public class GLCellularAutomatonModel {
     }
 
     /**
-     * Creates instances of the {@link GLCellularAutomatonModel}. The builder is not thread safe.
+     * Creates instances of the {@link CellularAutomatonVisualizationModelContainer}. The builder is not thread safe.
      */
     public static class Builder {
 
@@ -187,13 +187,13 @@ public class GLCellularAutomatonModel {
          *
          * @return the container object instance for all the built visualization model instances
          */
-        public GLCellularAutomatonModel build() {
+        public CellularAutomatonVisualizationModelContainer build() {
             this.floors = buildFloorModels();
             this.roomMap = createRoomMapping();
             this.cellMap = buildCells(roomMap.keySet());
             this.cellularAutomatonModel = new GLRootModel(visualizationModel, cellMap.values());
 
-            return new GLCellularAutomatonModel(this);
+            return new CellularAutomatonVisualizationModelContainer(this);
         }
 
         private List<GLFloorModel> buildFloorModels() {

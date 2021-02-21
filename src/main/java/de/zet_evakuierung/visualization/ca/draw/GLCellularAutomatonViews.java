@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.model.GLRootModel;
-import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
+import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
 import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
+import de.zet_evakuierung.visualization.ca.model.GLRootModel;
 import org.zet.cellularautomaton.DoorCell;
 import org.zet.cellularautomaton.EvacCell;
 import org.zet.cellularautomaton.EvacCellInterface;
@@ -70,7 +70,7 @@ public class GLCellularAutomatonViews {
     }
 
     public static GLCellularAutomatonViews createInstance(CellularAutomatonVisualizationModel visualizationModel,
-            MultiFloorEvacuationCellularAutomaton cellularAutomaton, GLCellularAutomatonModel cellularAutomatonModel) {
+            MultiFloorEvacuationCellularAutomaton cellularAutomaton, CellularAutomatonVisualizationModelContainer cellularAutomatonModel) {
         GLCellularAutomatonViewFactory factory = new GLCellularAutomatonViewFactory(visualizationModel,
                 cellularAutomaton, cellularAutomatonModel);
         factory.createViews();
@@ -88,14 +88,14 @@ public class GLCellularAutomatonViews {
 
         private final CellularAutomatonVisualizationModel visualizationModel;
         private final MultiFloorEvacuationCellularAutomaton cellularAutomaton;
-        private final GLCellularAutomatonModel cellularAutomatonModel;
+        private final CellularAutomatonVisualizationModelContainer cellularAutomatonModel;
         private Map<GLFloorModel, GLCAFloor> floorViews;
         private Map<GLCellModel, GLCell> cellViews;
         private GLCA rootView;
 
         GLCellularAutomatonViewFactory(CellularAutomatonVisualizationModel visualizationModel,
                 MultiFloorEvacuationCellularAutomaton cellularAutomaton,
-                GLCellularAutomatonModel cellularAutomatonModel) {
+                CellularAutomatonVisualizationModelContainer cellularAutomatonModel) {
             this.visualizationModel = visualizationModel;
             this.cellularAutomaton = cellularAutomaton;
             this.cellularAutomatonModel = cellularAutomatonModel;

@@ -33,9 +33,9 @@ import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
-import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import de.zet_evakuierung.visualization.network.draw.GLGraph;
 import de.zet_evakuierung.visualization.network.draw.GLGraphViews;
@@ -240,7 +240,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
             if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
                 throw new IllegalStateException("Only multi floor automaton supported");
             }
-            GLCellularAutomatonModel caModel = new GLCellularAutomatonModel.Builder(
+            CellularAutomatonVisualizationModelContainer caModel = new CellularAutomatonVisualizationModelContainer.Builder(
                     (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
                     .withVisualizationModel(cellularAutomatonVisualizationModel)
                     .build();
@@ -326,7 +326,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
             throw new IllegalStateException("Only multi floor automaton supported");
         }
-        GLCellularAutomatonModel caModel = new GLCellularAutomatonModel.Builder(
+        CellularAutomatonVisualizationModelContainer caModel = new CellularAutomatonVisualizationModelContainer.Builder(
                 (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
                 .withVisualizationModel(cellularAutomatonVisualizationModel)
                 .build();

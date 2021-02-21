@@ -51,7 +51,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     /**
      * Gives access to the model objects used by visualization views.
      */
-    private final GLCellularAutomatonModel cellularAutomatonModel;
+    private final CellularAutomatonVisualizationModelContainer cellularAutomatonModel;
     /**
      * Gives access to all view objects drawing the OpenGL scene.
      */
@@ -66,7 +66,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     private EvacuationSimulationResults evacuationResults;
 
     public GLCellularAutomatonControl(CellularAutomatonVisualizationModel visualizationModel,
-            GLCellularAutomatonModel cellularAutomatonModel, GLCellularAutomatonViews views) {
+            CellularAutomatonVisualizationModelContainer cellularAutomatonModel, GLCellularAutomatonViews views) {
         super(visualizationModel);
 
         this.cellularAutomatonModel = cellularAutomatonModel;

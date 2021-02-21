@@ -63,9 +63,9 @@ public class GLCellularAutomatonModelTest {
     @Test
     public void builderInitialization() {
         assertThrows(NullPointerException.class,
-                () -> new GLCellularAutomatonModel.Builder(null, mock(CellularAutomatonVisualizationResults.class)));
+                () -> new CellularAutomatonVisualizationModelContainer.Builder(null, mock(CellularAutomatonVisualizationResults.class)));
         assertThrows(NullPointerException.class,
-                () -> new GLCellularAutomatonModel.Builder(mock(MultiFloorEvacuationCellularAutomaton.class), null));
+                () -> new CellularAutomatonVisualizationModelContainer.Builder(mock(MultiFloorEvacuationCellularAutomaton.class), null));
     }
 
     /**
@@ -78,7 +78,7 @@ public class GLCellularAutomatonModelTest {
 
         setUpFloors(baseMocks);
 
-        GLCellularAutomatonModel fixture = buildFixture(baseMocks);
+        CellularAutomatonVisualizationModelContainer fixture = buildFixture(baseMocks);
 
         verify(baseMocks.cellularAutomaton, atLeastOnce()).getFloors();
         verifyNoMoreInteractions(baseMocks.cellularAutomaton);
@@ -95,7 +95,7 @@ public class GLCellularAutomatonModelTest {
         List<String> floors = setUpFloors(baseMocks, "floor1", "another floor", "last floor");
         setUpRooms(baseMocks, floors);
 
-        GLCellularAutomatonModel fixture = buildFixture(baseMocks);
+        CellularAutomatonVisualizationModelContainer fixture = buildFixture(baseMocks);
 
         verify(baseMocks.cellularAutomaton, atLeastOnce()).getFloors();
         for (int i = 0; i < floors.size(); ++i) {
@@ -137,7 +137,7 @@ public class GLCellularAutomatonModelTest {
         visualizationModel.setDefaultFloorHeight(customFloorHeight);
         visualizationModel.scaling = customScaling;
 
-        GLCellularAutomatonModel fixture = new GLCellularAutomatonModel.Builder(
+        CellularAutomatonVisualizationModelContainer fixture = new CellularAutomatonVisualizationModelContainer.Builder(
                 baseMocks.cellularAutomaton, baseMocks.visualizationResults)
                 .withVisualizationModel(visualizationModel)
                 .build();
@@ -158,7 +158,7 @@ public class GLCellularAutomatonModelTest {
         List<String> floors = setUpFloors(baseMocks, "one room", "two rooms");
         List<Room> rooms = setUpRooms(baseMocks, floors, 1, 2);
 
-        GLCellularAutomatonModel fixture = buildFixture(baseMocks);
+        CellularAutomatonVisualizationModelContainer fixture = buildFixture(baseMocks);
 
         verify(baseMocks.cellularAutomaton, atLeastOnce()).getFloors();
         for (int i = 0; i < floors.size(); ++i) {
@@ -184,7 +184,7 @@ public class GLCellularAutomatonModelTest {
         Room room = setUpRooms(baseMocks, floors, 1).get(0);
         List<EvacCell> cells = setUpCells(baseMocks, room, 3);
 
-        GLCellularAutomatonModel fixture = buildFixture(baseMocks);
+        CellularAutomatonVisualizationModelContainer fixture = buildFixture(baseMocks);
 
         verify(baseMocks.cellularAutomaton, atLeastOnce()).getFloors();
         verify(baseMocks.cellularAutomaton, atLeastOnce()).getRoomsOnFloor(0);
@@ -302,8 +302,8 @@ public class GLCellularAutomatonModelTest {
      * @param baseMocks the base mocks
      * @return the built instance
      */
-    private static GLCellularAutomatonModel buildFixture(BuilderBaseMocks baseMocks) {
-        return new GLCellularAutomatonModel.Builder(
+    private static CellularAutomatonVisualizationModelContainer buildFixture(BuilderBaseMocks baseMocks) {
+        return new CellularAutomatonVisualizationModelContainer.Builder(
                 baseMocks.cellularAutomaton, baseMocks.visualizationResults).build();
     }
 
@@ -315,7 +315,7 @@ public class GLCellularAutomatonModelTest {
      * @param roomCount the expected number of rooms
      * @param cellCount the expected number of cells
      */
-    private static void assertCounts(GLCellularAutomatonModel fixture, int floorCount, int roomCount, int cellCount) {
+    private static void assertCounts(CellularAutomatonVisualizationModelContainer fixture, int floorCount, int roomCount, int cellCount) {
         assertThat(fixture.getFloorCount(), is(equalTo(floorCount)));
         assertThat(fixture.floors(), is(iterableWithSize(floorCount)));
         assertThat(fixture.rooms(), is(iterableWithSize(roomCount)));

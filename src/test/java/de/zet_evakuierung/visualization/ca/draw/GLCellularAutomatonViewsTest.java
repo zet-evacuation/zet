@@ -16,6 +16,7 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
+import static de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder.hierarchyMocks;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -34,10 +35,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
+import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonModel;
+import de.zet_evakuierung.visualization.ca.model.GLFloorModel;
 import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import ds.PropertyContainer;
 import org.junit.BeforeClass;
@@ -51,10 +53,6 @@ import org.zet.cellularautomaton.RoomCell;
 import org.zet.cellularautomaton.SaveCell;
 import org.zet.cellularautomaton.StairCell;
 import org.zet.cellularautomaton.TeleportCell;
-
-import static de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder.hierarchyMocks;
-
-import de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder;
 
 /**
  *
@@ -305,12 +303,12 @@ public class GLCellularAutomatonViewsTest {
 
         final CellularAutomatonVisualizationModel visualizationModel;
         final MultiFloorEvacuationCellularAutomaton cellularAutomaton;
-        final GLCellularAutomatonModel cellularAutomatonModel;
+        final CellularAutomatonVisualizationModelContainer cellularAutomatonModel;
 
         public FactoryBaseMocks() {
             visualizationModel = mock(CellularAutomatonVisualizationModel.class);
             cellularAutomaton = mock(MultiFloorEvacuationCellularAutomaton.class);
-            cellularAutomatonModel = mock(GLCellularAutomatonModel.class);
+            cellularAutomatonModel = mock(CellularAutomatonVisualizationModelContainer.class);
         }
 
         /**
