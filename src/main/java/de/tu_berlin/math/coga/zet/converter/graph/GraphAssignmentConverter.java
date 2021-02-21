@@ -57,7 +57,7 @@ public class GraphAssignmentConverter extends AbstractAlgorithm<ConcreteAssignme
      * @param model The network flow model to which the converted assignment has to be written
      */
     private NetworkFlowModel convertConcreteAssignment(ConcreteAssignment assignment) {
-        NetworkFlowModel.AssignmentBuilder modelBuilder = new NetworkFlowModel.AssignmentBuilder(model); // this resets the assignment
+        NetworkFlowModel.AccurateAssignmentBuilder modelBuilder = new NetworkFlowModel.AccurateAssignmentBuilder(model); // this resets the assignment
         ZToGraphMapping mapping = model.getZToGraphMapping();
         ZToGraphRasterContainer raster = mapping.getRaster();
 

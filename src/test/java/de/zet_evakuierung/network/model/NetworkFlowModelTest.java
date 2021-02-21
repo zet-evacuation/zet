@@ -23,14 +23,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThrows;
+
+import java.util.List;
+import java.util.function.Function;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
-import de.zet_evakuierung.network.model.NetworkFlowModel.AssignmentBuilder;
+import de.zet_evakuierung.network.model.NetworkFlowModel.AccurateAssignmentBuilder;
+import de.zet_evakuierung.network.model.NetworkFlowModel.AverageAssignmentBuilder;
 import de.zet_evakuierung.network.model.NetworkFlowModel.BasicBuilder;
+import de.zet_evakuierung.network.model.NetworkFlowModel.ImmediateAssignmentBuilder;
 import org.zetool.common.util.Level;
 import org.zetool.container.mapping.IdentifiableIntegerMapping;
 import org.zetool.graph.Edge;
@@ -53,7 +59,7 @@ public class NetworkFlowModelTest {
     private static final NetworkFlowModel EMPTY_MODEL = new BasicBuilder(EMPTY_RASTER).build();
 
     /**
-     * Basic instance containing source, sink, and intermediate node to be used as input for {@link AssignmentBuilder}.
+     * Basic instance containing source, sink, and intermediate node used as {@link AccurateAssignmentBuilder} input.
      */
     private static final NetworkFlowModel SIMPLE_BASIC_MODEL;
     /**
@@ -399,11 +405,102 @@ public class NetworkFlowModelTest {
         assertThat(model.graph().edgeCount(), is(equalTo(5)));
     }
 
+    /**
+     * When starting with clean builder without edges, no failure in calculating edge size must happen.
+     */
     @Test
-    public void assignmentRemoved() {
+    public void regressionNoEdgesWithSinks() {
+        BasicBuilder.fromNodes(SIMPLE_BASIC_MODEL).build();
+    }
+
+    @Test
+    public void edgesCleared() {
+        NetworkFlowModel model = BasicBuilder.fromNodes(SIMPLE_BASIC_MODEL).build();
+        assertThat(model.getSupersink().id(), is(equalTo(0)));
+        assertThat(model.graph().nodeCount(), is(equalTo(4)));
+        assertThat(model.graph().edgeCount(), is(equalTo(0)));
+    }
+
+    @Test
+    public void assignmentEmptyForModelNodes() {
+        IdentifiableIntegerMapping<Node> assignment = SIMPLE_BASIC_MODEL.currentAssignment();
+
+        assertThat(assignment.get(SIMPLE_BASIC_MODEL.getSupersink()), is(equalTo(0)));
+        assertThat(assignment.get(SOURCE), is(equalTo(0)));
+        assertThat(assignment.get(INTERMEDIATE_NODE), is(equalTo(0)));
+        assertThat(assignment.get(SINK), is(equalTo(0)));
+    }
+
+    @Test
+    public void immediateAssignmentSet() {
+        ImmediateAssignmentBuilder fixture = new ImmediateAssignmentBuilder(SIMPLE_BASIC_MODEL);
+
+        fixture.setNodeAssignment(SOURCE, 3);
+
+        NetworkFlowModel model = fixture.build();
+
+        assertImmediateSingleAssignment(model, 3);
+    }
+
+    @Test
+    public void immediateAssignmentSetMultiple() {
+        ImmediateAssignmentBuilder fixture = new ImmediateAssignmentBuilder(SIMPLE_BASIC_MODEL);
+
+        fixture.setNodeAssignment(SOURCE, 3);
+        fixture.setNodeAssignment(SOURCE, 2);
+
+        NetworkFlowModel model = fixture.build();
+
+        assertImmediateSingleAssignment(model, 2);
+    }
+
+    @Test
+    public void immediateAssignmentSetAndIncrease() {
+        ImmediateAssignmentBuilder fixture = new ImmediateAssignmentBuilder(SIMPLE_BASIC_MODEL);
+
+        fixture.setNodeAssignment(SOURCE, 2);
+        fixture.increaseNodeAssignment(SOURCE);
+
+        NetworkFlowModel model = fixture.build();
+
+        assertImmediateSingleAssignment(model, 3);
+    }
+
+    @Test
+    public void immediateAssignmentOverflow() {
+        ImmediateAssignmentBuilder fixture = new ImmediateAssignmentBuilder(SIMPLE_BASIC_MODEL);
+
+        fixture.setNodeAssignment(SOURCE, Integer.MAX_VALUE);
+        assertThrows(ArithmeticException.class, () -> fixture.increaseNodeAssignment(SOURCE));
+    }
+
+    /**
+     * Asserts that the simple model with a single assignment is valid. The {@link NetworkFlowModel model} is expected
+     * to contain five nodes and six edges, e.g. it consists of the {@link #SIMPLE_BASIC_MODEL simple model} and a
+     * single assignment node.
+     *
+     * @param model the model instance
+     * @param expectedAssignment the expected value
+     */
+    private void assertImmediateSingleAssignment(NetworkFlowModel model, int expectedAssignment) {
+        // Check network has not been changed from SIMPLE_BASIC_MODEL
+        assertThat(model.graph().nodeCount(), is(equalTo(4)));
+        assertThat(model.graph().edgeCount(), is(equalTo(5)));
+
+        // Check assignment
+        assertThat(model.currentAssignment().get(SOURCE), is(equalTo(expectedAssignment)));
+        assertThat(model.currentAssignment().get(SIMPLE_BASIC_MODEL.getSupersink()), is(equalTo(-expectedAssignment)));
+
+        // Assert other parts of the network remain unchanged
+        assertThat(model.currentAssignment().get(INTERMEDIATE_NODE), is(equalTo(0)));
+        assertThat(model.currentAssignment().get(SINK), is(equalTo(0)));
+    }
+
+    @Test
+    public void accurateAssignmentRemoved() {
         // Initialize a model with assignment to start with
-        AssignmentBuilder builder = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
-        builder.setNodeAssignment(SOURCE, 3);
+        AccurateAssignmentBuilder builder = new AccurateAssignmentBuilder(SIMPLE_BASIC_MODEL);
+        builder.increaseNodeAssignment(SOURCE, 3);
         NetworkFlowModel modelWithAssignment = builder.build();
 
         // A virtual node and edge is created
@@ -419,57 +516,8 @@ public class NetworkFlowModelTest {
     }
 
     @Test
-    public void edgesCleared() {
-        NetworkFlowModel model = BasicBuilder.fromNodes(SIMPLE_BASIC_MODEL).build();
-        assertThat(model.getSupersink().id(), is(equalTo(0)));
-        assertThat(model.graph().nodeCount(), is(equalTo(4)));
-        assertThat(model.graph().edgeCount(), is(equalTo(0)));
-    }
-
-    /**
-     * When starting with clean builder without edges, no failure in calculating edge size must happen.
-     */
-    @Test
-    public void regressionNoEdgesWithSinks() {
-        BasicBuilder.fromNodes(SIMPLE_BASIC_MODEL).build();
-    }
-
-    @Test
-    public void assignmentEmptyForModelNodes() {
-        IdentifiableIntegerMapping<Node> assignment = SIMPLE_BASIC_MODEL.currentAssignment();
-
-        assertThat(assignment.get(SIMPLE_BASIC_MODEL.getSupersink()), is(equalTo(0)));
-        assertThat(assignment.get(SOURCE), is(equalTo(0)));
-        assertThat(assignment.get(INTERMEDIATE_NODE), is(equalTo(0)));
-        assertThat(assignment.get(SINK), is(equalTo(0)));
-    }
-
-    @Test
-    public void assignmentSet() {
-        AssignmentBuilder fixture = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
-
-        fixture.setNodeAssignment(SOURCE, 3);
-
-        NetworkFlowModel model = fixture.build();
-
-        assertSingleAssignment(model, 3, 0);
-    }
-
-    @Test
-    public void assignmentSetMultiple() {
-        AssignmentBuilder fixture = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
-
-        fixture.setNodeAssignment(SOURCE, 3);
-        fixture.setNodeAssignment(SOURCE, 2);
-
-        NetworkFlowModel model = fixture.build();
-
-        assertSingleAssignment(model, 2, 0);
-    }
-
-    @Test
-    public void assignmentIncreaseOnly() {
-        AssignmentBuilder fixture = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
+    public void accurateAssignmentIncreaseOnce() {
+        AccurateAssignmentBuilder fixture = new AccurateAssignmentBuilder(SIMPLE_BASIC_MODEL);
 
         fixture.increaseNodeAssignment(SOURCE);
 
@@ -479,26 +527,59 @@ public class NetworkFlowModelTest {
     }
 
     @Test
-    public void assignmentSetAndIncrease() {
-        AssignmentBuilder fixture = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
-
-        fixture.setNodeAssignment(SOURCE, 2);
-        fixture.increaseNodeAssignment(SOURCE);
-
-        NetworkFlowModel model = fixture.build();
-
-        assertSingleAssignment(model, 3, 0);
+    public void accurateAssignmentIncreaseTwice() {
+        testAccurateIncreaseTwice(AccurateAssignmentBuilder::new, 2, List.of(1, 2), List.of(0, 0));
     }
 
     @Test
-    public void assignmentWithTransitTime() {
-        AssignmentBuilder fixture = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
+    public void averageAssignmentIncreaseTwice() {
+        testAccurateIncreaseTwice(AverageAssignmentBuilder::new, 1, List.of(3), List.of(0));
+    }
 
-        fixture.increaseNodeAssignment(SOURCE, 3.5);
+    private void testAccurateIncreaseTwice(Function<NetworkFlowModel, AccurateAssignmentBuilder> fixtureFactory,
+            int expectedVirtualSources, List<Integer> expectedAssignments, List<Integer> expectedTransitTimes) {
+        AccurateAssignmentBuilder fixture = fixtureFactory.apply(SIMPLE_BASIC_MODEL);
+
+        fixture.increaseNodeAssignment(SOURCE);
+        fixture.increaseNodeAssignment(SOURCE, 2);
 
         NetworkFlowModel model = fixture.build();
 
-        assertSingleAssignment(model, 1, 4);
+        assertAccurateAssignment(model, expectedVirtualSources, expectedAssignments, expectedTransitTimes);
+    }
+
+    @Test
+    public void accurateAssignmentWithTransitTime() {
+        testAccurateTransitTime(AccurateAssignmentBuilder::new, List.of(3.5), 1, List.of(1), List.of(4));
+    }
+
+    @Test
+    public void accurateAssignmentWithTransitTimeTwice() {
+        testAccurateTransitTime(AccurateAssignmentBuilder::new, List.of(3.5, 5.4), 2, List.of(1, 1), List.of(4, 5));
+    }
+
+    @Test
+    public void averageAssignmentWithTransitTimeTwice() {
+        testAccurateTransitTime(AverageAssignmentBuilder::new, List.of(1.0, 2.0, 3.0), 1, List.of(3), List.of(2));
+    }
+
+    private void testAccurateTransitTime(Function<NetworkFlowModel, AccurateAssignmentBuilder> fixtureFactory,
+            List<Double> transitTimes, int expectedVirtualSources, List<Integer> expectedAssignments,
+            List<Integer> expectedTransitTimes) {
+        AccurateAssignmentBuilder fixture = fixtureFactory.apply(SIMPLE_BASIC_MODEL);
+
+        for (double transitTime : transitTimes) {
+            fixture.increaseNodeAssignment(SOURCE, transitTime);
+        }
+
+        NetworkFlowModel model = fixture.build();
+
+        assertAccurateAssignment(model, expectedVirtualSources, expectedAssignments, expectedTransitTimes);
+    }
+
+    private void assertSingleAssignment(NetworkFlowModel model, int expectedAssignment,
+            int expectedTransitTime) {
+        assertAccurateAssignment(model, 1, List.of(expectedAssignment), List.of(expectedTransitTime));
     }
 
     /**
@@ -510,60 +591,49 @@ public class NetworkFlowModelTest {
      * @param expectedAssignment the expected value
      * @param expectedTransitTime the expected rounded transit time
      */
-    private void assertSingleAssignment(NetworkFlowModel model, int expectedAssignment, int expectedTransitTime) {
+    private void assertAccurateAssignment(NetworkFlowModel model, int expectecVirtualSources,
+            List<Integer> expectedAssignments, List<Integer> expectedTransitTimes) {
+        assertThat(expectedAssignments.size(), is(equalTo(expectecVirtualSources)));
+        assertThat(expectedTransitTimes.size(), is(equalTo(expectecVirtualSources)));
+
         // Check virtual source node has been added
-        assertThat(model.graph().nodeCount(), is(equalTo(5)));
-        assertThat(model.graph().edgeCount(), is(equalTo(6)));
+        assertThat(model.graph().nodeCount(), is(equalTo(4 + expectecVirtualSources)));
+        assertThat(model.graph().edgeCount(), is(equalTo(5 + expectecVirtualSources)));
 
         // Check assignment
-        Node actualSource = model.getNode(4);
-        assertThat(model.currentAssignment().get(actualSource), is(equalTo(expectedAssignment)));
+        for (int i = 0; i < expectedAssignments.size(); ++i) {
+            Node actualSource = model.getNode(4 + i);
+            int expectedAssignment = expectedAssignments.get(i);
+            assertThat(model.currentAssignment().get(actualSource), is(equalTo(expectedAssignment)));
 
-        // Check edge properties
-        Edge sourceEdge = model.getEdge(5);
-        assertThat(model.getEdgeCapacity(sourceEdge), is(equalTo(Integer.MAX_VALUE)));
-        assertThat(model.getTransitTime(sourceEdge), is(equalTo(expectedTransitTime)));
+            // Check edge properties
+            Edge sourceEdge = model.getEdge(5 + i);
+            int expectedTransitTime = expectedTransitTimes.get(i);
+            assertThat(model.getEdgeCapacity(sourceEdge), is(equalTo(expectedAssignment)));
+            assertThat(model.getTransitTime(sourceEdge), is(equalTo(expectedTransitTime)));
+        }
+        int totalAssignment = expectedAssignments.stream().mapToInt(Integer::intValue).sum();
+        assertThat(model.currentAssignment().get(SIMPLE_BASIC_MODEL.getSupersink()), is(equalTo(-totalAssignment)));
 
         // Assert other parts of the network remain unchanged
-        assertSimpleModel();
-        assertSimpleModelAssignment(model.currentAssignment());
-    }
-
-    /**
-     * Asserts the properties of the simple model.
-     */
-    private void assertSimpleModel() {
-        assertThat(SIMPLE_BASIC_MODEL.graph().nodeCount(), is(equalTo(4)));
-        assertThat(SIMPLE_BASIC_MODEL.graph().edgeCount(), is(equalTo(5)));
-    }
-
-    /**
-     * Asserts that no actual supply is defined for the model nodes.
-     *
-     * @param assignment the final assignment
-     */
-    private void assertSimpleModelAssignment(IdentifiableIntegerMapping<Node> assignment) {
-//        assertThat(assignment.get(SIMPLE_MODEL.getSupersink()), is(equalTo(0)));
-        assertThat(assignment.get(SOURCE), is(equalTo(0)));
-        assertThat(assignment.get(INTERMEDIATE_NODE), is(equalTo(0)));
-        assertThat(assignment.get(SINK), is(equalTo(0)));
+        assertThat(model.currentAssignment().get(SOURCE), is(equalTo(0)));
+        assertThat(model.currentAssignment().get(INTERMEDIATE_NODE), is(equalTo(0)));
+        assertThat(model.currentAssignment().get(SINK), is(equalTo(0)));
     }
 
     @Test
     public void assignmentClearedForSources() {
-        AssignmentBuilder firstBuilder = new AssignmentBuilder(SIMPLE_BASIC_MODEL);
+        AccurateAssignmentBuilder firstBuilder = new AccurateAssignmentBuilder(SIMPLE_BASIC_MODEL);
 
-        firstBuilder.setNodeAssignment(SOURCE, 2);
+        firstBuilder.increaseNodeAssignment(SOURCE, 2);
 
         NetworkFlowModel modelWithAssignment = firstBuilder.build();
 
-        AssignmentBuilder secondBuilder = new AssignmentBuilder(modelWithAssignment);
+        AccurateAssignmentBuilder secondBuilder = new AccurateAssignmentBuilder(modelWithAssignment);
 
         NetworkFlowModel modelWithoutAssignment = secondBuilder.build();
 
-        assertThat(modelWithoutAssignment.graph().nodeCount(), is(equalTo(4)));
-        assertThat(modelWithoutAssignment.graph().edgeCount(), is(equalTo(5)));
-
-//        assertSingleAssignment(modelWithoutAssignment, 0, 0);
+        // The cleared graph looks as an empty network without additional nodes, as for the immediate builder
+        assertImmediateSingleAssignment(modelWithoutAssignment, 0);
     }
 }

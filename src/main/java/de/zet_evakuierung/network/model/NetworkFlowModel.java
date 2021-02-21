@@ -824,129 +824,43 @@ public class NetworkFlowModel implements Iterable<Node> {
     }
 
     /**
-     *
+     * Abstract base class for assignment builders. Implementing classes must add logic to actually increase the
+     * assignment.
      */
-    public static class AssignmentBuilder extends AbstractNetworkFlowModelBuilder {
+    private static abstract class AssignmentBuilder extends AbstractNetworkFlowModelBuilder {
 
-        /**
-         * Nodes that are created to connect assignment nodes to model source.
-         */
-        private final IdentifiableObjectMapping<Node, List<Node>> virtualNodes = new IdentifiableObjectMapping<>(sources);
-        /**
-         * Assignments are offset based, and all new assignments are added to additional nodes.
-         */
-        private final IdentifiableIntegerMapping<Node> currentAssignment;
-        /**
-         * Wether the assigned units are assigned to sources directly or receive their own start nodes.
-         */
-        private final AssignmentStartTimes assignmentStartTimes;
         /**
          * The mapping stored in the input model.
          */
         private final ZToGraphMapping mapping;
 
         /**
+         * Assignments are offset based, and all new assignments are added to additional nodes.
+         */
+        protected IdentifiableIntegerMapping<Node> currentAssignment;
+
+        /**
          * Creates an instance of the network flow model builder based on an existing instance to update the node
          * assignment. All supplies are resetted and all {@link NetworkFlowModel#getVirtualSources() virtual sources}
          * are removed
          *
-         * The assignment builder is initalized with {@link AssignmentStartTimes#Accurate accurate} start times.
-         *
          * @param model existing model instance
          */
-        public AssignmentBuilder(NetworkFlowModel model) {
-            this(model, AssignmentStartTimes.Accurate);
-        }
-
-        AssignmentBuilder(NetworkFlowModel model, AssignmentStartTimes assignmentStartTimes) {
+        protected AssignmentBuilder(NetworkFlowModel model) {
             super(model, true);
             currentAssignment = new IdentifiableIntegerMapping<>(model.numberOfNodes());
             this.mapping = model.getZToGraphMapping();
-            this.assignmentStartTimes = assignmentStartTimes;
         }
 
         /**
-         * Sets the assignment for a model node. If multiple transit times have been used already to define an
-         * assignment for the node, an exception is thrown. If a single transit time is used, it is kept. If no
-         * assignment for the node has been set, 0 transit time is used.
+         * Throws an exception if the node is not a source.
          *
-         * @param modelSource the model source node for which the assignment is set
-         * @param count the value of the assignment
+         * @param node the node
          */
-        public void setNodeAssignment(Node modelSource, int count) {
-            Node virtualSource = getOrCreateVirtualSource(modelSource);
-            int diff = count - (currentAssignment.isDefinedFor(virtualSource) ? currentAssignment.get(virtualSource) : 0);
-            currentAssignment.set(virtualSource, count);
-            currentAssignment.decrease(supersink, diff);
-        }
-        
-        void increaseNodeAssignment(Node node) {
-            Node virtualSNode = getOrCreateVirtualSource(node);
-            currentAssignment.increase(virtualSNode, 1);
-            currentAssignment.decrease(supersink, 1);
-        }
-
-        public Node increaseNodeAssignment(Node node, double transitTime) {
-            return increaseNodeAssignment(node, 1, transitTime);
-        }
-
-        private Node increaseNodeAssignment(Node node, int amount, double transitTime) {
-            Objects.requireNonNull(node, "Node must not be null!");
+        protected void checkValidForAssignment(Node node) {
             if (!sources.contains(node)) {
                 throw new IllegalArgumentException("Assignment can only be defined for sources.");
             }
-            currentAssignment.decrease(supersink, amount);
-            if (assignmentStartTimes == AssignmentStartTimes.Accurate) {
-                Node virtualSource = createVirtualSource(node);
-                currentAssignment.increase(virtualSource, amount);
-                Edge virtualEdge = network.outgoingEdges(virtualSource).get(0);
-                exactTransitTimes.set(virtualEdge, transitTime);
-                return virtualSource;
-            } else {
-                Node virtualSource = getOrCreateVirtualSource(node);
-                currentAssignment.increase(virtualSource, amount);
-                return virtualSource;
-            }
-        }
-
-        /**
-         * Returns the virtual node for a source. If the virtual node does not exist, it is created. If no
-         * {@link AssignmentStartTimes#Accurate accurate start times} are required, existing instance is returned..
-         *
-         * @param source the source
-         * @return a
-         */
-        private Node getOrCreateVirtualSource(Node source) {
-            if (virtualNodes.isDefinedFor(source)) {
-                List<Node> nodes = virtualNodes.get(source);
-                if (nodes.size() != 1) {
-                    throw new IllegalArgumentException("Only supported for single nodes!");
-                }
-                return nodes.get(0);
-            } else {
-                return createVirtualSource(source);
-            }
-        }
-
-        private Node createVirtualSource(Node source) {
-            // TODO: move to abstract class and use the same in NetworkFlowModelBuilder
-            Node node = new Node(network.nodeCount());
-            network.setNode(node);
-            addVirtualNode(source, node);
-            nodeCapacities.set(node, 0);
-
-            Edge edge = new Edge(network.edgeCount(), node, source);
-            network.setEdge(edge);
-            edgeCapacities.set(edge, Integer.MAX_VALUE);
-            exactTransitTimes.set(edge, 0);
-            return node;
-        }
-
-        private void addVirtualNode(Node source, Node node) {
-            if (!virtualNodes.isDefinedFor(source)) {
-                virtualNodes.set(source, new LinkedList<>());
-            }
-            virtualNodes.get(source).add(node);
         }
 
         @Override
@@ -987,29 +901,268 @@ public class NetworkFlowModel implements Iterable<Node> {
         }
 
         @Override
+        ZToGraphMapping getZToGraphMapping() {
+            return mapping;
+        }
+    }
+
+    /**
+     * Assignment builder that can place an assignment directly in {@link #getSources() source nodes}. It is not ossible
+     * to assign start times to individual flow units.
+     */
+    public static class ImmediateAssignmentBuilder extends AssignmentBuilder {
+
+        /**
+         * Initializes the assignment builder with an existing instance to create an assignment. All supplies are
+         * resetted and all {@link NetworkFlowModel#getVirtualSources() virtual sources} are removed.
+         *
+         * @param model existing model instance
+         */
+        public ImmediateAssignmentBuilder(NetworkFlowModel model) {
+            super(model);
+        }
+
+        /**
+         * Sets the assignment for a {@link #getSources() source node}. It is possible to set the value to higher and
+         * lower amounts, i.e. to decrease the assignment at the source.
+         *
+         * @param modelSource the model source node for which the assignment is set
+         * @param amount the value of the assignment
+         */
+        public void setNodeAssignment(Node modelSource, int amount) {
+            int diff = amount - (currentAssignment.isDefinedFor(modelSource)
+                    ? currentAssignment.get(modelSource)
+                    : 0);
+            increaseNodeAssignment(modelSource, diff);
+        }
+
+        /**
+         * Increases the assignment for a given node. The assignment is increased by a single flow unit.
+         *
+         * @param source the source node
+         */
+        public void increaseNodeAssignment(Node source) {
+            increaseNodeAssignment(source, 1);
+        }
+
+        /**
+         * Increases the assignment for a given node. The increased amount can be negative, in this case it must be
+         * smaller than the current capacity.
+         *
+         * @param source the source node
+         * @param amount the number of flow units by which the assignment is increased, can be negative
+         */
+        public void increaseNodeAssignment(Node source, int amount) {
+            Objects.requireNonNull(source, "Node must not be null!");
+            checkValidForAssignment(source);
+            checkValidAssignment(source, amount);
+
+            currentAssignment.decrease(supersink, amount);
+            currentAssignment.increase(source, amount);
+            nodeCapacities.increase(source, amount);
+        }
+
+        private void checkValidAssignment(Node source, int amount) {
+            if (amount < 0 && currentAssignment.get(source) < -amount) {
+                throw new IllegalArgumentException("Node assignment must not be negative");
+            }
+        }
+
+        @Override
+        protected List<Node> getVirtualSources() {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Assignment builder supporting individual start times for flow units. The flow units are placed in virtual
+     * sources.
+     */
+    public static class AccurateAssignmentBuilder extends AssignmentBuilder {
+
+        /**
+         * Nodes that are created to connect assignment nodes to model source.
+         */
+        protected final IdentifiableObjectMapping<Node, List<Node>> virtualNodes = new IdentifiableObjectMapping<>(sources);
+
+        /**
+         * Initializes the assignment builder with an existing instance to create an assignment. All supplies are
+         * resetted and all {@link NetworkFlowModel#getVirtualSources() virtual sources} are removed.
+         *
+         * @param model existing model instance
+         */
+        public AccurateAssignmentBuilder(NetworkFlowModel model) {
+            super(model);
+        }
+
+        /**
+         * Increases the assignment for a given node with units without delay.
+         *
+         * @param source the source node
+         */
+        void increaseNodeAssignment(Node source) {
+            increaseNodeAssignment(source, 1);
+        }
+
+        /**
+         * Increases the assignment for a given node by a single unit with a delay. A virtual source node is connected
+         * to the given source via a single edge.
+         * <p>
+         * A new virtual node {@code v} is created and connected with a single edge {@code e} to the given source. The
+         * following capacities are assigned:
+         * <ul>
+         * <li>capacity(v): 1</li>
+         * <li>assignment(v): 1</li>
+         * <li>capacity(e): 1</li>
+         * <li>transitTime(e): {@code delay}</li>
+         * </ul></p>
+         *
+         * @param source the source
+         * @param delay the time the flow unit requires until it starts at the {@code node}
+         * @return the virtual node holding the flow unit
+         */
+        public Node increaseNodeAssignment(Node source, double delay) {
+            return increaseNodeAssignment(source, 1, delay);
+        }
+
+        /**
+         * Increases the assignment for a given node by multiple units without delay. A virtual source node is connected
+         * to the given source via a single edge.
+         * <p>
+         * A new virtual node {@code v} is created and connected with a single edge {@code e} to the given source. The
+         * following capacities are assigned:
+         * <ul>
+         * <li>capacity(v): {@code amount}</li>
+         * <li>assignment(v): {@code amount}</li>
+         * <li>capacity(e): {@code amount}</li>
+         * <li>transitTime(e): 0</li>
+         * </ul></p>
+         *
+         * @param source the source
+         * @param amount the number of units assigned to the virtual node
+         * @return the virtual node holding the flow unit
+         */
+        public Node increaseNodeAssignment(Node source, int amount) {
+            return increaseNodeAssignment(source, amount, 0.0);
+        }
+
+        private Node increaseNodeAssignment(Node node, int amount, double delay) {
+            Objects.requireNonNull(node, "Node must not be null!");
+            checkValidForAssignment(node);
+            checkValidAssignment(amount);
+            currentAssignment.decrease(supersink, amount);
+            Node virtualSource = getVirtualSource(node);
+            Edge virtualEdge = network.outgoingEdges(virtualSource).get(0);
+            updateNodeAssignment(virtualSource, virtualEdge, amount, delay);
+            return virtualSource;
+        }
+
+        private void checkValidAssignment(int amount) {
+            if (amount <= 0) {
+                throw new IllegalArgumentException("Node assignment must not be negative");
+            }
+        }
+
+        protected void updateNodeAssignment(Node virtualSource, Edge virtualEdge, int amount, double delay) {
+            currentAssignment.increase(virtualSource, amount);
+            nodeCapacities.increase(virtualSource, amount);
+
+            edgeCapacities.increase(virtualEdge, amount);
+            exactTransitTimes.set(virtualEdge, delay);
+        }
+
+        /**
+         * Retrieves a virtual source node for the given {@code source}. Can be a new instance, or an existing one.
+         * <p>
+         * The new node {@code v} and the connecting edge {@code e} are initialized empty with
+         * <ul>
+         * <li>capacity(v): 0</li>
+         * <li>assignment(v): 0</li>
+         * <li>capacity(e): 0</li>
+         * <li>transitTime(e): 0</li>
+         * </ul></p>
+         *
+         * @param source a node in {@link #getSources()}
+         * @return the source instance
+         */
+        protected Node getVirtualSource(Node source) {
+            Node node = new Node(network.nodeCount());
+            network.setNode(node);
+            addVirtualNode(source, node);
+            nodeCapacities.set(node, 0);
+
+            Edge edge = new Edge(network.edgeCount(), node, source);
+            network.setEdge(edge);
+            edgeCapacities.set(edge, 0);
+            exactTransitTimes.set(edge, 0);
+            return node;
+        }
+
+        private void addVirtualNode(Node source, Node node) {
+            if (!virtualNodes.isDefinedFor(source)) {
+                virtualNodes.set(source, new LinkedList<>());
+            }
+            virtualNodes.get(source).add(node);
+        }
+
+        @Override
         protected List<Node> getVirtualSources() {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(virtualNodes.iterator(), Spliterator.ORDERED), false)
                     .flatMap(List::stream).collect(toList());
         }
+    }
+
+    /**
+     * Assignment builder supporting individual start times for sources. The start times for flow units starting at a
+     * node are averaged.
+     */
+    public static class AverageAssignmentBuilder extends AccurateAssignmentBuilder {
+
+        /**
+         * Nodes that are created to connect assignment nodes to model source.
+         *
+         * @param model existing model instance
+         */
+        public AverageAssignmentBuilder(NetworkFlowModel model) {
+            super(model);
+        }
 
         @Override
-        ZToGraphMapping getZToGraphMapping() {
-            return mapping;
+        protected void updateNodeAssignment(Node virtualSource, Edge virtualEdge, int amount, double delay) {
+            currentAssignment.increase(virtualSource, amount);
+            nodeCapacities.increase(virtualSource, amount);
+
+            edgeCapacities.increase(virtualEdge, amount);
+            double averageDelay = computeAverageDelay(virtualSource, virtualEdge, amount, delay);
+            exactTransitTimes.set(virtualEdge, averageDelay);
+        }
+
+        private double computeAverageDelay(Node virtualSource, Edge virtualEdge, int amount, double delay) {
+            int oldCapacity = currentAssignment.get(virtualSource);
+            return ((exactTransitTimes.get(virtualEdge) * oldCapacity) + delay) / (oldCapacity + amount);
         }
 
         /**
-         * Decides how supply units are defined in sources.
+         * Returns the virtual node for a source. If the virtual node does not exist, it is created.
+         *
+         * {@inheritDoc}
+         *
+         * @param source a node in {@link #getSources()}
+         * @return the unique virtual source for the given source
          */
-        static enum AssignmentStartTimes {
-            /**
-             * Supplies receive their own sources and edges to model their start time.
-             */
-            Accurate,
-            /**
-             * All supplies are assigned to their respective sources with zero transit times.
-             */
-            Immediate
+        @Override
+        protected Node getVirtualSource(Node source) {
+            if (virtualNodes.isDefinedFor(source)) {
+                return virtualNodes.get(source).get(0);
+            } else {
+                return super.getVirtualSource(source);
+            }
+        }
+
+        @Override
+        protected List<Node> getVirtualSources() {
+            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(virtualNodes.iterator(), Spliterator.ORDERED), false)
+                    .flatMap(List::stream).collect(toList());
         }
     }
-
 }

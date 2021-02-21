@@ -402,17 +402,15 @@ public class GridGraphConverter extends BaseZToGraphConverter {
      * @param model The network flow model to which the converted assignment has to be written
      */
     public static NetworkFlowModel convertConcreteAssignment(ConcreteAssignment assignment, NetworkFlowModel model) {
-        NetworkFlowModel.AssignmentBuilder modelBuilder = new NetworkFlowModel.AssignmentBuilder(model);
+        NetworkFlowModel.ImmediateAssignmentBuilder modelBuilder = new NetworkFlowModel.ImmediateAssignmentBuilder(model);
         ZToGraphMapping mapping = model.getZToGraphMapping();
         ZToGraphRasterContainer raster = mapping.getRaster();
 
         // the new converted node assignment
-        IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>(1);
         List<Person> persons = assignment.getPersons();
 
         // setting the people requirement (negative assignment) to the number of persons in the building
         Node superSink = model.getSupersink();
-        nodeAssignment.set(superSink, -persons.size());
 
         // for every person do
         for (int i = 0; i < persons.size(); i++) {
@@ -432,21 +430,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
             Node node = square.getNode();
 
             // increase the nodes assignment if already defined or set it's assignment to 1
-            if (nodeAssignment.isDefinedFor(node)) {
-                nodeAssignment.increase(node, 1);
-            } else {
-                nodeAssignment.set(node, 1);
-            }
-        }
-
-        // set node assignment to 0 for every node the assignment has not already defined for
-        //IdentifiableCollection<Node> nodes = model.getGraph().nodes();
-        // TODO: node assignment in the model is not set for the other nodes
-        for (int i = 0; i < model.numberOfNodes(); i++) // TODO remove this
-        {
-            if (!nodeAssignment.isDefinedFor(model.getNode(i))) {
-                modelBuilder.setNodeAssignment(model.getNode(i), 0);
-            }
+            modelBuilder.increaseNodeAssignment(node);
         }
 
         // set the network flow model's assignment to the calculated node assignment
