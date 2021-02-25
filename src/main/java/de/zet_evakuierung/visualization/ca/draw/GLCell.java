@@ -49,13 +49,13 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
         this(model, VisualizationOptionManager.getCellWallColor(), neighbourColour);
     }
 
-    public GLCell(GLCellModel control, GLColor color, Function<Direction8, GLColor> neighbourColour) {
-        super(control, new GLVector(control.getXPosition(), control.getYPosition(), 0));
+    public GLCell(GLCellModel model, GLColor color, Function<Direction8, GLColor> neighbourColour) {
+        super(model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
         if (topLeft == null) {
-            topLeft = new GLVector(control.getOffset(), -control.getOffset(), 0);
-            topRight = new GLVector(control.getWidth(), -control.getOffset(), 0);
-            bottomLeft = new GLVector(control.getOffset(), -control.getWidth(), 0);
-            bottomRight = new GLVector(control.getWidth(), -control.getWidth(), 0);
+            topLeft = new GLVector(model.getOffset(), -model.getOffset(), 0);
+            topRight = new GLVector(model.getWidth(), -model.getOffset(), 0);
+            bottomLeft = new GLVector(model.getOffset(), -model.getWidth(), 0);
+            bottomRight = new GLVector(model.getWidth(), -model.getWidth(), 0);
         }
         this.color = color;
         this.defaultColor = color;
@@ -95,7 +95,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
      * @param direction the edge of the cell
      * @return the mixed color for that edge
      */
-    public GLColor mixColorWithNeighbours(Direction8 direction) {
+    private GLColor mixColorWithNeighbours(Direction8 direction) {
         double r = color.getRed();
         double g = color.getGreen();
         double b = color.getBlue();
