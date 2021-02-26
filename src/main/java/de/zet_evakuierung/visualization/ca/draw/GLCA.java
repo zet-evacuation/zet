@@ -15,22 +15,12 @@
  */
 package de.zet_evakuierung.visualization.ca.draw;
 
-import javax.media.opengl.GL2;
-
-import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
-import de.zet_evakuierung.visualization.ca.model.GLRootModel;
 import org.zetool.opengl.framework.abs.HierarchyRoot;
 
 public class GLCA extends HierarchyRoot<GLCAFloor> {
 
-    private final CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel;
-    private long lastStep = 0;
-    private final GLRootModel model;
-
-    public GLCA(GLRootModel model, CellularAutomatonVisualizationModel cellularAutomatonVisualizationModel) {
+    public GLCA() {
         super();
-        this.model = model;
-        this.cellularAutomatonVisualizationModel = cellularAutomatonVisualizationModel;
     }
 
     @Override
@@ -40,14 +30,5 @@ public class GLCA extends HierarchyRoot<GLCAFloor> {
     @Override
     public String toString() {
         return "GLCA";
-    }
-
-    @Override
-    public void performDynamicDrawing(GL2 gl) {
-        long step = (long) cellularAutomatonVisualizationModel.getStep();
-        if (step != lastStep) {
-            model.stepUpdate();
-            lastStep = step;
-        }
     }
 }

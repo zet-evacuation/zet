@@ -106,7 +106,7 @@ public class GLCellularAutomatonViews {
             this.cellViews = new HashMap<>(visualizationModel.getCellCount());
 
             // Set this view.
-            this.rootView = new GLCA(cellularAutomatonModel.getCAModel(), visualizationModel);
+            this.rootView = new GLCA();
 
             // Create the view hierarchy
             for (int i = 0; i < cellularAutomatonModel.getFloorCount(); ++i) {

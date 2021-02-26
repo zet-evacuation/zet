@@ -24,17 +24,8 @@ import de.zet_evakuierung.visualization.AbstractVisualizationModel;
  */
 public class GLRootModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel> {
 
-    private final Iterable<GLCellModel> cells;
-
-    public GLRootModel(CellularAutomatonVisualizationModel visualizationModel, Iterable<GLCellModel> cells) {
+    public GLRootModel(CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
-        this.cells = cells;
-    }
-
-    public void stepUpdate() {
-        for (GLCellModel cell : cells) {
-            cell.stepUpdate();
-        }
     }
 
 }

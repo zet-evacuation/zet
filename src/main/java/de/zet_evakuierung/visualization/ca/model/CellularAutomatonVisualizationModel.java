@@ -42,6 +42,8 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
     private long nanoSecondsPerStep;
     private long step;
     private long time;
+    private long lastStep;
+    private boolean isNewStep = true;
     /**
      * The status of the simulation, true if all is finished.
      */
@@ -88,6 +90,8 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
         time += timeNanoSeconds * speedFactor;
         realStep = ((double) time / (double) nanoSecondsPerStep);
         step = (long) realStep;
+        isNewStep = lastStep != step;
+        lastStep = step;
 
         finished = step > maxStep;
     }
@@ -97,8 +101,14 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
         time = timeNanoSeconds;
         realStep = ((double) time / (double) nanoSecondsPerStep);
         step = (long) realStep;
+        isNewStep = lastStep != step;
+        lastStep = step;
 
         finished = step > maxStep;
+    }
+    
+    public boolean isNewStep() {
+        return isNewStep;
     }
 
     @Override

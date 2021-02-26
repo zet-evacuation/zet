@@ -191,7 +191,7 @@ public class CellularAutomatonVisualizationModelContainer {
             this.floors = buildFloorModels();
             this.roomMap = createRoomMapping();
             this.cellMap = buildCells(roomMap.keySet());
-            this.cellularAutomatonModel = new GLRootModel(visualizationModel, cellMap.values());
+            this.cellularAutomatonModel = new GLRootModel(visualizationModel);
 
             return new CellularAutomatonVisualizationModelContainer(this);
         }

@@ -64,6 +64,9 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
 
     @Override
     public void performDynamicDrawing(GL2 gl) {
+        if (model.isUpdateRequired()) {
+            updateFloorColor();
+        }
         if (VisualizationOptionManager.smoothCellVisualization()) {
             boolean lighting = gl.glIsEnabled(GL2.GL_LIGHTING);
             gl.glBegin(GL2.GL_QUADS);
@@ -170,7 +173,6 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
 
     @Override
     public void update() {
-        updateFloorColor();
     }
 
     @Override

@@ -18,12 +18,10 @@ package de.zet_evakuierung.visualization.ca.model;
 import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
 import static java.util.stream.Collectors.toList;
 
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
-import de.zet_evakuierung.visualization.ca.draw.GLCell;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.StepUpdateListener;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.algo.ca.util.PotentialUtils;
@@ -34,8 +32,8 @@ import org.zet.cellularautomaton.potential.Potential;
 import org.zet.cellularautomaton.statistic.CAStatistic;
 import org.zetool.common.util.Direction8;
 
-public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, CellularAutomatonVisualizationModel>
-        implements StepUpdateListener, VisualizationNodeModel {
+public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel>
+        implements VisualizationNodeModel {
 
     private final double xPosition;
     private final double yPosition;
@@ -116,12 +114,20 @@ public class GLCellModel extends AbstractZETVisualizationControl<Void, GLCell, C
         return controlled.getSpeedFactor();
     }
 
-    @Override
-    public void stepUpdate() {
-        // Update the floor colors if in an mode that can change every step
-        if (displayMode == CellInformationDisplay.DynamicPotential || displayMode == CellInformationDisplay.Utilization || displayMode == CellInformationDisplay.Waiting) {
-            getView().update();
-        }
+    /**
+     * Checks whether a new step has started and the current display mode is one that requires color updates on every
+     * step.
+     *
+     * @return {@code true} if re-calculation of color values is required
+     */
+    public boolean isUpdateRequired() {
+        return visualizationModel.isNewStep() && isDisplayMode();
+    }
+
+    private boolean isDisplayMode() {
+        return displayMode == CellInformationDisplay.DynamicPotential
+                || displayMode == CellInformationDisplay.Utilization
+                || displayMode == CellInformationDisplay.Waiting;
     }
 
     public static void setActivePotential(Potential activePotential) {
