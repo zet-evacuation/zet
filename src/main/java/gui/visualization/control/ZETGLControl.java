@@ -34,6 +34,7 @@ import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
@@ -58,7 +59,6 @@ import org.zetool.opengl.framework.abs.Drawable;
 import org.zetool.opengl.framework.abs.HierarchyNode;
 import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
-import zet.gui.main.tabs.JVisualizationView;
 
 /**
  * A control class for visualization in ZET. It combines three types of graphical objects: a graph, a cellular automaton
@@ -143,27 +143,6 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         }
     }
 
-    /**
-     * Describes the different types of information which can be illustrated by different colors of the heads of the
-     * individuals.
-     */
-//	public enum IndividualInformationDisplay {
-//
-//		/** Shows default individual */
-//		NOTHING,
-//		/** Shows panic at the head */
-//		PANIC,
-//		/** Shows speed at the head */
-//		SPEED,
-//		/** Shows exhaustion at the head */
-//		EXHAUSTION,
-//		/** Shows the alarm-status at the head */
-//		ALARMED,
-//		/** Shows the chosen exit at the head*/
-//		CHOSEN_EXIT,
-//		/** The rest of the reaction time */
-//		REACTION_TIME
-//	}
     /** The localization class. */
     private Localization loc = ZETLocalization2.loc;
     /** Indicates whether the graph is currently visible, or not. */
@@ -701,7 +680,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
      *
      * @param idm the information.
      */
-    public void showIndividualInformation(JVisualizationView.HeadInformation idm) {
+    public void showIndividualInformation(DynamicCellularAutomatonInformation.HeadInformation idm) {
         if (!hasCellularAutomaton) {
             return;
         }

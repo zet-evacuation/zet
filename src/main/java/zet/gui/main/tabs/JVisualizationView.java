@@ -15,40 +15,49 @@
  */
 package zet.gui.main.tabs;
 
-import org.zetool.common.localization.Localization;
-import org.zetool.common.localization.LocalizationManager;
-import ds.PropertyContainer;
-import gui.GUIControl;
-import gui.ZETLoader;
-import gui.visualization.AbstractVisualizationView;
-import gui.visualization.VisualizationPanel;
-import zet.gui.main.tabs.visualization.ZETVisualization;
-import zet.gui.components.model.PotentialSelectionModel;
-import gui.visualization.control.ZETGLControl;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
-import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
+import java.util.EnumMap;
 import java.util.Hashtable;
+import java.util.function.Function;
+
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import info.clearthought.layout.TableLayout;
+
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation;
+import ds.PropertyContainer;
+import gui.GUIControl;
+import gui.ZETLoader;
+import gui.visualization.AbstractVisualizationView;
+import gui.visualization.VisualizationPanel;
+import gui.visualization.control.ZETGLControl;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
+import org.zet.components.model.editor.editview.FloorComboBoxModel;
+import org.zet.components.model.editor.floor.FloorViewModel;
+import org.zet.components.model.editor.selectors.NamedComboBox;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.LocalizationManager;
 import org.zetool.components.JArrayPanel;
 import zet.gui.GUILocalization;
-import org.zet.components.model.editor.editview.FloorComboBoxModel;
-import org.zet.components.model.editor.selectors.NamedComboBox;
-import org.zet.components.model.editor.floor.FloorViewModel;
+import zet.gui.components.model.PotentialSelectionModel;
+import zet.gui.main.tabs.visualization.ZETVisualization;
 
 /**
  *
@@ -64,7 +73,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
     /** A combo box selecting the currently visible potential */
     private JComboBox potentialSelector;
     /** A combo box for selecting the information displayed on the head of the individuals. */
-    private JComboBox headColorSelector;
+    private JComboBox<DynamicCellularAutomatonInformation.HeadInformation> headColorSelector;
     /** The label for the floor combo box. */
     private JLabel lblFloorSelector;
     /** The label for the potential combo box. */
@@ -90,35 +99,21 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
     /** A button that resets the camera position to a fixed coordinate. */
     private JButton resetCameraPosition;
 
-    public enum HeadInformation {	// todo move to visualization
-        Nothing("gui.VisualizationPanel.HeadInformation.Nothing"),
-        Panic("gui.VisualizationPanel.HeadInformation.Panic"),
-        Speed("gui.VisualizationPanel.HeadInformation.Speed"),
-        Exhaustion("gui.VisualizationPanel.HeadInformation.Exhaustion"),
-        Alarmed("gui.VisualizationPanel.HeadInformation.Alarmed"),
-        ChosenExit("gui.VisualizationPanel.HeadInformation.ChosenExit"),
-        ReactionTime("gui.VisualizationPanel.HeadInformation.ReactionTime");
-
-        /** A string used to get the string representation for this information type (localized). */
-        private final String locString;
-
-        /**
-         * Initializes the enumeration element with its localization string.
-         */
-        private HeadInformation(String locString) {
-            this.locString = locString;
+    /**
+     * Map of head information types to visualization localization tags.
+     */
+    private final static EnumMap<DynamicCellularAutomatonInformation.HeadInformation, String> HEAD_INFORMATION_LOCALIZATION
+            = new EnumMap<DynamicCellularAutomatonInformation.HeadInformation, String>(DynamicCellularAutomatonInformation.HeadInformation.class) {
+        {
+            put(DynamicCellularAutomatonInformation.HeadInformation.NOTHING, "gui.VisualizationPanel.HeadInformation.Nothing");
+            put(DynamicCellularAutomatonInformation.HeadInformation.PANIC, "gui.VisualizationPanel.HeadInformation.Panic");
+            put(DynamicCellularAutomatonInformation.HeadInformation.SPEED, "gui.VisualizationPanel.HeadInformation.Speed");
+            put(DynamicCellularAutomatonInformation.HeadInformation.EXHAUSTION, "gui.VisualizationPanel.HeadInformation.Exhaustion");
+            put(DynamicCellularAutomatonInformation.HeadInformation.ALARMED, "gui.VisualizationPanel.HeadInformation.Alarmed");
+            put(DynamicCellularAutomatonInformation.HeadInformation.CHOSEN_EXIT, "gui.VisualizationPanel.HeadInformation.ChosenExit");
+            put(DynamicCellularAutomatonInformation.HeadInformation.REACTION_TIME, "gui.VisualizationPanel.HeadInformation.ReactionTime");
         }
-
-        /**
-         * Returns the localized description for this enumeration element.
-         *
-         * @return the localized description for this enumeration element.
-         */
-        @Override
-        public String toString() {
-            return GUILocalization.loc.getStringWithoutPrefix(locString);
-        }
-    }
+    };
 
     private static GLCapabilities getCaps() {
         GLCapabilities caps = new GLCapabilities(null);
@@ -246,15 +241,18 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
         eastPanel.add(potentialSelector, "1, " + row++);
         row++;
 
-        headColorSelector = new JComboBox();
-        for (HeadInformation hi : HeadInformation.values()) {
+        headColorSelector = new JComboBox<>();
+        CustomDefaultListCellRenderer<DynamicCellularAutomatonInformation.HeadInformation> llcr = new CustomDefaultListCellRenderer<>(
+                headColorSelector.getRenderer(), headInformation -> HEAD_INFORMATION_LOCALIZATION.get(headInformation));
+        headColorSelector.setRenderer(llcr);
+        for (DynamicCellularAutomatonInformation.HeadInformation hi : DynamicCellularAutomatonInformation.HeadInformation.values()) {
             headColorSelector.addItem(hi);
         }
         headColorSelector.setSelectedIndex(1);
         headColorSelector.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                visualization.getControl().showIndividualInformation((HeadInformation) (headColorSelector.getSelectedItem()));
+                visualization.getControl().showIndividualInformation((DynamicCellularAutomatonInformation.HeadInformation) (headColorSelector.getSelectedItem()));
                 getLeftPanel().getGLContainer().repaint();
             }
         });
@@ -404,5 +402,46 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
      */
     public int getSelectedFloorID() {
         return selectedFloor;
+    }
+
+    /**
+     * Implementation of a cell renderer that uses the default cell renderer and replaces the displaced text from simple
+     * {@link Object#toString() toString} to custom texts.
+     * <p>
+     * If the type of {@link Component} generated by the original renderer is not of type {@link JLabel}, the renderer
+     * does nothing.</p>
+     *
+     * @param <T> the type of items that is rendered
+     */
+    public final class CustomDefaultListCellRenderer<T> implements ListCellRenderer<T> {
+
+        private final ListCellRenderer<? super T> originalRenderer;
+        private final Function<T, String> itemText;
+
+        /**
+         * Initializes the custom text renderer with an existing renderer. To work properly the {@code originalRenderer}
+         * should be the default {@link javax.swing.JComboBox#getRenderer() combo box renderer}. More precise, the
+         * displayed text is replaced if the
+         * {@link javax.swing.DefaultListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean) component}
+         * used to render is an instance of {@link JList}.
+         *
+         * @param originalRenderer the original renderer, should be a default list cell renderer
+         * @param itemText function providing texts for inputs
+         */
+        public CustomDefaultListCellRenderer(ListCellRenderer<? super T> originalRenderer,
+                Function<T, String> itemText) {
+            this.originalRenderer = originalRenderer;
+            this.itemText = itemText;
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends T> jList, T value, int index, boolean isSelected,
+                boolean cellHasFocus) {
+            Component c = originalRenderer.getListCellRendererComponent(jList, value, index, isSelected, cellHasFocus);
+            if (c instanceof JLabel) {
+                ((JLabel) c).setText(itemText.apply(value));
+            }
+            return c;
+        }
     }
 }

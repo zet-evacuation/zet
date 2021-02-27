@@ -25,7 +25,6 @@ import gui.visualization.control.StepUpdateListener;
 import gui.visualization.util.Tuple;
 import org.zet.cellularautomaton.Individual;
 import org.zet.cellularautomaton.algorithm.state.EvacuationState;
-import zet.gui.main.tabs.JVisualizationView;
 
 /**
  * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton} and is used by the visualization
@@ -57,7 +56,7 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
     /** The value used for the calculation of the current color. */
     private double headInformationValue;
     /** The type of the information displayed on the head. */
-    private JVisualizationView.HeadInformation headInformationType = JVisualizationView.HeadInformation.Panic;
+    private DynamicCellularAutomatonInformation.HeadInformation headInformationType = DynamicCellularAutomatonInformation.HeadInformation.PANIC;
     private final Individual controlled;
     /** The floor on which the individual is standing in the current moment of simulation. */
     private int onFloor = 0;
@@ -164,7 +163,7 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
      *
      * @param idm the information type
      */
-    public void setHeadInformation(JVisualizationView.HeadInformation idm) {
+    public void setHeadInformation(DynamicCellularAutomatonInformation.HeadInformation idm) {
         this.headInformationType = idm;
     }
 
@@ -174,28 +173,28 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
     private void calcHeadInformation() {
         switch (headInformationType) {
             default:
-            case Nothing:
+            case NOTHING:
                 headInformationValue = 0;
                 break;
-            case Panic:
+            case PANIC:
                 headInformationValue = 0;//es.propertyFor(controlled).getPanic();
                 break;
-            case Speed:
+            case SPEED:
                 headInformationValue = 0;
                 break;
-            case Exhaustion:
+            case EXHAUSTION:
                 headInformationValue = 0;//es.propertyFor(controlled).getExhaustion();
                 break;
-            case Alarmed:
+            case ALARMED:
                 headInformationValue = 0;//es.propertyFor(controlled).isAlarmed() ? 0 : 1;
                 break;
-            case ChosenExit:
+            case CHOSEN_EXIT:
                 headInformationValue = 0;
                 // TODO visualization statistic
                 //final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
                 //headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
                 break;
-            case ReactionTime:
+            case REACTION_TIME:
                 headInformationValue = 1 - (visualizationModel.getTimeInSeconds() / controlled.getReactionTime());
                 break;
         }
