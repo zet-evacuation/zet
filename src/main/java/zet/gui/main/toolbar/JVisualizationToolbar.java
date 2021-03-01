@@ -15,22 +15,13 @@
  */
 package zet.gui.main.toolbar;
 
-import batch.BatchResult;
-import batch.BatchResultEntry;
-import org.zetool.common.datastructure.NamedIndex;
-import org.zetool.common.localization.Localization;
-import org.zetool.common.localization.Localized;
-import ds.PropertyContainer;
-import gui.GUIControl;
-import gui.ZETLoader;
-import gui.visualization.control.ZETGLControl;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -39,9 +30,20 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+
+import batch.BatchResult;
+import batch.BatchResultEntry;
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
+import ds.PropertyContainer;
+import gui.GUIControl;
+import gui.ZETLoader;
+import gui.visualization.control.ZETGLControl;
+import org.zet.components.model.editor.selectors.ComboBoxRenderer;
+import org.zetool.common.datastructure.NamedIndex;
+import org.zetool.common.localization.Localization;
+import org.zetool.common.localization.Localized;
 import org.zetool.components.framework.Button;
 import zet.gui.GUILocalization;
-import org.zet.components.model.editor.selectors.ComboBoxRenderer;
 
 /**
  *
@@ -207,13 +209,13 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener, L
 		} else if( e.getActionCommand().equals( "floors" ) ) {
 			control.visualizationShowAllFloors();
 		} else if( e.getActionCommand().equals( "potential" ) ) {
-			control.visualizationShowCellInformation( CellInformationDisplay.StaticPotential );
+			control.visualizationShowCellInformation(CellInformationDisplay.STATIC_POTENTIAL );
 		} else if( e.getActionCommand().equals( "dynamic" ) ) {
-			control.visualizationShowCellInformation( CellInformationDisplay.DynamicPotential );
+			control.visualizationShowCellInformation(CellInformationDisplay.DYNAMIC_POTENTIAL );
 		} else if( e.getActionCommand().equals( "utilization" ) ) {
-			control.visualizationShowCellInformation( CellInformationDisplay.Utilization );
+			control.visualizationShowCellInformation(CellInformationDisplay.UTILIZATION );
 		} else if( e.getActionCommand().equals( "waiting" ) ) {
-			control.visualizationShowCellInformation( CellInformationDisplay.Waiting );
+			control.visualizationShowCellInformation(CellInformationDisplay.WAITING );
 		} else
 			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
@@ -265,10 +267,10 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener, L
 	}
 
 	public void setSelectedCellInformationDisplay( CellInformationDisplay cid ) {
-		btnShowPotential.setSelected( cid == CellInformationDisplay.StaticPotential );
-		btnShowDynamicPotential.setSelected( cid == CellInformationDisplay.DynamicPotential );
-		btnShowUtilization.setSelected( cid == CellInformationDisplay.Utilization );
-		btnShowWaiting.setSelected( cid == CellInformationDisplay.Waiting );
+		btnShowPotential.setSelected( cid == CellInformationDisplay.STATIC_POTENTIAL );
+		btnShowDynamicPotential.setSelected( cid == CellInformationDisplay.DYNAMIC_POTENTIAL );
+		btnShowUtilization.setSelected( cid == CellInformationDisplay.UTILIZATION );
+		btnShowWaiting.setSelected( cid == CellInformationDisplay.WAITING );
 	}
 
 	public void setEnabledVisibleElements( ZETGLControl control ) {

@@ -35,6 +35,7 @@ import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation;
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import de.zet_evakuierung.visualization.ca.model.GLCellularAutomatonControl;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
@@ -114,33 +115,6 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
     @Override
     public Iterator iterator() {
         return List.of(buildingControl.getView(), caControl.getView(), graphControl.getView()).iterator();
-    }
-
-    /**
-     * Describes the different types of information which can be illustrated by different colors of the cells of the
-     * cellular automaton.
-     */
-    public enum CellInformationDisplay {
-
-        /** Disables displaying any potential on the floor of cells. */
-        NoPotential(0),
-        /** Enables displaying of static potential on the floor of cells. */
-        StaticPotential(1),
-        /** Enables displaying of the dynamic potential on the floor of cells. */
-        DynamicPotential(2),
-        /** Enables displaying usage statistic on the cells. */
-        Utilization(3),
-        /** Shows waiting times on cells. */
-        Waiting(4);
-        private int id;
-
-        private CellInformationDisplay(int id) {
-            this.id = id;
-        }
-
-        public int id() {
-            return id;
-        }
     }
 
     /** The localization class. */
@@ -385,20 +359,20 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
 
         switch (PropertyContainer.getGlobal().getAsInt("settings.gui.visualization.floorInformation")) {
             case 1:
-                showPotential(CellInformationDisplay.StaticPotential);
+                showPotential(CellInformationDisplay.STATIC_POTENTIAL);
                 break;
             case 2:
-                showPotential(CellInformationDisplay.DynamicPotential);
+                showPotential(CellInformationDisplay.DYNAMIC_POTENTIAL);
                 break;
             case 3:
-                showPotential(CellInformationDisplay.Utilization);
+                showPotential(CellInformationDisplay.UTILIZATION);
                 break;
             case 4:
-                showPotential(CellInformationDisplay.Waiting);
+                showPotential(CellInformationDisplay.WAITING);
                 break;
             case 0:
             default:
-                showPotential(CellInformationDisplay.NoPotential);
+                showPotential(CellInformationDisplay.NO_POTENTIAL);
                 break;
         }
     }

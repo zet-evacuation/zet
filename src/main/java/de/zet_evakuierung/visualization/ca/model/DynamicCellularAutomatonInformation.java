@@ -16,6 +16,7 @@
 package de.zet_evakuierung.visualization.ca.model;
 
 /**
+ * Collection of enumerations for various information that can be displayed in the cellular automaton visualization.
  *
  * @author Jan-Philipp Kappmeier
  */
@@ -53,5 +54,33 @@ public class DynamicCellularAutomatonInformation {
          * The rest of the reaction time.
          */
         REACTION_TIME;
+    }
+
+    /**
+     * Describes the different types of information which can be illustrated by different colors of the cells of the
+     * cellular automaton.
+     */
+    public enum CellInformationDisplay {
+
+        /**
+         * Disables displaying any potential on the floor of cells.
+         */
+        NO_POTENTIAL,
+        /**
+         * Enables displaying of static potential on the floor of cells.
+         */
+        STATIC_POTENTIAL,
+        /**
+         * Enables displaying of the dynamic potential on the floor of cells.
+         */
+        DYNAMIC_POTENTIAL,
+        /**
+         * Enables displaying usage statistic on the cells.
+         */
+        UTILIZATION,
+        /**
+         * Shows waiting times on cells.
+         */
+        WAITING;
     }
 }

@@ -15,14 +15,13 @@
  */
 package de.zet_evakuierung.visualization.ca.model;
 
-import static gui.visualization.control.ZETGLControl.CellInformationDisplay.DynamicPotential;
 import static java.util.stream.Collectors.toList;
 
 import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.algo.ca.util.PotentialUtils;
 import org.zet.cellularautomaton.EvacCell;
@@ -40,7 +39,7 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
     private static Potential mergedPotential = null;
     private static Potential activePotential = null;
     private static long MAX_DYNAMIC_POTENTIAL = -1;
-    private CellInformationDisplay displayMode = CellInformationDisplay.StaticPotential;
+    private CellInformationDisplay displayMode = CellInformationDisplay.STATIC_POTENTIAL;
     private final EvacCell controlled;
     // Initially unset
     private EvacuationState es;
@@ -125,9 +124,9 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
     }
 
     private boolean isDisplayMode() {
-        return displayMode == CellInformationDisplay.DynamicPotential
-                || displayMode == CellInformationDisplay.Utilization
-                || displayMode == CellInformationDisplay.Waiting;
+        return displayMode == CellInformationDisplay.DYNAMIC_POTENTIAL
+                || displayMode == CellInformationDisplay.UTILIZATION
+                || displayMode == CellInformationDisplay.WAITING;
     }
 
     public static void setActivePotential(Potential activePotential) {
@@ -147,16 +146,16 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
      */
     public long getCellInformation(CellInformationDisplay cid) {
         switch (cid) {
-            case DynamicPotential:
+            case DYNAMIC_POTENTIAL:
                 return (long) es.getDynamicPotential(controlled);
-            case StaticPotential:
+            case STATIC_POTENTIAL:
                 return activePotential.getPotential(controlled);
-            case Utilization:
+            case UTILIZATION:
                 //return 0;
                 // TODO statistic visualization
                 //return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
                 return statistic.getCellStatistic().getCellUtilization(controlled, (int) visualizationModel.getStep());
-            case Waiting:
+            case WAITING:
                 //return 0;
                 // TODO statistic visualization
                 //return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
@@ -175,15 +174,15 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
      */
     public long getMaxCellInformation(CellInformationDisplay cid) {
         switch (cid) {
-            case DynamicPotential:
+            case DYNAMIC_POTENTIAL:
                 return MAX_DYNAMIC_POTENTIAL;
-            case StaticPotential:
+            case STATIC_POTENTIAL:
                 return activePotential.getMaxPotential();
-            case Utilization:
+            case UTILIZATION:
                 return 0;
             // TODO opengL statistic visualization
             //return mainControl.getCAStatistic().getCellStatistic().getMaxUtilization();
-            case Waiting:
+            case WAITING:
                 return 0;
             // TODO opengL statistic visualization
             //return mainControl.getCAStatistic().getCellStatistic().getMaxWaiting();

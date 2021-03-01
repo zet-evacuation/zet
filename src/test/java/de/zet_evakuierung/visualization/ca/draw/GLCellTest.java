@@ -33,9 +33,9 @@ import mockit.Injectable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import ds.PropertyContainer;
-import gui.visualization.control.ZETGLControl;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
@@ -70,7 +70,7 @@ public class GLCellTest {
         
         // Set up test call: if drawn, an update is required and the potential is invalid
         when(model.isUpdateRequired()).thenReturn(true);
-        when(model.getDisplayMode()).thenReturn(ZETGLControl.CellInformationDisplay.StaticPotential);
+        when(model.getDisplayMode()).thenReturn(CellInformationDisplay.STATIC_POTENTIAL);
         when(model.isPotentialValid()).thenReturn(false);
                 
         fixture.performDynamicDrawing(glMock);

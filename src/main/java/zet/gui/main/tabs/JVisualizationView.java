@@ -48,7 +48,6 @@ import gui.ZETLoader;
 import gui.visualization.AbstractVisualizationView;
 import gui.visualization.VisualizationPanel;
 import gui.visualization.control.ZETGLControl;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import org.zet.components.model.editor.editview.FloorComboBoxModel;
 import org.zet.components.model.editor.floor.FloorViewModel;
 import org.zet.components.model.editor.selectors.NamedComboBox;
@@ -230,9 +229,9 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
                     return;
                 }
                 PotentialSelectionModel.PotentialEntry potentialEntry = (PotentialSelectionModel.PotentialEntry) e.getItem();
-                guiControl.visualizationShowCellInformation(CellInformationDisplay.NoPotential);
+                guiControl.visualizationShowCellInformation(DynamicCellularAutomatonInformation.CellInformationDisplay.NO_POTENTIAL);
                 visualization.getControl().activatePotential(potentialEntry.getPotential());
-                visualization.getControl().showPotential(CellInformationDisplay.StaticPotential);
+                visualization.getControl().showPotential(DynamicCellularAutomatonInformation.CellInformationDisplay.STATIC_POTENTIAL);
                 getGLContainer().repaint();
             }
         });

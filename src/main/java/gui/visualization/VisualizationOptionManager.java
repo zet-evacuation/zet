@@ -15,9 +15,10 @@
  */
 package gui.visualization;
 
-import ds.PropertyContainer;
-import gui.visualization.control.ZETGLControl;
 import java.awt.Color;
+
+import ds.PropertyContainer;
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import org.zetool.opengl.drawingutils.GLColor;
 
 /**
@@ -152,15 +153,15 @@ public class VisualizationOptionManager {
      * @param cid the status type
      * @return the low color for the given status
      */
-    public static GLColor getCellInformationLowColor(ZETGLControl.CellInformationDisplay cid) {
+    public static GLColor getCellInformationLowColor(CellInformationDisplay cid) {
         switch (cid) {
-            case DynamicPotential:
+            case DYNAMIC_POTENTIAL:
                 return getCellFloorColor();
-            case StaticPotential:
+            case STATIC_POTENTIAL:
                 return new GLColor(Color.white);
-            case Utilization:
+            case UTILIZATION:
                 return getCellFloorColor();
-            case Waiting:
+            case WAITING:
                 return new GLColor(Color.green);
             default:
                 return getCellFloorColor();
@@ -174,15 +175,15 @@ public class VisualizationOptionManager {
      * @param cid the status type
      * @return the low color for the given status
      */
-    public static GLColor getCellInformationHighColor(ZETGLControl.CellInformationDisplay cid) {
+    public static GLColor getCellInformationHighColor(CellInformationDisplay cid) {
         switch (cid) {
-            case DynamicPotential:
+            case DYNAMIC_POTENTIAL:
                 return new GLColor(Color.red);
-            case StaticPotential:
+            case STATIC_POTENTIAL:
                 return new GLColor(Color.blue);
-            case Utilization:
+            case UTILIZATION:
                 return new GLColor(Color.orange);
-            case Waiting:
+            case WAITING:
                 return new GLColor(Color.red);
             default:
                 return getCellFloorColor();

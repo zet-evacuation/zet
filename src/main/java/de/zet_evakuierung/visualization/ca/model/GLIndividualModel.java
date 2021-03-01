@@ -27,7 +27,8 @@ import org.zet.cellularautomaton.Individual;
 import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 
 /**
- * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton} and is used by the visualization
+ * This class controls an {@link Individual} in the
+ * {@link org.zetool.simulation.cellularautomaton.CellularAutomaton cellular automaton} and is used by the visualization
  * class {@link GLIndividual} which draws the individual on the screen.
  *
  * @author Jan-Philipp Kappmeier

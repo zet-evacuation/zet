@@ -20,9 +20,9 @@ import java.util.function.Function;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.drawingutils.GLVector;
@@ -149,7 +149,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
      * Updates the graphical representation of the cell. The current floor color is calculated.
      */
     protected void updateFloorColor() {
-        if (model.getDisplayMode() == CellInformationDisplay.NoPotential) {
+        if (model.getDisplayMode() == CellInformationDisplay.NO_POTENTIAL) {
             color = getDefaultColor();
         } else {
             color = potentialToColor(model.getCellInformation(model.getDisplayMode()),
