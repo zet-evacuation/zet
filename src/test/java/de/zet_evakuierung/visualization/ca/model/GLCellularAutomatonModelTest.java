@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import gui.visualization.EvacuationVisualizationProperties;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.junit.Test;
 import org.zet.cellularautomaton.EvacCell;
@@ -134,11 +135,14 @@ public class GLCellularAutomatonModelTest {
         Function<Integer, Double> expectedHeight = (i) -> i * customFloorHeight * customScaling;
 
         CellularAutomatonVisualizationModel visualizationModel = new CellularAutomatonVisualizationModel();
-        visualizationModel.setDefaultFloorHeight(customFloorHeight);
-        visualizationModel.scaling = customScaling;
+
+        EvacuationVisualizationProperties properties = new EvacuationVisualizationProperties();
+        properties.setScaling(customScaling);
+        properties.setFloorHeight(customFloorHeight);
 
         CellularAutomatonVisualizationModelContainer fixture = new CellularAutomatonVisualizationModelContainer.Builder(
                 baseMocks.cellularAutomaton, baseMocks.visualizationResults)
+                .withVisualizationProperties(properties)
                 .withVisualizationModel(visualizationModel)
                 .build();
 

@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import de.zet_evakuierung.visualization.network.GraphVisualizationData;
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import org.zetool.graph.Edge;
 import org.zetool.graph.Node;
 
@@ -145,6 +146,12 @@ public class GraphVisualizationModelContainer {
         private final NetworkVisualizationModel visualizationModel;
 
         /**
+         * Optional properties for the visualization.
+         */
+        private GraphVisualizationProperties properties = new GraphVisualizationProperties() {
+        };
+
+        /**
          * The {@link #build() built} root visualization model instance.
          */
         private GLFlowGraphModel network;
@@ -164,6 +171,11 @@ public class GraphVisualizationModelContainer {
         public Builder(GraphVisualizationData visualizationData, NetworkVisualizationModel networkVisualizationModel) {
             this.visualizationData = Objects.requireNonNull(visualizationData);
             this.visualizationModel = Objects.requireNonNull(networkVisualizationModel);
+        }
+
+        public Builder withVisualizationProperties(GraphVisualizationProperties properties) {
+            this.properties = properties;
+            return this;
         }
 
         /**
@@ -215,7 +227,8 @@ public class GraphVisualizationModelContainer {
 
         private Map<Node, GLNodeModel> buildNodeModels(Iterable<Node> nodesOnTheFloor) {
             Map<Node, GLNodeModel> result = StreamSupport.stream(nodesOnTheFloor.spliterator(), false)
-                    .collect(toMap(identity(), n -> new GLNodeModel(visualizationData, n, visualizationModel)));
+                    .collect(toMap(identity(), n -> new GLNodeModel(visualizationData, n, properties,
+                    visualizationModel)));
             return result;
         }
 

@@ -21,18 +21,20 @@ import java.util.Collections;
 import java.util.List;
 
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
-import gui.visualization.EvacuationVisualizationModel;
 import org.zet.cellularautomaton.EvacCellInterface;
 import org.zet.cellularautomaton.Individual;
 import org.zet.cellularautomaton.InitialConfiguration;
 import org.zet.cellularautomaton.algorithm.EvacuationSimulationSpeed;
 import org.zetool.math.Conversion;
+import org.zetool.opengl.framework.abs.VisualizationModel;
+import org.zetool.opengl.framework.abs.VisualizationModelProvider;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonVisualizationModel extends EvacuationVisualizationModel {
+public class CellularAutomatonVisualizationModel implements VisualizationModel, VisualizationModelProvider {
 
     private int cellCount;
     private int cellsDone;
@@ -55,17 +57,7 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
     private ArrayList<GLIndividual> glIndividuals = new ArrayList<>();
     private ArrayList<GLIndividualModel> individuals = new ArrayList<>();
     private InitialConfiguration initialConfiguration;
-
-    void init(int cellCount) {
-        this.cellCount = cellCount;
-        cellsDone = 0;
-
-        // initialize timing
-        secondsPerStep = Double.POSITIVE_INFINITY;
-        nanoSecondsPerStep = Long.MAX_VALUE;
-        step = 0;
-        realStep = 0.0;
-    }
+    private Frustum frustum;
 
     /**
      * <p>
@@ -106,7 +98,7 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
 
         finished = step > maxStep;
     }
-    
+
     public boolean isNewStep() {
         return isNewStep;
     }
@@ -150,6 +142,15 @@ public class CellularAutomatonVisualizationModel extends EvacuationVisualization
     }
 
     @Override
+    public Frustum getFrustum() {
+        return frustum;
+    }
+
+    @Override
+    public void setFrustum(Frustum frustum) {
+        this.frustum = frustum;
+    }
+
     public double getStep() {
         return realStep;
     }

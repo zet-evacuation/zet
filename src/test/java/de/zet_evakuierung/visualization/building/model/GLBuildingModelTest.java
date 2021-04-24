@@ -162,7 +162,7 @@ public class GLBuildingModelTest {
             for (int j = 0; j < wallsOnFloor[i]; ++j) {
                 Wall wallMock = mock(Wall.class);
                 wallsOnFloors.add(wallMock);
-                when(wallMock.getFloor()).thenReturn(floors.get(i));
+                when(wallMock.getFloor()).thenReturn(i);
             }
         }
 

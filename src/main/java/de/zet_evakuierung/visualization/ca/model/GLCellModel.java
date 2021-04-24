@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
@@ -34,13 +35,19 @@ import org.zetool.common.util.Direction8;
 public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel>
         implements VisualizationNodeModel {
 
+    private final EvacCell controlled;
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final CellularAutomatonVisualizationProperties properties;
+
     private final double xPosition;
     private final double yPosition;
+
     private static Potential mergedPotential = null;
     private static Potential activePotential = null;
     private static long MAX_DYNAMIC_POTENTIAL = -1;
     private CellInformationDisplay displayMode = CellInformationDisplay.STATIC_POTENTIAL;
-    private final EvacCell controlled;
     // Initially unset
     private EvacuationState es;
 
@@ -51,12 +58,14 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
     CAStatistic statistic;
 
     public GLCellModel(CellularAutomatonVisualizationResults caVisResults, EvacCell cell,
+            CellularAutomatonVisualizationProperties properties,
             CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
-        this.statistic = null;
         this.controlled = cell;
-        xPosition = caVisResults.get(cell).x * visualizationModel.scaling;
-        yPosition = caVisResults.get(cell).y * visualizationModel.scaling;
+        this.properties = properties;
+        xPosition = caVisResults.get(cell).x * properties.getScaling();
+        yPosition = caVisResults.get(cell).y * properties.getScaling();
+        this.statistic = null;
 
         if (mergedPotential == null) {
             mergedPotential = PotentialUtils.mergePotentials(caVisResults.getCa().getExits().stream()
@@ -204,11 +213,11 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
     }
 
     public double getWidth() {
-        return visualizationModel.scaling * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
+        return properties.getScaling() * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
     }
 
     public double getOffset() {
-        return VisualizationOptionManager.showSpaceBetweenCells() ? 10 * visualizationModel.scaling : 0;
+        return VisualizationOptionManager.showSpaceBetweenCells() ? 10 * properties.getScaling() : 0;
     }
 
     public boolean isNeighborPresent(Direction8 currentNeighbor) {

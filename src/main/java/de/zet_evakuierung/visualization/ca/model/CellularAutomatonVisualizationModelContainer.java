@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.cellularautomaton.EvacCellInterface;
@@ -150,6 +151,11 @@ public class CellularAutomatonVisualizationModelContainer {
         private final CellularAutomatonVisualizationResults caVisResults;
 
         /**
+         * Optional properties for the visualization.
+         */
+        private CellularAutomatonVisualizationProperties properties = new CellularAutomatonVisualizationProperties() {
+        };
+        /**
          * Optional visualization model used during the {@link #build() building process}.
          */
         private CellularAutomatonVisualizationModel visualizationModel = new CellularAutomatonVisualizationModel();
@@ -176,6 +182,11 @@ public class CellularAutomatonVisualizationModelContainer {
             this.caVisResults = Objects.requireNonNull(caVisResults);
         }
 
+        public Builder withVisualizationProperties(CellularAutomatonVisualizationProperties properties) {
+            this.properties = properties;
+            return this;
+        }
+        
         public Builder withVisualizationModel(CellularAutomatonVisualizationModel visualizationModel) {
             this.visualizationModel = Objects.requireNonNull(visualizationModel);
             return this;
@@ -199,7 +210,7 @@ public class CellularAutomatonVisualizationModelContainer {
         private List<GLFloorModel> buildFloorModels() {
             ArrayList<GLFloorModel> floorModels = new ArrayList<>(cellularAutomaton.getFloors().size());
             for (int i = 0; i < cellularAutomaton.getFloors().size(); ++i) {
-                GLFloorModel floormodel = new GLFloorModel(caVisResults, i, visualizationModel);
+                GLFloorModel floormodel = new GLFloorModel(caVisResults, i, properties, visualizationModel);
                 floorModels.add(floormodel);
             }
             return floorModels;
@@ -225,7 +236,7 @@ public class CellularAutomatonVisualizationModelContainer {
         private Map<Room, GLRoomModel> buildRoomModels(Collection<Room> roomsOnTheFloor) {
             HashMap<Room, GLRoomModel> result = new HashMap<>();
             roomsOnTheFloor.forEach(
-                    room -> result.put(room, new GLRoomModel(caVisResults, room, visualizationModel)));
+                    room -> result.put(room, new GLRoomModel(caVisResults, room, properties, visualizationModel)));
             return result;
         }
 
@@ -245,7 +256,7 @@ public class CellularAutomatonVisualizationModelContainer {
             HashMap<EvacCellInterface, GLCellModel> result = new HashMap<>(Math.toIntExact(cellCount));
             for (Room room : rooms) {
                 room.getAllCells().forEach(
-                        cell -> result.put(cell, new GLCellModel(caVisResults, cell, visualizationModel)));
+                        cell -> result.put(cell, new GLCellModel(caVisResults, cell, properties, visualizationModel)));
             }
             return result;
         }

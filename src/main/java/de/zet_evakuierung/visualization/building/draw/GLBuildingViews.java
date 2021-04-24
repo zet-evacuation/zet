@@ -110,7 +110,6 @@ public class GLBuildingViews {
             }
         }).get();
 
-        private final BuildingVisualizationModel visualizationModel;
         private final GLBuildingModel buildingModel;
 
         /**
@@ -126,7 +125,6 @@ public class GLBuildingViews {
 
         GLBuildingViewFactory(BuildingVisualizationModel visualizationModel,
                 GLBuildingModel buildingModel) {
-            this.visualizationModel = visualizationModel;
             this.buildingModel = buildingModel;
         }
 
@@ -142,7 +140,7 @@ public class GLBuildingViews {
         private void createWalls() {
             for (int i = 0; i < buildingModel.getFloorCount(); ++i) {
                 buildingModel.getWallModels(i).forEach(
-                        wall -> wallViews.put(wall, new GLWall(wall, visualizationModel)));
+                        wall -> wallViews.put(wall, new GLWall(wall)));
             }
         }
     }

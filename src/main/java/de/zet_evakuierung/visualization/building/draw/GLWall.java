@@ -17,15 +17,14 @@
 package de.zet_evakuierung.visualization.building.draw;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.media.opengl.GL2;
 
 import de.zet_evakuierung.visualization.building.model.GLWallModel;
-import gui.visualization.EvacuationVisualizationModel;
 import gui.visualization.VisualizationOptionManager;
 import io.visualization.BuildingResults.Wall;
 import org.zetool.math.Conversion;
@@ -41,31 +40,27 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
 
-    private List<GLVector> basePoints;
     private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * 0.01;
+
+    private final List<GLVector> basePoints;
     private final GLColor wallColor;
-    private boolean barrier = false;
 
     /**
      * @param model the visualization model that is drawn
-     * @param visualizationModel the overall visualization model
      */
-    public GLWall(GLWallModel model, EvacuationVisualizationModel visualizationModel) {
+    public GLWall(GLWallModel model) {
         super(model);
-        basePoints = getBasePoints(model, visualizationModel);
+        basePoints = getBasePoints(model);
         //wallColor = VisualizationOptionManager.getCellWallColor();
         wallColor = VisualizationOptionManager.getCellFloorColor();
-        barrier = model.isBarrier();
     }
 
-    private List<GLVector> getBasePoints(GLWallModel visualized, EvacuationVisualizationModel visualizationModel) {
-        final int floor = visualized.getFloor().id();
-        final double height = floor * VisualizationOptionManager.getFloorDistance();
+    private List<GLVector> getBasePoints(GLWallModel visualized) {
+        final double height = model.getZPosition();
         List<GLVector> result = new LinkedList<>();
 
         for (Point2D.Double point : visualized) {
-            result.add(new GLVector(point.x * visualizationModel.scaling, (-1) * point.y * visualizationModel.scaling,
-                    height * visualizationModel.scaling));
+            result.add(new GLVector(point.x, point.y, height));
         }
 
         return result;
@@ -95,8 +90,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
         Iterator<GLVector> wallStart = basePoints.iterator();
         Iterator<GLVector> wallEnd = basePoints.iterator();
 
-        Vector<Vector3> vectors = new Vector<>(basePoints.size());
-        Vector<Double> angles = new Vector<>(basePoints.size());
+        ArrayList<Vector3> vectors = new ArrayList<>(basePoints.size());
+        ArrayList<Double> angles = new ArrayList<>(basePoints.size());
         if (wallEnd.hasNext()) {
             wallEnd.next();
         }
@@ -122,7 +117,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
             GLVector outerStartHigh = new GLVector(innerStartHigh);
             GLVector outerEndHigh = new GLVector(innerEndHigh);
 
-            if (model.getWallType(i) != Wall.ElementType.PASSABLE) {	// Normal wall, no door
+            if (model.getWallType(i) != Wall.ElementType.PASSABLE) {
+                // Normal wall, no door
                 GLVector normal = model.isRoomLeft()
                         ? new GLVector(Vector3.normal(innerEnd, innerStart, innerStartHigh))
                         : new GLVector(Vector3.normal(innerStart, innerEnd, innerEndHigh));

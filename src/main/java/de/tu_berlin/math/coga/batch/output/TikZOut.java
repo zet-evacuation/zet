@@ -201,12 +201,12 @@ public class TikZOut extends AbstractOutput implements TreeListItem {
         for (Wall w : br.getWalls()) {
             Point2D last = null;
             int segmentNumber = 0;
-            for (Point2D p : w) {
+            for (Point2D p : w.getPoints()) {
                 if (last == null) {
                     last = p;
                 } else {
                     // draw a line from last to p
-                    StringBuilder sb = getSb(w.getFloor().id());
+                    StringBuilder sb = getSb(w.getFloor());
                     if (w.getWallType(segmentNumber) == Wall.ElementType.PASSABLE) {
                         //sb.append( "  \\draw[dashed] (" );
                     } else {

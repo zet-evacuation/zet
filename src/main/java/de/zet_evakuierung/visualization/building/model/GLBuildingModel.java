@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import io.visualization.BuildingResults;
 
 /**
@@ -68,6 +69,11 @@ public class GLBuildingModel {
         private final BuildingResults buildingResults;
 
         /**
+         * Optional properties for the visualization.
+         */
+        private BuildingVisualizationProperties properties = new BuildingVisualizationProperties() {
+        };
+        /**
          * Optional visualization model used during the {@link #build() building process}.
          */
         private BuildingVisualizationModel visualizationModel = new BuildingVisualizationModel();
@@ -76,6 +82,11 @@ public class GLBuildingModel {
 
         public Builder(BuildingResults buildingResults) {
             this.buildingResults = Objects.requireNonNull(buildingResults);
+        }
+
+        public Builder withVisualizationProperties(BuildingVisualizationProperties properties) {
+            this.properties = properties;
+            return this;
         }
 
         public Builder withVisualizationModel(BuildingVisualizationModel visualizationModel) {
@@ -112,8 +123,11 @@ public class GLBuildingModel {
          * @return a mapping of all rooms
          */
         private void createWalls() {
-            buildingResults.getWalls().forEach(wall -> floors.get(wall.getFloor().id()).add(wall));
+
+            buildingResults.getWalls()
+                    .forEach(wall -> floors.get(wall.getFloor())
+                    .add(new GLWallModel(buildingResults, wall, properties, visualizationModel))
+                    );
         }
     }
-
 }

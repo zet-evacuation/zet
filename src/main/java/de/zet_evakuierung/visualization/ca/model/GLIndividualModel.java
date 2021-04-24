@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import de.zet_evakuierung.visualization.VisHistoryTriple;
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.StepUpdateListener;
@@ -36,8 +37,15 @@ import org.zet.cellularautomaton.algorithm.state.EvacuationState;
 public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndividualModel, GLIndividual, CellularAutomatonVisualizationModel>
         implements StepUpdateListener {
 
+    private final Individual controlled;
+    private final Function<GLCellModel, Tuple> query;
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final CellularAutomatonVisualizationProperties properties;
+
     /** The history data structure that stores information about the positions of the individual at given times */
-    private ArrayList<VisHistoryTriple<Double, GLCellModel, GLCellModel>> path;
+    private final ArrayList<VisHistoryTriple<Double, GLCellModel, GLCellModel>> path;
     /** The last time at that the individual moves. */
     private double lastEnd;
     /** The current index on the history data structure that is reached during linear search. */
@@ -58,26 +66,27 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
     private double headInformationValue;
     /** The type of the information displayed on the head. */
     private DynamicCellularAutomatonInformation.HeadInformation headInformationType = DynamicCellularAutomatonInformation.HeadInformation.PANIC;
-    private final Individual controlled;
     /** The floor on which the individual is standing in the current moment of simulation. */
     private int onFloor = 0;
     EvacuationState es;
-    private final Function<GLCellModel, Tuple> query;
 
     /**
      * Creates a new individual control class for an {@link Individual}.
      *
      * @param individual the controlled individual
-     * @param visualizationModel the general control class
+     * @param properties properties of the visualization
+     * @param visualizationModel model of the dynamic visualization
      * @param query queries the 2 dimensional {@code x}-{@code y} position of a cell
      */
-    public GLIndividualModel(Individual individual, CellularAutomatonVisualizationModel visualizationModel,
+    public GLIndividualModel(Individual individual, CellularAutomatonVisualizationProperties properties,
+            CellularAutomatonVisualizationModel visualizationModel,
             Function<GLCellModel, Tuple> query) {
         super(visualizationModel);
+        controlled = individual;
+        this.properties = properties;
         this.query = query;
         this.setView(new GLIndividual(this));
         visualizationModel.setFrustum(visualizationModel.getFrustum());
-        controlled = individual;
         path = new ArrayList<>();
         moveVector = new Tuple(0, 0);
         sourcePos = new Tuple(0, 0);
@@ -135,7 +144,7 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
      * @return the current position of the individual in absolute coordinates.
      */
     public Tuple getCurrentPosition() {
-        double cellSize = 200 * visualizationModel.scaling;
+        double cellSize = 200 * properties.getScaling();
         double completedPartOfMove = (step - startTimeOfMove) / timeForMove;
         completedPartOfMove = Math.min(completedPartOfMove, 1.0);
         completedPartOfMove = Math.max(completedPartOfMove, 0.0);

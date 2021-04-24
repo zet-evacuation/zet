@@ -17,19 +17,18 @@ package io.visualization;
 
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import de.zet_evakuierung.model.FloorInterface;
 import de.zet_evakuierung.model.PlanPoint;
 import de.zet_evakuierung.model.RelativePosition;
 import de.zet_evakuierung.model.Room;
-import de.zet_evakuierung.visualization.building.model.GLWallModel;
 
 /**
  * @author Daniel R. Schmidt
@@ -37,11 +36,10 @@ import de.zet_evakuierung.visualization.building.model.GLWallModel;
  */
 public class BuildingResults {
 
-	public static class Wall implements GLWallModel, Iterable<Point2D.Double> {
+	public static class Wall {
 
 		/** An enumeration describing the different types of walls that can be visualized. */
 		public static enum ElementType {
-
 			/** The default wall type, nothing special. */
 			SIMPLE,
 			/** A passable wall, normally that is a door. */
@@ -49,21 +47,19 @@ public class BuildingResults {
 			/** A wall that belongs to an inaccessible area. */
 			INACCESSIBLE
 		};
-		private Vector<Point2D.Double> points;
-		private Floor floor;
-		//protected ElementType wallType;
-		private Vector<ElementType> wallTypes;
+		private final ArrayList<Point2D.Double> points;
+		private final ArrayList<ElementType> wallTypes;
+		private final Floor floor;
 		protected boolean roomIsLeft;
 		protected boolean roomIsRight;
 		protected boolean barrier = false;
 
 		public Wall( Floor floor ) {
-			this.points = new Vector<>();
-			this.wallTypes = new Vector<>();
+			this.points = new ArrayList<>();
+			this.wallTypes = new ArrayList<>();
 			this.floor = floor;
 		}
 
-        @Override
 		public boolean isBarrier() {
 			return barrier;
 		}
@@ -77,7 +73,6 @@ public class BuildingResults {
 		 *
 		 * @return true if the room is on the left side, false otherwise.
 		 */
-        @Override
 		public boolean isRoomLeft() {
 			return roomIsLeft;
 		}
@@ -91,7 +86,6 @@ public class BuildingResults {
 		 *
 		 * @return true if the room is on the right side, false otherwise
 		 */
-        @Override
 		public boolean isRoomRight() {
 			return roomIsRight;
 		}
@@ -123,20 +117,17 @@ public class BuildingResults {
 		 * @param wallSegment the segment of the wall which type should be returned
 		 * @return the wall type of the wall segment in the controlled class.
 		 */
-        @Override
 		public ElementType getWallType( int wallSegment ) {
 			return wallTypes.get( wallSegment );
 		}
 
-        @Override
-		public Floor getFloor() {
-			return floor;
+		public int getFloor() {
+			return floor.id;
 		}
 
-		@Override
-		public Iterator<Point2D.Double> iterator() {
-			return Collections.unmodifiableList( points ).iterator();
-		}
+        public Iterable<Point2D.Double> getPoints() {
+            return points;
+        }
 	}
 
 	public static class Floor implements FloorInterface {
@@ -276,7 +267,6 @@ public class BuildingResults {
 		if( isLeft != isRight ) {
 			curWall.roomIsLeft = isLeft;
 			curWall.roomIsRight = isRight;
-		}// else
-		//	System.err.println( "Kante konnte nicht genutzt werden!");
+		}
 	}
 }

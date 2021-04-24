@@ -19,23 +19,30 @@ import java.util.List;
 
 import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import io.visualization.CellularAutomatonVisualizationResults;
 
 public class GLFloorModel extends AbstractVisualizationModel<CellularAutomatonVisualizationModel>
         implements VisualizationNodeModel {
 
+    private final int floorNumber;
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final CellularAutomatonVisualizationProperties properties;
+
     private double xPosition = 0.0d;
     private double yPosition = 0.0d;
 
-    private int floorNumber = 0;
-
-    public GLFloorModel(CellularAutomatonVisualizationResults caVisResults, int floorID, CellularAutomatonVisualizationModel visualizationModel) {
+    public GLFloorModel(CellularAutomatonVisualizationResults caVisResults, int floorID,
+            CellularAutomatonVisualizationProperties properties,
+            CellularAutomatonVisualizationModel visualizationModel) {
         super(visualizationModel);
+        this.floorNumber = floorID;
+        this.properties = properties;
 
         xPosition = caVisResults.get(floorID).x;
         yPosition = caVisResults.get(floorID).y;
-
-        this.floorNumber = floorID;
     }
 
     /**
@@ -72,6 +79,6 @@ public class GLFloorModel extends AbstractVisualizationModel<CellularAutomatonVi
     }
 
     public double getZPosition() {
-        return floorNumber * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
+        return floorNumber * properties.getFloorHeight() * properties.getScaling();
     }
 }

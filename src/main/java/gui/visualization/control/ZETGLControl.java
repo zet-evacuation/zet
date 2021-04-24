@@ -47,6 +47,7 @@ import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
+import gui.visualization.EvacuationVisualizationProperties;
 import gui.visualization.VisualizationOptionManager;
 import io.visualization.BuildingResults;
 import io.visualization.CellularAutomatonVisualizationResults;
@@ -168,16 +169,22 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
      * Initializes a new instance of the general control class for the visualization of an evacuation simulation.
      *
      * @param caVisResults the visual results for cellular automatons
+     * @param evacResults the visual results for cellular automatons
      * @param graphVisResult the visual results for graph
      * @param buildingResults the visual information about the building
      * @param caStatistic the calculated statistic for cellular automaton
      * @param compvisres the visual information to compare 2 different networks
      */
     public ZETGLControl(CellularAutomatonVisualizationResults caVisResults, EvacuationSimulationResults evacResults,
-            GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres) {
+            GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic,
+            CompareVisualizationResults compvisres) {
         Logger.getGlobal().info("Setting up the ZETGLControl with the wrong constructor.");
         this.caStatistic = caStatistic;
         this.buildingResults = buildingResults;
+
+        EvacuationVisualizationProperties properties = new EvacuationVisualizationProperties();
+        properties.setScaling(sizeMultiplicator);
+        properties.setFloorHeight(VisualizationOptionManager.getFloorDistance());
 
         GLCellModel.invalidateMergedPotential();
         if (caVisResults != null) {
@@ -188,18 +195,17 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                 absoluteMaxSpeed = evacResults.getRecording().getInitialConfig().getAbsoluteMaxSpeed();
             }
             cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
-            cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
-            cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
             if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
                 throw new IllegalStateException("Only multi floor automaton supported");
             }
             CellularAutomatonVisualizationModelContainer caModel = new CellularAutomatonVisualizationModelContainer.Builder(
                     (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
                     .withVisualizationModel(cellularAutomatonVisualizationModel)
+                    .withVisualizationProperties(properties)
                     .build();
             GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
                     (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
-            caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, caModel, caViews);
+            caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, properties, caModel, caViews);
 
             estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
         } else {
@@ -209,11 +215,10 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
             hasGraph = true;
             networkVisualizationModel = new NetworkVisualizationModel();
             networkVisualizationModel.init(graphVisResult.getNetwork().nodes().size(), graphVisResult.getSupersink().id());
-            networkVisualizationModel.setScaling(sizeMultiplicator);
-            networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
-
             GraphVisualizationModelContainer graphModel
-                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel).build();
+                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel)
+                            .withVisualizationProperties(properties)
+                            .build();
             GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
                     graphModel, false);
             graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);
@@ -231,10 +236,10 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
             compareControl.build(compvisres);
         }
         time = 0;
-        buildingVisualizationModel = new BuildingVisualizationModel();
-        buildingVisualizationModel.setScaling(sizeMultiplicator);
+        buildingVisualizationModel = new BuildingVisualizationModel();        
         GLBuildingModel buildingModel = new GLBuildingModel.Builder(buildingResults)
                 .withVisualizationModel(buildingVisualizationModel)
+                .withVisualizationProperties(properties)
                 .build();
         GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
         buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
@@ -253,9 +258,12 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         }
         System.gc();
         buildingVisualizationModel = new BuildingVisualizationModel();
-        buildingVisualizationModel.setScaling(sizeMultiplicator);
+        EvacuationVisualizationProperties properties = new EvacuationVisualizationProperties();
+        properties.setScaling(sizeMultiplicator);
+        properties.setFloorHeight(VisualizationOptionManager.getFloorDistance());
         GLBuildingModel buildingModel = new GLBuildingModel.Builder(buildingResults)
                 .withVisualizationModel(buildingVisualizationModel)
+                .withVisualizationProperties(properties)
                 .build();
         GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
         buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
@@ -274,18 +282,20 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
         hasCellularAutomaton = true;
         this.ca = caVisResults.getCa();
         cellularAutomatonVisualizationModel = new CellularAutomatonVisualizationModel();
-        cellularAutomatonVisualizationModel.setScaling(sizeMultiplicator);
-        cellularAutomatonVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+        EvacuationVisualizationProperties properties = new EvacuationVisualizationProperties();
+        properties.setScaling(sizeMultiplicator);
+        properties.setFloorHeight(VisualizationOptionManager.getFloorDistance());
         if (!(caVisResults.getCa() instanceof MultiFloorEvacuationCellularAutomaton)) {
             throw new IllegalStateException("Only multi floor automaton supported");
         }
         CellularAutomatonVisualizationModelContainer caModel = new CellularAutomatonVisualizationModelContainer.Builder(
                 (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caVisResults)
                 .withVisualizationModel(cellularAutomatonVisualizationModel)
+                .withVisualizationProperties(properties)
                 .build();
         GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
                 (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
-        caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, caModel, caViews);
+        caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, properties, caModel, caViews);
         estimatedTime = 0;
         showCellularAutomaton(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.cellularAutomaton"));
         if (visibleFloor == -1) {
@@ -310,11 +320,15 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
             hasGraph = true;
             networkVisualizationModel = new NetworkVisualizationModel();
             networkVisualizationModel.init(graphVisResult.getNetwork().nodes().size(), graphVisResult.getSupersink().id());
-            networkVisualizationModel.setScaling(sizeMultiplicator);
-            networkVisualizationModel.setDefaultFloorHeight(VisualizationOptionManager.getFloorDistance());
+
+            EvacuationVisualizationProperties properties = new EvacuationVisualizationProperties();
+            properties.setScaling(sizeMultiplicator);
+            properties.setFloorHeight(VisualizationOptionManager.getFloorDistance());
 
             GraphVisualizationModelContainer graphModel
-                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel).build();
+                    = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel)
+                            .withVisualizationProperties(properties)
+                            .build();
             GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
                     graphModel, false);
             graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);

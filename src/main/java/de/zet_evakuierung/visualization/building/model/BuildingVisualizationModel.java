@@ -16,13 +16,15 @@
  */
 package de.zet_evakuierung.visualization.building.model;
 
-import gui.visualization.EvacuationVisualizationModel;
+import org.zetool.opengl.framework.abs.VisualizationModel;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BuildingVisualizationModel extends EvacuationVisualizationModel {
+public class BuildingVisualizationModel implements VisualizationModel {
+    private Frustum frustum;
 
     private int wallCount;
     private int wallsDone;
@@ -45,7 +47,6 @@ public class BuildingVisualizationModel extends EvacuationVisualizationModel {
         wallsDone = 0;
     }
 
-    @Override
     public double getStep() {
         return 0;
     }
@@ -68,6 +69,16 @@ public class BuildingVisualizationModel extends EvacuationVisualizationModel {
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    @Override
+    public void setFrustum(Frustum frustum) {
+        this.frustum = frustum;
+    }
+
+    @Override
+    public Frustum getFrustum() {
+        return frustum;
     }
 
 }

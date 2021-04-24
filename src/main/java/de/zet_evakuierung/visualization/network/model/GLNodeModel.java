@@ -22,6 +22,7 @@ import de.zet_evakuierung.visualization.AbstractVisualizationModel;
 import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.network.FlowHistroryTriple;
 import de.zet_evakuierung.visualization.network.GraphVisualizationData;
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.util.FlowCalculator;
 import ds.graph.NodeRectangle;
 import org.zetool.graph.Node;
@@ -31,12 +32,18 @@ public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualization
 
     private static final NodeRectangle DEFAULT_NODE_RECTANGLE = new NodeRectangle(0, 0, 0, 0);
 
-    private double xPosition;
-    private double yPosition;
-    // TODO read data from file in ZET
-    private double zPosition = 0;
-    private int capacity;
-    private FlowCalculator flowCalculator;
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final GraphVisualizationProperties properties;
+    private final int id;
+
+    private final double xPosition;
+    private final double yPosition;
+    private final double zPosition;
+
+    private final int capacity;
+    private final FlowCalculator flowCalculator;
     double nwX;
     double nwY;
     double seX;
@@ -49,21 +56,21 @@ public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualization
     private int startTime;
     private int floor;
     private boolean gridVisible = true;
-    private int id = 0;
 
-    public GLNodeModel(GraphVisualizationData visualizationData, Node node,
+    public GLNodeModel(GraphVisualizationData visualizationData, Node node, GraphVisualizationProperties properties,
             NetworkVisualizationModel visualizationModel) {
         super(visualizationModel);
+        this.properties = properties;
 
         Optional<NodeRectangle> rectangle = visualizationData.getNodeRectangle(node);
-        nwX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getX() * visualizationModel.scaling;
-        nwY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getY() * visualizationModel.scaling;
-        seX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getX() * visualizationModel.scaling;
-        seY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getY() * visualizationModel.scaling;
+        nwX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getX() * properties.getScaling();
+        nwY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_nw_point().getY() * properties.getScaling();
+        seX = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getX() * properties.getScaling();
+        seY = rectangle.orElse(DEFAULT_NODE_RECTANGLE).get_se_point().getY() * properties.getScaling();
 
         Vector3 position = visualizationData.getPosition(node);
-        xPosition = position.x * visualizationModel.scaling;
-        yPosition = position.y * visualizationModel.scaling;
+        xPosition = position.x * properties.getScaling();
+        yPosition = position.y * properties.getScaling();
         capacity = visualizationData.getCapacity(node);
 
         id = node.id();
@@ -73,8 +80,9 @@ public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualization
 
         floor = visualizationData.getLayer(node);
 
-        zPosition = visualizationModel.defaultFloorHeight * 0.1 * visualizationModel.scaling; // set bottom graph 10% above the ground
-        zPosition += floor * visualizationModel.defaultFloorHeight * visualizationModel.scaling;
+        // set bottom graph 10% above the ground
+        double positionOffset = properties.getFloorHeight() * 0.1 * properties.getScaling();
+        zPosition = positionOffset + floor * properties.getFloorHeight() * properties.getScaling();
 
         flowCalculator = new FlowCalculator();
         visualizationModel.nodeProgress();
@@ -167,7 +175,7 @@ public class GLNodeModel extends AbstractVisualizationModel<NetworkVisualization
      * @return
      */
     public double getFloorHeight() {
-        return visualizationModel.defaultFloorHeight * visualizationModel.scaling * 0.1;
+        return properties.getFloorHeight() * properties.getScaling() * 0.1;
     }
 
     public int getNumber() {

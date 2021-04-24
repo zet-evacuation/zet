@@ -16,26 +16,70 @@
 package de.zet_evakuierung.visualization.building.model;
 
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 
+import de.zet_evakuierung.visualization.AbstractVisualizationModel;
+import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import io.visualization.BuildingResults;
+import io.visualization.BuildingResults.Wall;
 
 /**
  * @author Jan-Philipp Kappmeier
  * @author Daniel R. Schmidt
  */
-public interface GLWallModel extends Iterable<Point2D.Double> {
+public class GLWallModel extends AbstractVisualizationModel<BuildingVisualizationModel>
+        implements Iterable<Point2D.Double> {
 
-    boolean isBarrier();
+    private final Wall backingWall;
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final BuildingVisualizationProperties properties;
 
-    boolean isRoomLeft();
+    public GLWallModel(BuildingResults buildingResults, Wall wall,
+            BuildingVisualizationProperties properties,
+            BuildingVisualizationModel visualizationModel) {
+        super(visualizationModel);
+        this.backingWall = wall;
+        this.properties = properties;
+    }
+    public boolean isBarrier() {
+        return backingWall.isBarrier();
+    }
 
-    boolean isRoomRight();
+    public boolean isRoomLeft() {
+        return backingWall.isRoomLeft();
+    }
 
-    BuildingResults.Wall.ElementType getWallType(int i);
+    public boolean isRoomRight() {
+        return backingWall.isRoomRight();
+    }
 
-    BuildingResults.Floor getFloor();
+    public Wall.ElementType getWallType(int wallSegment) {
+        return backingWall.getWallType(wallSegment);
+    }
 
-    default void delete() {
-        // will be removed
+    public double getZPosition() {
+        final int floor = backingWall.getFloor();
+        final double height = floor * properties.getFloorHeight();
+        return height * properties.getScaling();
+    }
+
+    @Override
+    public Iterator<Point2D.Double> iterator() {
+        final Iterator<Point2D.Double> sourceIterator = backingWall.getPoints().iterator();
+        return new Iterator<Point2D.Double>() {
+            @Override
+            public boolean hasNext() {
+                return sourceIterator.hasNext();
+            }
+
+            @Override
+            public Point2D.Double next() {
+                Point2D.Double nextSourcePoint = sourceIterator.next();
+                return new Point2D.Double(nextSourcePoint.x * properties.getScaling(),
+                        (-1) * nextSourcePoint.y * properties.getScaling());
+            }
+        };
     }
 }

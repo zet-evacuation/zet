@@ -137,7 +137,6 @@ public class GLBuildingViewsTest {
             wallMocks.addAll(modelMocksForParent);
             when(baseMocks.buildingModel.getWallModels(i)).thenReturn(modelMocksForParent);
             for (GLWallModel mock : modelMocksForParent) {
-                when(mock.getFloor()).thenReturn(floors.get(i));
                 when(mock.iterator()).thenReturn(Collections.emptyIterator());
             }
         }

@@ -19,14 +19,16 @@ package de.zet_evakuierung.visualization.network.model;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gui.visualization.EvacuationVisualizationModel;
 import org.zetool.math.Conversion;
+import org.zetool.opengl.framework.abs.VisualizationModel;
+import org.zetool.opengl.framework.abs.VisualizationModelProvider;
+import org.zetool.opengl.helper.Frustum;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class NetworkVisualizationModel extends EvacuationVisualizationModel {
+public class NetworkVisualizationModel implements VisualizationModel, VisualizationModelProvider {
 
     private static final Logger LOG = Logger.getGlobal();
 
@@ -48,6 +50,7 @@ public class NetworkVisualizationModel extends EvacuationVisualizationModel {
      */
     private boolean finished = false;
     private int superSinkID = 0;
+    private Frustum frustum;
 
     /**
      * <p>
@@ -87,12 +90,21 @@ public class NetworkVisualizationModel extends EvacuationVisualizationModel {
         return superSinkID;
     }
 
+    @Override
+    public Frustum getFrustum() {
+        return frustum;
+    }
+
+    @Override
+    public void setFrustum(Frustum frustum) {
+        this.frustum = frustum;
+    }
+
     /**
      * Returns the current step of the graph. The step counter is stopped if the graph is finished.
      *
      * @return the current step of the graph
      */
-    @Override
     public double getStep() {
         return realStep;
     }

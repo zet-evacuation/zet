@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.draw.GLCA;
 import de.zet_evakuierung.visualization.ca.draw.GLCell;
 import de.zet_evakuierung.visualization.ca.draw.GLCellularAutomatonViews;
@@ -49,6 +50,10 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     private static final Logger LOG = Logger.getGlobal();
 
     /**
+     * Access to properties of the visualization run.
+     */
+    private final CellularAutomatonVisualizationProperties properties;
+    /**
      * Gives access to the model objects used by visualization views.
      */
     private final CellularAutomatonVisualizationModelContainer cellularAutomatonModel;
@@ -66,9 +71,10 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     private EvacuationSimulationResults evacuationResults;
 
     public GLCellularAutomatonControl(CellularAutomatonVisualizationModel visualizationModel,
+            CellularAutomatonVisualizationProperties properties,
             CellularAutomatonVisualizationModelContainer cellularAutomatonModel, GLCellularAutomatonViews views) {
         super(visualizationModel);
-
+        this.properties = properties;
         this.cellularAutomatonModel = cellularAutomatonModel;
         this.views = views;
         setView(views.getView());
@@ -132,17 +138,16 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
     private void convertIndividualMovements() {
         LOG.info("Converting indivudal movements");
         ArrayList<GLIndividual> glIndividuals = new ArrayList<>();
-        ArrayList<GLIndividualModel> individuals = new ArrayList<>();
 
         EvacuationRecording recording = evacuationResults.getRecording();
         EvacuationCellularAutomaton ca = recording.getInitialConfig().getCellularAutomaton();
-        individuals = new ArrayList<>(evacuationResults.getEs().getInitialIndividualCount());
+        ArrayList<GLIndividualModel> individuals = new ArrayList<>(evacuationResults.getEs().getInitialIndividualCount());
         for (int k = 0; k < evacuationResults.getEs().getInitialIndividualCount(); k++) {
             individuals.add(null);
         }
 
         for (Individual individual : evacuationResults.getEs()) {
-            GLIndividualModel control = new GLIndividualModel(individual, visualizationModel, this::computeAbsoluteCellPosition);
+            GLIndividualModel control = new GLIndividualModel(individual, properties, visualizationModel, this::computeAbsoluteCellPosition);
             individuals.set(individual.getNumber(), control);
         }
 

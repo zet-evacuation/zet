@@ -105,9 +105,6 @@ public class GLBuildingControl
      */
     @Override
     public void delete() {
-        for (GLWallModel wall : this) {
-            wall.delete();
-        }
         view.delete();
         view = null;
     }
