@@ -18,6 +18,7 @@ package de.zet_evakuierung.visualization.network.draw;
 import javax.media.opengl.GL2;
 
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.model.GLEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLNashFlowEdgeModel;
 import org.zetool.math.Conversion;
@@ -64,8 +65,8 @@ public class GLNashFlowEdge extends GLEdge {
     /** The angle used to rotate to display the edges. */
     final double rotateAngle;
 
-    public GLNashFlowEdge(GLEdgeModel model) {
-        super(model);
+    public GLNashFlowEdge(GLEdgeModel model, GraphVisualizationProperties properties) {
+        super(model, properties);
         nmodel = (GLNashFlowEdgeModel) model;
         edgeColor = GLColor.gray;
         final Vector3 b = new Vector3(0, 0, 1);

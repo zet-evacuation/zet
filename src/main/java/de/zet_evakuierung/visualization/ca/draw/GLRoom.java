@@ -18,8 +18,9 @@ package de.zet_evakuierung.visualization.ca.draw;
 import javax.media.opengl.GL2;
 
 import com.google.common.annotations.VisibleForTesting;
+
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 
@@ -30,6 +31,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLRoom extends AbstractDrawable<GLCell, GLRoomModel> {
 
+    /**
+     * Access to properties of the visualization run.
+     */
+    private final CellularAutomatonVisualizationProperties properties;
     /** Top left coordinate of the room bounding box. */
     private GLVector topLeft;
     /** Top right coordinate of the room bounding box. */
@@ -43,11 +48,12 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomModel> {
      * Draws the room. The top left corner of the room will be located at {@code  (0, 0, z)}.
      *
      * @param model
+     * @param properties
      */
-    public GLRoom(GLRoomModel model) {
+    public GLRoom(GLRoomModel model, CellularAutomatonVisualizationProperties properties) {
         super(model, computePosition(model));
-        System.out.println("GRID Property is: " + VisualizationOptionManager.showSpaceBetweenCells());
-        if (VisualizationOptionManager.showSpaceBetweenCells()) {
+        this.properties = properties;
+        if (properties.isGridVisible()) {
             topLeft = new GLVector(0, 0, -0.1);
             topRight = new GLVector(model.getWidth(), 0, -0.1);
             bottomLeft = new GLVector(0, model.getHeight(), -0.1);
@@ -72,9 +78,9 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomModel> {
      */
     @Override
     public void performDynamicDrawing(GL2 gl) {
-        if (VisualizationOptionManager.showSpaceBetweenCells()) {
+        if (properties.isGridVisible()) {
             // draw a floor
-            VisualizationOptionManager.getCellSeperationColor().draw(gl);
+            properties.getGridColor().draw(gl);
             gl.glBegin(GL2.GL_QUADS);
             gl.glNormal3d(0, 0, 1);
             topLeft.draw(gl);

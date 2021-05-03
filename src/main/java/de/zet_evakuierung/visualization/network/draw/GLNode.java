@@ -30,9 +30,9 @@ import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.awt.TextureRenderer;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import gui.visualization.QualityPreset;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.drawingutils.GLVector;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
@@ -45,20 +45,24 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeModel> {
     private double radius;
     int nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
     int flowDisplayMode = GLU.GLU_FILL;
-    GLColor nodeColor = VisualizationOptionManager.getNodeColor();
-    GLColor evacuationColor = VisualizationOptionManager.getEvacuationNodeColor();
-    GLColor sourceColor = VisualizationOptionManager.getSourceNodeColor();
-    GLColor deletedSourceColor = VisualizationOptionManager.getDeletedSourceNodeColor();
-    GLColor nodeBorderColor = VisualizationOptionManager.getNodeBorderColor();
-    static double nodeRadius = VisualizationOptionManager.getNodeRadius(); //1.3 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
+    final GLColor nodeColor;
+    GLColor evacuationColor;
+    GLColor sourceColor;
+    GLColor deletedSourceColor;
+    GLColor nodeBorderColor;
     // TODO read quality preset from VisualizatonOptionManager
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.VeryHighQuality;// QualityPreset.MediumQuality;
 
-    public GLNode(GLNodeModel model) {
+    public GLNode(GLNodeModel model, GraphVisualizationProperties properties) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), model.getZPosition()));
 
-        radius = nodeRadius;
+        radius = properties.getNodeRadius();
+        nodeColor = properties.getNodeColor();
+        evacuationColor = properties.getEvacuationColor();
+        sourceColor = properties.getSourceColor();
+        deletedSourceColor = properties.getDeletedSourceColor();
+        nodeBorderColor = properties.getNodeBorderColor();
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, nodeDisplayMode);
         GLU_INSTANCE.gluQuadricOrientation(GLU_QUADRIC, GLU.GLU_OUTSIDE);
     }

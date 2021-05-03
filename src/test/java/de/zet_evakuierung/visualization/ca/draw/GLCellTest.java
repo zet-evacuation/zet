@@ -30,12 +30,11 @@ import java.util.function.Function;
 import javax.media.opengl.GL2;
 
 import mockit.Injectable;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import ds.PropertyContainer;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
@@ -44,9 +43,15 @@ import org.zetool.opengl.drawingutils.GLColor;
  * @author Jan-Philipp Kappmeier
  */
 public class GLCellTest {
-    
-    private final static String COLOR_PROPERTY = "options.visualization.appeareance.colors.wallColor";
-    private final static String SMOOTH_PROPERTY = "options.visualization.view.smooth";
+
+    private final CellularAutomatonVisualizationProperties DEFAULT_PROPERTIES
+            = new CellularAutomatonVisualizationProperties() {
+        @Override
+        public GLColor getFloorColor() {
+            return new GLColor(Color.GREEN);
+        }
+
+    };
 
     /**
      * Simple OpenGL mock to be injected in drawing methods.
@@ -54,27 +59,21 @@ public class GLCellTest {
     @Injectable
     GL2 glMock;
 
-    @BeforeClass
-    public static void initializeProperty() {
-        PropertyContainer.getGlobal().define(COLOR_PROPERTY, Color.class, Color.GREEN);
-        PropertyContainer.getGlobal().define(SMOOTH_PROPERTY, Boolean.class, false);
-    }
-
     @Test
     public void colorUpdatedOnNewSteps() {
         // Init mocks and fixture
         GLCellModel model = mock(GLCellModel.class);
         Function<Direction8, GLColor> neighbourColorMock = mock(Function.class);
-        GLCell fixture = createWithGLContext(() -> new GLCell(model, neighbourColorMock));
+        GLCell fixture = createWithGLContext(() -> new GLCell(model, DEFAULT_PROPERTIES, neighbourColorMock));
         assertThat(fixture.color, is(equalTo(new GLColor(Color.GREEN))));
-        
+
         // Set up test call: if drawn, an update is required and the potential is invalid
         when(model.isUpdateRequired()).thenReturn(true);
         when(model.getDisplayMode()).thenReturn(CellInformationDisplay.STATIC_POTENTIAL);
         when(model.isPotentialValid()).thenReturn(false);
-                
+
         fixture.performDynamicDrawing(glMock);
-        
+
         // Verify results: the new color should be set to the invalid color from the visualization properties
         assertThat(fixture.color, is(equalTo(getInvalidPotentialColor())));
     }

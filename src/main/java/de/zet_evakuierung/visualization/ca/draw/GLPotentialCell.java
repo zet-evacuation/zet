@@ -17,13 +17,15 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLPotentialCell extends GLCell {
 
-    public GLPotentialCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
-        super(model, neighborColor);
+    public GLPotentialCell(GLCellModel model, CellularAutomatonVisualizationProperties properties,
+            Function<Direction8, GLColor> neighborColor) {
+        super(model, properties, neighborColor);
     }
 }

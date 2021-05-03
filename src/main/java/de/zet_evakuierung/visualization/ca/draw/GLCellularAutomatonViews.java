@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
@@ -70,8 +71,9 @@ public class GLCellularAutomatonViews {
     }
 
     public static GLCellularAutomatonViews createInstance(CellularAutomatonVisualizationModel visualizationModel,
-            MultiFloorEvacuationCellularAutomaton cellularAutomaton, CellularAutomatonVisualizationModelContainer cellularAutomatonModel) {
-        GLCellularAutomatonViewFactory factory = new GLCellularAutomatonViewFactory(visualizationModel,
+            CellularAutomatonVisualizationProperties properties, MultiFloorEvacuationCellularAutomaton cellularAutomaton,
+            CellularAutomatonVisualizationModelContainer cellularAutomatonModel) {
+        GLCellularAutomatonViewFactory factory = new GLCellularAutomatonViewFactory(visualizationModel, properties,
                 cellularAutomaton, cellularAutomatonModel);
         factory.createViews();
         return new GLCellularAutomatonViews(factory);
@@ -87,6 +89,10 @@ public class GLCellularAutomatonViews {
     private static class GLCellularAutomatonViewFactory {
 
         private final CellularAutomatonVisualizationModel visualizationModel;
+        /**
+         * Properties for the visualization.
+         */
+        private final CellularAutomatonVisualizationProperties properties;
         private final MultiFloorEvacuationCellularAutomaton cellularAutomaton;
         private final CellularAutomatonVisualizationModelContainer cellularAutomatonModel;
         private Map<GLFloorModel, GLCAFloor> floorViews;
@@ -94,9 +100,11 @@ public class GLCellularAutomatonViews {
         private GLCA rootView;
 
         GLCellularAutomatonViewFactory(CellularAutomatonVisualizationModel visualizationModel,
+                CellularAutomatonVisualizationProperties properties,
                 MultiFloorEvacuationCellularAutomaton cellularAutomaton,
                 CellularAutomatonVisualizationModelContainer cellularAutomatonModel) {
             this.visualizationModel = visualizationModel;
+            this.properties = properties;
             this.cellularAutomaton = cellularAutomaton;
             this.cellularAutomatonModel = cellularAutomatonModel;
         }
@@ -121,7 +129,7 @@ public class GLCellularAutomatonViews {
         private void createRoomViews(int floorId, GLCAFloor parentFloor) {
             for (Room room : cellularAutomaton.getRoomsOnFloor(floorId)) {
                 GLRoomModel roomModel = cellularAutomatonModel.getRoomModel(room);
-                GLRoom roomView = new GLRoom(roomModel);
+                GLRoom roomView = new GLRoom(roomModel, properties);
                 parentFloor.addChild(roomView);
                 createCellViews(room, roomView);
             }
@@ -146,18 +154,18 @@ public class GLCellularAutomatonViews {
 
             if (cell instanceof DoorCell || cell instanceof RoomCell) {
                 if (cell.getSpeedFactor() == RoomCell.STANDARD_ROOMCELL_SPEEDFACTOR) {
-                    return new GLCell(cellModel, neighborColor);
+                    return new GLCell(cellModel, properties, neighborColor);
                 } else {
-                    return new GLDelayCell(cellModel, neighborColor);
+                    return new GLDelayCell(cellModel, properties, neighborColor);
                 }
             } else if (cell instanceof ExitCell) {
-                return new GLEvacuationCell(cellModel, neighborColor);
+                return new GLEvacuationCell(cellModel, properties, neighborColor);
             } else if (cell instanceof SaveCell) {
-                return new GLSaveCell(cellModel, neighborColor);
+                return new GLSaveCell(cellModel, properties, neighborColor);
             } else if (cell instanceof StairCell) {
-                return new GLStairCell(cellModel, neighborColor);
+                return new GLStairCell(cellModel, properties, neighborColor);
             } else if (cell instanceof TeleportCell) {
-                return new GLSaveCell(cellModel, neighborColor);
+                return new GLSaveCell(cellModel, properties, neighborColor);
             } else {
                 throw new java.lang.IllegalStateException("Illegal Cell Type");
             }

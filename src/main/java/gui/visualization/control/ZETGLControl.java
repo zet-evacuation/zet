@@ -17,6 +17,7 @@ package gui.visualization.control;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -115,7 +116,9 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
 
     @Override
     public Iterator iterator() {
-        return List.of(buildingControl.getView(), caControl.getView(), graphControl.getView()).iterator();
+        return Arrays.asList(
+                new Drawable[]{buildingControl.getView(), caControl.getView(), graphControl.getView()}
+        ).iterator();
     }
 
     /** The localization class. */
@@ -204,7 +207,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                     .withVisualizationProperties(properties)
                     .build();
             GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
-                    (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
+                    properties, (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
             caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, properties, caModel, caViews);
 
             estimatedTime = Math.max(estimatedTime, evacResults.getRecording().length() * cellularAutomatonVisualizationModel.getSecondsPerStep());
@@ -219,7 +222,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                     = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel)
                             .withVisualizationProperties(properties)
                             .build();
-            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
+            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, properties, graphVisResult,
                     graphModel, false);
             graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);
 
@@ -241,7 +244,8 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                 .withVisualizationModel(buildingVisualizationModel)
                 .withVisualizationProperties(properties)
                 .build();
-        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
+        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, properties,
+                buildingModel);
         buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
         //AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
         initSettings();
@@ -265,7 +269,8 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                 .withVisualizationModel(buildingVisualizationModel)
                 .withVisualizationProperties(properties)
                 .build();
-        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, buildingModel);
+        GLBuildingViews buildingViews = GLBuildingViews.createInstance(buildingVisualizationModel, properties,
+                buildingModel);
         buildingControl = new GLBuildingControl(buildingVisualizationModel, buildingModel, buildingViews);
         showWalls(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.walls"));
     }
@@ -294,7 +299,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                 .withVisualizationProperties(properties)
                 .build();
         GLCellularAutomatonViews caViews = GLCellularAutomatonViews.createInstance(cellularAutomatonVisualizationModel,
-                (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
+                properties, (MultiFloorEvacuationCellularAutomaton) caVisResults.getCa(), caModel);
         caControl = new GLCellularAutomatonControl(cellularAutomatonVisualizationModel, properties, caModel, caViews);
         estimatedTime = 0;
         showCellularAutomaton(PropertyContainer.getGlobal().getAsBoolean("settings.gui.visualization.cellularAutomaton"));
@@ -329,7 +334,7 @@ public class ZETGLControl implements Drawable, VisualizationModel, HierarchyNode
                     = new GraphVisualizationModelContainer.Builder(graphVisResult, networkVisualizationModel)
                             .withVisualizationProperties(properties)
                             .build();
-            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, graphVisResult,
+            GLGraphViews graphViews = GLGraphViews.createInstance(networkVisualizationModel, properties, graphVisResult,
                     graphModel, false);
             graphControl = new GLFlowGraphControl(networkVisualizationModel, graphModel, graphViews);
 

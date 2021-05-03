@@ -17,10 +17,10 @@ package de.zet_evakuierung.visualization.network.draw;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.model.GLEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import gui.visualization.QualityPreset;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
@@ -38,12 +38,17 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeModel> {
     //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
     private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
+    /**
+     * Access to properties of the visualization run.
+     */
+    protected final GraphVisualizationProperties properties;
+
     /* The edgeLength of the edge in {@code OpenGL} scaling. */
     double edgeLength;
 
-    public GLEdge(GLEdgeModel model) {
+    public GLEdge(GLEdgeModel model, GraphVisualizationProperties properties) {
         super(model);
-        //update();
+        this.properties = properties;
     }
 
     /**
@@ -88,7 +93,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeModel> {
     @Override
     public void update() {
         edgeLength = model.get3DLength();
-        edgeColor = VisualizationOptionManager.getEdgeColor();
+        edgeColor = properties.getEdgeColor();
         thickness = model.getThickness();//5;
 
     }

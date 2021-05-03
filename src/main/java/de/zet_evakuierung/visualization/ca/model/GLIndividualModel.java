@@ -85,7 +85,7 @@ public class GLIndividualModel extends AbstractZETVisualizationControl<GLIndivid
         controlled = individual;
         this.properties = properties;
         this.query = query;
-        this.setView(new GLIndividual(this));
+        this.setView(new GLIndividual(this, properties));
         visualizationModel.setFrustum(visualizationModel.getFrustum());
         path = new ArrayList<>();
         moveVector = new Tuple(0, 0);

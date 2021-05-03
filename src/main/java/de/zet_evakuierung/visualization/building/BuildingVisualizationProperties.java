@@ -15,6 +15,8 @@
  */
 package de.zet_evakuierung.visualization.building;
 
+import org.zetool.opengl.drawingutils.GLColor;
+
 /**
  *
  * @author Jan-Philipp Kappmeier
@@ -27,6 +29,10 @@ public interface BuildingVisualizationProperties {
 
     public default double getFloorHeight() {
         return 10;
+    }
+
+    public default GLColor getWallColor() {
+        return new GLColor(64, 64, 64);
     }
 
 }

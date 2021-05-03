@@ -20,15 +20,13 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import gui.visualization.QualityPreset;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLFlowEdge extends GLEdge {
-
-    GLFlowEdgeModel fmodel;
 
     /**
      * The edgeLength of single flow units. If set to 1 no single units are displayed.
@@ -44,6 +42,9 @@ public class GLFlowEdge extends GLEdge {
 
     static double maxFlowThickness = 10 * 0.1;
     static double flowThicknessOfOneCapacityStep;
+
+    GLFlowEdgeModel fmodel;
+ 
     int maxFlowRate;
     /* Telling the flow on the edge for each time step. */
     private ArrayList<Integer> flowOnEdge;
@@ -55,13 +56,13 @@ public class GLFlowEdge extends GLEdge {
     int transitTime;
     /* not used */
     //double maxCapacity;
-    // TODO read quality from VisualOptionManager
-    //private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-    private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
+    private final QualityPreset qualityPreset;
 
-    public GLFlowEdge(GLFlowEdgeModel model) {
-        super(model);
+
+    public GLFlowEdge(GLFlowEdgeModel model, GraphVisualizationProperties properties) {
+        super(model, properties);
         fmodel = model;
+        qualityPreset = properties.getQualityPreset();
         maxFlowRate = model.getMaxFlowRate();
         update();
         GLU_INSTANCE.gluQuadricDrawStyle(GLU_QUADRIC, edgeDisplayMode); // Fill, points, lines
@@ -297,8 +298,8 @@ public class GLFlowEdge extends GLEdge {
         transitTime = model.getTransitTime();
         capacity = model.getCapacity();
         //maxCapacity = model.getMaxCapacity();
-        flowColor = VisualizationOptionManager.getFlowUnitColor();
-        flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
+        flowColor = properties.getFlowColor();
+        flowUnitColor = properties.getFlowFaceColor();
         maxFlowRate = model.getMaxFlowRate();
         minFlowThickness = 3 * 0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;
         maxFlowThickness = 10 * 0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;

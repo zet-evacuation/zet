@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import de.zet_evakuierung.visualization.ModelContainerTestUtils.MockHierarchyBuilder;
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModel;
 import de.zet_evakuierung.visualization.ca.model.CellularAutomatonVisualizationModelContainer;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
@@ -318,7 +319,9 @@ public class GLCellularAutomatonViewsTest {
          * @return the created instance
          */
         private GLCellularAutomatonViews createResult() {
-            return GLCellularAutomatonViews.createInstance(visualizationModel, cellularAutomaton,
+            CellularAutomatonVisualizationProperties properties = new CellularAutomatonVisualizationProperties() {
+            };
+            return GLCellularAutomatonViews.createInstance(visualizationModel, properties, cellularAutomaton,
                     cellularAutomatonModel);
         }
     }

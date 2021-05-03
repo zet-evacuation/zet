@@ -31,7 +31,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.zetool.opengl.framework.util.GLContextAwareThread.createWithGLContext;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,14 +46,13 @@ import java.util.stream.StreamSupport;
 
 import de.zet_evakuierung.visualization.ModelContainerTestUtils;
 import de.zet_evakuierung.visualization.network.GraphVisualizationData;
+import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
 import de.zet_evakuierung.visualization.network.model.GLFlowEdgeModel;
 import de.zet_evakuierung.visualization.network.model.GLGraphFloorModel;
 import de.zet_evakuierung.visualization.network.model.GLNodeModel;
 import de.zet_evakuierung.visualization.network.model.GraphVisualizationModelContainer;
 import de.zet_evakuierung.visualization.network.model.NetworkVisualizationModel;
 import ds.GraphVisualizationResults;
-import ds.PropertyContainer;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zetool.container.collection.IdentifiableCollection;
 import org.zetool.container.collection.ListSequence;
@@ -68,24 +66,6 @@ import org.zetool.graph.Node;
  * @author Jan-Philipp Kappmeier
  */
 public class GLGraphViewsTest {
-
-    /**
-     * Some properties that have to be defined when view classes are created by the factory.
-     */
-    @BeforeClass
-    public static void initializeProperty() {
-        PropertyContainer.getGlobal().define("options.visualization.appearance.nodeRadius", Double.class, 2.0);
-        PropertyContainer.getGlobal().define("options.visualization.appeareance.colors.nodeColor", Color.class,
-                Color.RED);
-        PropertyContainer.getGlobal().define("options.visualization.appeareance.colors.edgeColor", Color.class,
-                Color.RED);
-        PropertyContainer.getGlobal().define("options.visualization.appeareance.colors.flowColor", Color.class,
-                Color.RED);
-        PropertyContainer.getGlobal().define("options.visualization.appeareance.colors.evacuationColor", Color.class,
-                Color.RED);
-        PropertyContainer.getGlobal().define("options.visualization.appeareance.colors.sourceColor", Color.class,
-                Color.RED);
-    }
 
     @Test
     public void testEmpty() {
@@ -439,7 +419,10 @@ public class GLGraphViewsTest {
          * @return the created instance
          */
         private GLGraphViews createResult(boolean interFloorEdges) {
-            return GLGraphViews.createInstance(visualizationModel, visualizationData, graphModel, interFloorEdges);
+            GraphVisualizationProperties properties = new GraphVisualizationProperties() {
+            };
+            return GLGraphViews.createInstance(visualizationModel, properties, visualizationData, graphModel,
+                    interFloorEdges);
         }
     }
 }

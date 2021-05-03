@@ -19,6 +19,7 @@ package gui.visualization;
 import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.network.GraphVisualizationProperties;
+import org.zetool.opengl.drawingutils.GLColor;
 
 /**
  *
@@ -47,4 +48,15 @@ public class EvacuationVisualizationProperties implements CellularAutomatonVisua
     public void setScaling(double scaling) {
         this.scaling = scaling;
     }
+
+    @Override
+    public QualityPreset getQualityPreset() {
+        return null;
+    }
+
+    @Override
+    public GLColor getEvacuationColor() {
+        return new GLColor(10, 170, 80);
+    }
+
 }

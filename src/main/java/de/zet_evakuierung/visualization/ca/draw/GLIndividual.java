@@ -19,9 +19,9 @@ import java.awt.Color;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLIndividualModel;
 import gui.visualization.QualityPreset;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.util.Tuple;
 import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
@@ -34,18 +34,25 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualModel> {
 
-    //public static double individualHeight = 150 * 0.1; // TODO: use the scaling value, original 30
-    //public static double individualRadius = 100 * 0.1; // original 10
-    // set up individual heights
-    private static final double INDIVIDUAL_HEIGHT = /*1.2 **/ VisualizationOptionManager.getIndividualHeight();
-    private static final double INDIVIDUAL_RADIUS = VisualizationOptionManager.getIndividualRadius();
+    /**
+     * Access to properties of the visualization run.
+     */
+    protected final CellularAutomatonVisualizationProperties properties;
+    private final double individualHeight;
+    private final double individualRadius;
+    private final GLColor individualColor;
+    private final GLColor deadColor;
+    private final QualityPreset qualityPreset;
 
-    public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
-    public static GLColor deadColor = new GLColor(130, 55, 101);
-    public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
-
-    public GLIndividual(GLIndividualModel model) {
+    public GLIndividual(GLIndividualModel model, CellularAutomatonVisualizationProperties properties) {
         super(model);
+        this.properties = properties;
+        individualHeight = properties.getIndividualHeight();
+        individualRadius = properties.getIndividualRadius();
+
+        individualColor = properties.getIndividualColor();
+        deadColor = properties.getInvalidColor();
+        qualityPreset = properties.getQualityPreset();
     }
 
     @Override
@@ -70,7 +77,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualMod
             return;
         } else {
             //headColor = green.blend( red, model.getHeadInformation() );
-            headColor = VisualizationOptionManager.getEvacuationNodeColor();
+            headColor = properties.getEvacuationColor();
             bodyColor = individualColor;
         }
         gl.glPushMatrix();
@@ -78,16 +85,16 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualMod
         gl.glTranslated(pos.x, pos.y, 0.1);
         bodyColor.draw(gl);
 
-        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, /*1.2 **/ INDIVIDUAL_RADIUS, 0.0, INDIVIDUAL_HEIGHT, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
+        GLU_INSTANCE.gluCylinder(GLU_QUADRIC, /*1.2 **/ individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks);
         headColor.draw(gl);
-        gl.glTranslated(0, 0, INDIVIDUAL_HEIGHT - INDIVIDUAL_RADIUS * 0.7);
+        gl.glTranslated(0, 0, individualHeight - individualRadius * 0.7);
 
         // here the head is drawn...
         // perform frustum test if the center point is within the frustum
         Vector3 check = new Vector3(pos.x, pos.y, 1);
         // TODO Frustum
         //if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-        GLU_INSTANCE.gluSphere(GLU_QUADRIC, /*1.5 * */ INDIVIDUAL_RADIUS * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
+        GLU_INSTANCE.gluSphere(GLU_QUADRIC, /*1.5 * */ individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks);
 
         gl.glPopMatrix();
     }

@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
@@ -30,6 +31,10 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
 
+    /**
+     * Access to properties of the visualization run.
+     */
+    protected final CellularAutomatonVisualizationProperties properties;
     /** Top left coordinate of the squre cell. */
     private static GLVector topLeft;
     /** Top right coordinate of the squre cell. */
@@ -45,20 +50,19 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
     /** Function that allows to query for a neighbor color. */
     private final Function<Direction8, GLColor> neighborColor;
 
-    public GLCell(GLCellModel model, Function<Direction8, GLColor> neighbourColour) {
-        this(model, VisualizationOptionManager.getCellWallColor(), neighbourColour);
-    }
-
-    public GLCell(GLCellModel model, GLColor color, Function<Direction8, GLColor> neighbourColour) {
+    public GLCell(GLCellModel model, CellularAutomatonVisualizationProperties properties,
+            Function<Direction8, GLColor> neighbourColour) {
         super(model, new GLVector(model.getXPosition(), model.getYPosition(), 0));
+
         if (topLeft == null) {
             topLeft = new GLVector(model.getOffset(), -model.getOffset(), 0);
             topRight = new GLVector(model.getWidth(), -model.getOffset(), 0);
             bottomLeft = new GLVector(model.getOffset(), -model.getWidth(), 0);
             bottomRight = new GLVector(model.getWidth(), -model.getWidth(), 0);
         }
-        this.color = color;
-        this.defaultColor = color;
+        this.properties = properties;
+        this.color = properties.getFloorColor();
+        this.defaultColor = properties.getFloorColor();
         this.neighborColor = neighbourColour;
     }
 
@@ -67,7 +71,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellModel> {
         if (model.isUpdateRequired()) {
             updateFloorColor();
         }
-        if (VisualizationOptionManager.smoothCellVisualization()) {
+        if (properties.isSmooth()) {
             boolean lighting = gl.glIsEnabled(GL2.GL_LIGHTING);
             gl.glBegin(GL2.GL_QUADS);
             gl.glNormal3d(0, 0, 1);

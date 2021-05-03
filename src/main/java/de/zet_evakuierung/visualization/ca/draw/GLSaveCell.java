@@ -17,6 +17,7 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
 import gui.visualization.VisualizationOptionManager;
 import org.zetool.common.util.Direction8;
@@ -24,8 +25,10 @@ import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLSaveCell extends GLCell {
 
-    public GLSaveCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
-        super(model, VisualizationOptionManager.getSaveCellFloorColor(), neighborColor);
+    public GLSaveCell(GLCellModel model, CellularAutomatonVisualizationProperties properties,
+            Function<Direction8, GLColor> neighborColor) {
+        super(model, properties, neighborColor);
+        color = properties.getSafeColor();
     }
 
     @Override

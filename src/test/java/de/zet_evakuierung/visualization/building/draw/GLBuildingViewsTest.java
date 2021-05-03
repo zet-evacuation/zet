@@ -36,6 +36,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import de.zet_evakuierung.visualization.building.model.BuildingVisualizationModel;
 import de.zet_evakuierung.visualization.building.model.GLBuildingModel;
 import de.zet_evakuierung.visualization.building.model.GLWallModel;
@@ -175,7 +176,9 @@ public class GLBuildingViewsTest {
          * @return the created instance
          */
         private GLBuildingViews createResult() {
-            return GLBuildingViews.createInstance(visualizationModel, buildingModel);
+            BuildingVisualizationProperties properties = new BuildingVisualizationProperties() {
+            };
+            return GLBuildingViews.createInstance(visualizationModel, properties, buildingModel);
         }
     }
 }

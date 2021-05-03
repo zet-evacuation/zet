@@ -25,10 +25,10 @@ import static org.mockito.Mockito.when;
 import static org.zetool.opengl.framework.util.GLContextAwareThread.createWithGLContext;
 import static org.zetool.test.math.geom.NDimensionalIsCloseTo.closeTo;
 
-import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
-import ds.PropertyContainer;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
+import de.zet_evakuierung.visualization.ca.model.GLRoomModel;
 import org.zetool.math.vectormath.Vector3;
 
 /**
@@ -37,18 +37,19 @@ import org.zetool.math.vectormath.Vector3;
  */
 public class GLRoomTest {
 
-    private final static String GRID_PROPERTY = "options.visualization.view.grid";
-
-    @BeforeClass
-    public static void initializeProperty() {
-        PropertyContainer.getGlobal().define(GRID_PROPERTY, Boolean.class, true);
-    }
+    private final static CellularAutomatonVisualizationProperties DEFAULT_PROPERTIES
+            = new CellularAutomatonVisualizationProperties() {
+        @Override
+        public boolean isGridVisible() {
+            return true;
+        }
+    };
 
     @Test
     public void initialization() throws InterruptedException {
         GLRoomModel model = mock(GLRoomModel.class);
 
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, DEFAULT_PROPERTIES));
 
         assertThat(fixture.getModel(), is(sameInstance(model)));
     }
@@ -67,8 +68,7 @@ public class GLRoomTest {
         when(model.getWidth()).thenReturn(width);
         when(model.getHeight()).thenReturn(height);
 
-        PropertyContainer.getGlobal().set(GRID_PROPERTY, true);
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, DEFAULT_PROPERTIES));
 
         assertThat(fixture.getTopLeft(), is(closeTo(new Vector3(0, 0, -0.1), 0.001)));
         assertThat(fixture.getTopRight(), is(closeTo(new Vector3(width, 0, -0.1), 0.001)));
@@ -85,8 +85,15 @@ public class GLRoomTest {
     public void coordinatesNotDefined() throws InterruptedException {
         GLRoomModel model = mock(GLRoomModel.class);
 
-        PropertyContainer.getGlobal().set(GRID_PROPERTY, false);
-        GLRoom fixture = createWithGLContext(() -> new GLRoom(model));
+        CellularAutomatonVisualizationProperties invisibleGridProperties
+                = new CellularAutomatonVisualizationProperties() {
+            @Override
+            public boolean isGridVisible() {
+                return false;
+            }
+        };
+
+        GLRoom fixture = createWithGLContext(() -> new GLRoom(model, invisibleGridProperties));
 
         assertThat(fixture.getTopLeft(), is(nullValue()));
         assertThat(fixture.getTopRight(), is(nullValue()));

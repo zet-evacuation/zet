@@ -24,8 +24,8 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import de.zet_evakuierung.visualization.building.model.GLWallModel;
-import gui.visualization.VisualizationOptionManager;
 import io.visualization.BuildingResults.Wall;
 import org.zetool.math.Conversion;
 import org.zetool.math.vectormath.Vector3;
@@ -40,19 +40,26 @@ import org.zetool.opengl.framework.abs.AbstractDrawable;
  */
 public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
 
-    private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * 0.01;
+    /**
+     * Access to properties of the visualization run.
+     */
+    protected final BuildingVisualizationProperties properties;
+
+    private final double wallHeight;
 
     private final List<GLVector> basePoints;
     private final GLColor wallColor;
 
     /**
      * @param model the visualization model that is drawn
+     * @param properties the visualization properties
      */
-    public GLWall(GLWallModel model) {
+    public GLWall(GLWallModel model, BuildingVisualizationProperties properties) {
         super(model);
+        this.properties = properties;
         basePoints = getBasePoints(model);
-        //wallColor = VisualizationOptionManager.getCellWallColor();
-        wallColor = VisualizationOptionManager.getCellFloorColor();
+        wallColor = properties.getWallColor();
+        wallHeight = properties.getFloorHeight() * 0.1;
     }
 
     private List<GLVector> getBasePoints(GLWallModel visualized) {
@@ -74,8 +81,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
     @Override
     public void performStaticDrawing(GL2 gl) {
         gl.glBegin(GL2.GL_POLYGON);
-        //VisualizationOptionManager.getCellFloorColor().draw(gl);
-        VisualizationOptionManager.getCellWallColor().draw(gl);
+        properties.getWallColor().draw(gl);
         final Vector3 perturbate = new Vector3(0, 0, -0.5); // add a small offset to move the floor under the ca floor-level
         for (GLVector v : basePoints) {
             v.add(perturbate).draw(gl);
@@ -363,13 +369,13 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallModel> {
 
     private GLVector getStartHigh(int segment, int segmentCount) {
         GLVector startHigh = new GLVector(basePoints.get(mod(segment, segmentCount)));
-        startHigh.z += WALL_HEIGHT;
+        startHigh.z += wallHeight;
         return startHigh;
     }
 
     private GLVector getEndHigh(int segment, int segmentCount) {
         GLVector endHigh = new GLVector(basePoints.get(mod(segment + 1, segmentCount)));
-        endHigh.z += WALL_HEIGHT;
+        endHigh.z += wallHeight;
         return endHigh;
     }
 

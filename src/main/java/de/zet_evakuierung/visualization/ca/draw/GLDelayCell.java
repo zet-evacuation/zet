@@ -17,20 +17,22 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLDelayCell extends GLCell {
 
-    public GLDelayCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
-        super(model, VisualizationOptionManager.getDelayCellFloorColor(), neighborColor);
+    public GLDelayCell(GLCellModel model, CellularAutomatonVisualizationProperties properties,
+            Function<Direction8, GLColor> neighborColor) {
+        super(model, properties, neighborColor);
+        color = properties.getDelayColor();
     }
 
     @Override
     protected void updateFloorColor() {
-        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+        if (properties.isCellTypeVisible()) {
             color = getDefaultColor();
         } else {
             super.updateFloorColor();

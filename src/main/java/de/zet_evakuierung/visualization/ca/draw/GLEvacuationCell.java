@@ -17,20 +17,22 @@ package de.zet_evakuierung.visualization.ca.draw;
 
 import java.util.function.Function;
 
+import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.model.GLCellModel;
-import gui.visualization.VisualizationOptionManager;
 import org.zetool.common.util.Direction8;
 import org.zetool.opengl.drawingutils.GLColor;
 
 public class GLEvacuationCell extends GLCell {
 
-    public GLEvacuationCell(GLCellModel model, Function<Direction8, GLColor> neighborColor) {
-        super(model, VisualizationOptionManager.getEvacuationCellFloorColor(), neighborColor);
+    public GLEvacuationCell(GLCellModel model, CellularAutomatonVisualizationProperties properties,
+            Function<Direction8, GLColor> neighborColor) {
+        super(model, properties, neighborColor);
+        color = properties.getEvacuationColor();
     }
 
     @Override
     protected void updateFloorColor() {
-        if (VisualizationOptionManager.getAlwaysDisplayCellType()) {
+        if (properties.isCellTypeVisible()) {
             color = getDefaultColor();
         } else {
             super.updateFloorColor();

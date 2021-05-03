@@ -22,7 +22,6 @@ import de.zet_evakuierung.visualization.VisualizationNodeModel;
 import de.zet_evakuierung.visualization.ca.CellularAutomatonVisualizationProperties;
 import de.zet_evakuierung.visualization.ca.draw.GLIndividual;
 import de.zet_evakuierung.visualization.ca.model.DynamicCellularAutomatonInformation.CellInformationDisplay;
-import gui.visualization.VisualizationOptionManager;
 import io.visualization.CellularAutomatonVisualizationResults;
 import org.zet.algo.ca.util.PotentialUtils;
 import org.zet.cellularautomaton.EvacCell;
@@ -213,11 +212,11 @@ public class GLCellModel extends AbstractVisualizationModel<CellularAutomatonVis
     }
 
     public double getWidth() {
-        return properties.getScaling() * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
+        return properties.getScaling() * (properties.isGridVisible() ? 390 : 400);
     }
 
     public double getOffset() {
-        return VisualizationOptionManager.showSpaceBetweenCells() ? 10 * properties.getScaling() : 0;
+        return properties.isGridVisible() ? 10 * properties.getScaling() : 0;
     }
 
     public boolean isNeighborPresent(Direction8 currentNeighbor) {

@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import de.zet_evakuierung.visualization.building.BuildingVisualizationProperties;
 import de.zet_evakuierung.visualization.building.model.BuildingVisualizationModel;
 import de.zet_evakuierung.visualization.building.model.GLBuildingControl;
 import de.zet_evakuierung.visualization.building.model.GLBuildingModel;
@@ -72,12 +73,13 @@ public class GLBuildingViews {
      * Factory method creating a {@link GLBuildingViews building views container} instance.
      *
      * @param visualizationModel the visualization model with basic visualization settings
+     * @param properties the visualization properties
      * @param buildingModel the input data for building visualization
      * @return the created instance
      */
     public static GLBuildingViews createInstance(BuildingVisualizationModel visualizationModel,
-            GLBuildingModel buildingModel) {
-        GLBuildingViewFactory factory = new GLBuildingViewFactory(visualizationModel, buildingModel);
+            BuildingVisualizationProperties properties, GLBuildingModel buildingModel) {
+        GLBuildingViewFactory factory = new GLBuildingViewFactory(visualizationModel, properties, buildingModel);
         factory.createViews();
         return new GLBuildingViews(factory);
     }
@@ -111,6 +113,10 @@ public class GLBuildingViews {
         }).get();
 
         private final GLBuildingModel buildingModel;
+        /**
+         * Properties for the visualization.
+         */
+        private final BuildingVisualizationProperties properties;
 
         /**
          * The created {@link GLBuilding hierarchy root} view instance; valid after views
@@ -123,9 +129,10 @@ public class GLBuildingViews {
          */
         private Map<GLWallModel, GLWall> wallViews;
 
-        GLBuildingViewFactory(BuildingVisualizationModel visualizationModel,
+        GLBuildingViewFactory(BuildingVisualizationModel visualizationModel, BuildingVisualizationProperties properties,
                 GLBuildingModel buildingModel) {
             this.buildingModel = buildingModel;
+            this.properties = properties;
         }
 
         void createViews() {
@@ -140,7 +147,7 @@ public class GLBuildingViews {
         private void createWalls() {
             for (int i = 0; i < buildingModel.getFloorCount(); ++i) {
                 buildingModel.getWallModels(i).forEach(
-                        wall -> wallViews.put(wall, new GLWall(wall)));
+                        wall -> wallViews.put(wall, new GLWall(wall, properties)));
             }
         }
     }
