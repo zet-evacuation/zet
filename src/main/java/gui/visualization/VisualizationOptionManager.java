@@ -99,7 +99,7 @@ public class VisualizationOptionManager {
     }
 
     public static GLColor getNodeColor() {
-        //return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
+        //return new GLColor( 221, 125, 42 );	// color used for the test evacuation report        
         return new GLColor(PropertyContainer.getGlobal().getAsColor("options.visualization.appeareance.colors.nodeColor"));
     }
 
@@ -205,8 +205,7 @@ public class VisualizationOptionManager {
      * @return true if the grid is visible, otherwise false
      */
     public static boolean showSpaceBetweenCells() {
-        //return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.view.grid" );
-        return false;
+        return PropertyContainer.getGlobal().getAsBoolean( "options.visualization.view.grid" );
     }
 
     /**

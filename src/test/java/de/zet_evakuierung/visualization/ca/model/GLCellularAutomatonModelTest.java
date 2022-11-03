@@ -58,7 +58,7 @@ public class GLCellularAutomatonModelTest {
     /**
      * Some pre-defined coordinates of objects; allows to create 3 test objects.
      */
-    private static final List<Point2D> POSITIONS = List.of(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
+    private static final List<Point2D> POSITIONS = Arrays.asList(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
             new Point2D.Double(1000, 3000));
 
     @Test
@@ -109,8 +109,8 @@ public class GLCellularAutomatonModelTest {
         assertCounts(fixture, 3, 0, 0);
 
         // Assert each floor object
-        assertObjectsFromIteratorAndMapAreEqual(fixture.floors(), List.of(0, 1, 2), fixture::getFloorModel);
-        assertPositions(fixture::getFloorModel, List.of(0, 1, 2), POSITIONS);
+        assertObjectsFromIteratorAndMapAreEqual(fixture.floors(), Arrays.asList(0, 1, 2), fixture::getFloorModel);
+        assertPositions(fixture::getFloorModel, Arrays.asList(0, 1, 2), POSITIONS);
 
         // Assert floor indices and z position based on them
         double defaultFloorHeight = 10;
@@ -218,7 +218,7 @@ public class GLCellularAutomatonModelTest {
      * @param names the floor names, if none present the result is empty
      */
     private static List<String> setUpFloors(BuilderBaseMocks baseMocks, String... names) {
-        List<String> floors = List.of(names);
+        List<String> floors = Arrays.asList(names);
 
         when(baseMocks.cellularAutomaton.getFloors()).thenReturn(floors);
         for (int i = 0; i < floors.size(); ++i) {

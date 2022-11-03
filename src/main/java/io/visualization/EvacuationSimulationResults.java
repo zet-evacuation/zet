@@ -41,9 +41,9 @@ public class EvacuationSimulationResults {
      * Creates the visualization results. Takes a ca data structure, a visual recording object, a ZToCAMapping and
      * creates all necessary objects.
      *
+     * @param es
+     * @param esp
      * @param visRecording
-     * @param caMapping
-     * @param ca
      */
     public EvacuationSimulationResults(EvacuationState es, EvacuationSimulationSpeed esp, EvacuationRecording visRecording) {
         this.visRecording = Objects.requireNonNull(visRecording);

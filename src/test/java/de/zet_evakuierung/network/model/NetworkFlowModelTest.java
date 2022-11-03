@@ -25,6 +25,8 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.assertThrows;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -528,12 +530,12 @@ public class NetworkFlowModelTest {
 
     @Test
     public void accurateAssignmentIncreaseTwice() {
-        testAccurateIncreaseTwice(AccurateAssignmentBuilder::new, 2, List.of(1, 2), List.of(0, 0));
+        testAccurateIncreaseTwice(AccurateAssignmentBuilder::new, 2, Arrays.asList(1, 2), Arrays.asList(0, 0));
     }
 
     @Test
     public void averageAssignmentIncreaseTwice() {
-        testAccurateIncreaseTwice(AverageAssignmentBuilder::new, 1, List.of(3), List.of(0));
+        testAccurateIncreaseTwice(AverageAssignmentBuilder::new, 1, Collections.singletonList(3), Collections.singletonList(0));
     }
 
     private void testAccurateIncreaseTwice(Function<NetworkFlowModel, AccurateAssignmentBuilder> fixtureFactory,
@@ -550,17 +552,17 @@ public class NetworkFlowModelTest {
 
     @Test
     public void accurateAssignmentWithTransitTime() {
-        testAccurateTransitTime(AccurateAssignmentBuilder::new, List.of(3.5), 1, List.of(1), List.of(4));
+        testAccurateTransitTime(AccurateAssignmentBuilder::new, Collections.singletonList(3.5), 1, Collections.singletonList(1), Collections.singletonList(4));
     }
 
     @Test
     public void accurateAssignmentWithTransitTimeTwice() {
-        testAccurateTransitTime(AccurateAssignmentBuilder::new, List.of(3.5, 5.4), 2, List.of(1, 1), List.of(4, 5));
+        testAccurateTransitTime(AccurateAssignmentBuilder::new, Arrays.asList(3.5, 5.4), 2, Arrays.asList(1, 1), Arrays.asList(4, 5));
     }
 
     @Test
     public void averageAssignmentWithTransitTimeTwice() {
-        testAccurateTransitTime(AverageAssignmentBuilder::new, List.of(1.0, 2.0, 3.0), 1, List.of(3), List.of(2));
+        testAccurateTransitTime(AverageAssignmentBuilder::new, Arrays.asList(1.0, 2.0, 3.0), 1, Collections.singletonList(3), Collections.singletonList(2));
     }
 
     private void testAccurateTransitTime(Function<NetworkFlowModel, AccurateAssignmentBuilder> fixtureFactory,
@@ -579,7 +581,7 @@ public class NetworkFlowModelTest {
 
     private void assertSingleAssignment(NetworkFlowModel model, int expectedAssignment,
             int expectedTransitTime) {
-        assertAccurateAssignment(model, 1, List.of(expectedAssignment), List.of(expectedTransitTime));
+        assertAccurateAssignment(model, 1, Collections.singletonList(expectedAssignment), Collections.singletonList(expectedTransitTime));
     }
 
     /**

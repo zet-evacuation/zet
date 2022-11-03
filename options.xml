@@ -1,9 +1,9 @@
 <zp name="additionalInformation" useAsLocString="false" propertyName="">
   <treeNode name="editor" useAsLocString="false">
     <intNode name="settings.editor.position.x" useAsLocString="false" information="" parameter="settings.editor.window.position.x">541</intNode>
-    <intNode name="settings.editor.position.y" useAsLocString="false" information="" parameter="settings.editor.window.position.y">121</intNode>
-    <intNode name="settings.editor.position.width" useAsLocString="false" information="" parameter="settings.editor.window.position.width">1117</intNode>
-    <intNode name="settings.editor.position.height" useAsLocString="false" information="" parameter="settings.editor.window.position.height">680</intNode>
+    <intNode name="settings.editor.position.y" useAsLocString="false" information="" parameter="settings.editor.window.position.y">67</intNode>
+    <intNode name="settings.editor.position.width" useAsLocString="false" information="" parameter="settings.editor.window.position.width">1085</intNode>
+    <intNode name="settings.editor.position.height" useAsLocString="false" information="" parameter="settings.editor.window.position.height">757</intNode>
     <boolNode name="settings.editor.position.maximized" useAsLocString="false" information="" parameter="settings.editor.window.position.maximized">false</boolNode>
   </treeNode>
   <treeNode name="directories" useAsLocString="false">
@@ -22,9 +22,9 @@
       <boolNode name="guiSettings.visualization.walls" useAsLocString="false" information="" parameter="settings.gui.visualization.walls">true</boolNode>
       <boolNode name="guiSettings.visualization.graph" useAsLocString="false" information="" parameter="settings.gui.visualization.graph">true</boolNode>
       <boolNode name="guiSettings.visualization.nodeArea" useAsLocString="false" information="" parameter="settings.gui.visualization.nodeArea">false</boolNode>
-      <boolNode name="guiSettings.visualization.cellularAutomaton" useAsLocString="false" information="" parameter="settings.gui.visualization.cellularAutomaton">false</boolNode>
+      <boolNode name="guiSettings.visualization.cellularAutomaton" useAsLocString="false" information="" parameter="settings.gui.visualization.cellularAutomaton">true</boolNode>
       <boolNode name="guiSettings.visualization.floors" useAsLocString="false" information="" parameter="settings.gui.visualization.floors">true</boolNode>
-      <intNode name="guiSettings.visualization.floorInformation" useAsLocString="false" information="" parameter="settings.gui.visualization.floorInformation">2</intNode>
+      <intNode name="guiSettings.visualization.floorInformation" useAsLocString="false" information="" parameter="settings.gui.visualization.floorInformation">4</intNode>
     </treeNode>
   </treeNode>
 </zp>

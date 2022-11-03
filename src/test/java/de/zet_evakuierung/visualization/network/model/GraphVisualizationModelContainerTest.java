@@ -64,7 +64,7 @@ public class GraphVisualizationModelContainerTest {
     /**
      * Some pre-defined coordinates of objects; allows to create 3 test objects.
      */
-    private static final List<Point2D> POSITIONS = List.of(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
+    private static final List<Point2D> POSITIONS = Arrays.asList(new Point2D.Double(100, 200), new Point2D.Double(0, 0),
             new Point2D.Double(1000, 3000));
 
     @Test
@@ -148,7 +148,8 @@ public class GraphVisualizationModelContainerTest {
         int nodeCount = 3;
         List<Node> nodes = setUpNodes(baseMocks, 1, nodeCount);
         int edgeCount = nodeCount - 1;
-        List<Edge> edges = setUpEdges(baseMocks, nodes, nodes.subList(1, nodeCount), List.of(), List.of());
+        List<Edge> edges = setUpEdges(baseMocks, nodes, nodes.subList(1, nodeCount), Collections.emptyList(),
+                Collections.emptyList());
 
         when(baseMocks.visualizationModel.superSinkID()).thenReturn(Integer.MIN_VALUE);
 

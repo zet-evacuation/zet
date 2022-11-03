@@ -29,7 +29,9 @@ import static org.zetool.opengl.framework.util.GLContextAwareThread.createWithGL
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -104,7 +106,7 @@ public class GLCellularAutomatonViewsTest {
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), floorCount, List.of(0), Collections.emptyList());
+        assertCounts(result.getView(), floorCount, Collections.singletonList(0), Collections.emptyList());
     }
 
     /**
@@ -120,7 +122,7 @@ public class GLCellularAutomatonViewsTest {
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), 1, List.of(2), List.of(0, 0));
+        assertCounts(result.getView(), 1, Collections.singletonList(2), Arrays.asList(0, 0));
     }
 
     /**
@@ -137,7 +139,7 @@ public class GLCellularAutomatonViewsTest {
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), floorCount, List.of(1), List.of(2));
+        assertCounts(result.getView(), floorCount, Collections.singletonList(1), Collections.singletonList(2));
     }
 
     /**
@@ -146,14 +148,13 @@ public class GLCellularAutomatonViewsTest {
     @Test
     public void testFactoryCellType() {
         // Standard types and cases that do not require additional mocking
-        Map<Class<? extends EvacCell>, Class<? extends GLCell>> standardViewCreation = Map.of(
-                RoomCell.class, GLDelayCell.class,
-                DoorCell.class, GLDelayCell.class,
-                ExitCell.class, GLEvacuationCell.class,
-                SaveCell.class, GLSaveCell.class,
-                StairCell.class, GLStairCell.class,
-                TeleportCell.class, GLSaveCell.class
-        );
+        Map<Class<? extends EvacCell>, Class<? extends GLCell>> standardViewCreation = new HashMap<>();
+        standardViewCreation.put(RoomCell.class, GLDelayCell.class);
+        standardViewCreation.put(DoorCell.class, GLDelayCell.class);
+        standardViewCreation.put(ExitCell.class, GLEvacuationCell.class);
+        standardViewCreation.put(SaveCell.class, GLSaveCell.class);
+        standardViewCreation.put(StairCell.class, GLStairCell.class);
+        standardViewCreation.put(TeleportCell.class, GLSaveCell.class);
 
         for (Map.Entry<Class<? extends EvacCell>, Class<? extends GLCell>> testCase : standardViewCreation.entrySet()) {
             testFactoryCellType(testCase.getKey(), testCase.getValue(), unused -> {
@@ -182,7 +183,7 @@ public class GLCellularAutomatonViewsTest {
 
         GLCellularAutomatonViews result = createWithGLContext(() -> baseMocks.createResult());
 
-        assertCounts(result.getView(), floorCount, List.of(1), List.of(1));
+        assertCounts(result.getView(), floorCount, Collections.singletonList(1), Collections.singletonList(1));
 
         GLCell createdCellView = result.getView().iterator().next().iterator().next().iterator().next();
         assertThat(createdCellView.getClass(), is(equalTo(viewType)));

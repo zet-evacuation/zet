@@ -41,6 +41,7 @@ import org.zetool.math.vectormath.Vector3;
 import org.zetool.opengl.drawingutils.GLColor;
 import org.zetool.opengl.framework.abs.AbstractDrawable;
 import org.zetool.opengl.framework.abs.Drawable;
+import org.zetool.opengl.framework.abs.HierarchyDrawable;
 import org.zetool.opengl.framework.abs.VisualizationModel;
 import org.zetool.opengl.helper.Frustum;
 import org.zetool.opengl.helper.ProjectionHelper;
@@ -114,6 +115,7 @@ public class Visualization<U extends Drawable, V extends VisualizationModel> ext
     protected boolean showFPS = true;
 
     protected Frustum frustum;
+    AbstractDrawable ad = null;
 
     public Frustum getFrustum() {
         return frustum;
@@ -593,6 +595,13 @@ public class Visualization<U extends Drawable, V extends VisualizationModel> ext
 
     @Override
     public void initGFX(GLAutoDrawable drawable) {
+        ad = new AbstractDrawable<HierarchyDrawable, Object>(new Object()) {
+            @Override
+            public void update() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+
         gl = drawable.getGL().getGL2();
 
         gl.glClearDepth(1.0f);																				// Initialize depth-buffer precision

@@ -90,7 +90,7 @@ public class GLGraphViewsTest {
 
         GLGraphViews result = createWithGLContext(baseMocks::createResult);
 
-        assertCounts(result.getView(), 1, List.of(0), Collections.emptyList());
+        assertCounts(result.getView(), 1, Collections.singletonList(0), Collections.emptyList());
     }
 
     /**
@@ -106,7 +106,7 @@ public class GLGraphViewsTest {
 
         GLGraphViews result = createWithGLContext(baseMocks::createResult);
 
-        assertCounts(result.getView(), 1, List.of(2), List.of(0, 0));
+        assertCounts(result.getView(), 1, Collections.singletonList(2), Arrays.asList(0, 0));
     }
 
     /**
@@ -128,7 +128,7 @@ public class GLGraphViewsTest {
 
         GLGraphViews result = createWithGLContext(baseMocks::createResult);
 
-        assertCounts(result.getView(), floorCount, List.of(nodeCount - 1), List.of(0, 0));
+        assertCounts(result.getView(), floorCount, Collections.singletonList(nodeCount - 1), Arrays.asList(0, 0));
 
         List<Integer> nodeIds = StreamSupport.stream(Spliterators
                 .spliteratorUnknownSize(result.nodeViews().iterator(), Spliterator.ORDERED), false)
@@ -150,7 +150,7 @@ public class GLGraphViewsTest {
 
         GLGraphViews result = createWithGLContext(baseMocks::createResult);
 
-        assertCounts(result.getView(), 1, List.of(2), List.of(0, 0));
+        assertCounts(result.getView(), 1, Collections.singletonList(2), Arrays.asList(0, 0));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class GLGraphViewsTest {
         // We have only one edge on two nodes:
         // (0,1) is removed because connected to supersink
         // (1,2) removed because 1 is supersink
-        assertCounts(result.getView(), floorCount, List.of(nodeCount - 1), List.of(0, 1));
+        assertCounts(result.getView(), floorCount, Collections.singletonList(nodeCount - 1), Arrays.asList(0, 1));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class GLGraphViewsTest {
         Function<FactoryBaseMocks, GLGraphViews> fixtureFactory
                 = baseMocks -> createWithGLContext(() -> baseMocks.createResult(false));
 
-        testInterFloorEdgeCreation(fixtureFactory, List.of(1, 0, 1, 0));
+        testInterFloorEdgeCreation(fixtureFactory, Arrays.asList(1, 0, 1, 0));
     }
 
     @Test
@@ -196,7 +196,7 @@ public class GLGraphViewsTest {
         Function<FactoryBaseMocks, GLGraphViews> fixtureFactory
                 = baseMocks -> createWithGLContext(() -> baseMocks.createResult(true));
 
-        testInterFloorEdgeCreation(fixtureFactory, List.of(2, 0, 1, 1));
+        testInterFloorEdgeCreation(fixtureFactory, Arrays.asList(2, 0, 1, 1));
     }
 
     /**
@@ -241,7 +241,7 @@ public class GLGraphViewsTest {
 
         GLGraphViews result = fixtureFactory.apply(baseMocks);
 
-        assertCounts(result.getView(), floorCount, List.of(2, 2), exptectedEdgeIndices);
+        assertCounts(result.getView(), floorCount, Arrays.asList(2, 2), exptectedEdgeIndices);
 
         return result;
     }

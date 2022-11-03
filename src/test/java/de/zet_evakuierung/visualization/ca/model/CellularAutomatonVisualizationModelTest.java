@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -46,7 +47,7 @@ public class CellularAutomatonVisualizationModelTest {
         // Init for time 0 and 1 as last step
         fixture.initTiming(esp, 1);
 
-        checkTiming(fixture, fixture::addTime, List.of(99L, 1L, 100L));
+        checkTiming(fixture, fixture::addTime, Arrays.asList(99L, 1L, 100L));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class CellularAutomatonVisualizationModelTest {
         // Init for time 0 and 1 as last step
         fixture.initTiming(esp, 1);
 
-        checkTiming(fixture, fixture::setTime, List.of(99L, 100L, 200L));
+        checkTiming(fixture, fixture::setTime, Arrays.asList(99L, 100L, 200L));
     }
 
     /**
